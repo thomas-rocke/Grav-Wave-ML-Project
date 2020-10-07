@@ -1,4 +1,4 @@
-### System
+# System
 The System directry hosts all code and user data needed to perform machine learning.
 
 ## UserData
