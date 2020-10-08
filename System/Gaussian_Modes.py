@@ -111,6 +111,7 @@ mode = Gaussian_Mode(0.4, 600, 500)
 plt.imshow(np.abs(mode.E2(X, Y, 0, 1, 0) + mode.E2(X, Y, 0, 2, 2) + mode.E2(X, Y, 0, 4, 1)), cmap='Greys_r')
 
 plt.axis('off')
+plt.savefig("Images/superposition.png", bbox_inches='tight', pad_inches=0)
 plt.show()
 
 for i in range(5):
