@@ -61,7 +61,7 @@ class Gaussian_Mode:
         '''
         Factors for the x and y dependance.
         '''
-        q0 = self.q(z)
+        q0 = self.q(z) # ???
         
         t1 = np.sqrt(np.sqrt(2 / np.pi) / (2**J * np.math.factorial(J) * self._w0))
         t2 = np.sqrt(q0 / self.q(z))
@@ -106,6 +106,12 @@ fig, ax = plt.subplots()
 # mat = ax.imshow(np.real(mode.E(X, Y)))
 # anim = animation.FuncAnimation(fig, update, animate, interval=100, save_count=50) # Create the animation for state evolutio using Markov Chain
 
+mode = Gaussian_Mode(0.4, 600, 500)
+
+plt.imshow(np.abs(mode.E2(X, Y, 0, 1, 0) + mode.E2(X, Y, 0, 2, 2) + mode.E2(X, Y, 0, 4, 1)), cmap='Greys_r')
+
+plt.axis('off')
+plt.show()
 
 for i in range(5):
     for j in tqdm(range(5)):
