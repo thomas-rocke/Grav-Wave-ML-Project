@@ -1,8 +1,29 @@
+##################################################
+##########                              ##########
+##########           GAUSSIAN           ##########
+##########             MODES            ##########
+##########                              ##########
+##################################################
+
+# TODO Header for file
+
+# Imports
 import numpy as np
 from scipy import special
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from tqdm import tqdm
+
+
+
+
+
+##################################################
+##########                              ##########
+##########           CLASSES            ##########
+##########                              ##########
+##################################################
+
 
 class Gaussian_Mode:
     '''
@@ -82,7 +103,36 @@ class Gaussian_Mode:
 
 
 
-# Testing
+##################################################
+##########                              ##########
+##########            MAIN              ##########
+##########                              ##########
+##################################################
+
+
+def generate_modes(ls, ms):
+    '''
+    Generate and save modes from (0,0) to (ls,ms).
+    '''
+    for l in range(ls):
+        for m in tqdm(range(ms)):
+            mode = Gaussian_Mode(0.4, 600, 500)
+
+            plt.imshow(np.abs(mode.E2(X, Y, 0, l, m)), cmap='Greys_r')
+            plt.axis('off')
+            plt.savefig("Images/" + str(l) + str(m) + ".png", bbox_inches='tight', pad_inches=0)
+
+
+
+
+
+
+##################################################
+##########                              ##########
+##########           TESTING            ##########
+##########                              ##########
+##################################################
+
 
 x = np.arange(-1.2, 1.2, 0.01)
 y = np.arange(-1.2, 1.2, 0.01)
@@ -90,6 +140,23 @@ y = np.arange(-1.2, 1.2, 0.01)
 X, Y = np.meshgrid(x, y)
 
 fig, ax = plt.subplots()
+
+# Testing a superposition of 3 basic modes.
+
+mode = Gaussian_Mode(0.4, 600, 500)
+
+plt.imshow(np.abs(mode.E2(X, Y, 0, 1, 0) + mode.E2(X, Y, 0, 2, 2) + mode.E2(X, Y, 0, 4, 1)), cmap='Greys_r')
+plt.axis('off')
+plt.savefig("Images/superposition.png", bbox_inches='tight', pad_inches=0)
+
+# Generating and saving all mode combinations from (0,0) to (5,5).
+
+generate_modes(5, 5)
+
+
+
+
+# TODO Animate Hermite-Gaussian modes as a GIF
 
 # data = []
 # for i in tqdm(range(1, 500)):
@@ -105,20 +172,3 @@ fig, ax = plt.subplots()
 
 # mat = ax.imshow(np.real(mode.E(X, Y)))
 # anim = animation.FuncAnimation(fig, update, animate, interval=100, save_count=50) # Create the animation for state evolutio using Markov Chain
-
-mode = Gaussian_Mode(0.4, 600, 500)
-
-plt.imshow(np.abs(mode.E2(X, Y, 0, 1, 0) + mode.E2(X, Y, 0, 2, 2) + mode.E2(X, Y, 0, 4, 1)), cmap='Greys_r')
-
-plt.axis('off')
-plt.savefig("Images/superposition.png", bbox_inches='tight', pad_inches=0)
-plt.show()
-
-for i in range(5):
-    for j in tqdm(range(5)):
-        mode = Gaussian_Mode(0.4, 600, 500)
-
-        plt.imshow(np.abs(mode.E2(X, Y, 0, i, j)), cmap='Greys_r')
-
-        plt.axis('off')
-        plt.savefig("Images/" + str(i) + str(j) + ".png", bbox_inches='tight', pad_inches=0)
