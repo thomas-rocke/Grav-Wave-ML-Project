@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.vs/Grav-Wave-ML-Project/v16/.suo
+*.sqlite
