@@ -9,7 +9,7 @@
 
 # Imports
 import numpy as np
-from scipy import special, math
+from scipy import special
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from tqdm import tqdm
@@ -115,7 +115,7 @@ class Gaussian_Mode:
     
     def plot(self):
         '''
-        Plot Gaussian mode.
+        Plot the Gaussian mode.
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
         plt.figure(self.__class__.__name__)
@@ -187,10 +187,7 @@ class Generate_Data(list):
         print("\n-----| Generating Data for " + str(modes) + " Modes of Complexity " + str(complexity) + " |-----\n")
         print("Generating Gaussian modes...")
 
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-
         gauss_modes = [Gaussian_Mode(l=i, m=j) for i in range(modes) for j in range(modes)]
-        self.gauss_modes = [i.E_mode(X, Y, 0) for i in gauss_modes]
 
         print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
