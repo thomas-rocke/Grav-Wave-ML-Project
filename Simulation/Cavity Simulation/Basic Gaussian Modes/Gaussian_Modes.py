@@ -124,7 +124,20 @@ class Gaussian_Mode:
 
         plt.title(str(self))
         plt.axis('off')
+    
+    def show(self):
+        '''
+        Show the plot of the Gaussian mode.
+        '''
+        self.plot()
         plt.show()
+    
+    def save(self):
+        '''
+        Save the plot of the Gaussian mode.
+        '''
+        self.plot()
+        plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
 
 
@@ -167,7 +180,20 @@ class Superposition(list):
 
         plt.title(str(self))
         plt.axis('off')
+    
+    def show(self):
+        '''
+        Show the plot of the Gaussian mode.
+        '''
+        self.plot()
         plt.show()
+    
+    def save(self):
+        '''
+        Save the plot of the Gaussian mode.
+        '''
+        self.plot()
+        plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
 
 
@@ -244,7 +270,8 @@ def generate_modes(ls, ms):
 x = Generate_Data(5, 3)
 
 print(x[1000])
-x[1000].plot()
+x[1000].show()
+x[1500].save()
 
 
 
