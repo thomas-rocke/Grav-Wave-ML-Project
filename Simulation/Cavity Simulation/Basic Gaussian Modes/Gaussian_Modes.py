@@ -113,7 +113,7 @@ class Gaussian_Mode:
 
         return t1 * t2 * t3 * special.eval_hermite(J, t4) * t5
     
-    def plot(self):
+    def plot(self, title: bool = True):
         '''
         Plot the Gaussian mode.
         '''
@@ -122,21 +122,21 @@ class Gaussian_Mode:
 
         plt.imshow(np.abs(np.abs(self.E_mode(X, Y, 0))), cmap='Greys_r')
 
-        plt.title(str(self))
+        if title: plt.title(str(self))
         plt.axis('off')
     
-    def show(self):
+    def show(self, title: bool = True):
         '''
         Show the plot of the Gaussian mode.
         '''
-        self.plot()
+        self.plot(title)
         plt.show()
     
-    def save(self):
+    def save(self, title: bool = True):
         '''
         Save the plot of the Gaussian mode.
         '''
-        self.plot()
+        self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
 
@@ -169,7 +169,7 @@ class Superposition(list):
         '''
         return str(self)
 
-    def plot(self):
+    def plot(self, title: bool = True):
         '''
         Plot the superposition.
         '''
@@ -178,21 +178,21 @@ class Superposition(list):
 
         plt.imshow(self.superposition, cmap='Greys_r')
 
-        plt.title(str(self))
+        if title: plt.title(str(self))
         plt.axis('off')
     
-    def show(self):
+    def show(self, title: bool = True):
         '''
         Show the plot of the Gaussian mode.
         '''
-        self.plot()
+        self.plot(title)
         plt.show()
     
-    def save(self):
+    def save(self, title: bool = True):
         '''
         Save the plot of the Gaussian mode.
         '''
-        self.plot()
+        self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
 
@@ -271,7 +271,7 @@ x = Generate_Data(5, 3)
 
 print(x[1000])
 x[1000].show()
-x[1500].save()
+x[1000].save(False)
 
 
 
