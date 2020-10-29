@@ -103,7 +103,7 @@ class Gaussian_Mode:
         '''
         Factors for the x and y dependance.
         '''
-        q0 = self.q(z) # ???
+        q0 = self.q(0) # ???
         
         t1 = np.sqrt(np.sqrt(2 / np.pi) / (2**J * np.math.factorial(J) * self.w_0))
         t2 = np.sqrt(q0 / self.q(z))
