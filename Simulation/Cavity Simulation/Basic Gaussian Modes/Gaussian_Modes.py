@@ -161,7 +161,7 @@ class Superposition(list):
         '''
         Magic method for str() function.
         '''
-        return self.__class__.__name__ + str(self.modes)
+        return self.__class__.__name__ + "(" + str(self.modes) + ")"
     
     def __repr__(self):
         '''
@@ -210,6 +210,9 @@ class Generate_Data(list):
         'modes': Max mode number for superpositions.
         'complexity': How many modes you want to superimpose together.
         '''
+        self.modes = modes
+        self.complexity = complexity
+
         print("\n-----| Generating Data for " + str(modes) + " Modes of Complexity " + str(complexity) + " |-----\n")
         print("Generating Gaussian modes...")
 
@@ -219,12 +222,23 @@ class Generate_Data(list):
 
         combs = list(combinations(gauss_modes, complexity))
         superposition_combinations = []
-        for i in tqdm(range(len(combs))):
-            superposition_combinations.append(Superposition(combs[i]))
+        for i in tqdm(range(len(combs))): superposition_combinations.append(Superposition(combs[i]))
 
         super().__init__(superposition_combinations)
-
+        
         print("Done! Found " + str(len(combs)) + " combinations.\n")
+    
+    def __str__(self):
+        '''
+        Magic method for str() function.
+        '''
+        return self.__class__.__name__ + "(" + str(self.modes) + ", " + str(self.complexity) + ")"
+    
+    def __repr__(self):
+        '''
+        Magic method for repr() function.
+        '''
+        return str(self)
 
     def plot(self):
         '''
