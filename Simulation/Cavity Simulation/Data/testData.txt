@@ -1,0 +1,6 @@
+Superposition((Gaussian_Mode(0, 0, 1.0), Gaussian_Mode(0, 1, 1.0)))
+Superposition((Gaussian_Mode(0, 0, 1.0), Gaussian_Mode(1, 0, 1.0)))
+Superposition((Gaussian_Mode(0, 0, 1.0), Gaussian_Mode(1, 1, 1.0)))
+Superposition((Gaussian_Mode(0, 1, 1.0), Gaussian_Mode(1, 0, 1.0)))
+Superposition((Gaussian_Mode(0, 1, 1.0), Gaussian_Mode(1, 1, 1.0)))
+Superposition((Gaussian_Mode(1, 0, 1.0), Gaussian_Mode(1, 1, 1.0)))
