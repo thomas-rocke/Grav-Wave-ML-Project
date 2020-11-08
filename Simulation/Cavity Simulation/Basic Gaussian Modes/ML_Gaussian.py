@@ -9,7 +9,7 @@ from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.constraints import maxnorm
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.utils import np_utils
-from Gaussian_Beam import Generate_Data
+from Gaussian_Beam import Generate_Data, Superposition, Gaussian_Mode
 
 
 class Model:
@@ -29,6 +29,8 @@ class Model:
         self.model = None
         self.loss_history, self.accuracy_history = None, None
         self.val_loss_history, self.val_accuracy_history = None, None
+
+        self.solutions = None
     
     def __str__(self):
         '''
@@ -71,22 +73,22 @@ class Model:
         '''
         print("Generating training data...")
 
-        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation)
+        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, False)
         X_train = np.array([i.superposition for i in x_train])[..., np.newaxis]
         y_train, Y_train = x_train.get_outputs()
 
-        print("Done!\nGenerating testing data...")
+        print("Done!\n\nGenerating testing data...")
 
-        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation)
+        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, False)
         X_test = np.array([i.superposition for i in x_test])[..., np.newaxis]
         y_test, Y_test = x_test.get_outputs()
 
-        print("Done!\n\nOne hot encoding outputs...")
+        print("Done!\n")
 
         Y_train = np_utils.to_categorical(Y_train)
         Y_test = np_utils.to_categorical(Y_test)
 
-        print("Done!\n")
+        self.solutions = np.array(y_train)
 
         return (X_train, Y_train), (X_test, Y_test), Y_train.shape[1]
 
@@ -94,7 +96,7 @@ class Model:
         '''
         Create the Keras model in preparation for training.
         '''
-        print("Generating model...")
+        print("Generating model... (shape = " + str(shape) + ")")
 
         model = Sequential()
 
@@ -184,6 +186,8 @@ class Model:
         np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.accuracy_history, delimiter=",")
         np.savetxt("Models/" + str(self) + "/val_loss_history.txt", self.val_loss_history, delimiter=",")
         np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.val_accuracy_history, delimiter=",")
+
+        np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
         print("Done\n")
     
     def load(self):
@@ -197,6 +201,8 @@ class Model:
         self.accuracy_history = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
         self.val_loss_history = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
         self.val_accuracy_history = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
+
+        self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=Gaussian_Mode, delimiter=",")
         print("Done!\n")
     
     def check_trained(self):
@@ -209,7 +215,18 @@ class Model:
         else:
             os.makedirs("Models/" + str(self), exist_ok=True) # Create directory for model
             return True
+    
+    def predict(self, data):
+        '''
+        Predict the superposition based on a 2D numpy array of the unknown optical cavity.
+        '''
+        data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
+
+        print("Predicting... (shape = " + str(data.shape) + ")")
+        prediction = self.model.predict(data) # Make prediction using model (return index of superposition)
+        print("Done!\n")
         
+        return self.solutions[np.argmax(prediction, axis=1)]
 
 
 
@@ -223,10 +240,18 @@ class Model:
 
 
 if __name__ == '__main__':
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.3, epochs=30)
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    print("█████▀█████████████████████████████████████████████████████████████████████████████\n"
+          "█─▄▄▄▄██▀▄─██▄─██─▄█─▄▄▄▄█─▄▄▄▄█▄─▄██▀▄─██▄─▀█▄─▄███▄─▀█▀─▄█─▄▄─█▄─▄▄▀█▄─▄▄─█─▄▄▄▄█\n"
+          "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
+          "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
+
+    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.2, epochs=30)
     model.train()
     model.save()
 
-    # model2 = Model(5, 3, 0.3, 30)
-    # model2.load()
-    # model2.plot()
+    model2 = Model(5, 3, 0.2, 30)
+    model2.load()
+    model2.plot()
+    print(model2.predict(Superposition([Gaussian_Mode(1,0), Gaussian_Mode(2,2), Gaussian_Mode(2,1)], 0.2).superposition))
