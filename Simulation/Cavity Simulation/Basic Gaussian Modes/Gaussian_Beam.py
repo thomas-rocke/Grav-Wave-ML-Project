@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from tqdm import tqdm
 from itertools import combinations
+from multiprocessing import Pool, cpu_count
 
 
 
@@ -153,7 +154,7 @@ class Superposition(list):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
-        self.modes = [eval(str(mode)) for mode in modes]
+        self.modes = [eval(str(mode)) for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         super().__init__(self.modes)
 
         random_amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
@@ -162,7 +163,7 @@ class Superposition(list):
         for i in range(len(self)): self[i].amplitude = random_normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
 
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self]))
+        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])) # Computae the superposition of the Gaussian modes
 
         self.superposition = superposition / np.linalg.norm(superposition) # Normalise the superposition
     
@@ -233,7 +234,7 @@ class Generate_Data(list):
 
         'max_order': Max order of Guassian modes in superpositions (x > 0).
         'number_of_modes': How many modes you want to superimpose together (x > 0).
-        'amplitude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
+        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
         '''
         self.max_order = max_order
         self.number_of_modes = number_of_modes
@@ -247,13 +248,36 @@ class Generate_Data(list):
 
         print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
-        combs = list(combinations(gauss_modes, number_of_modes))
-        superposition_combinations = []
-        for i in tqdm(range(len(combs))): superposition_combinations.append(Superposition(combs[i], amplitude_variation))
+        self.combs = list(combinations(gauss_modes, number_of_modes))
+        
+        # self.pool_handler(self.combs, 5)
+        # p = Pool(5)
+        # p.map(self.process, self.combs)
 
-        super().__init__(superposition_combinations)
+        super().__init__()
+        for i in tqdm(range(len(self.combs))): self.append(Superposition(self.combs[i], amplitude_variation))
 
-        print("Done! Found " + str(len(combs)) + " combinations.\n")
+        print("Done! Found " + str(len(self)) + " combinations.\n")
+    
+    def get_outputs(self):
+        '''
+        Get all possible Gaussian modes that could comprise a superposition.
+        '''
+        return self.combs, np.array([[i] for i in range(len(self.combs))])
+    
+    # def pool_handler(self, data, threads):
+    #     '''
+
+    #     '''
+    #     p = Pool(threads)
+    #     p.map(self.process, data)
+    
+    # def process(self, data):
+    #     '''
+        
+    #     '''
+    #     # print(self.combs.index(data), data)
+    #     data[0].append(Superposition(data[1], self.amplitude_variation))
     
     # def __str__(self):
     #     '''
@@ -281,6 +305,24 @@ class Generate_Data(list):
 ##########            MAIN              ##########
 ##########                              ##########
 ##################################################
+
+
+
+# def process(x):
+#     print("Process started for '" + x[0] + "' for k = " + str(x[1]) + " for event " + str(x[2]) + "...")
+#     fh.write_data(x[0], x[2], x[1])
+
+# def pool_handler(x, t):
+#     p = Pool(t)
+#     p.map(process, x)
+
+# if __name__ == '__main__':
+#     d = input("File: ")
+#     k = input("k: ")
+#     t = input("Threads: ")
+
+#     x = [(str(d), int(k), int(e)) for e in range(9999)]
+#     pool_handler(x, int(t))
 
 
 # def generate_modes(ls, ms):
@@ -317,10 +359,9 @@ class Generate_Data(list):
 # print(x)
 # x.show()
 
-# x = Generate_Data(3, 3)
-# print(x[1000])
-# x[1000].show()
-# x[1000].save(False)
+if __name__ == '__main__':
+    x = Generate_Data(5, 3)
+    x.plot()
 
 
 
