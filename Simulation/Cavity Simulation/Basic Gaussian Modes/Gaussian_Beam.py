@@ -234,7 +234,7 @@ class Generate_Data(list):
 
         'max_order': Max order of Guassian modes in superpositions (x > 0).
         'number_of_modes': How many modes you want to superimpose together (x > 0).
-        'ampltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
+        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
         '''
         self.max_order = max_order
         self.number_of_modes = number_of_modes
