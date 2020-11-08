@@ -141,32 +141,31 @@ class Model:
 
         return model
     
-    def plot_history(self):
+    def plot(self):
         '''
         Plot the history of the model whilst training.
         '''
         print("Plotting history...")
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-
         fig.suptitle("Training and Validation History for " + str(self))
 
         t = np.arange(1, self.epochs + 1)
-
-        # ax1.set_title("Loss")
-        # ax2.set_title("Accuracy")
         
         ax1.plot(t, self.loss_history, label="Training Loss")
         ax2.plot(t, self.accuracy_history, label="Training Accuracy")
         ax1.plot(t, self.val_loss_history, label="Validation Loss")
         ax2.plot(t, self.val_accuracy_history, label="Validation Accuracy")
 
+        # ax1.set_title("Loss")
+        # ax2.set_title("Accuracy")
+
         plt.xlim(0, self.epochs)
         ax1.set_ylim(0, np.max(self.val_loss_history))
         ax2.set_ylim(0, 1)
 
         ax1.grid()
-        ax1.legend()
         ax2.grid()
+        ax1.legend()
         ax2.legend()
 
         plt.show()
@@ -187,17 +186,12 @@ class Model:
         np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.val_accuracy_history, delimiter=",")
         print("Done\n")
     
-    def load(self, max_order: int, number_of_modes: int, amplitude_variation: float, epochs: int):
+    def load(self):
         '''
         Load a saved model.
         '''
         print("Loading model...")
-        self.max_order = max_order
-        self.number_of_modes = number_of_modes
-        self.amplitude_variation = amplitude_variation
-        self.epochs = epochs
-
-        #self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
+        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
 
         self.loss_history = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
         self.accuracy_history = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
@@ -233,6 +227,6 @@ if __name__ == '__main__':
     model.train()
     model.save()
 
-    # model2 = Model()
-    # model2.load(5, 3, 0.5, 50)
-    # model2.plot_history()
+    # model2 = Model(5, 3, 0.3, 30)
+    # model2.load()
+    # model2.plot()
