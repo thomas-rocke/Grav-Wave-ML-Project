@@ -38,13 +38,13 @@ class Model:
         '''
         return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.epochs) + ")"
 
-    def train(self):
+    def train(self, repeats: int = 1):
         '''
         Train the model.
         '''
         # Initialisation
 
-        (X_train, Y_train), (X_test, Y_test), num_classes, solutions = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation) # Load training and validation data
+        (X_train, Y_train), (X_test, Y_test), num_classes, solutions = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation, repeats) # Load training and validation data
         self.model = self.create_model(num_classes, X_train.shape[1:]) # Create the model
         self.solutions = solutions
 
@@ -68,19 +68,19 @@ class Model:
         # self.save_performance(history_callback)
         # self.save_model()
 
-    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0):
+    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1):
         '''
         Load training and testing data.
         '''
         print("Generating training data...")
 
-        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, False)
+        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, repeats, False)
         X_train = np.array([i.superposition for i in x_train])[..., np.newaxis]
         y_train, Y_train = x_train.get_outputs()
 
         print("Done!\n\nGenerating testing data...")
 
-        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, False)
+        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
         X_test = np.array([i.superposition for i in x_test])[..., np.newaxis]
         y_test, Y_test = x_test.get_outputs()
 
@@ -203,7 +203,7 @@ class Model:
         self.val_loss_history = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
         self.val_accuracy_history = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
 
-        self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=Gaussian_Mode, delimiter=",")
+        self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
         print("Done!\n")
     
     def check_trained(self):
@@ -248,11 +248,11 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.4, epochs=30)
-    model.train()
+    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.2, epochs=30)
+    model.train(repeats=3)
     model.save()
 
-    model2 = Model(5, 3, 0.4, 30)
+    model2 = Model(5, 3, 0.2, 30)
     model2.load()
     model2.plot()
     print(model2.predict(Superposition([Gaussian_Mode(0,1), Gaussian_Mode(3,3)], 1.8).superposition))

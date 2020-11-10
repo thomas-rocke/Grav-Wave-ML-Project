@@ -228,7 +228,7 @@ class Generate_Data(list):
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
     '''
     
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, info: bool = True):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1, info: bool = True):
         '''
         Initialise the class with the required complexity.
 
@@ -239,6 +239,7 @@ class Generate_Data(list):
         self.max_order = max_order
         self.number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
+        self.repeats = repeats
 
         if info: print("\n-----| Generating Data |-----\n")
         if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\n")
@@ -257,7 +258,8 @@ class Generate_Data(list):
         # p.map(self.process, self.combs)
 
         super().__init__()
-        for i in tqdm(range(len(self.combs))): self.append(Superposition(self.combs[i], amplitude_variation))
+        for r in range(repeats):
+            for i in tqdm(range(len(self.combs))): self.append(Superposition(self.combs[i], amplitude_variation))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
     
@@ -265,7 +267,7 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
-        return self.combs, np.array([[i] for i in range(len(self.combs))])
+        return self.combs, np.array(self.repeats * [[i] for i in range(len(self.combs))])
     
     # def pool_handler(self, data, threads):
     #     '''
