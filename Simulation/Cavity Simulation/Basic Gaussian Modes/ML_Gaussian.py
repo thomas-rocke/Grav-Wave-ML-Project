@@ -9,7 +9,7 @@ from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.constraints import maxnorm
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.utils import np_utils
-from Gaussian_Beam import Generate_Data
+from Gaussian_Beam import Generate_Data, Superposition, Gaussian_Mode
 
 
 class Model:
@@ -29,6 +29,8 @@ class Model:
         self.model = None
         self.loss_history, self.accuracy_history = None, None
         self.val_loss_history, self.val_accuracy_history = None, None
+
+        self.solutions = None
     
     def __str__(self):
         '''
@@ -36,14 +38,15 @@ class Model:
         '''
         return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.epochs) + ")"
 
-    def train(self):
+    def train(self, repeats: int = 1):
         '''
         Train the model.
         '''
         # Initialisation
 
-        (X_train, Y_train), (X_test, Y_test), num_classes = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation) # Load training and validation data
+        (X_train, Y_train), (X_test, Y_test), num_classes, solutions = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation, repeats) # Load training and validation data
         self.model = self.create_model(num_classes, X_train.shape[1:]) # Create the model
+        self.solutions = solutions
 
         # Training
 
@@ -65,36 +68,36 @@ class Model:
         # self.save_performance(history_callback)
         # self.save_model()
 
-    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0):
+    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1):
         '''
         Load training and testing data.
         '''
         print("Generating training data...")
 
-        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation)
+        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, repeats, False)
         X_train = np.array([i.superposition for i in x_train])[..., np.newaxis]
         y_train, Y_train = x_train.get_outputs()
 
-        print("Done!\nGenerating testing data...")
+        print("Done!\n\nGenerating testing data...")
 
-        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation)
+        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
         X_test = np.array([i.superposition for i in x_test])[..., np.newaxis]
         y_test, Y_test = x_test.get_outputs()
 
-        print("Done!\n\nOne hot encoding outputs...")
+        print("Done!\n")
 
         Y_train = np_utils.to_categorical(Y_train)
         Y_test = np_utils.to_categorical(Y_test)
 
-        print("Done!\n")
+        solutions = np.array(y_train, dtype=object)
 
-        return (X_train, Y_train), (X_test, Y_test), Y_train.shape[1]
+        return (X_train, Y_train), (X_test, Y_test), Y_train.shape[1], solutions
 
     def create_model(self, num_classes, shape, summary: bool = False):
         '''
         Create the Keras model in preparation for training.
         '''
-        print("Generating model...")
+        print("Generating model... (shape = " + str(shape) + ")")
 
         model = Sequential()
 
@@ -141,32 +144,31 @@ class Model:
 
         return model
     
-    def plot_history(self):
+    def plot(self):
         '''
         Plot the history of the model whilst training.
         '''
         print("Plotting history...")
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-
         fig.suptitle("Training and Validation History for " + str(self))
 
         t = np.arange(1, self.epochs + 1)
-
-        # ax1.set_title("Loss")
-        # ax2.set_title("Accuracy")
         
         ax1.plot(t, self.loss_history, label="Training Loss")
         ax2.plot(t, self.accuracy_history, label="Training Accuracy")
         ax1.plot(t, self.val_loss_history, label="Validation Loss")
         ax2.plot(t, self.val_accuracy_history, label="Validation Accuracy")
 
+        # ax1.set_title("Loss")
+        # ax2.set_title("Accuracy")
+
         plt.xlim(0, self.epochs)
         ax1.set_ylim(0, np.max(self.val_loss_history))
         ax2.set_ylim(0, 1)
 
         ax1.grid()
-        ax1.legend()
         ax2.grid()
+        ax1.legend()
         ax2.legend()
 
         plt.show()
@@ -185,24 +187,23 @@ class Model:
         np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.accuracy_history, delimiter=",")
         np.savetxt("Models/" + str(self) + "/val_loss_history.txt", self.val_loss_history, delimiter=",")
         np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.val_accuracy_history, delimiter=",")
+
+        np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
         print("Done\n")
     
-    def load(self, max_order: int, number_of_modes: int, amplitude_variation: float, epochs: int):
+    def load(self):
         '''
         Load a saved model.
         '''
         print("Loading model...")
-        self.max_order = max_order
-        self.number_of_modes = number_of_modes
-        self.amplitude_variation = amplitude_variation
-        self.epochs = epochs
-
-        #self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
+        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
 
         self.loss_history = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
         self.accuracy_history = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
         self.val_loss_history = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
         self.val_accuracy_history = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
+
+        self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
         print("Done!\n")
     
     def check_trained(self):
@@ -215,7 +216,18 @@ class Model:
         else:
             os.makedirs("Models/" + str(self), exist_ok=True) # Create directory for model
             return True
+    
+    def predict(self, data):
+        '''
+        Predict the superposition based on a 2D numpy array of the unknown optical cavity.
+        '''
+        data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
+
+        print("Predicting... (shape = " + str(data.shape) + ")")
+        prediction = self.model.predict(data) # Make prediction using model (return index of superposition)
+        print("Done!\n")
         
+        return self.solutions[np.argmax(prediction, axis=1)]
 
 
 
@@ -229,10 +241,18 @@ class Model:
 
 
 if __name__ == '__main__':
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.3, epochs=30)
-    model.train()
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    print("█████▀█████████████████████████████████████████████████████████████████████████████\n"
+          "█─▄▄▄▄██▀▄─██▄─██─▄█─▄▄▄▄█─▄▄▄▄█▄─▄██▀▄─██▄─▀█▄─▄███▄─▀█▀─▄█─▄▄─█▄─▄▄▀█▄─▄▄─█─▄▄▄▄█\n"
+          "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
+          "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
+
+    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.2, epochs=30)
+    model.train(repeats=3)
     model.save()
 
-    # model2 = Model()
-    # model2.load(5, 3, 0.5, 50)
-    # model2.plot_history()
+    model2 = Model(5, 3, 0.2, 30)
+    model2.load()
+    model2.plot()
+    print(model2.predict(Superposition([Gaussian_Mode(0,1), Gaussian_Mode(3,3)], 1.8).superposition))
