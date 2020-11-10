@@ -44,8 +44,9 @@ class Model:
         '''
         # Initialisation
 
-        (X_train, Y_train), (X_test, Y_test), num_classes = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation) # Load training and validation data
+        (X_train, Y_train), (X_test, Y_test), num_classes, solutions = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation) # Load training and validation data
         self.model = self.create_model(num_classes, X_train.shape[1:]) # Create the model
+        self.solutions = solutions
 
         # Training
 
@@ -88,9 +89,9 @@ class Model:
         Y_train = np_utils.to_categorical(Y_train)
         Y_test = np_utils.to_categorical(Y_test)
 
-        self.solutions = np.array(y_train)
+        solutions = np.array(y_train, dtype=object)
 
-        return (X_train, Y_train), (X_test, Y_test), Y_train.shape[1]
+        return (X_train, Y_train), (X_test, Y_test), Y_train.shape[1], solutions
 
     def create_model(self, num_classes, shape, summary: bool = False):
         '''
@@ -247,11 +248,11 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.2, epochs=30)
+    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.4, epochs=30)
     model.train()
     model.save()
 
-    model2 = Model(5, 3, 0.2, 30)
+    model2 = Model(5, 3, 0.4, 30)
     model2.load()
     model2.plot()
-    print(model2.predict(Superposition([Gaussian_Mode(1,0), Gaussian_Mode(2,2), Gaussian_Mode(2,1)], 0.2).superposition))
+    print(model2.predict(Superposition([Gaussian_Mode(0,1), Gaussian_Mode(3,3)], 1.8).superposition))

@@ -163,7 +163,7 @@ class Superposition(list):
         for i in range(len(self)): self[i].amplitude = random_normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
 
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])) # Computae the superposition of the Gaussian modes
+        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])) # Compute the superposition of the Gaussian modes
 
         self.superposition = superposition / np.linalg.norm(superposition) # Normalise the superposition
     
@@ -248,8 +248,10 @@ class Generate_Data(list):
 
         if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
-        self.combs = list(combinations(gauss_modes, number_of_modes))
-        
+        self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        for i in range(len(self.combs)): print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i])))
+        self.combs = [i[j] for i in self.combs for j in range(len(i))]
+
         # self.pool_handler(self.combs, 5)
         # p = Pool(5)
         # p.map(self.process, self.combs)
