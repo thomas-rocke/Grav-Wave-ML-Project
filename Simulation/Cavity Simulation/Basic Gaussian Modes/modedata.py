@@ -16,7 +16,7 @@ def saveData(superposList, fname, path=None):
 
 
 def loadData(fname, path=None):
-    import numpy as np
+   import numpy as np
    if(path==None):
         path = os.getcwd() + r'\Simulation\Cavity Simulation\Data'
    file = path + os.sep + fname
@@ -26,6 +26,7 @@ def loadData(fname, path=None):
    supers = [eval(superposition) for superposition in superText]
    return supers
 
-
-supers = loadData('testData.txt')
-[s.show() for s in supers]
+x0 = Gaussian_Mode(0, 1, 1)
+x1 = Gaussian_Mode(1, 0, 1j)
+x = Superposition([x0, x1])
+x.show()
