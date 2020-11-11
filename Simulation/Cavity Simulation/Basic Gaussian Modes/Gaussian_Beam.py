@@ -256,7 +256,7 @@ class Generate_Data(list):
         if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
-        for i in range(len(self.combs)): print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i])))
+        if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
 
         # self.pool_handler(self.combs, 5)
