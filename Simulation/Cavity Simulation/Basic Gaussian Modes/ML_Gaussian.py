@@ -50,7 +50,9 @@ class Model:
 
         # Training
 
-        print("Training...")
+        etl = (((len(X_train) / 64) * 6) * self.epochs) / 60
+
+        print("Training... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
         try:
             history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=64)
         except:
