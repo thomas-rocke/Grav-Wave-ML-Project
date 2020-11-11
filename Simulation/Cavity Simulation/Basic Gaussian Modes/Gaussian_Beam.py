@@ -64,13 +64,19 @@ class Gaussian_Mode:
         exp_1 = np.exp(-(r**2) / self.w(z)**2)
         exp_2 = np.exp(-1j * (self.k * z + self.k * (r**2 / (2 * self.R(z))) - self.phi(z)))
 
-        return self.amplitude * (w_ratio * exp_1 * exp_2)
+        return np.array(self.amplitude * (w_ratio * exp_1 * exp_2))
     
     def E_mode(self, x, y, z):
         '''
         Electric field amplitude at x, y, z for a given mode of order l, m.
         '''
-        return self.amplitude * (self.u(x, z, self.l) * self.u(y, z, self.m) * np.exp(-1j * self.k * z))
+        return np.array(self.amplitude * (self.u(x, z, self.l) * self.u(y, z, self.m) * np.exp(-1j * self.k * z)))
+    
+    def I(self, x, y, z):
+        '''
+        Intensity at x, y, z, for a given mode of order l, m.
+        '''
+        return np.abs(self.E_mode(x, y, z)**2)
     
     def w(self, z):
         '''
@@ -121,9 +127,9 @@ class Gaussian_Mode:
         Plot the Gaussian mode.
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-        plt.figure(self.__class__.__name__)
 
-        plt.imshow(np.abs(np.abs(self.E_mode(X, Y, 0))), cmap='Greys_r')
+        plt.figure(self.__class__.__name__)
+        plt.imshow(self.I(X, Y, 0), cmap='Greys_r')
 
         if title: plt.title(str(self))
         plt.axis('off')
@@ -157,13 +163,13 @@ class Superposition(list):
         self.modes = [eval(str(mode)) for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         super().__init__(self.modes)
 
-        random_amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
+        random_amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
         random_normalised_amplitudes = random_amplitudes / np.linalg.norm(random_amplitudes) # Normalise the amplititudes
 
         for i in range(len(self)): self[i].amplitude = random_normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
 
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])) # Compute the superposition of the Gaussian modes
+        superposition = sum([i.I(X, Y, 0) for i in self]) # Compute the superposition of the Gaussian modes
 
         self.superposition = superposition / np.linalg.norm(superposition) # Normalise the superposition
     
@@ -198,9 +204,9 @@ class Superposition(list):
         '''
         Plot the superposition.
         '''
-        # for i in self: i.plot() # Plot the constituent Gaussian modes
-        plt.figure(self.__class__.__name__)
+        for i in self: i.show() # Plot the constituent Gaussian modes
 
+        plt.figure(self.__class__.__name__)
         plt.imshow(self.superposition, cmap='Greys_r')
 
         if title: plt.title(str(self))
@@ -269,6 +275,18 @@ class Generate_Data(list):
         '''
         return self.combs, np.array(self.repeats * [[i] for i in range(len(self.combs))])
     
+    def show(self):
+        '''
+        Plot and show all superpositions generated.
+        '''
+        for i in self: i.show()
+    
+    def save(self):
+        '''
+        Plot and save all superpositions generated.
+        '''
+        for i in self: i.save()
+    
     # def pool_handler(self, data, threads):
     #     '''
 
@@ -294,12 +312,6 @@ class Generate_Data(list):
     #     Magic method for repr() function.
     #     '''
     #     return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ")"
-    
-    def plot(self):
-        '''
-        Plot all superpositions generated.
-        '''
-        for i in self: i.plot()
 
 
 
@@ -364,8 +376,16 @@ class Generate_Data(list):
 # x.show()
 
 if __name__ == '__main__':
-    x = Generate_Data(5, 3)
-    x.plot()
+    x1 = Gaussian_Mode(0,1)
+    x2 = Gaussian_Mode(1,0)
+    x = Superposition([x1,x2])
+    x[0].amplitude = 1/np.sqrt(2)
+    x[1].amplitude = 1j/np.sqrt(2)
+    print(x)
+    x.show()
+
+    # x = Generate_Data(5, 3, 0.0)
+    # x.save()
 
 
 

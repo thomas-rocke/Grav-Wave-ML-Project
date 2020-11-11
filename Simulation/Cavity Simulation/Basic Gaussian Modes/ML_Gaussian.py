@@ -51,7 +51,10 @@ class Model:
         # Training
 
         print("Training...")
-        history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=64)
+        try:
+            history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=64)
+        except:
+            print("Aborted!")
         print("Done!\n")
 
         self.loss_history, self.accuracy_history = np.array(history_callback.history["loss"]), np.array(history_callback.history["accuracy"])
@@ -226,8 +229,10 @@ class Model:
         print("Predicting... (shape = " + str(data.shape) + ")")
         prediction = self.model.predict(data) # Make prediction using model (return index of superposition)
         print("Done!\n")
-        
-        return self.solutions[np.argmax(prediction, axis=1)]
+
+        answer = self.solutions[np.argmax(prediction, axis=1)]
+
+        return list(eval(eval(str(answer))[0]))
 
 
 
@@ -248,11 +253,11 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.2, epochs=30)
-    model.train(repeats=3)
+    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.6, epochs=30)
+    model.train(repeats=5)
     model.save()
 
-    model2 = Model(5, 3, 0.2, 30)
+    model2 = Model(5, 3, 0.6, 30)
     model2.load()
     model2.plot()
-    print(model2.predict(Superposition([Gaussian_Mode(0,1), Gaussian_Mode(3,3)], 1.8).superposition))
+    print(model2.predict(Superposition([Gaussian_Mode(2,1), Gaussian_Mode(4,4), Gaussian_Mode(4,1)], 0.2).superposition))
