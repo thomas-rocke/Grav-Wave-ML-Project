@@ -57,7 +57,7 @@ class Model:
         print("Training... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
         try:
             history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=64)
-        except:
+        except KeyboardInterrupt:
             print("Aborted!")
         print("Done!\n")
 
