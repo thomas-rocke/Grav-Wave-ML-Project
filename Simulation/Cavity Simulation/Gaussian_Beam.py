@@ -43,13 +43,13 @@ class Gaussian_Mode:
         self.l = l
         self.m = m
         self.amplitude = amplitude
-    
+
     def __str__(self):
         '''
         Magic method for str() function.
         '''
         return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
-    
+
     def __repr__(self):
         '''
         Magic method for repr() function.
@@ -65,55 +65,55 @@ class Gaussian_Mode:
         exp_2 = np.exp(-1j * (self.k * z + self.k * (r**2 / (2 * self.R(z))) - self.phi(z)))
 
         return np.array(self.amplitude * (w_ratio * exp_1 * exp_2))
-    
+
     def E_mode(self, x, y, z):
         '''
         Electric field amplitude at x, y, z for a given mode of order l, m.
         '''
         return np.array(self.amplitude * (self.u(x, z, self.l) * self.u(y, z, self.m) * np.exp(-1j * self.k * z)))
-    
+
     def I(self, x, y, z):
         '''
         Intensity at x, y, z, for a given mode of order l, m.
         '''
         return np.abs(self.E_mode(x, y, z)**2)
-    
+
     def w(self, z):
         '''
         Spot size parameter is given by a hyperbolic relation.
         '''
         return self.w_0 * np.sqrt(1 + (z / self.z_R)**2)
-    
+
     def R(self, z):
         '''
         Radius of curvature.
         '''
         return z * (1 + (self.z_R / z)**2)
-    
+
     def phi(self, z):
         '''
         Gouy phase is a phase advance gradually aquired by a beam around the focal region.
         '''
         return np.arctan(z / self.z_R)
-    
+
     def P(self, r, z):
         '''
         Power passing through a circle of radius r in the tarnsverse plane at position z.
         '''
         return 1 - np.exp((-2 * r**2) / self.w(z)**2)
-    
+
     def q(self, z):
         '''
         Complex beam parameter.
         '''
         return z + self.z_R * 1j
-    
+
     def u(self, x, z, J):
         '''
         Factors for the x and y dependance.
         '''
         q0 = self.q(0) # ???
-        
+
         t1 = np.sqrt(np.sqrt(2 / np.pi) / (2**J * np.math.factorial(J) * self.w_0))
         t2 = np.sqrt(q0 / self.q(z))
         t3 = (-np.conj(self.q(z)) / self.q(z))**(J / 2)
@@ -121,7 +121,7 @@ class Gaussian_Mode:
         t5 = np.exp(-1j * ((self.k * x**2) / (2 * self.q(z))))
 
         return t1 * t2 * t3 * special.eval_hermite(J, t4) * t5
-    
+
     def plot(self, title: bool = True):
         '''
         Plot the Gaussian mode.
@@ -133,14 +133,14 @@ class Gaussian_Mode:
 
         if title: plt.title(str(self))
         plt.axis('off')
-    
+
     def show(self, title: bool = True):
         '''
         Show the plot of the Gaussian mode.
         '''
         self.plot(title)
         plt.show()
-    
+
     def save(self, title: bool = True):
         '''
         Save the plot of the Gaussian mode.
@@ -172,19 +172,19 @@ class Superposition(list):
         superposition = sum([i.I(X, Y, 0) for i in self]) # Compute the superposition of the Gaussian modes
 
         self.superposition = superposition / np.linalg.norm(superposition) # Normalise the superposition
-    
+
     def __str__(self):
         '''
         Magic method for str() function.
         '''
         return self.__class__.__name__ + "(" + str(self.modes) + ")"
-    
+
     def __repr__(self):
         '''
         Magic method for repr() function.
         '''
         return str(self)
-    
+
     def random_amplitude(self, amplitude_variation):
         '''
         Get random value for the amplitude based on amplitude variation as the width of a normal distribution.
@@ -193,7 +193,7 @@ class Superposition(list):
         # x = 0
         # while x <= 0: x = round(np.random.normal(1, amplitude_variation), 2)
         # return x
-    
+
     # def get_truncated_normal(self, mean=1, sd=1, low=0, upp=10):
     #     '''
     #     Get truncated normal in a format that is easier to interpret.
@@ -204,21 +204,21 @@ class Superposition(list):
         '''
         Plot the superposition.
         '''
-        for i in self: i.show() # Plot the constituent Gaussian modes
-
         plt.figure(self.__class__.__name__)
         plt.imshow(self.superposition, cmap='Greys_r')
 
         if title: plt.title(str(self))
         plt.axis('off')
-    
+
     def show(self, title: bool = True):
         '''
         Show the plot of the Gaussian mode.
         '''
+        for i in self: i.show() # Plot the constituent Gaussian modes
+
         self.plot(title)
         plt.show()
-    
+
     def save(self, title: bool = True):
         '''
         Save the plot of the Gaussian mode.
@@ -233,7 +233,7 @@ class Generate_Data(list):
     '''
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
     '''
-    
+
     def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1, info: bool = True):
         '''
         Initialise the class with the required complexity.
@@ -268,45 +268,47 @@ class Generate_Data(list):
             for i in tqdm(range(len(self.combs))): self.append(Superposition(self.combs[i], amplitude_variation))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
-    
+
     def get_outputs(self):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
         return self.combs, np.array(self.repeats * [[i] for i in range(len(self.combs))])
-    
-    def show(self):
+
+    def show(self, title: bool = True):
         '''
         Plot and show all superpositions generated.
         '''
-        for i in self: i.show()
-    
-    def save(self):
+        for i in self: i.show(title)
+
+    def save(self, title: bool = True):
         '''
         Plot and save all superpositions generated.
         '''
-        for i in self: i.save()
-    
+        print("Saving dataset...")
+        for i in tqdm(range(len(self))): self[i].save(title)
+        print("Done!\n")
+
     # def pool_handler(self, data, threads):
     #     '''
 
     #     '''
     #     p = Pool(threads)
     #     p.map(self.process, data)
-    
+
     # def process(self, data):
     #     '''
-        
+
     #     '''
     #     # print(self.combs.index(data), data)
     #     data[0].append(Superposition(data[1], self.amplitude_variation))
-    
+
     # def __str__(self):
     #     '''
     #     Magic method for str() function.
     #     '''
     #     return self.__class__.__name__ + "(" + [self.__getitem__(i) for i in range(len(self))] + ")"
-    
+
     # def __repr__(self):
     #     '''
     #     Magic method for repr() function.
@@ -319,6 +321,30 @@ class Generate_Data(list):
 ##################################################
 ##########                              ##########
 ##########            MAIN              ##########
+##########                              ##########
+##################################################
+
+
+
+if __name__ == '__main__':
+    x1 = Gaussian_Mode(0,1)
+    x2 = Gaussian_Mode(1,0)
+    x = Superposition([x1,x2])
+    x[0].amplitude = 1/np.sqrt(2)
+    x[1].amplitude = 1j/np.sqrt(2)
+    print(x)
+    x.show()
+
+    x = Generate_Data(5, 3, 0.0)
+    x.save(False)
+
+
+
+
+
+##################################################
+##########                              ##########
+##########           TESTING            ##########
 ##########                              ##########
 ##################################################
 
@@ -341,73 +367,6 @@ class Generate_Data(list):
 #     pool_handler(x, int(t))
 
 
-# def generate_modes(ls, ms):
-#     '''
-#     Generate and save modes from (0,0) to (ls,ms).
-#     '''
-#     for l in range(ls):
-#         for m in tqdm(range(ms)):
-#             X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-            
-#             mode = Gaussian_Mode(0.4, 600, 500, l, m)
-
-#             plt.imshow(np.abs(mode.E_mode(X, Y, 0)), cmap='Greys_r')
-#             plt.axis('off')
-#             plt.savefig("Images/" + str(l) + str(m) + ".png", bbox_inches='tight', pad_inches=0)
-
-
-
-
-
-##################################################
-##########                              ##########
-##########           TESTING            ##########
-##########                              ##########
-##################################################
-
-
-
-# x1 = Gaussian_Mode(0,1)
-# x2 = Gaussian_Mode(1,0)
-# x = Superposition([x1,x2])
-# x[0].amplitude = 1/np.sqrt(2)
-# x[1].amplitude = 1j/np.sqrt(2)
-# print(x)
-# x.show()
-
-if __name__ == '__main__':
-    x1 = Gaussian_Mode(0,1)
-    x2 = Gaussian_Mode(1,0)
-    x = Superposition([x1,x2])
-    x[0].amplitude = 1/np.sqrt(2)
-    x[1].amplitude = 1j/np.sqrt(2)
-    print(x)
-    x.show()
-
-    # x = Generate_Data(5, 3, 0.0)
-    # x.save()
-
-
-
-
-# x = np.arange(-1.2, 1.2, 0.01)
-# y = np.arange(-1.2, 1.2, 0.01)
-
-# X, Y = np.meshgrid(x, y)
-
-# fig, ax = plt.subplots()
-
-# Testing a superposition of 3 basic modes.
-
-# mode = Gaussian_Mode(0.4, 600, 500)
-
-# plt.imshow(np.abs(mode.E2(X, Y, 0, 1, 0) + mode.E2(X, Y, 0, 2, 2) + mode.E2(X, Y, 0, 4, 1)), cmap='Greys_r')
-# plt.axis('off')
-# plt.savefig("Images/superposition.png", bbox_inches='tight', pad_inches=0)
-
-# Generating and saving all mode combinations from (0,0) to (5,5).
-
-# generate_modes(5, 5)
 
 
 

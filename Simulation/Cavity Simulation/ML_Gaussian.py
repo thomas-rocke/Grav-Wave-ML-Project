@@ -16,7 +16,7 @@ class Model:
     '''
     The class 'Model' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, epochs: int = 30):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, epochs: int = 30, repeats: int = 1):
         '''
         Initialise the class.
         '''
@@ -24,27 +24,28 @@ class Model:
         self.number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
         self.epochs = epochs
+        self.repeats = repeats
+
         self.optimizer = "Adam"
 
         self.model = None
         self.loss_history, self.accuracy_history = None, None
         self.val_loss_history, self.val_accuracy_history = None, None
-
         self.solutions = None
     
     def __str__(self):
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.epochs) + ")"
+        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.epochs) + ", " + str(self.repeats) + ")"
 
-    def train(self, repeats: int = 1):
+    def train(self):
         '''
         Train the model.
         '''
         # Initialisation
 
-        (X_train, Y_train), (X_test, Y_test), num_classes, solutions = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation, repeats) # Load training and validation data
+        (X_train, Y_train), (X_test, Y_test), num_classes, solutions = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation) # Load training and validation data
         self.model = self.create_model(num_classes, X_train.shape[1:]) # Create the model
         self.solutions = solutions
 
@@ -73,13 +74,13 @@ class Model:
         # self.save_performance(history_callback)
         # self.save_model()
 
-    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1):
+    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0):
         '''
         Load training and testing data.
         '''
         print("Generating training data...")
 
-        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, repeats, False)
+        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
         X_train = np.array([i.superposition for i in x_train])[..., np.newaxis]
         y_train, Y_train = x_train.get_outputs()
 
@@ -154,6 +155,7 @@ class Model:
         Plot the history of the model whilst training.
         '''
         print("Plotting history...")
+        
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
         fig.suptitle("Training and Validation History for " + str(self))
 
@@ -176,8 +178,14 @@ class Model:
         ax1.legend()
         ax2.legend()
 
-        plt.show()
         print("Done!\n")
+    
+    def show(self):
+        '''
+        Show the plot of the Gaussian mode.
+        '''
+        self.plot()
+        plt.show()
     
     def save(self):
         '''
@@ -186,6 +194,7 @@ class Model:
         if not self.check_trained(): return
 
         print("Saving model...")
+
         self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
         np.savetxt("Models/" + str(self) + "/loss_history.txt", self.loss_history, delimiter=",")
@@ -194,6 +203,10 @@ class Model:
         np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.val_accuracy_history, delimiter=",")
 
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
+
+        self.plot()
+        plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
+
         print("Done\n")
     
     def load(self):
@@ -201,6 +214,7 @@ class Model:
         Load a saved model.
         '''
         print("Loading model...")
+
         self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
 
         self.loss_history = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
@@ -209,6 +223,7 @@ class Model:
         self.val_accuracy_history = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
 
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
+
         print("Done!\n")
     
     def check_trained(self):
@@ -255,11 +270,11 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.6, epochs=30)
-    model.train(repeats=5)
+    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.0, epochs=30, repeats=5)
+    model.train()
     model.save()
 
-    model2 = Model(5, 3, 0.6, 30)
+    model2 = Model(5, 3, 0.0, 30, 5)
     model2.load()
-    model2.plot()
-    print(model2.predict(Superposition([Gaussian_Mode(2,1), Gaussian_Mode(4,4), Gaussian_Mode(4,1)], 0.2).superposition))
+    model2.show()
+    print(model2.predict(Superposition([Gaussian_Mode(2,1), Gaussian_Mode(4,4), Gaussian_Mode(4,1)], 0.0).superposition))
