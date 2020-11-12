@@ -81,13 +81,13 @@ class Model:
         print("Generating training data...")
 
         x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
-        X_train = np.array([i.superposition for i in x_train])[..., np.newaxis]
+        X_train = np.array([i.superpose() for i in x_train])[..., np.newaxis]
         y_train, Y_train = x_train.get_outputs()
 
         print("Done!\n\nGenerating testing data...")
 
         x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
-        X_test = np.array([i.superposition for i in x_test])[..., np.newaxis]
+        X_test = np.array([i.superpose() for i in x_test])[..., np.newaxis]
         y_test, Y_test = x_test.get_outputs()
 
         print("Done!\n")
@@ -155,7 +155,7 @@ class Model:
         Plot the history of the model whilst training.
         '''
         print("Plotting history...")
-        
+
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
         fig.suptitle("Training and Validation History for " + str(self))
 
@@ -270,11 +270,12 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.0, epochs=30, repeats=5)
+    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.0, epochs=30, repeats=1)
     model.train()
     model.save()
 
-    model2 = Model(5, 3, 0.0, 30, 5)
+    model2 = Model(5, 3, 0.0, 30, 1)
     model2.load()
     model2.show()
-    print(model2.predict(Superposition([Gaussian_Mode(2,1), Gaussian_Mode(4,4), Gaussian_Mode(4,1)], 0.0).superposition))
+    sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(4,4), Gaussian_Mode(4,1)], 0.0)
+    print(model2.predict(sup.superpose()))
