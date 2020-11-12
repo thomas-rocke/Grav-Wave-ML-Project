@@ -266,11 +266,11 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.2, epochs=30, repeats=1)
+    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.4, epochs=30, repeats=5)
     model.train()
     model.save()
 
-    model2 = Model(5, 3, 0.2, 30, 1)
+    model2 = Model(5, 3, 0.4, 30, 5)
     model2.load()
     model2.show()
     sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(4,4), Gaussian_Mode(4,1)], 0.2)

@@ -279,7 +279,7 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
-        return self.combs, np.array(self.repeats * [[i] for i in range(len(self.combs))])
+        return self.combs, np.array([[i] for i in range(len(self.combs))])
 
     def show(self, title: bool = True):
         '''
