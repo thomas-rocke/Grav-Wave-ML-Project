@@ -16,6 +16,7 @@ import matplotlib.animation as animation
 from tqdm import tqdm
 from itertools import combinations
 from multiprocessing import Pool, cpu_count
+import time
 
 
 
@@ -185,8 +186,9 @@ class Superposition(list):
         Compute the superposition of the Gaussian modes.
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
+        
         superposition = sum([i.I(X, Y, 0) for i in self])
-
+        
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
     def random_amplitude(self, amplitude_variation):
@@ -269,7 +271,7 @@ class Generate_Data(list):
 
         super().__init__()
         for r in range(repeats):
-            for i in tqdm(range(len(self.combs))): self.append(Superposition(self.combs[i], amplitude_variation))
+            for i in self.combs: self.append(Superposition(i, amplitude_variation))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
 
