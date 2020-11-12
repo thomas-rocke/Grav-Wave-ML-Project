@@ -168,11 +168,6 @@ class Superposition(list):
 
         for i in range(len(self)): self[i].amplitude = random_normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
 
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-        superposition = sum([i.I(X, Y, 0) for i in self]) # Compute the superposition of the Gaussian modes
-
-        self.superposition = superposition / np.linalg.norm(superposition) # Normalise the superposition
-
     def __str__(self):
         '''
         Magic method for str() function.
@@ -184,6 +179,15 @@ class Superposition(list):
         Magic method for repr() function.
         '''
         return str(self)
+    
+    def superpose(self):
+        '''
+        Compute the superposition of the Gaussian modes.
+        '''
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
+        superposition = sum([i.I(X, Y, 0) for i in self])
+
+        return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
     def random_amplitude(self, amplitude_variation):
         '''
@@ -205,7 +209,7 @@ class Superposition(list):
         Plot the superposition.
         '''
         plt.figure(self.__class__.__name__)
-        plt.imshow(self.superposition, cmap='Greys_r')
+        plt.imshow(self.superpose(), cmap='Greys_r')
 
         if title: plt.title(str(self))
         plt.axis('off')
