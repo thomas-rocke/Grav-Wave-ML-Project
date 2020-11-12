@@ -1,6 +1,6 @@
 import os
-from Gaussian_Modes import Superposition
-from Gaussian_Modes import Gaussian_Mode
+from Gaussian_Beam import Superposition
+from Gaussian_Beam import Gaussian_Mode
 
 def saveData(superposList, fname, path=None):    
     if(path==None):
@@ -25,8 +25,3 @@ def loadData(fname, path=None):
        superText = np.genfromtxt(f, delimiter='\n', dtype=str)
    supers = [eval(superposition) for superposition in superText]
    return supers
-
-x0 = Gaussian_Mode(0, 1, 1)
-x1 = Gaussian_Mode(1, 0, 1j)
-x = Superposition([x0, x1])
-x.show()
