@@ -27,6 +27,7 @@ class Model:
         self.epochs = epochs
         self.repeats = repeats
 
+        self.batch_size = 64
         self.optimizer = "Adam"
 
         self.model = None
@@ -54,11 +55,11 @@ class Model:
 
         # Training
 
-        etl = (((len(X_train) / 64) * 6) * self.epochs) / 60
+        etl = (((len(X_train) / self.batch_size) * 6) * self.epochs) / 60
 
-        print("Training for " + str(self.epochs) + " epochs... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
+        print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " for " + str(self.epochs) + " epochs... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
         try:
-            history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=64)
+            history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=self.batch_size)
         except KeyboardInterrupt:
             print("Aborted!")
         print("Done!\n")
