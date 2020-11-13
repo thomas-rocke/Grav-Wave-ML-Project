@@ -283,7 +283,7 @@ class Generate_Data(list):
         '''
         Get all the superpositions for the dataset.
         '''
-        return np.array([self[i].superpose() for i in tqdm(range(len(self)))])[..., np.newaxis]
+        return np.array([i.superpose() for i in tqdm(self)])[..., np.newaxis]
 
     def get_outputs(self):
         '''
@@ -302,7 +302,7 @@ class Generate_Data(list):
         Plot and save all superpositions generated.
         '''
         print("Saving dataset...")
-        for i in tqdm(range(len(self))): self[i].save(title)
+        for i in tqdm(self): i.save(title)
         print("Done!\n")
 
     # def pool_handler(self, data, threads):
