@@ -194,7 +194,7 @@ class Superposition(list):
         
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
-    def random_amplitude(self, amplitude_variation):
+    def random_amplitude(self, amplitude_variation: float):
         '''
         Get random value for the amplitude based on amplitude variation as the width of a normal distribution.
         '''
@@ -243,7 +243,7 @@ class Generate_Data(list):
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
     '''
 
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1, info: bool = True):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, repeats: int = 1, info: bool = True):
         '''
         Initialise the class with the required complexity.
 
@@ -264,9 +264,10 @@ class Generate_Data(list):
 
         if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
-        self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        # self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        self.combs = list(combinations(gauss_modes, number_of_modes))
         if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
-        self.combs = [i[j] for i in self.combs for j in range(len(i))]
+        # self.combs = [i[j] for i in self.combs for j in range(len(i))]
 
         # self.pool_handler(self.combs, 5)
         # p = Pool(5)
@@ -277,6 +278,12 @@ class Generate_Data(list):
             for i in self.combs: self.append(Superposition(i, amplitude_variation))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+    
+    def superpose(self):
+        '''
+        Get all the superpositions for the dataset.
+        '''
+        return np.array([self[i].superpose() for i in tqdm(range(len(self)))])[..., np.newaxis]
 
     def get_outputs(self):
         '''

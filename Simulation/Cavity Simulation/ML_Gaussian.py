@@ -33,7 +33,9 @@ class Model:
         self.loss_history, self.accuracy_history = None, None
         self.val_loss_history, self.val_accuracy_history = None, None
         self.solutions = None
-    
+
+        print("____________________| " + str(self) + " |____________________\n")
+
     def __str__(self):
         '''
         Magic method for the str() function.
@@ -54,7 +56,7 @@ class Model:
 
         etl = (((len(X_train) / 64) * 6) * self.epochs) / 60
 
-        print("Training... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
+        print("Training for " + str(self.epochs) + " epochs... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
         try:
             history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=64)
         except KeyboardInterrupt:
@@ -74,16 +76,16 @@ class Model:
         '''
         Load training and testing data.
         '''
-        print("Generating training data...")
+        print("Generating " + str(self.repeats) + " dataset of training data...")
 
         x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
-        X_train = np.array([x_train[i].superpose() for i in tqdm(range(len(x_train)))])[..., np.newaxis]
+        X_train = x_train.superpose()
         y_train, Y_train = x_train.get_outputs()
 
         print("Done!\n\nGenerating testing data...")
 
         x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
-        X_test = np.array([x_test[i].superpose() for i in tqdm(range(len(x_test)))])[..., np.newaxis]
+        X_test = x_test.superpose()
         y_test, Y_test = x_test.get_outputs()
 
         print("Done!\n")
@@ -266,37 +268,30 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    # model = Model(5, 3, 0.4, 30, 1)
-    # model.train()
-    # model.save()
-    # model = Model(5, 3, 0.4, 30, 5)
-    # model.train()
-    # model.save()
-    # model = Model(5, 3, 0.0, 30, 1)
-    # model.train()
-    # model.save()
-    # model = Model(5, 3, 0.2, 30, 1)
-    # model.train()
-    # model.save()
-    # model = Model(5, 3, 0.6, 30, 1)
-    # model.train()
-    # model.save()
+    amplitude_variations = np.arange(0.0, 1.2, 0.2)
+    repeats = np.arange(1, 6, 2)
+
+    for r in repeats:
+        for a in amplitude_variations:
+            model = Model(5, 3, a, 30, r)
+            model.train()
+            model.save()
 
     max_order = 5
     number_of_modes = 3
     amplitude_variation = 0.2
     epochs = 30
-    repeats = 1
+    repeats = 5
 
     # model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
     # model.train()
     # model.save()
 
-    model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
-    model2.load()
-    model2.show()
-    sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(2,2), Gaussian_Mode(4,1)], amplitude_variation)
-    sup.show()
-    prediction = Superposition(model2.predict(sup.superpose()))
-    prediction.show()
-    print(prediction)
+    # model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    # model2.load()
+    # model2.show()
+    # sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(2,2), Gaussian_Mode(4,1)], amplitude_variation)
+    # sup.show()
+    # prediction = Superposition(model2.predict(sup.superpose()))
+    # prediction.show()
+    # print(prediction)
