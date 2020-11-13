@@ -150,8 +150,6 @@ class Model:
         '''
         Plot the history of the model whilst training.
         '''
-        print("Plotting history...")
-
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
         fig.suptitle("Training and Validation History for " + str(self))
 
@@ -173,15 +171,17 @@ class Model:
         ax2.grid()
         ax1.legend()
         ax2.legend()
-
-        print("Done!\n")
     
     def show(self):
         '''
         Show the plot of the Gaussian mode.
         '''
+        print("Plotting history...")
+
         self.plot()
         plt.show()
+
+        print("Done!\n")
     
     def save(self):
         '''
@@ -203,7 +203,7 @@ class Model:
         self.plot()
         plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
 
-        print("Done\n")
+        print("Done!\n")
     
     def load(self):
         '''
@@ -266,12 +266,37 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.4, epochs=30, repeats=5)
-    model.train()
-    model.save()
+    # model = Model(5, 3, 0.4, 30, 1)
+    # model.train()
+    # model.save()
+    # model = Model(5, 3, 0.4, 30, 5)
+    # model.train()
+    # model.save()
+    # model = Model(5, 3, 0.0, 30, 1)
+    # model.train()
+    # model.save()
+    # model = Model(5, 3, 0.2, 30, 1)
+    # model.train()
+    # model.save()
+    # model = Model(5, 3, 0.6, 30, 1)
+    # model.train()
+    # model.save()
 
-    model2 = Model(5, 3, 0.4, 30, 5)
+    max_order = 5
+    number_of_modes = 3
+    amplitude_variation = 0.2
+    epochs = 30
+    repeats = 1
+
+    # model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    # model.train()
+    # model.save()
+
+    model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
     model2.load()
     model2.show()
-    sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(4,4), Gaussian_Mode(4,1)], 0.2)
-    print(model2.predict(sup.superpose()))
+    sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(2,2), Gaussian_Mode(4,1)], amplitude_variation)
+    sup.show()
+    prediction = Superposition(model2.predict(sup.superpose()))
+    prediction.show()
+    print(prediction)
