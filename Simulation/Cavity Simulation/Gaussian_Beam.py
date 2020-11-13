@@ -16,6 +16,7 @@ import matplotlib.animation as animation
 from tqdm import tqdm
 from itertools import combinations
 from multiprocessing import Pool, cpu_count
+import time
 
 
 
@@ -156,17 +157,20 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, modes: list, amplitude_variation: float = 0):
+    def __init__(self, modes: list, amplitude_variation: float = 0.0):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
         self.modes = [eval(str(mode)) for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         super().__init__(self.modes)
 
-        random_amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
-        random_normalised_amplitudes = random_amplitudes / np.linalg.norm(random_amplitudes) # Normalise the amplititudes
+        if amplitude_variation > 0:
+            amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+        else:
+            amplitudes = [i.amplitude for i in self]
 
-        for i in range(len(self)): self[i].amplitude = random_normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
+        normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+        for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
@@ -185,8 +189,9 @@ class Superposition(list):
         Compute the superposition of the Gaussian modes.
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
+        
         superposition = sum([i.I(X, Y, 0) for i in self])
-
+        
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
     def random_amplitude(self, amplitude_variation):
@@ -218,7 +223,7 @@ class Superposition(list):
         '''
         Show the plot of the Gaussian mode.
         '''
-        for i in self: i.show() # Plot the constituent Gaussian modes
+        # for i in self: i.show() # Plot the constituent Gaussian modes
 
         self.plot(title)
         plt.show()
@@ -269,7 +274,7 @@ class Generate_Data(list):
 
         super().__init__()
         for r in range(repeats):
-            for i in tqdm(range(len(self.combs))): self.append(Superposition(self.combs[i], amplitude_variation))
+            for i in self.combs: self.append(Superposition(i, amplitude_variation))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
 

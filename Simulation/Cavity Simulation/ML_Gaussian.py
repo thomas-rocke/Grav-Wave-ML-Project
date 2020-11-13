@@ -3,6 +3,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and err
 
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
@@ -56,7 +57,7 @@ class Model:
         print("Training... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
         try:
             history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=64)
-        except:
+        except KeyboardInterrupt:
             print("Aborted!")
         print("Done!\n")
 
@@ -69,11 +70,6 @@ class Model:
         scores = self.model.evaluate(X_test, Y_test, verbose=0)
         print("Done! Accuracy: %.2f%%\n" % (scores[1]*100))
 
-        # # Saving
-
-        # self.save_performance(history_callback)
-        # self.save_model()
-
     def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0):
         '''
         Load training and testing data.
@@ -81,13 +77,13 @@ class Model:
         print("Generating training data...")
 
         x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
-        X_train = np.array([i.superpose() for i in x_train])[..., np.newaxis]
+        X_train = np.array([x_train[i].superpose() for i in tqdm(range(len(x_train)))])[..., np.newaxis]
         y_train, Y_train = x_train.get_outputs()
 
         print("Done!\n\nGenerating testing data...")
 
         x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
-        X_test = np.array([i.superpose() for i in x_test])[..., np.newaxis]
+        X_test = np.array([x_test[i].superpose() for i in tqdm(range(len(x_test)))])[..., np.newaxis]
         y_test, Y_test = x_test.get_outputs()
 
         print("Done!\n")
@@ -154,8 +150,6 @@ class Model:
         '''
         Plot the history of the model whilst training.
         '''
-        print("Plotting history...")
-
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
         fig.suptitle("Training and Validation History for " + str(self))
 
@@ -177,15 +171,17 @@ class Model:
         ax2.grid()
         ax1.legend()
         ax2.legend()
-
-        print("Done!\n")
     
     def show(self):
         '''
         Show the plot of the Gaussian mode.
         '''
+        print("Plotting history...")
+
         self.plot()
         plt.show()
+
+        print("Done!\n")
     
     def save(self):
         '''
@@ -207,7 +203,7 @@ class Model:
         self.plot()
         plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
 
-        print("Done\n")
+        print("Done!\n")
     
     def load(self):
         '''
@@ -270,12 +266,37 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    model = Model(max_order=5, number_of_modes=3, amplitude_variation=0.0, epochs=30, repeats=1)
-    model.train()
-    model.save()
+    # model = Model(5, 3, 0.4, 30, 1)
+    # model.train()
+    # model.save()
+    # model = Model(5, 3, 0.4, 30, 5)
+    # model.train()
+    # model.save()
+    # model = Model(5, 3, 0.0, 30, 1)
+    # model.train()
+    # model.save()
+    # model = Model(5, 3, 0.2, 30, 1)
+    # model.train()
+    # model.save()
+    # model = Model(5, 3, 0.6, 30, 1)
+    # model.train()
+    # model.save()
 
-    model2 = Model(5, 3, 0.0, 30, 1)
+    max_order = 5
+    number_of_modes = 3
+    amplitude_variation = 0.2
+    epochs = 30
+    repeats = 1
+
+    # model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    # model.train()
+    # model.save()
+
+    model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
     model2.load()
     model2.show()
-    sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(4,4), Gaussian_Mode(4,1)], 0.0)
-    print(model2.predict(sup.superpose()))
+    sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(2,2), Gaussian_Mode(4,1)], amplitude_variation)
+    sup.show()
+    prediction = Superposition(model2.predict(sup.superpose()))
+    prediction.show()
+    print(prediction)
