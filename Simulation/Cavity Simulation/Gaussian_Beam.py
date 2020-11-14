@@ -37,14 +37,15 @@ class Gaussian_Mode:
         '''
         Initialise class.
         '''
-        self.n = n
-        self.w_0 = w_0 # Waist radius
-        self.z_R = (np.pi * w_0**2 * n) / wavelength # Rayleigh range
-        self.k = (2 * np.pi * n) / wavelength # Wave number
-
         self.l = l
         self.m = m
         self.amplitude = amplitude
+        self.w_0 = w_0 # Waist radius
+        self.wavelength = wavelength
+        self.n = n
+
+        self.z_R = (np.pi * w_0**2 * n) / wavelength # Rayleigh range
+        self.k = (2 * np.pi * n) / wavelength # Wave number
 
     def __str__(self):
         '''
