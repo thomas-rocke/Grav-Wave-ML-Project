@@ -37,13 +37,15 @@ class Gaussian_Mode:
         '''
         Initialise class.
         '''
-        self.w_0 = w_0 # Waist radius
-        self.z_R = (np.pi * w_0**2 * n) / wavelength # Rayleigh range
-        self.k = (2 * np.pi * n) / wavelength # Wave number
-
         self.l = l
         self.m = m
         self.amplitude = amplitude
+        self.w_0 = w_0 # Waist radius
+        self.wavelength = wavelength
+        self.n = n
+
+        self.z_R = (np.pi * w_0**2 * n) / wavelength # Rayleigh range
+        self.k = (2 * np.pi * n) / wavelength # Wave number
 
     def __str__(self):
         '''
@@ -57,17 +59,26 @@ class Gaussian_Mode:
         '''
         return str(self)
 
-    def copy(self):
-        return Gaussian_Mode(self.l, self.m, self.amplitude, self.w_0, (2*np.pi*self.n)/self.k, self.n)
-
-    def __imul__(self, val):
-        self.amplitude *= val
-        return self
-
     def __mul__(self, val):
+        '''
+        Magic method for the * operator.
+        '''
         x = self.copy()
         x *= val
         return x
+
+    def __imul__(self, val):
+        '''
+        Magic method for the *= operator.
+        '''
+        self.amplitude *= val
+        return self
+
+    def copy(self):
+        '''
+        Method for copying the Gaussian mode.
+        '''
+        return Gaussian_Mode(self.l, self.m, self.amplitude, self.w_0, self.wavelength, self.n)
 
     def E(self, r, z):
         '''
@@ -173,7 +184,7 @@ class Superposition(list):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
-        self.modes = [eval(str(mode)) for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         super().__init__(self.modes)
 
         if amplitude_variation > 0:
@@ -182,8 +193,8 @@ class Superposition(list):
         else:
             amplitudes = [i.amplitude for i in self]
 
-        # normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
-        # for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
+        normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+        for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
@@ -199,7 +210,7 @@ class Superposition(list):
 
     def __mul__(self, value):
         '''
-        Define multiplication method for superposition
+        Magic method for the * operator.
         '''
         x = self.copy()
         x *= value
@@ -207,7 +218,7 @@ class Superposition(list):
 
     def __imul__(self, value):
         '''
-        Define inline multiplication method for superposition
+        Magic method for the *= operator.
         '''
         for i in self:
             i.amplitude *= value
@@ -219,7 +230,7 @@ class Superposition(list):
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
         
-        #superposition = sum([i.I(X, Y, 0) for i in self])
+        # superposition = sum([i.I(X, Y, 0) for i in self])
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
         
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
