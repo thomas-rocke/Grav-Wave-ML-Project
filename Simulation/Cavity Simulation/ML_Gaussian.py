@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from numba import cuda
+import multiprocessing
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
@@ -28,8 +29,8 @@ class Model:
         self.epochs = epochs
         self.repeats = repeats
 
-        self.step_speed = 0.194
-        self.batch_size = 35
+        self.step_speed = 0.168
+        self.batch_size = 30
         self.optimizer = "Adam"
 
         self.model = None
@@ -169,7 +170,7 @@ class Model:
         # ax2.set_title("Accuracy")
 
         plt.xlim(0, self.epochs)
-        ax1.set_ylim(0, np.max(self.val_loss_history))
+        ax1.set_ylim(0, np.max(self.loss_history))
         ax2.set_ylim(0, 1)
 
         ax1.grid()
@@ -263,6 +264,11 @@ class Model:
 
 
 
+def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+    model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    model.train()
+    model.save()
+
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -282,11 +288,14 @@ if __name__ == '__main__':
     # for n in numbers:
     for r in repeats:
         for a in amplitude_variations:
-            model = Model(5, 3, a, 30, r)
-            model.train()
-            model.save()
-            device = cuda.get_current_device()
-            device.reset()
+            p = multiprocessing.Process(target=train_and_save, args=(5, 3, a, 30, r))
+            p.start()
+            p.join()
+            # model = Model(5, 3, a, 30, r)
+            # model.train()
+            # model.save()
+            # device = cuda.get_current_device()
+            # device.reset()
 
     max_order = 5
     number_of_modes = 3
