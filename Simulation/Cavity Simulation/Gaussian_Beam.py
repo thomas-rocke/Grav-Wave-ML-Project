@@ -43,7 +43,7 @@ def unpack_and_superpose(mode_list):
     for mode in mode_list:
         if type(mode) in [Superposition, Laguerre]:
             modes.extend(mode)
-        elif type(mode) == Gaussian:
+        elif type(mode) == Hermite:
             modes.append(mode)
     return Superposition(modes)
         

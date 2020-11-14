@@ -1,5 +1,5 @@
 import os
-from Gaussian_Beam import Superposition, Gaussian_Mode, Laguerre
+from Gaussian_Beam import Superposition, Hermite, Laguerre
 import Gaussian_Beam as gauss
 import numpy as np
 
@@ -32,8 +32,8 @@ def loadData(fname, path=None):
 
 y = gauss.Laguerre(2, 1)
 y.show()
-x = Gaussian_Mode(0, 0, n=21)
-#y = Gaussian_Mode(0, 2)
+x = Hermite(0, 0, n=21)
+#y = Hermite(0, 2)
 modes = [x, y]
 modes = gauss.randomise_amplitudes(modes, 0.1)
 sup = gauss.unpack_and_superpose(modes)
