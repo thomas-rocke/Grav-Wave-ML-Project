@@ -11,7 +11,7 @@ from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.constraints import maxnorm
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.utils import np_utils
-from Gaussian_Beam import Generate_Data, Superposition, Gaussian_Mode
+from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data
 
 
 class Model:
@@ -300,7 +300,7 @@ if __name__ == '__main__':
     # model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
     # model2.load()
     # model2.show()
-    # sup = Superposition([Gaussian_Mode(2,1), Gaussian_Mode(2,2), Gaussian_Mode(4,1)], amplitude_variation)
+    # sup = Superposition([Hermite(2,1), Hermite(2,2), Hermite(4,1)], amplitude_variation)
     # sup.show()
     # prediction = Superposition(model2.predict(sup.superpose()))
     # prediction.show()
