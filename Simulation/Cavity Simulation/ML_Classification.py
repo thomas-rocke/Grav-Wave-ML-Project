@@ -4,7 +4,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and err
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-from numba import cuda
 import multiprocessing
 import keras
 from keras.models import Sequential
@@ -277,10 +276,6 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    # model = Model(5, 2, 0.0, 30, 1)
-    # model.train()
-    # model.save()
-
     numbers = np.arange(1, 4)
     amplitude_variations = np.arange(0.0, 0.8, 0.2)
     repeats = np.arange(1, 6, 2)
@@ -288,14 +283,9 @@ if __name__ == '__main__':
     # for n in numbers:
     for r in repeats:
         for a in amplitude_variations:
-            p = multiprocessing.Process(target=train_and_save, args=(5, 3, a, 30, r))
+            p = multiprocessing.Process(target=train_and_save, args=(5, 3, round(a, 1), 30, r))
             p.start()
             p.join()
-            # model = Model(5, 3, a, 30, r)
-            # model.train()
-            # model.save()
-            # device = cuda.get_current_device()
-            # device.reset()
 
     max_order = 5
     number_of_modes = 3
