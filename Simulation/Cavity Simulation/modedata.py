@@ -39,6 +39,7 @@ def choose(n, r):
 
 
 def makeLaguerre(p, m):
+    #From https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=247715
     x=[]
     for q in range(p + 1):
         for s in range(int((m)/2) + 1):
@@ -50,5 +51,5 @@ def makeLaguerre(p, m):
     return Superposition(x)
 
 
-y = makeLaguerre(3, 4)
+y = makeLaguerre(6, 8)
 y.show()

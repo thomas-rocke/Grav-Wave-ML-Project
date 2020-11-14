@@ -56,6 +56,17 @@ class Gaussian_Mode:
         Magic method for repr() function.
         '''
         return str(self)
+    def copy(self):
+        return Gaussian_Mode(self.l, self.m, self.amplitude, self.w_0, (2*np.pi*self.n)/self.k, self.n)
+
+    def __imul__(self, val):
+        self.amplitude *= val
+        return self
+
+    def __mul__(self, val):
+        x = self.copy()
+        x *= val
+        return x
 
     def E(self, r, z):
         '''
@@ -183,6 +194,22 @@ class Superposition(list):
         Magic method for repr() function.
         '''
         return str(self)
+
+    def __mul__(self, value):
+        '''
+        Define multiplication method for superposition
+        '''
+        x = self.copy()
+        x *= value
+        return x
+
+    def __imul__(self, value):
+        '''
+        Define inline multiplication method for superposition
+        '''
+        for i in self:
+            i.amplitude *= value
+        return self
     
     def superpose(self):
         '''
@@ -190,7 +217,8 @@ class Superposition(list):
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
         
-        superposition = sum([i.I(X, Y, 0) for i in self])
+        #superposition = sum([i.I(X, Y, 0) for i in self])
+        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
         
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
