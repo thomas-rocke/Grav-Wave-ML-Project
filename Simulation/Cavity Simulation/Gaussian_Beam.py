@@ -165,12 +165,13 @@ class Superposition(list):
         super().__init__(self.modes)
 
         if amplitude_variation > 0:
-            amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+            # amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+            amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
         else:
             amplitudes = [i.amplitude for i in self]
 
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
-        for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
+        for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
@@ -264,10 +265,10 @@ class Generate_Data(list):
 
         if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
-        # self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
-        self.combs = list(combinations(gauss_modes, number_of_modes))
-        if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
-        # self.combs = [i[j] for i in self.combs for j in range(len(i))]
+        self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        # self.combs = list(combinations(gauss_modes, number_of_modes))
+        # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
+        self.combs = [i[j] for i in self.combs for j in range(len(i))]
 
         # self.pool_handler(self.combs, 5)
         # p = Pool(5)
@@ -302,8 +303,18 @@ class Generate_Data(list):
         Plot and save all superpositions generated.
         '''
         print("Saving dataset...")
-        for i in tqdm(self): i.save(title)
+
+        p = Pool(8)
+        p.map(self.process, self)
+        # for i in tqdm(self): i.save(title)
+
         print("Done!\n")
+
+    def process(self, data):
+        '''
+        Process for saving images of the dataset across multiple threads in the CPU.
+        '''
+        data.save(False)
 
     # def pool_handler(self, data, threads):
     #     '''

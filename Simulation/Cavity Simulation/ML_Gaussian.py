@@ -4,6 +4,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and err
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from numba import cuda
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
@@ -27,7 +28,8 @@ class Model:
         self.epochs = epochs
         self.repeats = repeats
 
-        self.batch_size = 64
+        self.step_speed = 0.194
+        self.batch_size = 35
         self.optimizer = "Adam"
 
         self.model = None
@@ -55,7 +57,7 @@ class Model:
 
         # Training
 
-        etl = (((len(X_train) / self.batch_size) * 6) * self.epochs) / 60
+        etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.epochs) / 60
 
         print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " for " + str(self.epochs) + " epochs... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
         try:
@@ -77,7 +79,7 @@ class Model:
         '''
         Load training and testing data.
         '''
-        print("Generating " + str(self.repeats) + " dataset of training data...")
+        print("Generating " + str(self.repeats) + " datasets of training data...")
 
         x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
         X_train = x_train.superpose()
@@ -269,14 +271,22 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    amplitude_variations = np.arange(0.0, 1.2, 0.2)
+    # model = Model(5, 2, 0.0, 30, 1)
+    # model.train()
+    # model.save()
+
+    numbers = np.arange(1, 4)
+    amplitude_variations = np.arange(0.0, 0.8, 0.2)
     repeats = np.arange(1, 6, 2)
 
+    # for n in numbers:
     for r in repeats:
         for a in amplitude_variations:
             model = Model(5, 3, a, 30, r)
             model.train()
             model.save()
+            device = cuda.get_current_device()
+            device.reset()
 
     max_order = 5
     number_of_modes = 3
