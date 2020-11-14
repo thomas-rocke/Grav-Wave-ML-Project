@@ -193,8 +193,8 @@ class Superposition(list):
         else:
             amplitudes = [i.amplitude for i in self]
 
-        normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
-        for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
+        ##normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+        #for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
@@ -212,9 +212,12 @@ class Superposition(list):
         '''
         Magic method for the * operator.
         '''
-        x = self.copy()
+        x = Superposition(self.modes)
         x *= value
         return x
+
+    def __rmul__(self, value):
+        return self.__mul__(value)
 
     def __imul__(self, value):
         '''
@@ -276,6 +279,24 @@ class Superposition(list):
         self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
+class Laguerre(Superposition):
+    def __init__(self, p, m):
+        self.p = p
+        self.m = m
+        #From https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=247715
+        self.modes = []
+        for q in range(p + 1):
+            for s in range(int((m)/2) + 1):
+                frac = ((fact(2*(q-s) + m)*fact(2*(p-q+s)))/(2**(2*p + m - 1) * fact(p) * fact(p+m) * (1 + choose(0, m))))**0.5
+                y = Gaussian_Mode(2*(q - s) + m, 2*(p - q + s))
+                y.amplitude = (-1)**(s+p) * choose(p, q) * choose(m, 2*s) * frac
+                self.modes.append(y)
+        super().__init__(self.modes)
+
+    def __mul__(self, value):
+        x = Laguerre(self.p, self.m)
+        x *= value
+        return x
 
 
 def randomise_amplitudes(mode_list, variance):
@@ -291,13 +312,21 @@ def randomise_amplitudes(mode_list, variance):
 def unpack_and_superpose(mode_list):
     modes = []
     for mode in mode_list:
-        if type(mode) == Superposition:
+        if type(mode) in [Superposition, Laguerre]:
             modes.extend(mode)
         elif type(mode) == Gaussian_Mode:
             modes.append(mode)
     return Superposition(modes)
         
+def fact(x):
+    res = 1
+    if x != 0:
+        for i in range(x):
+            res *= i + 1
+    return res
 
+def choose(n, r):
+    return fact(n)/(fact(r)*fact(n-r))
 
 
 
