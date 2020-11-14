@@ -1,6 +1,7 @@
 import os
 from Gaussian_Beam import Superposition
 from Gaussian_Beam import Gaussian_Mode
+import Gaussian_Beam as gauss
 import numpy as np
 
 def saveData(superposList, fname, path=None):    
@@ -51,5 +52,12 @@ def makeLaguerre(p, m):
     return Superposition(x)
 
 
-y = makeLaguerre(6, 8)
+y = makeLaguerre(2, 1)
+y.show()
+x = Gaussian_Mode(0, 0, n=21)
+y = Gaussian_Mode(0, 2)
+modes = [x, y]
+modes = gauss.randomise_amplitudes(modes, 0.1)
+sup = gauss.unpack_and_superpose(modes)
+sup.show()
 y.show()
