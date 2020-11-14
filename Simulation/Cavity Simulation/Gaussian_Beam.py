@@ -56,6 +56,7 @@ class Gaussian_Mode:
         Magic method for repr() function.
         '''
         return str(self)
+
     def copy(self):
         return Gaussian_Mode(self.l, self.m, self.amplitude, self.w_0, (2*np.pi*self.n)/self.k, self.n)
 
@@ -180,8 +181,8 @@ class Superposition(list):
         else:
             amplitudes = [i.amplitude for i in self]
 
-        normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
-        for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
+        #normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+        #for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
@@ -262,6 +263,19 @@ class Superposition(list):
         '''
         self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+
+
+
+def randomise_amplitudes(mode_list, variance):
+    amplitudes = np.zeros((len(mode_list)))
+    for i in range(len(mode_list)):
+        amplitudes[i] = abs(round(np.random.normal(scale=variance), 2) + 1) #make randomised amplitude based on normal distribution
+    amplitudes /= np.linalg.norm(amplitudes) #Normalise amplitudes
+    for i, mode in enumerate(mode_list):
+        mode *= amplitudes[i]
+    return mode_list
+        
+
 
 
 
