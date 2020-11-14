@@ -264,7 +264,7 @@ class Superposition(list):
         '''
         Show the plot of the Gaussian mode.
         '''
-        # for i in self: i.show() # Plot the constituent Gaussian modes
+        #for i in self: i.show() # Plot the constituent Gaussian modes
 
         self.plot(title)
         plt.show()
@@ -280,12 +280,22 @@ class Superposition(list):
 
 def randomise_amplitudes(mode_list, variance):
     amplitudes = np.zeros((len(mode_list)))
+    new_modes = []
     for i in range(len(mode_list)):
         amplitudes[i] = abs(round(np.random.normal(scale=variance), 2) + 1) #make randomised amplitude based on normal distribution
     amplitudes /= np.linalg.norm(amplitudes) #Normalise amplitudes
     for i, mode in enumerate(mode_list):
-        mode *= amplitudes[i]
-    return mode_list
+        new_modes.append(mode * amplitudes[i])
+    return new_modes
+
+def unpack_and_superpose(mode_list):
+    modes = []
+    for mode in mode_list:
+        if type(mode) == Superposition:
+            modes.extend(mode)
+        elif type(mode) == Gaussian_Mode:
+            modes.append(mode)
+    return Superposition(modes)
         
 
 
