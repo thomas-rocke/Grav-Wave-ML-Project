@@ -177,12 +177,13 @@ class Superposition(list):
         super().__init__(self.modes)
 
         if amplitude_variation > 0:
-            amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+            # amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+            amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
         else:
             amplitudes = [i.amplitude for i in self]
 
-        #normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
-        #for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
+        # normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+        # for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
@@ -223,7 +224,7 @@ class Superposition(list):
         
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
-    def random_amplitude(self, amplitude_variation):
+    def random_amplitude(self, amplitude_variation: float):
         '''
         Get random value for the amplitude based on amplitude variation as the width of a normal distribution.
         '''
@@ -285,7 +286,7 @@ class Generate_Data(list):
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
     '''
 
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1, info: bool = True):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, repeats: int = 1, info: bool = True):
         '''
         Initialise the class with the required complexity.
 
@@ -307,7 +308,8 @@ class Generate_Data(list):
         if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
-        if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
+        # self.combs = list(combinations(gauss_modes, number_of_modes))
+        # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
 
         # self.pool_handler(self.combs, 5)
@@ -319,6 +321,12 @@ class Generate_Data(list):
             for i in self.combs: self.append(Superposition(i, amplitude_variation))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+    
+    def superpose(self):
+        '''
+        Get all the superpositions for the dataset.
+        '''
+        return np.array([i.superpose() for i in tqdm(self)])[..., np.newaxis]
 
     def get_outputs(self):
         '''
@@ -337,8 +345,18 @@ class Generate_Data(list):
         Plot and save all superpositions generated.
         '''
         print("Saving dataset...")
-        for i in tqdm(range(len(self))): self[i].save(title)
+
+        p = Pool(8)
+        p.map(self.process, self)
+        # for i in tqdm(self): i.save(title)
+
         print("Done!\n")
+
+    def process(self, data):
+        '''
+        Process for saving images of the dataset across multiple threads in the CPU.
+        '''
+        data.save(False)
 
     # def pool_handler(self, data, threads):
     #     '''
