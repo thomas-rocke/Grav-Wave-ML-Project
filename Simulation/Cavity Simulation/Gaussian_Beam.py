@@ -381,7 +381,7 @@ class Generate_Data(list):
         laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
         gauss_modes = hermite_modes + laguerre_modes
 
-        if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
+        if info: print("Done! Found " + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving " + str(len(gauss_modes)) + " gaussian modes in total.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
