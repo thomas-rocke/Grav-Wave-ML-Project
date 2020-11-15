@@ -219,7 +219,9 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, modes: list, amplitude_variation: float = 0.0):
+
+    def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude:float = 1.0, max_order:int = 5):
+
         '''
         Initialise the class with the list of modes that compose the superposition.
         ''' 
@@ -228,11 +230,21 @@ class Superposition(list):
 
         super().__init__(self.modes)
 
-        # if amplitude_variation > 0:
-        #     amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
-        #     amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
-        # else:
-        #     amplitudes = [i.amplitude for i in self]
+
+        self.max_order = max_order
+        self.mode_matrix = np.zeros((2, self.max_order+1, self.max_order+1))
+        for mode in modes:
+            if type(mode) == Hermite:
+                self.mode_matrix[0, mode.l, mode.m] = mode.amplitude #Populates [0, :, :] axis of matrix with Hermite mode amplitudes
+            elif type(mode) == Laguerre:
+                self.mode_matrix[1, mode.p, mode.m] = mode.amplitude #Populates [1, :, :] axis of matrix with Laguerre mode amplitudes
+
+        #if amplitude_variation > 0:
+            # amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+            #amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
+        #else:
+            #amplitudes = [i.amplitude for i in self]
+
 
         # normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
         # for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
@@ -322,6 +334,9 @@ class Superposition(list):
         '''
         self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+
+    def get_vector(self):
+        return np.reshape(self.mode_matrix, (self.mode_matrix.size))
 
 
 
