@@ -228,14 +228,14 @@ class Superposition(list):
 
         super().__init__(self.modes)
 
-        # if amplitude_variation > 0:
-        #     amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
-        #     amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
-        # else:
-        #     amplitudes = [i.amplitude for i in self]
+        if amplitude_variation > 0:
+            amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+            amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
+        else:
+            amplitudes = [i.amplitude for i in self]
 
-        # normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
-        # for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
+        normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+        for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
@@ -431,7 +431,7 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
-        return self.combs, np.array(self.repeats * [[i] for i in range(len(self.combs))])
+        return [Superposition(i) for i in self.combs], np.array(self.repeats * [[i] for i in range(len(self.combs))])
 
     def show(self, title: bool = True):
         '''

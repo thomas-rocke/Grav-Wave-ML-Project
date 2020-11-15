@@ -25,7 +25,7 @@ class Model:
         self.max_order = max_order
         self.number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
-        self.epochs = epochs
+        self.epochs = 1
         self.repeats = repeats
 
         self.step_speed = 0.168
@@ -33,8 +33,7 @@ class Model:
         self.optimizer = "Adam"
 
         self.model = None
-        self.loss_history, self.accuracy_history = None, None
-        self.val_loss_history, self.val_accuracy_history = None, None
+        self.history = {"loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.solutions = None
 
         print("____________________| " + str(self) + " |____________________\n")
@@ -63,17 +62,26 @@ class Model:
 
         # Training
 
-        etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.epochs) / 60
+        # etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.epochs) / 60
 
-        print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " for " + str(self.epochs) + " epochs... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
+        print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + "...\n") # for " + str(self.epochs) + " epochs... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
+
         try:
-            history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=self.batch_size)
+            performance = 0.0
+            while performance < 0.99:
+                print("Epoch " + str(self.epochs) + ":")
+
+                history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=self.batch_size)
+
+                performance = history_callback.history["val_accuracy"][0]
+                for i in self.history: self.history[i].append(history_callback.history[i][0])
+
+                self.epochs += 1
+
         except KeyboardInterrupt:
             print("Aborted!")
-        print("Done!\n")
 
-        self.loss_history, self.accuracy_history = np.array(history_callback.history["loss"]), np.array(history_callback.history["accuracy"])
-        self.val_loss_history, self.val_accuracy_history = np.array(history_callback.history["val_loss"]), np.array(history_callback.history["val_accuracy"])
+        print("\nDone!\n")
 
         # Evaluation
 
@@ -164,18 +172,18 @@ class Model:
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
         fig.suptitle("Training and Validation History for " + str(self))
 
-        t = np.arange(1, self.epochs + 1)
+        t = np.arange(1, self.epochs)
         
-        ax1.plot(t, self.loss_history, label="Training Loss")
-        ax2.plot(t, self.accuracy_history, label="Training Accuracy")
-        ax1.plot(t, self.val_loss_history, label="Validation Loss")
-        ax2.plot(t, self.val_accuracy_history, label="Validation Accuracy")
+        ax1.plot(t, self.history["loss"], label="Training Loss")
+        ax2.plot(t, self.history["accuracy"], label="Training Accuracy")
+        ax1.plot(t, self.history["val_loss"], label="Validation Loss")
+        ax2.plot(t, self.history["val_accuracy"], label="Validation Accuracy")
 
         # ax1.set_title("Loss")
         # ax2.set_title("Accuracy")
 
         plt.xlim(0, self.epochs)
-        ax1.set_ylim(0, np.max(self.loss_history))
+        ax1.set_ylim(0, np.max(self.history["loss"]))
         ax2.set_ylim(0, 1)
 
         ax1.grid()
@@ -204,10 +212,10 @@ class Model:
 
         self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
-        np.savetxt("Models/" + str(self) + "/loss_history.txt", self.loss_history, delimiter=",")
-        np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.accuracy_history, delimiter=",")
-        np.savetxt("Models/" + str(self) + "/val_loss_history.txt", self.val_loss_history, delimiter=",")
-        np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.val_accuracy_history, delimiter=",")
+        np.savetxt("Models/" + str(self) + "/loss_history.txt", self.history["loss"], delimiter=",")
+        np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.history["accuracy"], delimiter=",")
+        np.savetxt("Models/" + str(self) + "/val_loss_history.txt", self.history["val_loss"], delimiter=",")
+        np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.history["val_accuracy"], delimiter=",")
 
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
 
@@ -224,12 +232,13 @@ class Model:
 
         self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
 
-        self.loss_history = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
-        self.accuracy_history = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
-        self.val_loss_history = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
-        self.val_accuracy_history = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
+        self.history["loss"] = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
+        self.history["accuracy"] = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
+        self.history["val_loss"] = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
+        self.history["val_accuracy"] = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
 
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
+        self.solutions = [eval(i) for i in self.solutions]
 
         print("Done!\n")
     
@@ -248,15 +257,25 @@ class Model:
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
+        print("Predicting... (shape = " + str(data.shape) + ")")
+
         data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
 
-        print("Predicting... (shape = " + str(data.shape) + ")")
-        prediction = self.model.predict(data) # Make prediction using model (return index of superposition)
-        print("Done!\n")
+        prediction = self.model.predict(data)[0] # Make prediction using model (return index of superposition)
 
-        answer = self.solutions[np.argmax(prediction, axis=1)]
+        answer = self.solutions[np.argmax(prediction)]
 
-        return list(eval(eval(str(answer))[0]))
+        amplitudes = np.zeros(len(answer))
+        for i in range(len(self.solutions)): # For every possible superposition
+            for j in range(len(answer)): # For every mode in the predicted superposition
+                if str(answer[j]) in str(self.solutions[i]): # If mode is in superposition
+                    amplitudes[j] += prediction[i] # Increase amplitude of that mode by the probability of that superposition
+
+        for i in range(len(answer)): answer[i].amplitude = amplitudes[i]
+        answer = Superposition(answer) # Normalise the amplitudes
+
+        print("Done! Answer: " + str(answer) + "\n")
+        return answer
 
 
 
@@ -287,30 +306,33 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
+    # train_and_save(5, 2, 0.4, 30, 10)
+
     numbers = np.arange(1, 4)
     amplitude_variations = np.arange(0.0, 0.8, 0.2)
     repeats = np.arange(1, 6, 2)
 
     # for n in numbers:
-    for r in repeats:
-        for a in amplitude_variations:
-            train_and_save(5, 3, round(a, 1), 30, r)
+    # for r in repeats:
+    #     for a in amplitude_variations:
+    #         train_and_save(5, 3, round(a, 1), 30, r)
 
     max_order = 5
-    number_of_modes = 3
-    amplitude_variation = 0.2
-    epochs = 30
-    repeats = 5
+    number_of_modes = 2
+    amplitude_variation = 0.4
+    epochs = 9
+    repeats = 10
 
     # model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
     # model.train()
     # model.save()
 
-    # model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
-    # model2.load()
-    # model2.show()
-    # sup = Superposition([Hermite(2,1), Hermite(2,2), Hermite(4,1)], amplitude_variation)
-    # sup.show()
-    # prediction = Superposition(model2.predict(sup.superpose()))
-    # prediction.show()
-    # print(prediction)
+    model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    model2.epochs = 9
+    model2.load()
+    model2.show()
+    sup = Superposition([Hermite(2,1), Hermite(4,1)], amplitude_variation)
+    print(sup)
+    sup.show()
+    prediction = Superposition(model2.predict(sup.superpose()))
+    prediction.show()
