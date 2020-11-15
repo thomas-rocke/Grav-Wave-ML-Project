@@ -181,7 +181,6 @@ class Superposition(list):
     '''
 
     def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude: float = 1.0, max_order: int = 5):
-
         '''
         Initialise the class with the list of modes that compose the superposition.
         ''' 
@@ -378,7 +377,9 @@ class Generate_Data(list):
         if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\n")
         if info: print("Generating Gaussian modes...")
 
-        gauss_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
+        hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
+        laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
+        gauss_modes = hermite_modes + laguerre_modes
 
         if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
