@@ -30,12 +30,10 @@ def loadData(fname, path=None):
 
 
 
-y = gauss.Laguerre(2, 1)
+y = Laguerre(2, 1)
 y.show()
-x = Hermite(0, 0, n=21)
+x = Hermite(0, 0)
 #y = Hermite(0, 2)
-modes = [x, y]
-modes = gauss.randomise_amplitudes(modes, 0.1)
-sup = gauss.unpack_and_superpose(modes)
+sup = Superposition([x, y])
 sup.show()
 y.show()

@@ -219,18 +219,19 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, modes: list, amplitude_variation: float = 0.0):
+    def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude:float = 1.0):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
-        self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        self.modes = modes#[mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         super().__init__(self.modes)
+        self.amplitude = amplitude
 
-        if amplitude_variation > 0:
+        #if amplitude_variation > 0:
             # amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
-            amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
-        else:
-            amplitudes = [i.amplitude for i in self]
+            #amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
+        #else:
+            #amplitudes = [i.amplitude for i in self]
 
         ##normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
         #for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
@@ -262,10 +263,12 @@ class Superposition(list):
         '''
         Magic method for the *= operator.
         '''
-        for i in self:
-            i.amplitude *= value
+        self.amplitude *= value
         return self
     
+    def E_mode(self, X, Y, Z):
+        return sum([i.E_mode(X, Y, Z) for i in self]) * self.amplitude
+
     def superpose(self):
         '''
         Compute the superposition of the Gaussian modes.
@@ -273,7 +276,7 @@ class Superposition(list):
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
         
         # superposition = sum([i.I(X, Y, 0) for i in self])
-        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
+        superposition = np.abs(self.E_mode(X, Y, 0)**2)
         
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
@@ -326,12 +329,13 @@ class Laguerre(Superposition):
     Class representing a Laguerre mode generated as a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, p, m):
+    def __init__(self, p, m, amplitude:float = 1.0):
         '''
         Initialise the class with the order (p, m) of the Laguerre mode.
         '''
         self.p = p
         self.m = m
+        self.amplitude = amplitude
 
         # From https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=247715
 
@@ -352,6 +356,9 @@ class Laguerre(Superposition):
         x = Laguerre(self.p, self.m)
         x *= value
         return x
+
+    def __str__(self):
+        return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
 
 
 
