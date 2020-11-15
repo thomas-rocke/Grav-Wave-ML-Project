@@ -181,7 +181,6 @@ class Superposition(list):
     '''
 
     def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude: float = 1.0, max_order: int = 5):
-
         '''
         Initialise the class with the list of modes that compose the superposition.
         ''' 
