@@ -180,7 +180,6 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-
     def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude: float = 1.0, max_order: int = 5):
 
         '''
@@ -295,6 +294,9 @@ class Superposition(list):
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
     def get_vector(self):
+        '''
+        Get the vector of the mode matrix.
+        '''
         return np.reshape(self.mode_matrix, (self.mode_matrix.size))
 
 
@@ -325,6 +327,12 @@ class Laguerre(Superposition):
 
         super().__init__(self.modes)
 
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
+
     def __mul__(self, value):
         '''
         Magic method for the * operator.
@@ -332,12 +340,6 @@ class Laguerre(Superposition):
         x = Laguerre(self.p, self.m)
         x *= value
         return x
-
-    def __str__(self):
-        '''
-        Magic method for the str() function.
-        '''
-        return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
 
     def copy(self):
         '''
