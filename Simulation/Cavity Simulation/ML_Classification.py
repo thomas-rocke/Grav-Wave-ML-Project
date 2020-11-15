@@ -277,15 +277,22 @@ if __name__ == '__main__':
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
     numbers = np.arange(1, 4)
-    amplitude_variations = np.arange(0.2, 0.8, 0.2)
+    amplitude_variations = np.arange(0.0, 0.8, 0.2)
     repeats = np.arange(1, 6, 2)
 
+    p = multiprocessing.Process(target=train_and_save, args=(5, 3, 0.8, 30, 1))
+    p.start()
+    p.join()
+
+    p = multiprocessing.Process(target=train_and_save, args=(5, 3, 0.8, 30, 3))
+    p.start()
+    p.join()
     # for n in numbers:
-    for r in repeats:
-        for a in amplitude_variations:
-            p = multiprocessing.Process(target=train_and_save, args=(5, 3, round(a, 1), 30, 5))
-            p.start()
-            p.join()
+    # for r in repeats:
+    #     for a in amplitude_variations:
+    #         p = multiprocessing.Process(target=train_and_save, args=(5, 3, round(a, 1), 30, r))
+    #         p.start()
+    #         p.join()
 
     max_order = 5
     number_of_modes = 3

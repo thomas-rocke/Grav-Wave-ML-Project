@@ -222,8 +222,10 @@ class Superposition(list):
     def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude:float = 1.0):
         '''
         Initialise the class with the list of modes that compose the superposition.
-        '''
+        ''' 
+        self.amplitude_variation = amplitude_variation
         self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+
         super().__init__(self.modes)
         self.amplitude = amplitude
 
@@ -240,7 +242,7 @@ class Superposition(list):
         '''
         Magic method for str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.modes) + ")"
+        return self.__class__.__name__ + "(" + str(self.modes) + ", " + str(self.amplitude_variation) + ")"
 
     def __repr__(self):
         '''
@@ -393,9 +395,9 @@ class Generate_Data(list):
         if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        self.combs = [i[j] for i in self.combs for j in range(len(i))]
         # self.combs = list(combinations(gauss_modes, number_of_modes))
         # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
-        self.combs = [i[j] for i in self.combs for j in range(len(i))]
 
         # self.pool_handler(self.combs, 5)
         # p = Pool(5)
