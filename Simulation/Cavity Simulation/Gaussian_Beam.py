@@ -219,13 +219,22 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude:float = 1.0):
+    def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude:float = 1.0, max_order:int = 5):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
         self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         super().__init__(self.modes)
         self.amplitude = amplitude
+
+
+        self.max_order = max_order
+        self.mode_matrix = np.zeros((2, self.max_order+1, self.max_order+1))
+        for mode in modes:
+            if type(mode) == Hermite:
+                self.mode_matrix[0, mode.l, mode.m] = mode.amplitude #Populates [0, :, :] axis of matrix with Hermite mode amplitudes
+            elif type(mode) == Laguerre:
+                self.mode_matrix[1, mode.p, mode.m] = mode.amplitude #Populates [1, :, :] axis of matrix with Laguerre mode amplitudes
 
         #if amplitude_variation > 0:
             # amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
@@ -320,6 +329,9 @@ class Superposition(list):
         '''
         self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+
+    def get_vector(self):
+        return np.reshape(self.mode_matrix, (self.mode_matrix.size))
 
 
 
