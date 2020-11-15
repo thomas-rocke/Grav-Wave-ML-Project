@@ -45,6 +45,12 @@ class Model:
         '''
         return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.epochs) + ", " + str(self.repeats) + ")"
 
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return str(self)
+
     def train(self):
         '''
         Train the model.
@@ -263,10 +269,15 @@ class Model:
 
 
 
-def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+def process(max_order, number_of_modes, amplitude_variation, epochs, repeats):
     model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
     model.train()
     model.save()
+
+def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+    p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, epochs, repeats))
+    p.start()
+    p.join()
 
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -277,15 +288,13 @@ if __name__ == '__main__':
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
     numbers = np.arange(1, 4)
-    amplitude_variations = np.arange(0.2, 0.8, 0.2)
+    amplitude_variations = np.arange(0.0, 0.8, 0.2)
     repeats = np.arange(1, 6, 2)
 
     # for n in numbers:
     for r in repeats:
         for a in amplitude_variations:
-            p = multiprocessing.Process(target=train_and_save, args=(5, 3, round(a, 1), 30, 5))
-            p.start()
-            p.join()
+            train_and_save(5, 3, round(a, 1), 30, r)
 
     max_order = 5
     number_of_modes = 3

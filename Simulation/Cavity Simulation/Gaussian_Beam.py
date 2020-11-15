@@ -88,13 +88,13 @@ class Hermite:
 
     def __str__(self):
         '''
-        Magic method for str() function.
+        Magic method for the str() function.
         '''
         return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
 
     def __repr__(self):
         '''
-        Magic method for repr() function.
+        Magic method for the repr() function.
         '''
         return str(self)
 
@@ -219,13 +219,16 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
+
     def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude:float = 1.0, max_order:int = 5):
+
         '''
         Initialise the class with the list of modes that compose the superposition.
-        '''
+        ''' 
+        self.amplitude_variation = amplitude_variation
         self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+
         super().__init__(self.modes)
-        self.amplitude = amplitude
 
 
         self.max_order = max_order
@@ -242,18 +245,19 @@ class Superposition(list):
         #else:
             #amplitudes = [i.amplitude for i in self]
 
-        ##normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
-        #for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
+
+        # normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+        # for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
-        Magic method for str() function.
+        Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.modes) + ")"
+        return self.__class__.__name__ + "(" + str(self.modes) + ", " + str(self.amplitude_variation) + ")"
 
     def __repr__(self):
         '''
-        Magic method for repr() function.
+        Magic method for the repr() function.
         '''
         return str(self)
 
@@ -266,17 +270,18 @@ class Superposition(list):
         return x
 
     def __rmul__(self, value):
+        '''
+        Magic method for reverse multiplication.
+        '''
         return self.__mul__(value)
 
     def __imul__(self, value):
         '''
         Magic method for the *= operator.
         '''
-        self.amplitude *= value
+        for i in self:
+            i.amplitude *= value
         return self
-    
-    def E_mode(self, X, Y, Z):
-        return sum([i.E_mode(X, Y, Z) for i in self]) * self.amplitude
 
     def superpose(self):
         '''
@@ -284,8 +289,8 @@ class Superposition(list):
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
         
-        # superposition = sum([i.I(X, Y, 0) for i in self])
-        superposition = np.abs(self.E_mode(X, Y, 0)**2)
+        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
+        # superposition = np.abs(self.E_mode(X, Y, 0)**2)
         
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
@@ -314,11 +319,11 @@ class Superposition(list):
         if title: plt.title(str(self))
         plt.axis('off')
 
-    def show(self, title: bool = True):
+    def show(self, title: bool = True, constituents: bool = False):
         '''
         Show the plot of the Gaussian mode.
         '''
-        # for i in self: i.show() # Plot the constituent Gaussian modes
+        if constituents: [i.show() for i in self] # Plot the constituent Gaussian modes
 
         self.plot(title)
         plt.show()
@@ -341,7 +346,7 @@ class Laguerre(Superposition):
     Class representing a Laguerre mode generated as a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, p, m, amplitude:float = 1.0):
+    def __init__(self, p: int = 1, m: int = 1, amplitude: float = 1.0):
         '''
         Initialise the class with the order (p, m) of the Laguerre mode.
         '''
@@ -370,10 +375,22 @@ class Laguerre(Superposition):
         return x
 
     def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
         return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
 
     def copy(self):
+        '''
+        Make a copy of the object.
+        '''
         return Laguerre(self.p, self.m, self.amplitude)
+
+    def E_mode(self, x, y, z):
+        '''
+        Electric field amplitude at x, y, z for the superposition.
+        '''
+        return sum([i.E_mode(x, y, z) for i in self]) * self.amplitude
 
 
 
@@ -405,9 +422,9 @@ class Generate_Data(list):
         if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        self.combs = [i[j] for i in self.combs for j in range(len(i))]
         # self.combs = list(combinations(gauss_modes, number_of_modes))
         # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
-        self.combs = [i[j] for i in self.combs for j in range(len(i))]
 
         # self.pool_handler(self.combs, 5)
         # p = Pool(5)
