@@ -80,6 +80,32 @@ class Hermite:
         '''
         return Hermite(self.l, self.m, self.amplitude, self.w_0, self.wavelength, self.n)
 
+    def plot(self, title: bool = True):
+        '''
+        Plot the Gaussian mode.
+        '''
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
+
+        plt.figure(self.__class__.__name__)
+        plt.imshow(self.I(X, Y, 0), cmap='Greys_r')
+
+        if title: plt.title(str(self))
+        plt.axis('off')
+
+    def show(self, title: bool = True):
+        '''
+        Show the plot of the Gaussian mode.
+        '''
+        self.plot(title)
+        plt.show()
+
+    def save(self, title: bool = True):
+        '''
+        Save the plot of the Gaussian mode.
+        '''
+        self.plot(title)
+        plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+
     def E(self, r, z):
         '''
         Electric field at a given radial distance and axial distance.
@@ -146,32 +172,6 @@ class Hermite:
 
         return t1 * t2 * t3 * special.eval_hermite(J, t4) * t5
 
-    def plot(self, title: bool = True):
-        '''
-        Plot the Gaussian mode.
-        '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-
-        plt.figure(self.__class__.__name__)
-        plt.imshow(self.I(X, Y, 0), cmap='Greys_r')
-
-        if title: plt.title(str(self))
-        plt.axis('off')
-
-    def show(self, title: bool = True):
-        '''
-        Show the plot of the Gaussian mode.
-        '''
-        self.plot(title)
-        plt.show()
-
-    def save(self, title: bool = True):
-        '''
-        Save the plot of the Gaussian mode.
-        '''
-        self.plot(title)
-        plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
-
 
 
 
@@ -203,9 +203,9 @@ class Superposition(list):
         self.mode_matrix = np.zeros((2, self.max_order+1, self.max_order+1))
         for mode in modes:
             if type(mode) == Hermite:
-                self.mode_matrix[0, mode.l, mode.m] = mode.amplitude #Populates [0, :, :] axis of matrix with Hermite mode amplitudes
+                self.mode_matrix[0, mode.l, mode.m] = mode.amplitude # Populates [0, :, :] axis of matrix with Hermite mode amplitudes
             elif type(mode) == Laguerre:
-                self.mode_matrix[1, mode.p, mode.m] = mode.amplitude #Populates [1, :, :] axis of matrix with Laguerre mode amplitudes
+                self.mode_matrix[1, mode.p, mode.m] = mode.amplitude # Populates [1, :, :] axis of matrix with Laguerre mode amplitudes
 
     def __str__(self):
         '''
@@ -241,32 +241,6 @@ class Superposition(list):
             i.amplitude *= value
         return self
 
-    def superpose(self):
-        '''
-        Compute the superposition of the Gaussian modes.
-        '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
-        
-        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
-        # superposition = np.abs(self.E_mode(X, Y, 0)**2)
-        
-        return superposition / np.linalg.norm(superposition) # Normalise the superposition
-
-    def random_amplitude(self, amplitude_variation: float):
-        '''
-        Get random value for the amplitude based on amplitude variation as the width of a normal distribution.
-        '''
-        return abs(round(np.random.normal(scale=amplitude_variation), 2) + 1)
-        # x = 0
-        # while x <= 0: x = round(np.random.normal(1, amplitude_variation), 2)
-        # return x
-
-    # def get_truncated_normal(self, mean=1, sd=1, low=0, upp=10):
-    #     '''
-    #     Get truncated normal in a format that is easier to interpret.
-    #     '''
-    #     return truncnorm((low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd)
-
     def plot(self, title: bool = True):
         '''
         Plot the superposition.
@@ -292,6 +266,32 @@ class Superposition(list):
         '''
         self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+
+    def superpose(self):
+        '''
+        Compute the superposition of the Gaussian modes.
+        '''
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
+        
+        superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
+        # superposition = np.abs(self.E_mode(X, Y, 0)**2)
+        
+        return superposition / np.linalg.norm(superposition) # Normalise the superposition
+
+    def random_amplitude(self, amplitude_variation: float):
+        '''
+        Get random value for the amplitude based on amplitude variation as the width of a normal distribution.
+        '''
+        return abs(round(np.random.normal(scale=amplitude_variation), 2) + 1)
+        # x = 0
+        # while x <= 0: x = round(np.random.normal(1, amplitude_variation), 2)
+        # return x
+
+    # def get_truncated_normal(self, mean=1, sd=1, low=0, upp=10):
+    #     '''
+    #     Get truncated normal in a format that is easier to interpret.
+    #     '''
+    #     return truncnorm((low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd)
 
     def get_vector(self):
         '''
@@ -396,18 +396,6 @@ class Generate_Data(list):
             for i in self.combs: self.append(Superposition(i, amplitude_variation))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
-    
-    def superpose(self):
-        '''
-        Get all the superpositions for the dataset.
-        '''
-        return np.array([i.superpose() for i in tqdm(self)])[..., np.newaxis]
-
-    def get_outputs(self):
-        '''
-        Get all possible Gaussian modes that could comprise a superposition.
-        '''
-        return [Superposition(i) for i in self.combs], np.array(self.repeats * [[i] for i in range(len(self.combs))])
 
     def show(self, title: bool = True):
         '''
@@ -432,6 +420,18 @@ class Generate_Data(list):
         Process for saving images of the dataset across multiple threads in the CPU.
         '''
         data.save(False)
+    
+    def superpose(self):
+        '''
+        Get all the superpositions for the dataset.
+        '''
+        return np.array([i.superpose() for i in tqdm(self)])[..., np.newaxis]
+
+    def get_outputs(self):
+        '''
+        Get all possible Gaussian modes that could comprise a superposition.
+        '''
+        return [Superposition(i) for i in self.combs], np.array(self.repeats * [[i] for i in range(len(self.combs))])
 
     # def pool_handler(self, data, threads):
     #     '''
