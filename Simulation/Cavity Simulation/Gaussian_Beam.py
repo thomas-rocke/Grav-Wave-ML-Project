@@ -23,45 +23,6 @@ import time
 
 ##################################################
 ##########                              ##########
-##########          FUNCTIONS           ##########
-##########                              ##########
-##################################################
-
-
-def randomise_amplitudes(mode_list, variance):
-    amplitudes = np.zeros((len(mode_list)))
-    new_modes = []
-    for i in range(len(mode_list)):
-        amplitudes[i] = abs(round(np.random.normal(scale=variance), 2) + 1) # Make randomised amplitude based on normal distribution
-    amplitudes /= np.linalg.norm(amplitudes) # Normalise amplitudes
-    for i, mode in enumerate(mode_list):
-        new_modes.append(mode * amplitudes[i])
-    return new_modes
-
-def unpack_and_superpose(mode_list):
-    modes = []
-    for mode in mode_list:
-        if type(mode) in [Superposition, Laguerre]:
-            modes.extend(mode)
-        elif type(mode) == Hermite:
-            modes.append(mode)
-    return Superposition(modes)
-        
-def fact(x):
-    res = 1
-    if x != 0:
-        for i in range(x):
-            res *= i + 1
-    return res
-
-def choose(n, r):
-    return fact(n)/(fact(r)*fact(n-r))
-
-
-
-
-##################################################
-##########                              ##########
 ##########           CLASSES            ##########
 ##########                              ##########
 ##################################################
@@ -488,10 +449,48 @@ class Generate_Data(list):
 
 ##################################################
 ##########                              ##########
-##########            MAIN              ##########
+##########          FUNCTIONS           ##########
 ##########                              ##########
 ##################################################
 
+
+def randomise_amplitudes(mode_list, variance):
+    amplitudes = np.zeros((len(mode_list)))
+    new_modes = []
+    for i in range(len(mode_list)):
+        amplitudes[i] = abs(round(np.random.normal(scale=variance), 2) + 1) # Make randomised amplitude based on normal distribution
+    amplitudes /= np.linalg.norm(amplitudes) # Normalise amplitudes
+    for i, mode in enumerate(mode_list):
+        new_modes.append(mode * amplitudes[i])
+    return new_modes
+
+def unpack_and_superpose(mode_list):
+    modes = []
+    for mode in mode_list:
+        if type(mode) in [Superposition, Laguerre]:
+            modes.extend(mode)
+        elif type(mode) == Hermite:
+            modes.append(mode)
+    return Superposition(modes)
+        
+def fact(x):
+    res = 1
+    if x != 0:
+        for i in range(x):
+            res *= i + 1
+    return res
+
+def choose(n, r):
+    return fact(n)/(fact(r)*fact(n-r))
+
+
+
+
+##################################################
+##########                              ##########
+##########            MAIN              ##########
+##########                              ##########
+##################################################
 
 
 if __name__ == '__main__':
