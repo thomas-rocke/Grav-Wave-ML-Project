@@ -223,7 +223,7 @@ class Superposition(list):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
-        self.modes = modes#[mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         super().__init__(self.modes)
         self.amplitude = amplitude
 
@@ -359,6 +359,9 @@ class Laguerre(Superposition):
 
     def __str__(self):
         return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
+
+    def copy(self):
+        return Laguerre(self.p, self.m, self.amplitude)
 
 
 
