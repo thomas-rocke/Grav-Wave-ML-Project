@@ -1,3 +1,13 @@
+##################################################
+##########                              ##########
+##########              ML              ##########
+##########        CLASSIFICATION        ##########
+##########                              ##########
+##################################################
+
+# TODO Header for file
+
+# Imports
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
@@ -14,24 +24,34 @@ from keras.utils import np_utils
 from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data
 
 
+
+
+##################################################
+##########                              ##########
+##########           CLASSES            ##########
+##########                              ##########
+##################################################
+
+
 class Model:
     '''
     The class 'Model' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, epochs: int = 30, repeats: int = 1):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, max_epochs: int = 30, repeats: int = 1):
         '''
         Initialise the class.
         '''
         self.max_order = max_order
         self.number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
-        self.epochs = 1
+        self.max_epochs = 30
         self.repeats = repeats
 
         self.step_speed = 0.168
         self.batch_size = 30
         self.optimizer = "Adam"
 
+        self.epochs = 1
         self.model = None
         self.history = {"loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.solutions = None
@@ -42,7 +62,7 @@ class Model:
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.epochs) + ", " + str(self.repeats) + ")"
+        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.max_epochs) + ", " + str(self.repeats) + ")"
 
     def __repr__(self):
         '''
@@ -62,13 +82,13 @@ class Model:
 
         # Training
 
-        # etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.epochs) / 60
+        etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
 
-        print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + "...\n") # for " + str(self.epochs) + " epochs... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
+        print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " for " + str(self.max_epochs) + " epochs maximum... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
 
         try:
             performance = 0.0
-            while performance < 0.99:
+            while performance < 0.99 and self.epochs <= self.max_epochs:
                 print("Epoch " + str(self.epochs) + ":")
 
                 history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=self.batch_size)
@@ -179,8 +199,9 @@ class Model:
         ax1.plot(t, self.history["val_loss"], label="Validation Loss")
         ax2.plot(t, self.history["val_accuracy"], label="Validation Accuracy")
 
-        # ax1.set_title("Loss")
-        # ax2.set_title("Accuracy")
+        ax1.set_ylabel("Loss")
+        ax2.set_xlabel("Epoch")
+        ax2.set_ylabel("Accuracy")
 
         plt.xlim(0, self.epochs)
         ax1.set_ylim(0, np.max(self.history["loss"]))
@@ -263,7 +284,7 @@ class Model:
 
         prediction = self.model.predict(data)[0] # Make prediction using model (return index of superposition)
 
-        answer = self.solutions[np.argmax(prediction)]
+        answer = self.solutions[np.argmax(prediction)] # Answer is the superposition with the maximum probability
 
         amplitudes = np.zeros(len(answer))
         for i in range(len(self.solutions)): # For every possible superposition
@@ -275,7 +296,34 @@ class Model:
         answer = Superposition(answer) # Normalise the amplitudes
 
         print("Done! Answer: " + str(answer) + "\n")
+
         return answer
+
+
+
+
+##################################################
+##########                              ##########
+##########          FUNCTIONS           ##########
+##########                              ##########
+##################################################
+
+
+def process(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+    '''
+    Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
+    '''
+    model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    model.train()
+    model.save()
+
+def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+    '''
+    Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
+    '''
+    p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, epochs, repeats))
+    p.start()
+    p.join()
 
 
 
@@ -286,17 +334,6 @@ class Model:
 ##########                              ##########
 ##################################################
 
-
-
-def process(max_order, number_of_modes, amplitude_variation, epochs, repeats):
-    model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
-    model.train()
-    model.save()
-
-def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repeats):
-    p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, epochs, repeats))
-    p.start()
-    p.join()
 
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -313,26 +350,26 @@ if __name__ == '__main__':
     repeats = np.arange(1, 6, 2)
 
     # for n in numbers:
-    # for r in repeats:
-    #     for a in amplitude_variations:
-    #         train_and_save(5, 3, round(a, 1), 30, r)
+    for r in repeats:
+        for a in amplitude_variations:
+            train_and_save(5, 3, round(a, 1), 30, r)
 
-    max_order = 5
-    number_of_modes = 2
-    amplitude_variation = 0.4
-    epochs = 9
-    repeats = 10
+    # max_order = 5
+    # number_of_modes = 2
+    # amplitude_variation = 0.4
+    # epochs = 9
+    # repeats = 10
 
     # model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
     # model.train()
     # model.save()
 
-    model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
-    model2.epochs = 9
-    model2.load()
-    model2.show()
-    sup = Superposition([Hermite(2,1), Hermite(4,1)], amplitude_variation)
-    print(sup)
-    sup.show()
-    prediction = Superposition(model2.predict(sup.superpose()))
-    prediction.show()
+    # model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    # model2.epochs = 9
+    # model2.load()
+    # model2.show()
+    # sup = Superposition([Hermite(2,1), Hermite(4,1)], amplitude_variation)
+    # print(sup)
+    # sup.show()
+    # prediction = Superposition(model2.predict(sup.superpose()))
+    # prediction.show()
