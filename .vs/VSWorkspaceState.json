@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\System"
+    "\\Simulation",
+    "\\Simulation\\Cavity Simulation",
+    "\\Simulation\\Sin Replication Test"
   ],
-  "SelectedNode": "\\System",
+  "SelectedNode": "\\Simulation\\Cavity Simulation\\Gaussian_Beam.py",
   "PreviewInSolutionExplorer": false
 }

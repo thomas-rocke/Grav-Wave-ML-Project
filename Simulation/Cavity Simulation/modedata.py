@@ -30,11 +30,5 @@ def loadData(fname, path=None):
 
 
 
-y = Laguerre(2, 1)
-#y.show()
-x = Hermite(0, 0)
-#y = Hermite(0, 2)
-sup = Superposition([x, y])
-#sup.show()
-#y.show()
-print(sup.mode_matrix)
+x = Superposition([Laguerre(5, 1), Hermite(0, 0)])
+print(x.mode_matrix)
