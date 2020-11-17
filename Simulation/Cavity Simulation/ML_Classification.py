@@ -21,6 +21,7 @@ from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.constraints import maxnorm
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.utils import np_utils
+import tensorflow as tf
 from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data
 
 
@@ -47,9 +48,11 @@ class Model:
         self.max_epochs = 30
         self.repeats = repeats
 
-        self.step_speed = 0.168
-        self.batch_size = 30
+        self.step_speed = 0.167
+        self.batch_size = 128
+        self.success_performance = 0.9
         self.optimizer = "Adam"
+        self.input_shape = (120, 120, 1)
 
         self.epochs = 1
         self.model = None
@@ -76,73 +79,84 @@ class Model:
         '''
         # Initialisation
 
-        (X_train, Y_train), (X_test, Y_test), num_classes, solutions = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation) # Load training and validation data
-        self.model = self.create_model(num_classes, X_train.shape[1:]) # Create the model
-        self.solutions = solutions
+        print("Generating preliminary data for model generation...")
 
-        # Training
-
-        etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-
-        print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " for " + str(self.max_epochs) + " epochs maximum... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
-
-        try:
-            performance = 0.0
-            while performance < 0.99 and self.epochs <= self.max_epochs:
-                print("Epoch " + str(self.epochs) + ":")
-
-                history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=self.batch_size)
-
-                performance = history_callback.history["val_accuracy"][0]
-                for i in self.history: self.history[i].append(history_callback.history[i][0])
-
-                self.epochs += 1
-
-        except KeyboardInterrupt:
-            print("Aborted!")
-
-        print("\nDone!\n")
-
-        # Evaluation
-
-        print("Evaluating...")
-        scores = self.model.evaluate(X_test, Y_test, verbose=0)
-        print("Done! Accuracy: %.2f%%\n" % (scores[1]*100))
-
-    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0):
-        '''
-        Load training and testing data.
-        '''
-        print("Generating " + str(self.repeats) + " datasets of training data...")
-
-        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
-        X_train = x_train.superpose()
-        y_train, Y_train = x_train.get_outputs()
-
-        print("Done!\n\nGenerating testing data...")
-
-        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
-        X_test = x_test.superpose()
-        y_test, Y_test = x_test.get_outputs()
+        prelim_data = Generate_Data(self.max_order, self.number_of_modes, 0.0, self.repeats, info=False)
+        num_classes = prelim_data.get_num_classes()
 
         print("Done!\n")
 
-        Y_train = np_utils.to_categorical(Y_train)
-        Y_test = np_utils.to_categorical(Y_test)
+        self.model = self.create_model(num_classes) # Create the model
+
+        for number_of_modes in range(2, self.number_of_modes + 1):
+            (X_train, Y_train), (X_test, Y_test), self.solutions = self.load_data(self.max_order, number_of_modes, self.amplitude_variation, num_classes) # Load training and validation data
+
+            # Training
+
+            etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
+            print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * number_of_modes) + " or a maximum performance of " + str(int(self.success_performance * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
+
+            try:
+                performance = 0.0
+                while performance < self.success_performance and self.epochs <= self.max_epochs * number_of_modes:
+                    print("Epoch " + str(self.epochs) + ":")
+
+                    history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=self.batch_size)
+
+                    performance = history_callback.history["accuracy"][0]
+                    for i in self.history: self.history[i].append(history_callback.history[i][0])
+
+                    if self.epochs >= self.max_epochs * number_of_modes: print("A strange game. The only winning move is not to play.\n")
+                    if performance >= self.success_performance: print(str(int(self.success_performance * 100)) + "% performance achieved!\n")
+                    self.epochs += 1
+
+            except KeyboardInterrupt:
+                print("\nAborted!\n")
+
+            print("Done!\n")
+
+            # Evaluation
+
+            print("Evaluating...")
+            scores = self.model.evaluate(X_test, Y_test, verbose=0)
+            print("Done! Accuracy: %.2f%%\n" % (scores[1]*100))
+
+    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, num_classes: int = None):
+        '''
+        Load training and testing data.
+        '''
+        print("Generating data for superpositions of " + str(number_of_modes) + " different modes...")
+        print(" |")
+
+        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
+        X_train = x_train.superpose(" |-> " + str(self.repeats) + " datasets of training data")
+        y_train, Y_train = x_train.get_outputs()
+
+        print(" |")
+
+        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
+        X_test = x_test.superpose(" |-> 1 dataset of testing data")
+        y_test, Y_test = x_test.get_outputs()
+
+        print(" V")
+        print("Done!\n")
+
+        Y_train = np_utils.to_categorical(Y_train, num_classes)
+        Y_test = np_utils.to_categorical(Y_test, num_classes)
 
         solutions = np.array(y_train, dtype=object)
 
-        return (X_train, Y_train), (X_test, Y_test), Y_train.shape[1], solutions
+        return (X_train, Y_train), (X_test, Y_test), solutions
 
-    def create_model(self, num_classes, shape, summary: bool = False):
+    def create_model(self, num_classes: int, summary: bool = False):
         '''
         Create the Keras model in preparation for training.
         '''
-        print("Generating model... (shape = " + str(shape) + ")")
+        print("Generating model... (classes = " + str(num_classes) + ", shape = " + str(self.input_shape) + ")")
 
         model = Sequential()
 
-        model.add(Conv2D(32, (1, 1), input_shape=shape, padding='same'))
+        model.add(Conv2D(32, (1, 1), input_shape=self.input_shape, padding='same'))
         model.add(Activation('relu'))
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
@@ -313,6 +327,7 @@ def process(max_order, number_of_modes, amplitude_variation, epochs, repeats):
     '''
     Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
     '''
+    print("Done!\n")
     model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
     model.train()
     model.save()
@@ -321,6 +336,7 @@ def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repe
     '''
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
+    print("Starting process to ensure GPU memory is freed after taining is complete...")
     p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, epochs, repeats))
     p.start()
     p.join()
@@ -335,6 +351,11 @@ def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repe
 ##################################################
 
 
+# This is supposed to automatically allocate memory to the GPU when it is needed instead of reserving the full space.
+# config = tf.compat.v1.ConfigProto()
+# config.gpu_options.allow_growth = True
+# session = tf.compat.v1.Session(config=config)
+
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -343,33 +364,27 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    # train_and_save(5, 2, 0.4, 30, 10)
+    train_and_save(3, 3, 0.2, 30, 5)
 
-    numbers = np.arange(1, 4)
-    amplitude_variations = np.arange(0.0, 0.8, 0.2)
-    repeats = np.arange(1, 6, 2)
+    # numbers = np.arange(1, 4)
+    # amplitude_variations = np.arange(0.0, 0.8, 0.2)
+    # repeats = np.arange(1, 6, 2)
 
     # for n in numbers:
-    for r in repeats:
-        for a in amplitude_variations:
-            train_and_save(5, 3, round(a, 1), 30, r)
+    # for r in repeats:
+    #     for a in amplitude_variations:
+    #         train_and_save(5, 3, round(a, 1), 30, r)
 
-    # max_order = 5
-    # number_of_modes = 2
-    # amplitude_variation = 0.4
-    # epochs = 9
-    # repeats = 10
+    model = Model(max_order = 3,
+                  number_of_modes = 3,
+                  amplitude_variation = 0.2,
+                  max_epochs = 30,
+                  repeats = 5
+    )
+    model.load()
 
-    # model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
-    # model.train()
-    # model.save()
-
-    # model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
-    # model2.epochs = 9
-    # model2.load()
-    # model2.show()
-    # sup = Superposition([Hermite(2,1), Hermite(4,1)], amplitude_variation)
-    # print(sup)
-    # sup.show()
-    # prediction = Superposition(model2.predict(sup.superpose()))
-    # prediction.show()
+    sup = Superposition([Hermite(2,1), Laguerre(4,1)], 0.2)
+    print("Test: " + str(sup))
+    prediction = model.predict(sup.superpose())
+    sup.show()
+    prediction.show()
