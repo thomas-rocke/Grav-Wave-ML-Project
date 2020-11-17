@@ -364,7 +364,7 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    train_and_save(5, 3, 0.0, 30, 1)
+    train_and_save(3, 3, 0.2, 30, 5)
 
     # numbers = np.arange(1, 4)
     # amplitude_variations = np.arange(0.0, 0.8, 0.2)
@@ -377,9 +377,9 @@ if __name__ == '__main__':
 
     model = Model(max_order = 3,
                   number_of_modes = 3,
-                  amplitude_variation = 0.0,
+                  amplitude_variation = 0.2,
                   max_epochs = 30,
-                  repeats = 1
+                  repeats = 5
     )
     model.load()
 

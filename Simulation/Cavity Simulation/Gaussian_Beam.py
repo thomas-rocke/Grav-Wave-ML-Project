@@ -397,9 +397,19 @@ class Generate_Data(list):
         # p.map(self.process, self.combs)
 
         super().__init__()
-        for r in range(repeats): [self.append(Superposition(i, amplitude_variation)) for i in self.combs]
+
+        p = Pool(cpu_count())
+        self.extend(p.map(self.generate_process, self.combs * repeats))
+
+        # for r in range(repeats): [self.append(Superposition(i, amplitude_variation)) for i in self.combs]
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+    
+    def generate_process(self, item):
+        '''
+        Process for generating superposition objects across multiple threads in the CPU.
+        '''
+        return Superposition(item, self.amplitude_variation)
 
     def show(self, title: bool = True):
         '''
