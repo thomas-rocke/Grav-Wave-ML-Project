@@ -14,7 +14,7 @@ from scipy.stats import truncnorm
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from tqdm import tqdm
-from itertools import combinations
+from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 import time
 
@@ -413,13 +413,13 @@ class Generate_Data(list):
         '''
         print("Saving dataset...")
 
-        p = Pool(8)
-        p.map(self.process, self)
+        p = Pool(cpu_count())
+        p.map(self.save_process, self)
         # for i in tqdm(self): i.save(title)
 
         print("Done!\n")
 
-    def process(self, data):
+    def save_process(self, data):
         '''
         Process for saving images of the dataset across multiple threads in the CPU.
         '''
@@ -429,11 +429,25 @@ class Generate_Data(list):
         '''
         Get all the superpositions for the dataset.
         '''
-        return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
+        # return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
+        # thread_solutions = p.map(self.superpose_process, [(i, self[i:i + len(self) // n]) for i in range(0, len(self), len(self) // n)])
+        # return [item for item in thread_solutions]
+
+        p = Pool(cpu_count())
+        n = len(self) // (cpu_count() - 1)
+        jobs = [self[i:i + n] for i in range(0, len(self), n)]
+        threads = p.map(self.superpose_process, tqdm(jobs, desc))
+        return np.array([item for item in chain(*threads)])[..., np.newaxis]
+
+    def superpose_process(self, data):
+        '''
+        Process for superposing elements of the dataset across multiple threrads in the CPU.
+        '''
+        return [item.superpose() for item in data]
 
     def get_outputs(self):
         '''
-        Get all possible Gaussian modes that could comprise a superposition.
+        Get all possible Gaussian modes that could comprise a superposition.D
         '''
         return [Superposition(i) for i in self.combs], np.array(self.repeats * [[i] for i in range(len(self.combs))])
     
@@ -519,16 +533,19 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-    x1 = Hermite(0,1)
-    x2 = Hermite(1,0)
-    x = Superposition([x1,x2])
-    x[0].amplitude = 1/np.sqrt(2)
-    x[1].amplitude = 1j/np.sqrt(2)
-    print(x)
-    x.show()
+    x = Generate_Data(3, 3)
+    x.superpose()
 
-    x = Generate_Data(5, 2, 0.0)
-    x.save(False)
+    # x1 = Hermite(0,1)
+    # x2 = Hermite(1,0)
+    # x = Superposition([x1,x2])
+    # x[0].amplitude = 1/np.sqrt(2)
+    # x[1].amplitude = 1j/np.sqrt(2)
+    # print(x)
+    # x.show()
+
+    # x = Generate_Data(5, 2, 0.0)
+    # x.save(False)
 
 
 

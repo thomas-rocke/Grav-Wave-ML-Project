@@ -49,7 +49,7 @@ class Model:
         self.repeats = repeats
 
         self.step_speed = 0.167
-        self.batch_size = 150
+        self.batch_size = 128
         self.success_performance = 0.9
         self.optimizer = "Adam"
         self.input_shape = (120, 120, 1)
@@ -94,7 +94,7 @@ class Model:
             # Training
 
             etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * number_of_modes) + "... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
+            print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * number_of_modes) + " or a maximum performance of " + str(int(self.success_performance * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
 
             try:
                 performance = 0.0
@@ -103,7 +103,7 @@ class Model:
 
                     history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=self.batch_size)
 
-                    performance = history_callback.history["val_accuracy"][0]
+                    performance = history_callback.history["accuracy"][0]
                     for i in self.history: self.history[i].append(history_callback.history[i][0])
 
                     if self.epochs >= self.max_epochs * number_of_modes: print("A strange game. The only winning move is not to play.\n")
@@ -364,7 +364,7 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    train_and_save(5, 3, 0.4, 30, 5)
+    train_and_save(5, 3, 0.0, 30, 1)
 
     # numbers = np.arange(1, 4)
     # amplitude_variations = np.arange(0.0, 0.8, 0.2)
@@ -375,11 +375,11 @@ if __name__ == '__main__':
     #     for a in amplitude_variations:
     #         train_and_save(5, 3, round(a, 1), 30, r)
 
-    model = Model(max_order = 5,
+    model = Model(max_order = 3,
                   number_of_modes = 3,
-                  amplitude_variation = 0.2,
+                  amplitude_variation = 0.0,
                   max_epochs = 30,
-                  repeats = 5
+                  repeats = 1
     )
     model.load()
 
