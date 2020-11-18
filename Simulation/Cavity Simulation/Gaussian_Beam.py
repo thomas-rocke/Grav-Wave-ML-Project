@@ -14,9 +14,11 @@ from scipy.stats import truncnorm
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from tqdm import tqdm
-from itertools import combinations
+from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 import time
+
+resolution = 50
 
 
 
@@ -84,7 +86,7 @@ class Hermite:
         '''
         Plot the Gaussian mode.
         '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / resolution), np.arange(-1.2, 1.2, 1.0 / resolution))
 
         plt.figure(self.__class__.__name__)
         plt.imshow(self.I(X, Y, 0), cmap='Greys_r')
@@ -183,7 +185,7 @@ class Superposition(list):
     def __init__(self, modes: list, amplitude_variation: float = 0.0, amplitude: float = 1.0, max_order: int = None):
         '''
         Initialise the class with the list of modes that compose the superposition.
-        ''' 
+        '''
         self.amplitude_variation = amplitude_variation
         self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
 
@@ -271,7 +273,7 @@ class Superposition(list):
         '''
         Compute the superposition of the Gaussian modes.
         '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 0.01), np.arange(-1.2, 1.2, 0.01))
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / resolution), np.arange(-1.2, 1.2, 1.0 / resolution))
         
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
         # superposition = np.abs(self.E_mode(X, Y, 0)**2)
@@ -374,12 +376,13 @@ class Generate_Data(list):
         self.amplitude_variation = amplitude_variation
         self.repeats = repeats
 
-        if info: print("\n-----| Generating Data |-----\n")
+        if info: print("\n_____| Generating Data |_____\n")
         if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\n")
         if info: print("Generating Gaussian modes...")
 
         hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
         laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
+        # laguerre_modes = []
         gauss_modes = hermite_modes + laguerre_modes
 
         if info: print("Done! Found " + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving " + str(len(gauss_modes)) + " gaussian modes in total.\n\nGenerating superpositions...")
@@ -394,10 +397,19 @@ class Generate_Data(list):
         # p.map(self.process, self.combs)
 
         super().__init__()
-        for r in range(repeats):
-            for i in self.combs: self.append(Superposition(i, amplitude_variation))
+
+        p = Pool(cpu_count())
+        self.extend(p.map(self.generate_process, self.combs * repeats))
+
+        # for r in range(repeats): [self.append(Superposition(i, amplitude_variation)) for i in self.combs]
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+    
+    def generate_process(self, item):
+        '''
+        Process for generating superposition objects across multiple threads in the CPU.
+        '''
+        return Superposition(item, self.amplitude_variation)
 
     def show(self, title: bool = True):
         '''
@@ -411,29 +423,49 @@ class Generate_Data(list):
         '''
         print("Saving dataset...")
 
-        p = Pool(8)
-        p.map(self.process, self)
+        p = Pool(cpu_count())
+        p.map(self.save_process, self)
         # for i in tqdm(self): i.save(title)
 
         print("Done!\n")
 
-    def process(self, data):
+    def save_process(self, data):
         '''
         Process for saving images of the dataset across multiple threads in the CPU.
         '''
         data.save(False)
     
-    def superpose(self):
+    def superpose(self, desc: str = None):
         '''
         Get all the superpositions for the dataset.
         '''
-        return np.array([i.superpose() for i in tqdm(self)])[..., np.newaxis]
+        # return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
+        # thread_solutions = p.map(self.superpose_process, [(i, self[i:i + len(self) // n]) for i in range(0, len(self), len(self) // n)])
+        # return [item for item in thread_solutions]
+
+        p = Pool(cpu_count())
+        n = len(self) // (cpu_count() - 1)
+        jobs = [self[i:i + n] for i in range(0, len(self), n)]
+        threads = p.map(self.superpose_process, tqdm(jobs, desc))
+        return np.array([item for item in chain(*threads)])[..., np.newaxis]
+
+    def superpose_process(self, data):
+        '''
+        Process for superposing elements of the dataset across multiple threrads in the CPU.
+        '''
+        return [item.superpose() for item in data]
 
     def get_outputs(self):
         '''
-        Get all possible Gaussian modes that could comprise a superposition.
+        Get all possible Gaussian modes that could comprise a superposition.D
         '''
         return [Superposition(i) for i in self.combs], np.array(self.repeats * [[i] for i in range(len(self.combs))])
+    
+    def get_num_classes(self):
+        '''
+        Get the num_classes result required for model creation.
+        '''
+        return self.repeats * len(self.combs)
 
     # def pool_handler(self, data, threads):
     #     '''
@@ -511,16 +543,19 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-    x1 = Hermite(0,1)
-    x2 = Hermite(1,0)
-    x = Superposition([x1,x2])
-    x[0].amplitude = 1/np.sqrt(2)
-    x[1].amplitude = 1j/np.sqrt(2)
-    print(x)
-    x.show()
+    x = Generate_Data(3, 3)
+    x.superpose()
 
-    x = Generate_Data(5, 3, 0.0)
-    x.save(False)
+    # x1 = Hermite(0,1)
+    # x2 = Hermite(1,0)
+    # x = Superposition([x1,x2])
+    # x[0].amplitude = 1/np.sqrt(2)
+    # x[1].amplitude = 1j/np.sqrt(2)
+    # print(x)
+    # x.show()
+
+    # x = Generate_Data(5, 2, 0.0)
+    # x.save(False)
 
 
 
