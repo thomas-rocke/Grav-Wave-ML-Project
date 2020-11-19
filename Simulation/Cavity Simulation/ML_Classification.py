@@ -38,7 +38,7 @@ class Model:
     '''
     The class 'Model' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, max_epochs: int = 30, repeats: int = 1):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1):
         '''
         Initialise the class.
         '''
@@ -65,7 +65,7 @@ class Model:
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.max_epochs) + ", " + str(self.repeats) + ")"
+        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.repeats) + ")"
 
     def __repr__(self):
         '''
@@ -81,32 +81,33 @@ class Model:
 
         print("Generating preliminary data for model generation...")
 
-        prelim_data = Generate_Data(self.max_order, self.number_of_modes, 0.0, self.repeats, info=False)
-        num_classes = prelim_data.get_num_classes()
+        prelim_data = Generate_Data(self.max_order, self.number_of_modes, 0.0, 1, info=False)
+        self.solutions = prelim_data.get_classes()
+        num_classes = len(self.solutions)
 
         print("Done!\n")
 
         self.model = self.create_model(num_classes) # Create the model
 
         for number_of_modes in range(2, self.number_of_modes + 1):
-            (X_train, Y_train), (X_test, Y_test), self.solutions = self.load_data(self.max_order, number_of_modes, self.amplitude_variation, num_classes) # Load training and validation data
+            (X_train, Y_train), (X_test, Y_test) = self.load_data(self.max_order, number_of_modes, self.amplitude_variation, num_classes) # Load training and validation data
 
             # Training
 
             etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * number_of_modes) + " or a maximum performance of " + str(int(self.success_performance * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
+            print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes - 1)) + " or a maximum performance of " + str(int(self.success_performance * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
 
             try:
                 performance = 0.0
-                while performance < self.success_performance and self.epochs <= self.max_epochs * number_of_modes:
+                while performance < self.success_performance and self.epochs <= self.max_epochs * (number_of_modes - 1):
                     print("Epoch " + str(self.epochs) + ":")
 
                     history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=self.batch_size)
 
-                    performance = history_callback.history["accuracy"][0]
+                    performance = history_callback.history["val_accuracy"][0]
                     for i in self.history: self.history[i].append(history_callback.history[i][0])
 
-                    if self.epochs >= self.max_epochs * number_of_modes: print("A strange game. The only winning move is not to play.\n")
+                    if self.epochs >= self.max_epochs * (number_of_modes - 1): print("ERROR: Max epoch reached!\n")
                     if performance >= self.success_performance: print(str(int(self.success_performance * 100)) + "% performance achieved!\n")
                     self.epochs += 1
 
@@ -130,13 +131,13 @@ class Model:
 
         x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
         X_train = x_train.superpose(" |-> " + str(self.repeats) + " datasets of training data")
-        y_train, Y_train = x_train.get_outputs()
+        Y_train = x_train.get_outputs()
 
         print(" |")
 
         x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
-        X_test = x_test.superpose(" |-> 1 dataset of testing data")
-        y_test, Y_test = x_test.get_outputs()
+        X_test = x_test.superpose(" |-> 1 dataset of validation data")
+        Y_test = x_test.get_outputs()
 
         print(" V")
         print("Done!\n")
@@ -144,9 +145,7 @@ class Model:
         Y_train = np_utils.to_categorical(Y_train, num_classes)
         Y_test = np_utils.to_categorical(Y_test, num_classes)
 
-        solutions = np.array(y_train, dtype=object)
-
-        return (X_train, Y_train), (X_test, Y_test), solutions
+        return (X_train, Y_train), (X_test, Y_test)
 
     def create_model(self, num_classes: int, summary: bool = False):
         '''
@@ -156,24 +155,29 @@ class Model:
 
         model = Sequential()
 
-        model.add(Conv2D(32, (1, 1), input_shape=self.input_shape, padding='same'))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        # Conv2D: Matrix that traverses the image and blurs it
+        # Dropout: Randomly sets input units to 0 to help prevent overfitting
+        # MaxPooling2D: Downsamples the input representation
 
-        model.add(Conv2D(64, (1, 1), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
-
-        model.add(Conv2D(64, (1, 1), padding='same'))
+        model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
         model.add(Activation('relu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
 
-        model.add(Conv2D(128, (1, 1), padding='same'))
+        model.add(Conv2D(64, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+
+        model.add(Conv2D(128, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+
+        model.add(Conv2D(256, (3, 3), padding='same'))
         model.add(Activation('relu'))
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
@@ -303,7 +307,9 @@ class Model:
         amplitudes = np.zeros(len(answer))
         for i in range(len(self.solutions)): # For every possible superposition
             for j in range(len(answer)): # For every mode in the predicted superposition
+                # print(str(answer[j]), str(self.solutions[i]))
                 if str(answer[j]) in str(self.solutions[i]): # If mode is in superposition
+                    # print("1")
                     amplitudes[j] += prediction[i] # Increase amplitude of that mode by the probability of that superposition
 
         for i in range(len(answer)): answer[i].amplitude = amplitudes[i]
@@ -323,21 +329,21 @@ class Model:
 ##################################################
 
 
-def process(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+def process(max_order, number_of_modes, amplitude_variation, repeats):
     '''
     Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
     '''
     print("Done!\n")
-    model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    model = Model(max_order, number_of_modes, amplitude_variation, repeats)
     model.train()
     model.save()
 
-def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+def train_and_save(max_order, number_of_modes, amplitude_variation, repeats):
     '''
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
     print("Starting process to ensure GPU memory is freed after taining is complete...")
-    p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, epochs, repeats))
+    p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, repeats))
     p.start()
     p.join()
 
@@ -364,7 +370,12 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    train_and_save(3, 3, 0.2, 30, 5)
+    # train_and_save(3, 3, 0.0, 100)
+    # train_and_save(4, 3, 0.0, 10)
+    # train_and_save(3, 3, 0.2, 10)
+    train_and_save(4, 3, 0.2, 10)
+    # train_and_save(3, 3, 0.4, 10)
+    # train_and_save(4, 3, 0.4, 10)
 
     # numbers = np.arange(1, 4)
     # amplitude_variations = np.arange(0.0, 0.8, 0.2)
@@ -375,15 +386,14 @@ if __name__ == '__main__':
     #     for a in amplitude_variations:
     #         train_and_save(5, 3, round(a, 1), 30, r)
 
-    model = Model(max_order = 3,
+    model = Model(max_order = 4,
                   number_of_modes = 3,
-                  amplitude_variation = 0.2,
-                  max_epochs = 30,
+                  amplitude_variation = 0.4,
                   repeats = 5
     )
     model.load()
 
-    sup = Superposition([Hermite(2,1), Laguerre(4,1)], 0.2)
+    sup = Superposition([Hermite(0,1), Hermite(2,0), Laguerre(2,1)], 0.2)
     print("Test: " + str(sup))
     prediction = model.predict(sup.superpose())
     sup.show()

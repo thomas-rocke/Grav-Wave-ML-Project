@@ -53,13 +53,13 @@ class Hermite:
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
+        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ")"
 
     def __repr__(self):
         '''
         Magic method for the repr() function.
         '''
-        return str(self)
+        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
 
     def __mul__(self, val):
         '''
@@ -377,7 +377,7 @@ class Generate_Data(list):
         self.repeats = repeats
 
         if info: print("\n_____| Generating Data |_____\n")
-        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\n")
+        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nRepeats of combinations: " + str(repeats) + "\n")
         if info: print("Generating Gaussian modes...")
 
         hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
@@ -459,13 +459,13 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.D
         '''
-        return [Superposition(i) for i in self.combs], np.array(self.repeats * [[i] for i in range(len(self.combs))])
+        return np.array(self.repeats * [[i] for i in range(len(self.combs))])
     
-    def get_num_classes(self):
+    def get_classes(self):
         '''
         Get the num_classes result required for model creation.
         '''
-        return self.repeats * len(self.combs)
+        return np.array([Superposition(i) for i in self.combs], dtype=object) # * self.repeats
 
     # def pool_handler(self, data, threads):
     #     '''
