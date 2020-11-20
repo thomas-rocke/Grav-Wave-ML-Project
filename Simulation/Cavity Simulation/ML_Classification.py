@@ -11,19 +11,17 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
+from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import multiprocessing
+import tensorflow as tf
 import keras
-# from keras.models import Sequential
-from keras import Input, Model
+from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.constraints import maxnorm
 from keras.layers.convolutional import Conv2D, MaxPooling2D
-from keras.utils import np_utils
-import tensorflow as tf
-from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data
 
 
 
@@ -49,10 +47,10 @@ class ML:
         self.max_epochs = 30
         self.repeats = repeats
 
-        self.step_speed = 0.167
+        self.step_speed = 0.200
         self.batch_size = 128
-        self.success_performance = 0.9
-        self.optimizer = "Adam"
+        self.success_loss = 0.1
+        self.optimizer = "sgd"
         self.input_shape = (120, 120, 1)
 
         self.epochs = 1
@@ -90,25 +88,25 @@ class ML:
         self.model = self.create_model(summary=False) # Create the model
 
         for number_of_modes in range(2, self.number_of_modes + 1):
-            (X_train, Y_train), (X_test, Y_test) = self.load_data(self.max_order, number_of_modes, self.amplitude_variation) # Load training and validation data
+            (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(self.max_order, number_of_modes, self.amplitude_variation) # Load training and validation data
 
             # Training
 
-            etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes - 1)) + " or a maximum performance of " + str(int(self.success_performance * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
+            etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
+            print("Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes - 1)) + " or a maximum performance of " + str(int(self.sucess_loss * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
 
             try:
-                performance = 0.0
-                while performance < self.success_performance and self.epochs <= self.max_epochs * (number_of_modes - 1):
+                loss = 100.0
+                while loss > self.sucess_loss and self.epochs <= self.max_epochs * (number_of_modes - 1):
                     print("Epoch " + str(self.epochs) + ":")
 
-                    history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=self.batch_size)
+                    history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size)
 
-                    performance = history_callback.history["val_accuracy"][0]
+                    loss = history_callback.history["loss"][0]
                     for i in self.history: self.history[i].append(history_callback.history[i][0])
 
                     if self.epochs >= self.max_epochs * (number_of_modes - 1): print("ERROR: Max epoch reached!\n")
-                    if performance >= self.success_performance: print(str(int(self.success_performance * 100)) + "% performance achieved!\n")
+                    if loss <= self.sucess_loss: print(str(int(self.sucess_loss * 100)) + " loss achieved!\n")
                     self.epochs += 1
 
             except KeyboardInterrupt:
@@ -119,7 +117,7 @@ class ML:
             # Evaluation
 
             print("Evaluating...")
-            scores = self.model.evaluate(X_test, Y_test, verbose=0)
+            scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
             print("Done! Accuracy: %.2f%%\n" % (scores[1]*100))
 
     def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0):
@@ -142,13 +140,9 @@ class ML:
         print(" V")
         print("Done!\n")
 
-        train_outputs = [np_utils.to_categorical(train_outputs[..., np.newaxis][i], len(self.solutions)) for i in range(len(train_outputs))]
-        val_outputs = [np_utils.to_categorical(val_outputs[..., np.newaxis][i], len(self.solutions)) for i in range(len(val_outputs))]
-
-        # print(len(Y_train))
-
-        # train_outputs = np_utils.to_categorical(train_outputs)#, len(self.solutions))
-        # val_outputs = np_utils.to_categorical(val_outputs)#, len(self.solutions))
+        # If our loss function was 'categorical_crossentropy':
+        # train_outputs = np_utils.to_categorical(train_outputs)
+        # val_outputs = np_utils.to_categorical(val_outputs)
 
         return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
@@ -158,54 +152,52 @@ class ML:
         '''
         print("Generating model... (classes = " + str(len(self.solutions)) + ", shape = " + str(self.input_shape) + ")")
 
-        # model = Sequential()
+        model = Sequential()
 
         # Conv2D: Matrix that traverses the image and blurs it
         # Dropout: Randomly sets input units to 0 to help prevent overfitting
         # MaxPooling2D: Downsamples the input representation
 
-        inputs = Input(shape=self.input_shape)
+        model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        x = Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same')(inputs)
-        x = Activation('relu')(x)
-        x = MaxPooling2D(pool_size=(2, 2))(x)
-        x = Dropout(0.2)(x)
-        x = BatchNormalization()(x)
+        model.add(Conv2D(64, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        x = Conv2D(64, (3, 3), padding='same')(x)
-        x = Activation('relu')(x)
-        x = MaxPooling2D(pool_size=(2, 2))(x)
-        x = Dropout(0.2)(x)
-        x = BatchNormalization()(x)
+        model.add(Conv2D(128, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        x = Conv2D(128, (3, 3), padding='same')(x)
-        x = Activation('relu')(x)
-        x = MaxPooling2D(pool_size=(2, 2))(x)
-        x = Dropout(0.2)(x)
-        x = BatchNormalization()(x)
+        model.add(Conv2D(256, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        x = Conv2D(256, (3, 3), padding='same')(x)
-        x = Activation('relu')(x)
-        x = Dropout(0.2)(x)
-        x = BatchNormalization()(x)
+        model.add(Flatten())
+        model.add(Dropout(0.2))
 
-        x = Flatten()(x)
-        x = Dropout(0.2)(x)
+        model.add(Dense(256, kernel_constraint=maxnorm(3)))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        x = Dense(256, kernel_constraint=maxnorm(3))(x)
-        x = Activation('relu')(x)
-        x = Dropout(0.2)(x)
-        x = BatchNormalization()(x)
+        model.add(Dense(128, kernel_constraint=maxnorm(3)))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        x = Dense(128, kernel_constraint=maxnorm(3))(x)
-        x = Activation('relu')(x)
-        x = Dropout(0.2)(x)
-        x = BatchNormalization()(x)
+        model.add(Dense(len(self.solutions)))
+        model.add(Activation('sigmoid'))
 
-        outputs = [Dense(1, activation='softmax', name=str(self.solutions[i]).replace(' ', '').replace('(', '_').replace(')', '').replace(',', '_'))(x) for i in range(len(self.solutions))] # Creating a multi-output network
-
-        model = Model(inputs=inputs, outputs=outputs)
-        model.compile(loss='categorical_crossentropy', optimizer=self.optimizer)#, metrics=['accuracy'])
+        model.compile(loss='binary_crossentropy', optimizer=self.optimizer, metrics=['accuracy'])
 
         print("Done!\n")
         if summary: print(model.summary())
@@ -311,22 +303,17 @@ class ML:
         data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
 
         prediction = self.model.predict(data)[0] # Make prediction using model (return index of superposition)
+        prediction = [(self.solutions[i], prediction[i]) for i in range(len(prediction))]
+        prediction = {i[0] : i[1] for i in prediction}
+        prediction = {k : v for k, v in sorted(prediction.items(), key=lambda item: item[1])} # Sort list
 
-        answer = self.solutions[np.argmax(prediction)] # Answer is the superposition with the maximum probability
+        modes = list(prediction.keys())[-self.number_of_modes:]
+        amplitudes = list(prediction.values())[-self.number_of_modes:]
 
-        amplitudes = np.zeros(len(answer))
-        for i in range(len(self.solutions)): # For every possible superposition
-            for j in range(len(answer)): # For every mode in the predicted superposition
-                # print(str(answer[j]), str(self.solutions[i]))
-                if str(answer[j]) in str(self.solutions[i]): # If mode is in superposition
-                    # print("1")
-                    amplitudes[j] += prediction[i] # Increase amplitude of that mode by the probability of that superposition
-
-        for i in range(len(answer)): answer[i].amplitude = amplitudes[i]
-        answer = Superposition(answer) # Normalise the amplitudes
+        for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
+        answer = Superposition(modes) # Normalise the amplitudes
 
         print("Done! Answer: " + str(answer) + "\n")
-
         return answer
 
 
@@ -380,30 +367,18 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    # train_and_save(3, 3, 0.0, 100)
-    # train_and_save(4, 3, 0.0, 10)
-    # train_and_save(3, 3, 0.2, 10)
-    train_and_save(4, 3, 0.2, 10)
-    # train_and_save(3, 3, 0.4, 10)
-    # train_and_save(4, 3, 0.4, 10)
+    train_and_save(3, 3, 0.4, 100)
+    train_and_save(4, 3, 0.4, 100)
+    train_and_save(5, 3, 0.4, 100)
 
-    # numbers = np.arange(1, 4)
-    # amplitude_variations = np.arange(0.0, 0.8, 0.2)
-    # repeats = np.arange(1, 6, 2)
-
-    # for n in numbers:
-    # for r in repeats:
-    #     for a in amplitude_variations:
-    #         train_and_save(5, 3, round(a, 1), 30, r)
-
-    model = ML(max_order = 4,
+    model = ML(max_order = 5,
                   number_of_modes = 3,
                   amplitude_variation = 0.4,
-                  repeats = 5
+                  repeats = 10
     )
     model.load()
 
-    sup = Superposition([Hermite(0,1), Hermite(2,0), Laguerre(2,1)], 0.2)
+    sup = Superposition([Hermite(4,1), Hermite(2,0)], 0.4)
     print("Test: " + str(sup))
     prediction = model.predict(sup.superpose())
     sup.show()

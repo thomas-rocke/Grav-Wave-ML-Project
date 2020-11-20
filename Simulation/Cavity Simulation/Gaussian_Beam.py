@@ -388,26 +388,18 @@ class Generate_Data(list):
 
         hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
         # laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
-        laguerre_modes = []
-        self.gauss_modes = hermite_modes + laguerre_modes
+        # laguerre_modes = []
+        self.gauss_modes = hermite_modes# + laguerre_modes
 
-        if info: print("Done! Found " + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving " + str(len(self.gauss_modes)) + " gaussian modes in total.\n\nGenerating superpositions...")
+        if info: print("Done! Found " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")# + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving " + str(len(self.gauss_modes)) + " gaussian modes in total.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
-        # self.combs = list(combinations(gauss_modes, number_of_modes))
-        # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
-
-        # self.pool_handler(self.combs, 5)
-        # p = Pool(5)
-        # p.map(self.process, self.combs)
 
         super().__init__()
 
         p = Pool(cpu_count())
         self.extend(p.map(self.generate_process, self.combs * repeats))
-
-        # for r in range(repeats): [self.append(Superposition(i, amplitude_variation)) for i in self.combs]
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
     
@@ -431,7 +423,6 @@ class Generate_Data(list):
 
         p = Pool(cpu_count())
         p.map(self.save_process, self)
-        # for i in tqdm(self): i.save(title)
 
         print("Done!\n")
 
@@ -446,8 +437,6 @@ class Generate_Data(list):
         Get all the superpositions for the dataset.
         '''
         # return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
-        # thread_solutions = p.map(self.superpose_process, [(i, self[i:i + len(self) // n]) for i in range(0, len(self), len(self) // n)])
-        # return [item for item in thread_solutions]
 
         p = Pool(cpu_count())
         n = len(self) // (cpu_count() - 1)
@@ -465,7 +454,10 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
-        return np.array(self.repeats * [[int(str(j)[:-1] in str(i)) for j in self.gauss_modes] for i in self.combs]).T
+        yes = np.array(self.repeats * [[int(str(j)[:-1] in str(i))  for j in self.gauss_modes] for i in self.combs])
+        no = np.array(self.repeats * [[not int(str(j)[:-1] in str(i))  for j in self.gauss_modes] for i in self.combs])
+        # return (yes, no)
+        return yes
 
     def get_classes(self):
         '''
