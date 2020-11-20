@@ -53,13 +53,13 @@ class Hermite:
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
+        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ")"
 
     def __repr__(self):
         '''
         Magic method for the repr() function.
         '''
-        return str(self)
+        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
 
     def __mul__(self, val):
         '''
@@ -333,6 +333,12 @@ class Laguerre(Superposition):
         '''
         Magic method for the str() function.
         '''
+        return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ")"
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
         return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ", " + str(self.amplitude) + ")"
 
     def __mul__(self, value):
@@ -377,17 +383,17 @@ class Generate_Data(list):
         self.repeats = repeats
 
         if info: print("\n_____| Generating Data |_____\n")
-        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\n")
+        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nRepeats of combinations: " + str(repeats) + "\n")
         if info: print("Generating Gaussian modes...")
 
         hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
-        laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
-        # laguerre_modes = []
-        gauss_modes = hermite_modes + laguerre_modes
+        # laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
+        laguerre_modes = []
+        self.gauss_modes = hermite_modes + laguerre_modes
 
-        if info: print("Done! Found " + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving " + str(len(gauss_modes)) + " gaussian modes in total.\n\nGenerating superpositions...")
+        if info: print("Done! Found " + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving " + str(len(self.gauss_modes)) + " gaussian modes in total.\n\nGenerating superpositions...")
 
-        self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
         # self.combs = list(combinations(gauss_modes, number_of_modes))
         # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
@@ -435,7 +441,7 @@ class Generate_Data(list):
         '''
         data.save(False)
     
-    def superpose(self, desc: str = None):
+    def get_inputs(self, desc: str = None):
         '''
         Get all the superpositions for the dataset.
         '''
@@ -457,15 +463,15 @@ class Generate_Data(list):
 
     def get_outputs(self):
         '''
-        Get all possible Gaussian modes that could comprise a superposition.D
+        Get all possible Gaussian modes that could comprise a superposition.
         '''
-        return [Superposition(i) for i in self.combs], np.array(self.repeats * [[i] for i in range(len(self.combs))])
-    
-    def get_num_classes(self):
+        return np.array(self.repeats * [[int(str(j)[:-1] in str(i)) for j in self.gauss_modes] for i in self.combs]).T
+
+    def get_classes(self):
         '''
         Get the num_classes result required for model creation.
         '''
-        return self.repeats * len(self.combs)
+        return np.array(self.gauss_modes, dtype=object) # * self.repeats
 
     # def pool_handler(self, data, threads):
     #     '''
@@ -544,7 +550,7 @@ def choose(n, r):
 
 if __name__ == '__main__':
     x = Generate_Data(3, 3)
-    x.superpose()
+    x.get_outputs()
 
     # x1 = Hermite(0,1)
     # x2 = Hermite(1,0)
