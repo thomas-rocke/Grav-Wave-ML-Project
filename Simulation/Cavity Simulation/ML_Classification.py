@@ -328,6 +328,26 @@ class ML:
         print("[PRED]  Done! Answer: " + str(answer) + "\n")
         return answer
 
+    def compare(self, sup: Superposition):
+        '''
+        Plot given superposition against predicted superposition for visual comparison.
+        '''
+        pred = self.predict(sup.superpose())
+
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / sup.resolution), np.arange(-1.2, 1.2, 1.0 / sup.resolution))
+
+        plt.figure(str(self))
+        fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+        fig.suptitle(str(self))
+        
+        ax1.imshow(sup.superpose(), cmap='Greys_r')
+        ax2.imshow(pred.superpose(), cmap='Greys_r')
+
+        ax1.set_ylabel(str(sup))
+        ax2.set_ylabel(str(pred))
+        plt.axis('off')
+
+        plt.show()
 
 
 
@@ -381,9 +401,9 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    train_and_save(3, 3, 0.4, 100)
-    train_and_save(4, 3, 0.4, 100)
-    train_and_save(5, 3, 0.4, 100)
+    # train_and_save(3, 3, 0.4, 100)
+    # train_and_save(4, 3, 0.4, 100)
+    # train_and_save(5, 3, 0.4, 100)
 
     model = ML(max_order = 5,
                   number_of_modes = 3,
@@ -393,7 +413,8 @@ if __name__ == '__main__':
     model.load()
 
     sup = Superposition([Hermite(4,1), Hermite(2,0)], 0.4)
-    print("Test: " + str(sup))
-    prediction = model.predict(sup.superpose())
-    sup.show()
-    prediction.show()
+    model.compare(sup)
+    # print("Test: " + str(sup))
+    # prediction = model.predict(sup.superpose())
+    # sup.show()
+    # prediction.show()

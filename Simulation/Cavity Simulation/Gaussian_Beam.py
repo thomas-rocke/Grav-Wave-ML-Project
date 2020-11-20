@@ -20,8 +20,6 @@ import time
 
 np.seterr(divide='ignore', invalid='ignore')
 
-resolution = 50
-
 
 
 
@@ -50,6 +48,8 @@ class Hermite:
 
         self.z_R = (np.pi * w_0**2 * n) / wavelength # Rayleigh range
         self.k = (2 * np.pi * n) / wavelength # Wave number
+
+        self.resolution = 50
 
     def __str__(self):
         '''
@@ -88,7 +88,7 @@ class Hermite:
         '''
         Plot the Gaussian mode.
         '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / resolution), np.arange(-1.2, 1.2, 1.0 / resolution))
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / self.resolution), np.arange(-1.2, 1.2, 1.0 / self.resolution))
 
         plt.figure(self.__class__.__name__)
         plt.imshow(self.I(X, Y, 0), cmap='Greys_r')
@@ -190,6 +190,7 @@ class Superposition(list):
         '''
         self.amplitude_variation = amplitude_variation
         self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        self.resolution = modes[0].resolution
 
         super().__init__(self.modes)
 
@@ -275,7 +276,7 @@ class Superposition(list):
         '''
         Compute the superposition of the Gaussian modes.
         '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / resolution), np.arange(-1.2, 1.2, 1.0 / resolution))
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / self.resolution), np.arange(-1.2, 1.2, 1.0 / self.resolution))
         
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
         # superposition = np.abs(self.E_mode(X, Y, 0)**2)
