@@ -4,6 +4,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and err
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from itertools import combinations, chain
 import multiprocessing
 import keras
 from keras.models import Sequential
@@ -42,7 +43,7 @@ class Generate_Data(list):
 
         self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
-        self.vecs = [i[j].get_vector() for i in self.combs for j in range(len(i))]
+        self.vecs = [Superposition(i, max_order=max_order).get_vector() for i in self.combs for j in range(len(i))]
         # self.combs = list(combinations(gauss_modes, number_of_modes))
         # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
 
@@ -66,7 +67,10 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
-        return self.vecs, np.array(self.vecs * self.repeats) #np.array(self.repeats * [[i] for i in range(len(self.vecs))])
+        new_arr = np.zeros((self.repeats*len(self.vecs)))
+        for i in range(len(self.vecs)):
+            new_arr[i] = self.vecs[i%len(self.vecs)]
+        return self.vecs, new_arr #np.array(self.repeats * [[i] for i in range(len(self.vecs))])
 
     def show(self, title: bool = True):
         '''
