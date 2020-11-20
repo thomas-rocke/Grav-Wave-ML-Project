@@ -16,7 +16,8 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import multiprocessing
 import keras
-from keras.models import Sequential
+# from keras.models import Sequential
+from keras import Input, Model
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.constraints import maxnorm
 from keras.layers.convolutional import Conv2D, MaxPooling2D
@@ -34,9 +35,9 @@ from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data
 ##################################################
 
 
-class Model:
+class ML:
     '''
-    The class 'Model' that represents a Keras model using datasets from Gaussian modes.
+    The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
     def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1):
         '''
@@ -83,14 +84,13 @@ class Model:
 
         prelim_data = Generate_Data(self.max_order, self.number_of_modes, 0.0, 1, info=False)
         self.solutions = prelim_data.get_classes()
-        num_classes = len(self.solutions)
 
         print("Done!\n")
 
-        self.model = self.create_model(num_classes) # Create the model
+        self.model = self.create_model(summary=False) # Create the model
 
         for number_of_modes in range(2, self.number_of_modes + 1):
-            (X_train, Y_train), (X_test, Y_test) = self.load_data(self.max_order, number_of_modes, self.amplitude_variation, num_classes) # Load training and validation data
+            (X_train, Y_train), (X_test, Y_test) = self.load_data(self.max_order, number_of_modes, self.amplitude_variation) # Load training and validation data
 
             # Training
 
@@ -122,87 +122,97 @@ class Model:
             scores = self.model.evaluate(X_test, Y_test, verbose=0)
             print("Done! Accuracy: %.2f%%\n" % (scores[1]*100))
 
-    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, num_classes: int = None):
+    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0):
         '''
         Load training and testing data.
         '''
         print("Generating data for superpositions of " + str(number_of_modes) + " different modes...")
         print(" |")
 
-        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
-        X_train = x_train.superpose(" |-> " + str(self.repeats) + " datasets of training data")
-        Y_train = x_train.get_outputs()
+        train_data = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
+        train_inputs = train_data.get_inputs(" |-> " + str(self.repeats) + " datasets of training data")
+        train_outputs = train_data.get_outputs()
 
         print(" |")
 
-        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
-        X_test = x_test.superpose(" |-> 1 dataset of validation data")
-        Y_test = x_test.get_outputs()
+        val_data = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
+        val_inputs = val_data.get_inputs(" |-> 1 dataset of validation data")
+        val_outputs = val_data.get_outputs()
 
         print(" V")
         print("Done!\n")
 
-        Y_train = np_utils.to_categorical(Y_train, num_classes)
-        Y_test = np_utils.to_categorical(Y_test, num_classes)
+        train_outputs = [np_utils.to_categorical(i, len(self.solutions)) for i in train_outputs]
+        val_outputs = [np_utils.to_categorical(i, len(self.solutions)) for i in val_outputs]
 
-        return (X_train, Y_train), (X_test, Y_test)
+        # print(len(Y_train))
 
-    def create_model(self, num_classes: int, summary: bool = False):
+        # train_outputs = np_utils.to_categorical(train_outputs)#, len(self.solutions))
+        # val_outputs = np_utils.to_categorical(val_outputs)#, len(self.solutions))
+
+        return (train_inputs, train_outputs), (val_inputs, val_outputs)
+
+    def create_model(self, summary: bool = False):
         '''
         Create the Keras model in preparation for training.
         '''
-        print("Generating model... (classes = " + str(num_classes) + ", shape = " + str(self.input_shape) + ")")
+        print("Generating model... (classes = " + str(len(self.solutions)) + ", shape = " + str(self.input_shape) + ")")
 
-        model = Sequential()
+        # model = Sequential()
 
         # Conv2D: Matrix that traverses the image and blurs it
         # Dropout: Randomly sets input units to 0 to help prevent overfitting
         # MaxPooling2D: Downsamples the input representation
 
-        model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        inputs = Input(shape=self.input_shape)
 
-        model.add(Conv2D(64, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        x = Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same')(inputs)
+        x = Activation('relu')(x)
+        x = MaxPooling2D(pool_size=(2, 2))(x)
+        x = Dropout(0.2)(x)
+        x = BatchNormalization()(x)
 
-        model.add(Conv2D(128, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        x = Conv2D(64, (3, 3), padding='same')(x)
+        x = Activation('relu')(x)
+        x = MaxPooling2D(pool_size=(2, 2))(x)
+        x = Dropout(0.2)(x)
+        x = BatchNormalization()(x)
 
-        model.add(Conv2D(256, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        x = Conv2D(128, (3, 3), padding='same')(x)
+        x = Activation('relu')(x)
+        x = MaxPooling2D(pool_size=(2, 2))(x)
+        x = Dropout(0.2)(x)
+        x = BatchNormalization()(x)
 
-        model.add(Flatten())
-        model.add(Dropout(0.2))
+        x = Conv2D(256, (3, 3), padding='same')(x)
+        x = Activation('relu')(x)
+        x = Dropout(0.2)(x)
+        x = BatchNormalization()(x)
 
-        model.add(Dense(256, kernel_constraint=maxnorm(3)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
-        model.add(Dense(128, kernel_constraint=maxnorm(3)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
-        model.add(Dense(num_classes))
-        model.add(Activation('softmax'))
+        x = Flatten()(x)
+        x = Dropout(0.2)(x)
 
-        model.compile(loss='categorical_crossentropy', optimizer=self.optimizer, metrics=['accuracy'])
+        x = Dense(256, kernel_constraint=maxnorm(3))(x)
+        x = Activation('relu')(x)
+        x = Dropout(0.2)(x)
+        x = BatchNormalization()(x)
+
+        x = Dense(128, kernel_constraint=maxnorm(3))(x)
+        x = Activation('relu')(x)
+        x = Dropout(0.2)(x)
+        x = BatchNormalization()(x)
+
+        outputs = [Dense(1, activation='softmax', name=str(self.solutions[i]).replace(' ', '').replace('(', '_').replace(')', '').replace(',', '_'))(x) for i in range(len(self.solutions))] # Creating a multi-output network
+
+        model = Model(inputs=inputs, outputs=outputs)
+        model.compile(loss='categorical_crossentropy', optimizer=self.optimizer)#, metrics=['accuracy'])
 
         print("Done!\n")
         if summary: print(model.summary())
+        if summary: keras.utils.plot_model(model, str(self), show_shapes=True)
 
         return model
-    
+
     def plot(self):
         '''
         Plot the history of the model whilst training.
@@ -211,7 +221,7 @@ class Model:
         fig.suptitle("Training and Validation History for " + str(self))
 
         t = np.arange(1, self.epochs)
-        
+
         ax1.plot(t, self.history["loss"], label="Training Loss")
         ax2.plot(t, self.history["accuracy"], label="Training Accuracy")
         ax1.plot(t, self.history["val_loss"], label="Validation Loss")
@@ -229,7 +239,7 @@ class Model:
         ax2.grid()
         ax1.legend()
         ax2.legend()
-    
+
     def show(self):
         '''
         Show the plot of the Gaussian mode.
@@ -240,7 +250,7 @@ class Model:
         plt.show()
 
         print("Done!\n")
-    
+
     def save(self):
         '''
         Save the history of the training to text files.
@@ -334,7 +344,7 @@ def process(max_order, number_of_modes, amplitude_variation, repeats):
     Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
     '''
     print("Done!\n")
-    model = Model(max_order, number_of_modes, amplitude_variation, repeats)
+    model = ML(max_order, number_of_modes, amplitude_variation, repeats)
     model.train()
     model.save()
 
@@ -386,7 +396,7 @@ if __name__ == '__main__':
     #     for a in amplitude_variations:
     #         train_and_save(5, 3, round(a, 1), 30, r)
 
-    model = Model(max_order = 4,
+    model = ML(max_order = 4,
                   number_of_modes = 3,
                   amplitude_variation = 0.4,
                   repeats = 5
