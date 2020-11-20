@@ -37,7 +37,7 @@ class ML:
     '''
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, repeats: int = 1):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, repeats: int = 1):
         '''
         Initialise the class.
         '''
@@ -58,6 +58,7 @@ class ML:
         self.history = {"loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.solutions = None
 
+        # print("                    " + (len(str(self)) + 4) * "_")
         print("____________________| " + str(self) + " |____________________\n")
 
     def __str__(self):
@@ -78,67 +79,78 @@ class ML:
         '''
         # Initialisation
 
-        print("Generating preliminary data for model generation...")
-
-        prelim_data = Generate_Data(self.max_order, self.number_of_modes, 0.0, 1, info=False)
-        self.solutions = prelim_data.get_classes()
-
-        print("Done!\n")
-
+        self.generate_prelim() # Generate preliminary data to determine all solutions (classes)
         self.model = self.create_model(summary=False) # Create the model
 
-        for number_of_modes in range(2, self.number_of_modes + 1):
+        # Training
+
+        for number_of_modes in range(1, self.number_of_modes + 1):
             (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(self.max_order, number_of_modes, self.amplitude_variation) # Load training and validation data
 
-            # Training
-
             etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print("Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes - 1)) + " or a maximum performance of " + str(int(self.sucess_loss * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)\n")
+            print("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * number_of_modes) + " or a loss of " + str(self.success_loss) + "... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
+            print("[TRAIN] |")
 
             try:
-                loss = 100.0
-                while loss > self.sucess_loss and self.epochs <= self.max_epochs * (number_of_modes - 1):
-                    print("Epoch " + str(self.epochs) + ":")
-
-                    history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size)
+                for i in tqdm(range(self.epochs, (self.max_epochs * number_of_modes) + 1), "[TRAIN] |-> Training with " + str(number_of_modes) + " modes"):
+                    history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=0)
 
                     loss = history_callback.history["loss"][0]
                     for i in self.history: self.history[i].append(history_callback.history[i][0])
 
-                    if self.epochs >= self.max_epochs * (number_of_modes - 1): print("ERROR: Max epoch reached!\n")
-                    if loss <= self.sucess_loss: print(str(int(self.sucess_loss * 100)) + " loss achieved!\n")
+                    if self.epochs >= self.max_epochs * number_of_modes:
+                        print("[TRAIN] |")
+                        print("[ERROR] |-> Max epoch reached!")
+                        break
+    
+                    if self.history["loss"][-1] <= self.success_loss:
+                        print("[TRAIN] |")
+                        print("[TRAIN] |-> " + str(self.success_loss) + " loss achieved!")
+                        break
+
                     self.epochs += 1
 
             except KeyboardInterrupt:
-                print("\nAborted!\n")
-
-            print("Done!\n")
+                print("[TRAIN] |")
+                print("[ERROR] |-> Aborted!")
 
             # Evaluation
 
-            print("Evaluating...")
+            print("[TRAIN] |")
+            print("[EVAL]  |-> Evaluating...")
             scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
-            print("Done! Accuracy: %.2f%%\n" % (scores[1]*100))
+            print("[EVAL]  |-> Done! Accuracy: %.2f%%\n" % (scores[1]*100))
+
+    def generate_prelim(self):
+        '''
+        Gather preliminary data for the training of the model.
+        '''
+        print("[INIT]  Generating preliminary data for model generation...")
+
+        prelim_data = Generate_Data(self.max_order, self.number_of_modes, 0.0, 1, info=False)
+        self.solutions = prelim_data.get_classes()
+
+        print("[INIT]  Done!\n")
 
     def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0):
         '''
         Load training and testing data.
         '''
-        print("Generating data for superpositions of " + str(number_of_modes) + " different modes...")
-        print(" |")
+        print("[DATA]  Generating data for superpositions of " + str(number_of_modes) + " different modes...")
+        print("[DATA]  |")
 
         train_data = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
-        train_inputs = train_data.get_inputs(" |-> " + str(self.repeats) + " datasets of training data")
+        train_inputs = train_data.get_inputs("[DATA]  |-> " + str(self.repeats) + " datasets of training data")
         train_outputs = train_data.get_outputs()
 
-        print(" |")
+        print("[DATA]  |")
 
         val_data = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
-        val_inputs = val_data.get_inputs(" |-> 1 dataset of validation data")
+        val_inputs = val_data.get_inputs("[DATA]  |-> 1 dataset of validation data")
         val_outputs = val_data.get_outputs()
 
-        print(" V")
-        print("Done!\n")
+        print("[DATA]  V")
+        print("[DATA]  Done!\n")
 
         # If our loss function was 'categorical_crossentropy':
         # train_outputs = np_utils.to_categorical(train_outputs)
@@ -150,7 +162,7 @@ class ML:
         '''
         Create the Keras model in preparation for training.
         '''
-        print("Generating model... (classes = " + str(len(self.solutions)) + ", shape = " + str(self.input_shape) + ")")
+        print("[MODEL] Generating model... (classes = " + str(len(self.solutions)) + ", shape = " + str(self.input_shape) + ")")
 
         model = Sequential()
 
@@ -199,7 +211,7 @@ class ML:
 
         model.compile(loss='binary_crossentropy', optimizer=self.optimizer, metrics=['accuracy'])
 
-        print("Done!\n")
+        print("[MODEL] Done!\n")
         if summary: print(model.summary())
         if summary: keras.utils.plot_model(model, str(self), show_shapes=True)
 
@@ -236,12 +248,12 @@ class ML:
         '''
         Show the plot of the Gaussian mode.
         '''
-        print("Plotting history...")
+        print("[PLOT]  Plotting history...")
 
         self.plot()
         plt.show()
 
-        print("Done!\n")
+        print("[PLOT]  Done!\n")
 
     def save(self):
         '''
@@ -249,7 +261,7 @@ class ML:
         '''
         if not self.check_trained(): return
 
-        print("Saving model...")
+        print("[SAVE]  Saving model...")
 
         self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
@@ -263,13 +275,13 @@ class ML:
         self.plot()
         plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
 
-        print("Done!\n")
+        print("[SAVE]  Done!\n")
     
     def load(self):
         '''
         Load a saved model.
         '''
-        print("Loading model...")
+        print("[LOAD]  Loading model...")
 
         self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
 
@@ -281,14 +293,14 @@ class ML:
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
         self.solutions = [eval(i) for i in self.solutions]
 
-        print("Done!\n")
+        print("[LOAD]  Done!\n")
     
     def check_trained(self):
         '''
         Check if the model has been trained yet.
         '''
         if self.model == None:
-            print("Model not yet trained!")
+            print("[ERROR] Model not yet trained!")
             return False
         else:
             os.makedirs("Models/" + str(self), exist_ok=True) # Create directory for model
@@ -298,7 +310,7 @@ class ML:
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
-        print("Predicting... (shape = " + str(data.shape) + ")")
+        print("[PRED]  Predicting... (shape = " + str(data.shape) + ")")
 
         data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
 
@@ -313,7 +325,7 @@ class ML:
         for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
         answer = Superposition(modes) # Normalise the amplitudes
 
-        print("Done! Answer: " + str(answer) + "\n")
+        print("[PRED]  Done! Answer: " + str(answer) + "\n")
         return answer
 
 
@@ -331,6 +343,7 @@ def process(max_order, number_of_modes, amplitude_variation, repeats):
     Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
     '''
     print("Done!\n")
+
     model = ML(max_order, number_of_modes, amplitude_variation, repeats)
     model.train()
     model.save()
@@ -340,6 +353,7 @@ def train_and_save(max_order, number_of_modes, amplitude_variation, repeats):
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
     print("Starting process to ensure GPU memory is freed after taining is complete...")
+
     p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, repeats))
     p.start()
     p.join()

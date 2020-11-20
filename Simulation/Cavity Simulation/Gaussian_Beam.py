@@ -18,6 +18,8 @@ from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 import time
 
+np.seterr(divide='ignore', invalid='ignore')
+
 resolution = 50
 
 
@@ -191,8 +193,8 @@ class Superposition(list):
 
         super().__init__(self.modes)
 
-        if amplitude_variation > 0:
-            amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+        if amplitude_variation > 0.0:
+            # amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
             amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
         else:
             amplitudes = [i.amplitude for i in self]
@@ -284,7 +286,7 @@ class Superposition(list):
         '''
         Get random value for the amplitude based on amplitude variation as the width of a normal distribution.
         '''
-        return abs(round(np.random.normal(scale=amplitude_variation), 2) + 1)
+        return np.abs(round(np.random.normal(scale=amplitude_variation), 2) + 1)
         # x = 0
         # while x <= 0: x = round(np.random.normal(1, amplitude_variation), 2)
         # return x
@@ -454,10 +456,7 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
-        yes = np.array(self.repeats * [[int(str(j)[:-1] in str(i))  for j in self.gauss_modes] for i in self.combs])
-        no = np.array(self.repeats * [[not int(str(j)[:-1] in str(i))  for j in self.gauss_modes] for i in self.combs])
-        # return (yes, no)
-        return yes
+        return np.array(self.repeats * [[int(str(j)[:-1] in str(i))  for j in self.gauss_modes] for i in self.combs])
 
     def get_classes(self):
         '''
