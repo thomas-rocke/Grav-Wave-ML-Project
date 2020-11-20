@@ -142,8 +142,8 @@ class ML:
         print(" V")
         print("Done!\n")
 
-        train_outputs = [np_utils.to_categorical(i, len(self.solutions)) for i in train_outputs]
-        val_outputs = [np_utils.to_categorical(i, len(self.solutions)) for i in val_outputs]
+        train_outputs = [np_utils.to_categorical(train_outputs[..., np.newaxis][i], len(self.solutions)) for i in range(len(train_outputs))]
+        val_outputs = [np_utils.to_categorical(val_outputs[..., np.newaxis][i], len(self.solutions)) for i in range(len(val_outputs))]
 
         # print(len(Y_train))
 
