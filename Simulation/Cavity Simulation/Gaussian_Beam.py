@@ -216,13 +216,13 @@ class Superposition(list):
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.modes) + ", " + str(self.amplitude_variation) + ")"
+        return self.__class__.__name__ + "(" + str(self.modes)[1:-1] + ")"
 
     def __repr__(self):
         '''
         Magic method for the repr() function.
         '''
-        return str(self)
+        return self.__class__.__name__ + "(" + str(self.modes) + ", " + str(self.amplitude_variation) + ")"
 
     def __mul__(self, value):
         '''
