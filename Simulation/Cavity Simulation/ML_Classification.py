@@ -148,7 +148,7 @@ class ML:
             print("[DATA]  V")
             print("[DATA]  Done!\n")
 
-        except:
+        except MemoryError:
             print("[DATA] V")
             print("[FATAL] Memory overflow!\n")
             sys.exit()
@@ -373,7 +373,7 @@ def process(max_order, number_of_modes, amplitude_variation, repeats):
     '''
     Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
     '''
-    print("[INFO] Done!\n")
+    print("[INFO]  Done!\n")
 
     model = ML(max_order, number_of_modes, amplitude_variation, repeats)
     model.train()
@@ -383,7 +383,7 @@ def train_and_save(max_order, number_of_modes, amplitude_variation, repeats):
     '''
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
-    print("[INFO] Starting process to ensure GPU memory is freed after taining is complete...")
+    print("[INFO]  Starting process to ensure GPU memory is freed after taining is complete...")
 
     p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, repeats))
     p.start()
@@ -412,9 +412,9 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    train_and_save(3, 3, 0.2, 50)
-    train_and_save(4, 3, 0.2, 50)
-    train_and_save(5, 3, 0.2, 50)
+    # train_and_save(3, 3, 0.2, 50)
+    # train_and_save(4, 3, 0.2, 50)
+    train_and_save(5, 3, 0.2, 20)
 
     model = ML(max_order = 4,
                   number_of_modes = 3,
