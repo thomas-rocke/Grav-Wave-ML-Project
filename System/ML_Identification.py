@@ -414,8 +414,8 @@ if __name__ == '__main__':
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
     train_and_save(3, 3, 0.2, 0.0, 50)
-    # train_and_save(4, 3, 0.2, 0.0, 50)
-    # train_and_save(5, 3, 0.2, 0.0, 20)
+    train_and_save(4, 3, 0.2, 0.0, 50)
+    train_and_save(5, 3, 0.2, 0.0, 20)
 
     model = ML(max_order = 4,
                   number_of_modes = 3,

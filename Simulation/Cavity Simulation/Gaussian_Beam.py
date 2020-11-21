@@ -212,8 +212,8 @@ class Superposition(list):
         super().__init__(self.modes)
 
         amplitudes = [i.amplitude for i in self]
-
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+
         for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
 
     def __str__(self):
@@ -281,11 +281,12 @@ class Superposition(list):
         Compute the superposition of the Gaussian modes.
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / self.resolution), np.arange(-1.2, 1.2, 1.0 / self.resolution))
-        
+
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
         # superposition = np.abs(self.E_mode(X, Y, 0)**2)
-        
+
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
+
 
 
 
@@ -314,7 +315,7 @@ class Laguerre(Superposition):
                 self.modes.append(y)
 
         super().__init__(self.modes)
-        
+
         for mode in self.modes:
             mode *= self.amplitude
             mode.add_phase(self.phase) #Propagates total Laguerre amp and phase to each constituent mode
@@ -454,37 +455,15 @@ class Generate_Data(list):
     
     def randomise_amp_and_phase(self, mode):
         '''
-        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width
-        
-        Returns new mode with randomised amp and phase
+        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
+        Returns new mode with randomised amp and phase.
         '''
         x = mode.copy()
-        x = self.randomise_amplitude(x)
-        x = self.randomise_phase(x)
+
+        x *= np.abs(round(np.random.normal(scale=self.amplitude_variation), 2) + 1)
+        x.add_phase(np.abs(round(np.random.normal(scale=self.phase_variation), 2)))
+
         return x
-        
-    def randomise_amplitude(self, mode):
-        '''
-        Randomise the amplitude of mode according to normal distribution of self.amplitude_variation width
-        
-        Returns new mode with randomised amplitude
-        '''
-        x = mode.copy()
-        new_amp = np.abs(round(np.random.normal(scale=self.amplitude_variation), 2) + 1)
-        x *= new_amp
-        return x
-    
-    def randomise_phase(self, mode):
-        '''
-        Randomise the phase of mode according to normal distribution of self.phase_variation width
-        
-        Returns new mode with randomised phase
-        '''
-        x = mode.copy()
-        new_phase = np.abs(round(np.random.normal(scale=self.phase_variation), 2))
-        x.add_phase(new_phase)
-        return x
-        
 
     # def pool_handler(self, data, threads):
     #     '''
