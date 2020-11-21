@@ -8,6 +8,7 @@
 # TODO Header for file
 
 # Imports
+import sys
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
@@ -45,20 +46,20 @@ class ML:
         self.max_order = max_order
         self.number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
-        self.max_epochs = 30
         self.repeats = repeats
 
+        self.epochs = 1
+        self.model = None
+        self.history = {"loss": [], "binary_accuracy": [], "val_loss": [], "val_binary_accuracy": []}
+        self.solutions = None
+
+        self.max_epochs = 50
         self.start_number = 2
         self.step_speed = 0.06
         self.batch_size = 128
         self.success_performance = 0.95
         self.optimizer = "sgd"
         self.input_shape = (120, 120, 1)
-
-        self.epochs = 1
-        self.model = None
-        self.history = {"loss": [], "binary_accuracy": [], "val_loss": [], "val_binary_accuracy": []}
-        self.solutions = None
 
         # print("                    " + (len(str(self)) + 4) * "_")
         print("____________________| " + str(self) + " |____________________\n")
@@ -92,7 +93,7 @@ class ML:
             (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(self.max_order, number_of_modes, self.amplitude_variation) # Load training and validation data
 
             etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + " or an accuracy of " + str(int(self.success_performance * 100)) + "... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
+            print("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + " or an accuracy of " + str(int(self.success_performance * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
 
             try:
                 for i in range(self.epochs, (self.max_epochs * (number_of_modes + 1 - self.start_number)) + 1): #, "[TRAIN] Training with " + str(number_of_modes) + " modes"):
@@ -106,18 +107,14 @@ class ML:
                         break
 
             except KeyboardInterrupt:
-                print("\n[ERROR] Aborted!")
+                print("\n[WARN]  Aborted!")
 
-            if self.epochs >= self.max_epochs * (number_of_modes + 1 - self.start_number): print("[ERROR] Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!")
+            if self.epochs >= self.max_epochs * (number_of_modes + 1 - self.start_number): print("[WARN]  Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!")
             print("[TRAIN] Done!\n")
 
-            # Evaluation
+            self.evaluate(val_inputs, val_outputs) # Evaluation
 
-            print("[EVAL]  Evaluating...")
-            scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
-            print("[EVAL]  Done! Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".\n")
-
-        print("[INFO] Training complete after " + str((perf_counter() - start_time) // 60) + " minutes and " + str((perf_counter() - start_time) % 60) + " seconds.\n")
+        print("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n")
 
     def generate_prelim(self):
         '''
@@ -134,21 +131,27 @@ class ML:
         '''
         Load training and testing data.
         '''
-        print("[DATA]  Generating data for superpositions of " + str(number_of_modes) + " different modes...")
-        print("[DATA]  |")
+        try:
+            print("[DATA]  Generating data for superpositions of " + str(number_of_modes) + " different modes...")
+            print("[DATA]  |")
 
-        train_data = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
-        train_inputs = train_data.get_inputs("[DATA]  |-> " + str(self.repeats) + " datasets of training data")
-        train_outputs = train_data.get_outputs()
+            train_data = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
+            train_inputs = train_data.get_inputs("[DATA]  |-> " + str(self.repeats) + " datasets of training data")
+            train_outputs = train_data.get_outputs()
 
-        print("[DATA]  |")
+            print("[DATA]  |")
 
-        val_data = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
-        val_inputs = val_data.get_inputs("[DATA]  |-> 1 dataset of validation data")
-        val_outputs = val_data.get_outputs()
+            val_data = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
+            val_inputs = val_data.get_inputs("[DATA]  |-> 1 dataset of validation data")
+            val_outputs = val_data.get_outputs()
 
-        print("[DATA]  V")
-        print("[DATA]  Done!\n")
+            print("[DATA]  V")
+            print("[DATA]  Done!\n")
+
+        except:
+            print("[DATA] V")
+            print("[FATAL] Memory overflow!\n")
+            sys.exit()
 
         # If our loss function was 'categorical_crossentropy':
         # train_outputs = np_utils.to_categorical(train_outputs)
@@ -217,6 +220,14 @@ class ML:
         if summary: keras.utils.plot_model(model, str(self), show_shapes=True)
 
         return model
+
+    def evaluate(self, val_inputs, val_outputs):
+        '''
+        Evaluate the model using some validation data.
+        '''
+        print("[EVAL]  Evaluating...")
+        scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
+        print("[EVAL]  Done! Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".\n")
 
     def plot(self):
         '''
