@@ -18,7 +18,7 @@ from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 import time
 
-resolution = 50
+np.seterr(divide='ignore', invalid='ignore')
 
 
 
@@ -48,6 +48,8 @@ class Hermite:
 
         self.z_R = (np.pi * w_0**2 * n) / wavelength # Rayleigh range
         self.k = (2 * np.pi * n) / wavelength # Wave number
+
+        self.resolution = 50
 
     def __str__(self):
         '''
@@ -86,7 +88,7 @@ class Hermite:
         '''
         Plot the Gaussian mode.
         '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / resolution), np.arange(-1.2, 1.2, 1.0 / resolution))
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / self.resolution), np.arange(-1.2, 1.2, 1.0 / self.resolution))
 
         plt.figure(self.__class__.__name__)
         plt.imshow(self.I(X, Y, 0), cmap='Greys_r')
@@ -188,11 +190,12 @@ class Superposition(list):
         '''
         self.amplitude_variation = amplitude_variation
         self.modes = [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        self.resolution = modes[0].resolution
 
         super().__init__(self.modes)
 
-        if amplitude_variation > 0:
-            amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
+        if amplitude_variation > 0.0:
+            # amplitudes = [self.random_amplitude(amplitude_variation) + self.random_amplitude(amplitude_variation) * 1j for i in range(len(self))] # Generate random amplitudes
             amplitudes = [self.random_amplitude(amplitude_variation) for i in range(len(self))] # Generate random amplitudes
         else:
             amplitudes = [i.amplitude for i in self]
@@ -213,13 +216,13 @@ class Superposition(list):
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.modes) + ", " + str(self.amplitude_variation) + ")"
+        return self.__class__.__name__ + "(" + str(self.modes)[1:-1] + ")"
 
     def __repr__(self):
         '''
         Magic method for the repr() function.
         '''
-        return str(self)
+        return self.__class__.__name__ + "(" + str(self.modes) + ", " + str(self.amplitude_variation) + ")"
 
     def __mul__(self, value):
         '''
@@ -273,7 +276,7 @@ class Superposition(list):
         '''
         Compute the superposition of the Gaussian modes.
         '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / resolution), np.arange(-1.2, 1.2, 1.0 / resolution))
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / self.resolution), np.arange(-1.2, 1.2, 1.0 / self.resolution))
         
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
         # superposition = np.abs(self.E_mode(X, Y, 0)**2)
@@ -284,7 +287,7 @@ class Superposition(list):
         '''
         Get random value for the amplitude based on amplitude variation as the width of a normal distribution.
         '''
-        return abs(round(np.random.normal(scale=amplitude_variation), 2) + 1)
+        return np.abs(round(np.random.normal(scale=amplitude_variation), 2) + 1)
         # x = 0
         # while x <= 0: x = round(np.random.normal(1, amplitude_variation), 2)
         # return x
@@ -388,26 +391,18 @@ class Generate_Data(list):
 
         hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
         # laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
-        laguerre_modes = []
-        self.gauss_modes = hermite_modes + laguerre_modes
+        # laguerre_modes = []
+        self.gauss_modes = hermite_modes# + laguerre_modes
 
-        if info: print("Done! Found " + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving " + str(len(self.gauss_modes)) + " gaussian modes in total.\n\nGenerating superpositions...")
+        if info: print("Done! Found " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")# + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving " + str(len(self.gauss_modes)) + " gaussian modes in total.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
-        # self.combs = list(combinations(gauss_modes, number_of_modes))
-        # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
-
-        # self.pool_handler(self.combs, 5)
-        # p = Pool(5)
-        # p.map(self.process, self.combs)
 
         super().__init__()
 
         p = Pool(cpu_count())
         self.extend(p.map(self.generate_process, self.combs * repeats))
-
-        # for r in range(repeats): [self.append(Superposition(i, amplitude_variation)) for i in self.combs]
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
     
@@ -431,7 +426,6 @@ class Generate_Data(list):
 
         p = Pool(cpu_count())
         p.map(self.save_process, self)
-        # for i in tqdm(self): i.save(title)
 
         print("Done!\n")
 
@@ -446,8 +440,6 @@ class Generate_Data(list):
         Get all the superpositions for the dataset.
         '''
         # return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
-        # thread_solutions = p.map(self.superpose_process, [(i, self[i:i + len(self) // n]) for i in range(0, len(self), len(self) // n)])
-        # return [item for item in thread_solutions]
 
         p = Pool(cpu_count())
         n = len(self) // (cpu_count() - 1)
@@ -465,7 +457,7 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
-        return np.array(self.repeats * [[int(str(j)[:-1] in str(i)) for j in self.gauss_modes] for i in self.combs]).T
+        return np.array(self.repeats * [[int(str(j)[:-1] in str(i))  for j in self.gauss_modes] for i in self.combs])
 
     def get_classes(self):
         '''
