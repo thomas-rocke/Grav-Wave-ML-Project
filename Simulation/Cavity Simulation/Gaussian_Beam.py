@@ -498,6 +498,17 @@ class Generate_Data(list):
         new_phase = np.abs(round(np.random.normal(scale=self.phase_variation), 2))
         x.add_phase(new_phase)
         return x
+    
+    def add_noise(image, noise_variance=0.001):
+        '''
+        Adds random noise to a copy of the image according to a normal distribution of variance noise_variance
+        '''
+        img_copy = image.copy()
+        max_val = np.max(img_copy)
+        norm = lambda i: np.min([max_val, np.random.normal(loc=i, scale=noise_variance)])
+        f = np.vectorize(norm)
+        img_copy = f(img_copy)
+        return img_copy
         
 
     # def pool_handler(self, data, threads):
