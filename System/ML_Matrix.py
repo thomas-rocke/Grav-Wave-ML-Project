@@ -1,0 +1,428 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
+
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from itertools import combinations, chain
+import multiprocessing
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
+from keras.constraints import maxnorm
+from keras.layers.convolutional import Conv2D, MaxPooling2D
+from keras.utils import np_utils
+from Gaussian_Beam import Hermite, Superposition, Laguerre
+
+
+class Generate_Data(list):
+    '''
+    Class representing many superpositions of multiple Guassian modes at a specified complexity.
+    '''
+
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, repeats: int = 1, info: bool = True):
+        '''
+        Initialise the class with the required complexity.
+
+        'max_order': Max order of Guassian modes in superpositions (x > 0).
+        'number_of_modes': How many modes you want to superimpose together (x > 0).
+        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
+        '''
+        self.max_order = max_order
+        self.number_of_modes = number_of_modes
+        self.amplitude_variation = amplitude_variation
+        self.repeats = repeats
+
+        if info: print("\n-----| Generating Data |-----\n")
+        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\n")
+        if info: print("Generating Gaussian modes...")
+
+        gauss_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
+
+        if info: print("Done! Found " + str(len(gauss_modes)) + " modes.\n\nGenerating superpositions...")
+
+        self.combs = [list(combinations(gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        self.combs = [i[j] for i in self.combs for j in range(len(i))]
+        self.vecs = [Superposition(i, max_order=max_order).get_vector() for i in self.combs for j in range(len(i))]
+        # self.combs = list(combinations(gauss_modes, number_of_modes))
+        # if info: [print("Combinations for " + str(i + 1) + " modes: " + str(len(self.combs[i]))) for i in range(len(self.combs))]
+
+        # self.pool_handler(self.combs, 5)
+        # p = Pool(5)
+        # p.map(self.process, self.combs)
+
+        super().__init__()
+        for r in range(repeats):
+            for i in self.combs: self.append(Superposition(i, amplitude_variation))
+
+        if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+    
+    def superpose(self):
+        '''
+        Get all the superpositions for the dataset.
+        '''
+        return np.array([i.superpose() for i in tqdm(self)])[..., np.newaxis]
+
+    def get_outputs(self):
+        '''
+        Get all possible Gaussian modes that could comprise a superposition.
+        '''
+        new_arr = np.zeros((self.repeats*len(self.vecs)))
+        for i in range(len(self.vecs)):
+            new_arr[i] = self.vecs[i%len(self.vecs)]
+        return self.vecs, new_arr #np.array(self.repeats * [[i] for i in range(len(self.vecs))])
+
+    def show(self, title: bool = True):
+        '''
+        Plot and show all superpositions generated.
+        '''
+        for i in self: i.show(title)
+
+    def save(self, title: bool = True):
+        '''
+        Plot and save all superpositions generated.
+        '''
+        print("Saving dataset...")
+
+        p = Pool(8)
+        p.map(self.process, self)
+        # for i in tqdm(self): i.save(title)
+
+        print("Done!\n")
+
+    def process(self, data):
+        '''
+        Process for saving images of the dataset across multiple threads in the CPU.
+        '''
+        data.save(False)
+
+
+    # def pool_handler(self, data, threads):
+    #     '''
+
+    #     '''
+    #     p = Pool(threads)
+    #     p.map(self.process, data)
+
+    # def process(self, data):
+    #     '''
+
+    #     '''
+    #     # print(self.combs.index(data), data)
+    #     data[0].append(Superposition(data[1], self.amplitude_variation))
+
+    # def __str__(self):
+    #     '''
+    #     Magic method for str() function.
+    #     '''
+    #     return self.__class__.__name__ + "(" + [self.__getitem__(i) for i in range(len(self))] + ")"
+
+    # def __repr__(self):
+    #     '''
+    #     Magic method for repr() function.
+    #     '''
+    #     return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ")"
+
+
+class Model:
+    '''
+    The class 'Model' that represents a Keras model using datasets from Gaussian modes.
+    '''
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0, epochs: int = 30, repeats: int = 1):
+        '''
+        Initialise the class.
+        '''
+        self.max_order = max_order
+        self.number_of_modes = number_of_modes
+        self.amplitude_variation = amplitude_variation
+        self.epochs = epochs
+        self.repeats = repeats
+
+        self.step_speed = 0.168
+        self.batch_size = 30
+        self.optimizer = "Adam"
+
+        self.model = None
+        self.loss_history, self.accuracy_history = None, None
+        self.val_loss_history, self.val_accuracy_history = None, None
+        self.solutions = None
+
+        print("____________________| " + str(self) + " |____________________\n")
+
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.epochs) + ", " + str(self.repeats) + ")"
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return str(self)
+
+    def train(self):
+        '''
+        Train the model.
+        '''
+        # Initialisation
+
+        (X_train, Y_train), (X_test, Y_test), num_classes, solutions = self.load_data(self.max_order, self.number_of_modes, self.amplitude_variation) # Load training and validation data
+        self.model = self.create_model(num_classes, X_train.shape[1:]) # Create the model
+        self.solutions = solutions
+
+        # Training
+
+        etl = (((len(X_train) / self.batch_size) * self.step_speed) * self.epochs) / 60
+
+        print("Training model using " + str(self.repeats) + " datasets of " + str(len(X_train)) + " elements in batches of " + str(self.batch_size) + " for " + str(self.epochs) + " epochs... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
+        try:
+            history_callback = self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=self.batch_size)
+        except KeyboardInterrupt:
+            print("Aborted!")
+        print("Done!\n")
+
+        self.loss_history, self.accuracy_history = np.array(history_callback.history["loss"]), np.array(history_callback.history["accuracy"])
+        self.val_loss_history, self.val_accuracy_history = np.array(history_callback.history["val_loss"]), np.array(history_callback.history["val_accuracy"])
+
+        # Evaluation
+
+        print("Evaluating...")
+        scores = self.model.evaluate(X_test, Y_test, verbose=0)
+        print("Done! Accuracy: %.2f%%\n" % (scores[1]*100))
+
+    def load_data(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0):
+        '''
+        Load training and testing data.
+        '''
+        print("Generating " + str(self.repeats) + " datasets of training data...")
+
+        x_train = Generate_Data(max_order, number_of_modes, amplitude_variation, self.repeats, False)
+        X_train = x_train.superpose()
+        y_train, Y_train = x_train.get_outputs()
+
+        print("Done!\n\nGenerating testing data...")
+
+        x_test = Generate_Data(max_order, number_of_modes, amplitude_variation, 1, False)
+        X_test = x_test.superpose()
+        y_test, Y_test = x_test.get_outputs()
+
+        print("Done!\n")
+
+        Y_train = np_utils.to_categorical(Y_train)
+        Y_test = np_utils.to_categorical(Y_test)
+
+        solutions = np.array(y_train, dtype=object)
+
+        return (X_train, Y_train), (X_test, Y_test), Y_train.shape[1], solutions
+
+    def create_model(self, num_classes, shape, summary: bool = False):
+        '''
+        Create the Keras model in preparation for training.
+        '''
+        print("Generating model... (shape = " + str(shape) + ")")
+
+        model = Sequential()
+
+        model.add(Conv2D(32, (1, 1), input_shape=shape, padding='same'))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+
+        model.add(Conv2D(64, (1, 1), padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+
+        model.add(Conv2D(64, (1, 1), padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+
+        model.add(Conv2D(128, (1, 1), padding='same'))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+
+        model.add(Flatten())
+        model.add(Dropout(0.2))
+
+        model.add(Dense(256, kernel_constraint=maxnorm(3)))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+        model.add(Dense(128, kernel_constraint=maxnorm(3)))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+        model.add(Dense(num_classes))
+        model.add(Activation('relu'))
+
+        model.compile(loss='categorical_crossentropy', optimizer=self.optimizer, metrics=['accuracy'])
+
+        print("Done!\n")
+        if summary: print(model.summary())
+
+        return model
+    
+    def plot(self):
+        '''
+        Plot the history of the model whilst training.
+        '''
+        fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+        fig.suptitle("Training and Validation History for " + str(self))
+
+        t = np.arange(1, self.epochs + 1)
+        
+        ax1.plot(t, self.loss_history, label="Training Loss")
+        ax2.plot(t, self.accuracy_history, label="Training Accuracy")
+        ax1.plot(t, self.val_loss_history, label="Validation Loss")
+        ax2.plot(t, self.val_accuracy_history, label="Validation Accuracy")
+
+        # ax1.set_title("Loss")
+        # ax2.set_title("Accuracy")
+
+        plt.xlim(0, self.epochs)
+        ax1.set_ylim(0, np.max(self.loss_history))
+        ax2.set_ylim(0, 1)
+
+        ax1.grid()
+        ax2.grid()
+        ax1.legend()
+        ax2.legend()
+    
+    def show(self):
+        '''
+        Show the plot of the Gaussian mode.
+        '''
+        print("Plotting history...")
+
+        self.plot()
+        plt.show()
+
+        print("Done!\n")
+    
+    def save(self):
+        '''
+        Save the history of the training to text files.
+        '''
+        if not self.check_trained(): return
+
+        print("Saving model...")
+
+        self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
+
+        np.savetxt("Models/" + str(self) + "/loss_history.txt", self.loss_history, delimiter=",")
+        np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.accuracy_history, delimiter=",")
+        np.savetxt("Models/" + str(self) + "/val_loss_history.txt", self.val_loss_history, delimiter=",")
+        np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.val_accuracy_history, delimiter=",")
+
+        np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
+
+        self.plot()
+        plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
+
+        print("Done!\n")
+    
+    def load(self):
+        '''
+        Load a saved model.
+        '''
+        print("Loading model...")
+
+        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
+
+        self.loss_history = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
+        self.accuracy_history = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
+        self.val_loss_history = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
+        self.val_accuracy_history = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
+
+        self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
+
+        print("Done!\n")
+    
+    def check_trained(self):
+        '''
+        Check if the model has been trained yet.
+        '''
+        if self.model == None:
+            print("Model not yet trained!")
+            return False
+        else:
+            os.makedirs("Models/" + str(self), exist_ok=True) # Create directory for model
+            return True
+    
+    def predict(self, data):
+        '''
+        Predict the superposition based on a 2D numpy array of the unknown optical cavity.
+        '''
+        data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
+
+        print("Predicting... (shape = " + str(data.shape) + ")")
+        #prediction = self.model.predict(data) # Make prediction using model (return index of superposition)
+        prediction = np.array(self.model.predict(data))
+        print("Done!\n")
+
+        matrix_prediction = prediction.reshape((2, self.max_order+1, self.max_order+1))
+        #answer = self.solutions[np.argmax(prediction, axis=1)]
+
+        return matrix_prediction #list(eval(eval(str(answer))[0]))
+
+
+
+
+##################################################
+##########                              ##########
+##########            MAIN              ##########
+##########                              ##########
+##################################################
+
+
+
+def process(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+    model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    model.train()
+    model.save()
+
+def train_and_save(max_order, number_of_modes, amplitude_variation, epochs, repeats):
+    p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, epochs, repeats))
+    p.start()
+    p.join()
+
+if __name__ == '__main__':
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    print("█████▀█████████████████████████████████████████████████████████████████████████████\n"
+          "█─▄▄▄▄██▀▄─██▄─██─▄█─▄▄▄▄█─▄▄▄▄█▄─▄██▀▄─██▄─▀█▄─▄███▄─▀█▀─▄█─▄▄─█▄─▄▄▀█▄─▄▄─█─▄▄▄▄█\n"
+          "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
+          "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
+
+    numbers = np.arange(1, 4)
+    amplitude_variations = np.arange(0.0, 0.8, 0.2)
+    repeats = np.arange(1, 6, 2)
+
+    # for n in numbers:
+    for r in repeats:
+        for a in amplitude_variations:
+            train_and_save(5, 3, round(a, 1), 30, r)
+
+    max_order = 5
+    number_of_modes = 3
+    amplitude_variation = 0.2
+    epochs = 30
+    repeats = 5
+
+    # model = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    # model.train()
+    # model.save()
+
+    # model2 = Model(max_order, number_of_modes, amplitude_variation, epochs, repeats)
+    # model2.load()
+    # model2.show()
+    # sup = Superposition([Hermite(2,1), Hermite(2,2), Hermite(4,1)], amplitude_variation)
+    # sup.show()
+    # prediction = Superposition(model2.predict(sup.superpose()))
+    # prediction.show()
+    # print(prediction)
