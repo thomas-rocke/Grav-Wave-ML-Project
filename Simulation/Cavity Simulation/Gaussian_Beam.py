@@ -62,7 +62,9 @@ class Hermite:
         '''
         Magic method for the repr() function.
         '''
+
         return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ", " + str(self.phase) + ")"
+
 
     def __mul__(self, val):
         '''
@@ -71,6 +73,9 @@ class Hermite:
         x = self.copy()
         x *= val
         return x
+    
+    def __rmul__(self, val):
+        return self.__mul__(val)
 
     def __imul__(self, val):
         '''
@@ -111,15 +116,17 @@ class Hermite:
         self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
-    def E(self, r, z):
-        '''
-        Electric field at a given radial distance and axial distance.
-        '''
-        w_ratio = self.w_0 / self.w(z)
-        exp_1 = np.exp(-(r**2) / self.w(z)**2)
-        exp_2 = np.exp(-1j * (self.k * z + self.k * (r**2 / (2 * self.R(z))) - self.phi(z)))
 
-        return np.array(self.amplitude * np.exp(1j * self.phase) * w_ratio * exp_1 * exp_2)
+#    def E(self, r, z):
+#        '''
+#        Electric field at a given radial distance and axial distance.
+#        '''
+#        w_ratio = self.w_0 / self.w(z)
+#        exp_1 = np.exp(-(r**2) / self.w(z)**2)
+#        exp_2 = np.exp(-1j * (self.k * z + self.k * (r**2 / (2 * self.R(z))) - self.phi(z)))
+#
+#        return np.array((w_ratio * exp_1 * exp_2) * self.amplitude * np.e**(1j*self.phase))
+
 
     def E_mode(self, x, y, z):
         '''
@@ -208,13 +215,18 @@ class Superposition(list):
         
         self.modes = mode_list # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         self.resolution = modes[0].resolution
+        self.amplitude = amplitude
+        self.phase = phase
 
         super().__init__(self.modes)
 
         amplitudes = [i.amplitude for i in self]
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
 
-        for i in range(len(self)): self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
+        for i in range(len(self)): 
+            self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
+            self[i].add_phase(phase)
+
 
     def __str__(self):
         '''
@@ -286,6 +298,14 @@ class Superposition(list):
         # superposition = np.abs(self.E_mode(X, Y, 0)**2)
 
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
+    
+    def add_phase(self, phase):
+        '''
+        Add phase to Superposition, and propagate down to component modes.
+        '''
+        self.phase += phase
+        self.phase = self.phase % 2*np.pi
+        [mode.add_phase(phase) for mode in self.modes]
 
 
 
@@ -464,6 +484,19 @@ class Generate_Data(list):
         x.add_phase(np.abs(round(np.random.normal(scale=self.phase_variation), 2)))
 
         return x
+
+    
+    def add_noise(image, noise_variance=0.001):
+        '''
+        Adds random noise to a copy of the image according to a normal distribution of variance noise_variance
+        '''
+        img_copy = image.copy()
+        max_val = np.max(img_copy)
+        norm = lambda i: np.min([max_val, np.random.normal(loc=i, scale=noise_variance)])
+        f = np.vectorize(norm)
+        img_copy = f(img_copy)
+        return img_copy
+
 
     # def pool_handler(self, data, threads):
     #     '''

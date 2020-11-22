@@ -6,20 +6,30 @@ Created on Sun Nov 15 13:55:01 2020
 """
 
 import numpy as np
-from Gaussian_Beam import Hermite, Laguerre, Superposition, combinations
-from ML_Matrix import *
+import matplotlib.pyplot as plt
+from Gaussian_Beam import *
+
+def add_noise(image, noise_variance=0.001):
+        '''
+        Adds random noise to a copy of the image according to a normal distribution of variance noise_variance
+        '''
+        img_copy = image.copy()
+        max_val = np.max(img_copy)
+        norm = lambda i: np.min([max_val, np.random.normal(loc=i, scale=noise_variance)])
+        f = np.vectorize(norm)
+        img_copy = f(img_copy)
+        return img_copy
 
 
-#%%
-x = Hermite(0, 3)
-x.show()
-#%%
-y = Laguerre(2, 2)
-y.show()
-#%%
-sup = Superposition([Hermite(0, 0)*0.66, Hermite(3, 2)*0.75, Laguerre(4, 4)*0.43], max_order=5)
-print(sup.mode_matrix)
-sup.show()
+x = Laguerre(0, 0)
+img = x.superpose()
+print( np.max(img))
+noise = add_noise(img, 0.001)
 
-m = Model(3, 2)
-m.train()
+plt.imshow(noise, cmap='Greys_r')
+plt.show()
+
+plt.imshow(noise - img, cmap='Greys_r')
+plt.show()
+
+print(np.max(noise-img))
