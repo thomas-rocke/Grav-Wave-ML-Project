@@ -55,11 +55,11 @@ class ML:
         self.history = {"loss": [], "binary_accuracy": [], "val_loss": [], "val_binary_accuracy": []}
         self.solutions = None
 
-        self.max_epochs = 50
+        self.max_epochs = 100
         self.start_number = 2
         self.step_speed = 0.06
         self.batch_size = 128
-        self.success_performance = 0.95
+        self.success_performance = 0.99
         self.optimizer = "sgd"
         self.input_shape = (120, 120, 1)
 
@@ -324,6 +324,8 @@ class ML:
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
+        start_time = perf_counter()
+
         if info: print("[PRED]  Predicting... (shape = " + str(data.shape) + ")")
 
         data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
@@ -339,7 +341,9 @@ class ML:
         for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
         answer = Superposition(modes) # Normalise the amplitudes
 
-        if info: print("[PRED]  Done! Prediction: " + str(answer) + "\n")
+        if info: print("[PRED]  Done! Took " + str(round((perf_counter() - start_time) * 1000, 3)) + " milliseconds.")
+        if info: print("[PRED]  Prediction: " + str(answer) + "\n")
+
         return answer
 
     def compare(self, sup: Superposition):
@@ -413,11 +417,11 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    train_and_save(3, 3, 0.2, 0.0, 50)
-    train_and_save(4, 3, 0.2, 0.0, 50)
-    train_and_save(5, 3, 0.2, 0.0, 20)
+    # train_and_save(3, 3, 0.2, 0.0, 50)
+    # train_and_save(4, 3, 0.2, 0.0, 50)
+    # train_and_save(5, 3, 0.2, 0.0, 20)
 
-    model = ML(max_order = 4,
+    model = ML(max_order = 3,
                   number_of_modes = 3,
                   amplitude_variation = 0.2,
                   phase_variation = 0.0,
@@ -425,7 +429,7 @@ if __name__ == '__main__':
     )
     model.load()
 
-    sup = Superposition([Hermite(3,1), Hermite(2,0), Hermite(1,0)], 0.0)
+    sup = Superposition([Hermite(1,2), Hermite(2,0), Hermite(0,1)])
     model.compare(sup)
     # print("Test: " + str(sup))
     # prediction = model.predict(sup.superpose())
