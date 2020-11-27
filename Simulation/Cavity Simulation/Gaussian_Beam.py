@@ -460,7 +460,7 @@ class Generate_Data(list):
         '''
         Process for superposing elements of the dataset across multiple threrads in the CPU.
         '''
-        return [add_noise(item.superpose(), self.noise_variation) for item in data]
+        return [add_exposure(add_noise(item.superpose(), self.noise_variation), self.exposure) for item in data]
 
     def get_outputs(self):
         '''
@@ -555,15 +555,33 @@ def choose(n, r):
 def add_noise(image, noise_variance: float = 0.0):
     '''
     Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
+    Noise Variance defined as a %age of maximal intensity
     '''
     max_val = np.max(image)
-    norm = lambda i: np.min([max_val, np.random.normal(loc=i, scale=noise_variance)])
+    norm = lambda i: np.random.normal(loc=i, scale=noise_variance*max_val)
     f = np.vectorize(norm)
     image = f(image)
     return image
 
-
-
+def add_exposure(image, exposure:tuple = (0.0, 1.0)):
+    '''
+    Adds in exposure limits to the image, using percentile limits defined by exposure.
+    exposure[0] is the x% lower limit of detection, exposure[1] is the upper.
+    Percents calculated as a function of the maximum image intensity.
+    '''
+    max_val = np.max(image)
+    lower_bound = max_val * exposure[0]
+    upper_bound = max_val * exposure[1]
+    exp = np.vectorize(exposure_comparison)
+    image = exp(image, upper_bound, lower_bound)
+    return image
+    
+def exposure_comparison(val, upper_bound, lower_bound):
+    if val > upper_bound:
+        val = upper_bound
+    elif val < lower_bound:
+        val = lower_bound
+    return val
 
 ##################################################
 ##########                              ##########
@@ -573,17 +591,21 @@ def add_noise(image, noise_variance: float = 0.0):
 
 
 if __name__ == '__main__':
-    x = Generate_Data(3, 3)
-    x.get_outputs()
+    
 
-    # x1 = Hermite(0,1)
-    # x2 = Hermite(1,0)
-    # x = Superposition([x1,x2])
-    # x[0].amplitude = 1/np.sqrt(2)
-    # x[1].amplitude = 1j/np.sqrt(2)
-    # print(x)
-    # x.show()
+     x1 = Hermite(0,1)
+     x2 = Hermite(1,0)
+     x = Superposition([x1,x2])
+     
+     im = add_exposure(add_noise(x.superpose(), 0.00), (0.2, 0.5))
+     plt.imshow(im, cmap='Greys_r')
+     plt.show()
+     x.plot()
 
+     for i in range(len(im[:, 0])):
+         for j in range(len(im[0, :])):
+             if type(im[i, j]) != np.float64:
+                 print(type(im[i, j]))
     # x = Generate_Data(5, 2, 0.0)
     # x.save(False)
 
