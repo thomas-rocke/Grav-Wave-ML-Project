@@ -301,7 +301,7 @@ class Superposition(list):
         Add phase to Superposition, and propagate down to component modes.
         '''
         self.phase += phase
-        self.phase = self.phase % 2*np.pi
+        self.phase = self.phase % 2 * np.pi
         [mode.add_phase(phase) for mode in self.modes]
 
 

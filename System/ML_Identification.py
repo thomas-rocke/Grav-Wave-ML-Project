@@ -348,7 +348,7 @@ class ML:
 
         return answer
 
-    def compare(self, sup: Superposition):
+    def compare(self, sup: Superposition, show="Plot"):
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
@@ -364,7 +364,8 @@ class ML:
         ax2.set_title(r"$\bf{Prediction: }$" + str(pred))
         plt.axis('off')
 
-        plt.show()
+        if show == "Plot": plt.show()
+        if show == "Save": plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
 
 
@@ -376,23 +377,23 @@ class ML:
 ##################################################
 
 
-def process(max_order, number_of_modes, amplitude_variation, phase_variation, repeats):
+def process(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats):
     '''
     Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
     '''
     print("[INFO]  Done!\n")
 
-    model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, repeats)
+    model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
     model.train()
     model.save()
 
-def train_and_save(max_order, number_of_modes, amplitude_variation, phase_variation, repeats):
+def train_and_save(max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1):
     '''
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
     print("[INFO]  Starting process to ensure GPU memory is freed after taining is complete...")
 
-    p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, phase_variation, repeats))
+    p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats))
     p.start()
     p.join()
 
@@ -419,21 +420,21 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    train_and_save(3, 5, 0.2, 0.2, repeats=50)
+    train_and_save(3, 5, 0.4, 0.4, repeats=50)
 
     # train_and_save(3, 3, 0.2, 0.0, 50)
     # train_and_save(4, 3, 0.2, 0.0, 50)
     # train_and_save(5, 3, 0.2, 0.0, 50)
 
-    model = ML(max_order = 5,
-                  number_of_modes = 3,
+    model = ML(max_order = 3,
+                  number_of_modes = 5,
                   amplitude_variation = 0.2,
-                  phase_variation = 0.0,
-                  repeats = 20
+                  phase_variation = 0.2,
+                  repeats = 50
     )
     model.load()
 
-    sup = Superposition([Hermite(1,2), Hermite(2,0), Hermite(0,1)])
+    sup = Superposition([Hermite(1,2), Hermite(2,0), Hermite(0,1), Hermite(2,2), Hermite(0,0)])
     model.compare(sup)
     print("Test: " + str(sup))
     prediction = model.predict(sup.superpose())
