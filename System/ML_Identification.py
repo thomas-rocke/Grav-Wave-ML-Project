@@ -40,7 +40,7 @@ class ML:
     '''
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, repeats: int = 1):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1):
         '''
         Initialise the class.
         '''
@@ -48,18 +48,20 @@ class ML:
         self.number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
         self.phase_variation = phase_variation
+        self.noise_variation = noise_variation
+        self.exposure = exposure
         self.repeats = repeats
 
-        self.epochs = 1
+        self.epoch = 1
         self.model = None
         self.history = {"loss": [], "binary_accuracy": [], "val_loss": [], "val_binary_accuracy": []}
         self.solutions = None
 
-        self.max_epochs = 100
+        self.max_epochs = 50
         self.start_number = 2
         self.step_speed = 0.06
         self.batch_size = 128
-        self.success_performance = 0.99
+        self.success_performance = 0.95
         self.optimizer = "sgd"
         self.input_shape = (120, 120, 1)
 
@@ -76,7 +78,7 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.repeats) + ")"
+        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.noise_variation) + ", " + str(self.exposure) + ", " + str(self.repeats) + ")"
 
     def train(self):
         '''
@@ -98,20 +100,20 @@ class ML:
             print("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + " or an accuracy of " + str(int(self.success_performance * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
 
             try:
-                for i in range(self.epochs, (self.max_epochs * (number_of_modes + 1 - self.start_number)) + 1): #, "[TRAIN] Training with " + str(number_of_modes) + " modes"):
+                for i in range(self.epoch, (self.max_epochs * (number_of_modes + 1 - self.start_number)) + 1): #, "[TRAIN] Training with " + str(number_of_modes) + " modes"):
                     history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=1)
 
                     for i in self.history: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
-                    self.epochs += 1
+                    self.epoch += 1
     
                     if self.history["binary_accuracy"][-1] >= self.success_performance:
-                        print("[TRAIN] " + str(int(self.success_performance * 100)) + "% acccuracy achieved at epoch " + str(self.epochs - 1) + "!")
+                        print("[TRAIN] " + str(int(self.success_performance * 100)) + "% acccuracy achieved at epoch " + str(self.epoch - 1) + "!")
                         break
 
             except KeyboardInterrupt:
                 print("\n[WARN]  Aborted!")
 
-            if self.epochs >= self.max_epochs * (number_of_modes + 1 - self.start_number): print("[WARN]  Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!")
+            if self.epoch >= self.max_epochs * (number_of_modes + 1 - self.start_number): print("[WARN]  Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!")
             print("[TRAIN] Done!\n")
 
             self.evaluate(val_inputs, val_outputs) # Evaluation
@@ -124,7 +126,7 @@ class ML:
         '''
         print("[INIT]  Generating preliminary data for model generation...")
 
-        prelim_data = Generate_Data(self.max_order, self.number_of_modes, 0.0, 0.0, 1, info=False)
+        prelim_data = Generate_Data(self.max_order, self.number_of_modes, info=False)
         self.solutions = prelim_data.get_classes()
 
         print("[INIT]  Done!\n")
@@ -137,13 +139,13 @@ class ML:
             print("[DATA]  Generating data for superpositions of " + str(number_of_modes) + " different modes...")
             print("[DATA]  |")
 
-            train_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.repeats, info=False)
+            train_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
             train_inputs = train_data.get_inputs("[DATA]  |-> " + str(self.repeats) + " datasets of training data")
             train_outputs = train_data.get_outputs()
 
             print("[DATA]  |")
 
-            val_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, 1, info=False)
+            val_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
             val_inputs = val_data.get_inputs("[DATA]  |-> 1 dataset of validation data")
             val_outputs = val_data.get_outputs()
 
@@ -185,13 +187,13 @@ class ML:
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
 
-        model.add(Conv2D(128, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        # model.add(Conv2D(128, (3, 3), padding='same'))
+        # model.add(Activation('relu'))
+        # model.add(MaxPooling2D(pool_size=(2, 2)))
+        # model.add(Dropout(0.2))
+        # model.add(BatchNormalization())
 
-        model.add(Conv2D(256, (3, 3), padding='same'))
+        model.add(Conv2D(128, (3, 3), padding='same'))
         model.add(Activation('relu'))
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
@@ -199,12 +201,12 @@ class ML:
         model.add(Flatten())
         model.add(Dropout(0.2))
 
-        model.add(Dense(256, kernel_constraint=maxnorm(3)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        # model.add(Dense(256, kernel_constraint=maxnorm(3)))
+        # model.add(Activation('relu'))
+        # model.add(Dropout(0.2))
+        # model.add(BatchNormalization())
 
-        model.add(Dense(128, kernel_constraint=maxnorm(3)))
+        model.add(Dense(64, kernel_constraint=maxnorm(3)))
         model.add(Activation('relu'))
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
@@ -238,7 +240,7 @@ class ML:
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
         fig.suptitle("Training and Validation History for " + str(self))
 
-        t = np.arange(1, self.epochs)
+        t = np.arange(1, self.epoch)
 
         ax1.plot(t, self.history["loss"], label="Training Loss")
         ax2.plot(t, self.history["binary_accuracy"], label="Training Accuracy")
@@ -249,7 +251,7 @@ class ML:
         ax2.set_xlabel("Epoch")
         ax2.set_ylabel("Accuracy")
 
-        plt.xlim(0, self.epochs)
+        plt.xlim(0, self.epoch)
         ax1.set_ylim(0, np.max(self.history["loss"]))
         ax2.set_ylim(0, 1)
 
@@ -417,21 +419,23 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
+    train_and_save(3, 5, 0.2, 0.2, 50)
+
     # train_and_save(3, 3, 0.2, 0.0, 50)
     # train_and_save(4, 3, 0.2, 0.0, 50)
-    # train_and_save(5, 3, 0.2, 0.0, 20)
+    # train_and_save(5, 3, 0.2, 0.0, 50)
 
-    model = ML(max_order = 3,
+    model = ML(max_order = 5,
                   number_of_modes = 3,
                   amplitude_variation = 0.2,
                   phase_variation = 0.0,
-                  repeats = 50
+                  repeats = 20
     )
     model.load()
 
     sup = Superposition([Hermite(1,2), Hermite(2,0), Hermite(0,1)])
     model.compare(sup)
-    # print("Test: " + str(sup))
-    # prediction = model.predict(sup.superpose())
-    # sup.show()
-    # prediction.show()
+    print("Test: " + str(sup))
+    prediction = model.predict(sup.superpose())
+    sup.show()
+    prediction.show()

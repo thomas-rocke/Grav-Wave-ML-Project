@@ -380,7 +380,7 @@ class Generate_Data(list):
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
     '''
 
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation:float = 0.0, repeats: int = 1, info: bool = True):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True):
         '''
         Initialise the class with the required complexity.
 
@@ -392,10 +392,12 @@ class Generate_Data(list):
         self.number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
         self.phase_variation = phase_variation
+        self.noise_variation = noise_variation
+        self.exposure = exposure
         self.repeats = repeats
 
         if info: print("\n_____| Generating Data |_____\n")
-        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: " + str(phase_variation) + "\nRepeats of combinations: " + str(repeats) + "\n")
+        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: " + str(phase_variation) + "\nVariation in mode noise: " + str(noise_variation) + "\nVariation in mode exposure: " + str(exposure) + "\nRepeats of combinations: " + str(repeats) + "\n")
         if info: print("Generating Gaussian modes...")
 
         hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
@@ -459,7 +461,7 @@ class Generate_Data(list):
         '''
         Process for superposing elements of the dataset across multiple threrads in the CPU.
         '''
-        return [item.superpose() for item in data]
+        return [add_noise(item.superpose(), self.noise_variation) for item in data]
 
     def get_outputs(self):
         '''
@@ -551,16 +553,15 @@ def fact(x):
 def choose(n, r):
     return fact(n)/(fact(r)*fact(n-r))
 
-def add_noise(image, noise_variance: float = 0.001):
+def add_noise(image, noise_variance: float = 0.0):
     '''
     Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
     '''
-    img_copy = image.copy()
-    max_val = np.max(img_copy)
+    max_val = np.max(image)
     norm = lambda i: np.min([max_val, np.random.normal(loc=i, scale=noise_variance)])
     f = np.vectorize(norm)
-    img_copy = f(img_copy)
-    return img_copy
+    image = f(image)
+    return image
 
 
 
