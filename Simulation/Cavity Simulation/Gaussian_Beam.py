@@ -62,9 +62,7 @@ class Hermite:
         '''
         Magic method for the repr() function.
         '''
-
         return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ", " + str(self.phase) + ")"
-
 
     def __mul__(self, val):
         '''
@@ -226,7 +224,6 @@ class Superposition(list):
         for i in range(len(self)): 
             self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
             self[i].add_phase(phase)
-
 
     def __str__(self):
         '''
@@ -397,11 +394,13 @@ class Generate_Data(list):
         self.repeats = repeats
 
         if info: print("\n_____| Generating Data |_____\n")
-        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: " + str(phase_variation) + "\nVariation in mode noise: " + str(noise_variation) + "\nVariation in mode exposure: " + str(exposure) + "\nRepeats of combinations: " + str(repeats) + "\n")
+        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: "
+                        + str(phase_variation) + "\nVariation in saturation noise: " + str(noise_variation) + "\nVariation in saturation exposure: " + str(exposure) + "\nRepeats of combinations: " + str(repeats) + "\n")
         if info: print("Generating Gaussian modes...")
 
         hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
-        self.gauss_modes = hermite_modes
+        #laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
+        self.gauss_modes = hermite_modes# + laguerre_modes
 
         if info: print("Done! Found " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
 
