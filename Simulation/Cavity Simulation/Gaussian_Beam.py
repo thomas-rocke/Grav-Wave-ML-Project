@@ -52,7 +52,7 @@ class Hermite:
 
         self.resolution = 50
         
-        self.sortitems = [self.l**2 + self.m **2, self.l, self.m] #Define the sorting index for this mode (for Superposition sorting)
+        self.sort_items = [self.l**2 + self.m**2, self.l, self.m] # Define the sorting index for this mode (for Superposition sorting)
 
     def __str__(self):
         '''
@@ -116,7 +116,6 @@ class Hermite:
         self.plot(title)
         plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
 
-
 #    def E(self, r, z):
 #        '''
 #        Electric field at a given radial distance and axial distance.
@@ -126,7 +125,6 @@ class Hermite:
 #        exp_2 = np.exp(-1j * (self.k * z + self.k * (r**2 / (2 * self.R(z))) - self.phi(z)))
 #
 #        return np.array((w_ratio * exp_1 * exp_2) * self.amplitude * np.e**(1j*self.phase))
-
 
     def E_mode(self, x, y, z):
         '''
@@ -213,15 +211,16 @@ class Superposition(list):
             elif type(mode) == Laguerre: # Process Laguerre modes in Hermite basis
                 mode_list.extend(mode)
         
-        sorted_modes = sorted(mode_list, key= lambda x: (x.sortitems[0], x.sortitems[1], x.sortitems[2])) # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        sorted_modes = sorted(mode_list, key= lambda x: (x.sort_items[0], x.sort_items[1], x.sort_items[2])) # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+
         self.modes=[]
         for mode in sorted_modes:
             existing_mode = [x for x in self.modes if (x.l == mode.l and x.m == mode.m)]
-            if len(existing_mode) == 0: #No identical matches
+            if len(existing_mode) == 0: # No identical matches
                 self.modes.append(mode)
-            else: #Duplicate exists
-                self.add_modes(existing_mode[0], mode) #Merge duplicate
-        
+            else: # Duplicate exists
+                self.add_modes(existing_mode[0], mode) # Merge duplicate
+
         self.resolution = modes[0].resolution
         self.amplitude = amplitude
         self.phase = phase
@@ -333,6 +332,7 @@ class Superposition(list):
 
 
 
+
 class Laguerre(Superposition):
     '''
     Class representing a Laguerre mode generated as a superposition of multiple Gaussian modes.
@@ -347,7 +347,7 @@ class Laguerre(Superposition):
         self.amplitude = amplitude
         self.phase = phase
         
-        self.sortitems = [self.p**2 + self.m **2, self.p, self.m] #Define the sorting index for this mode (for Superposition sorting)
+        self.sort_items = [self.p**2 + self.m**2, self.p, self.m] # Define the sorting index for this mode (for Superposition sorting)
 
         # From https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=247715
 
@@ -428,10 +428,10 @@ class Generate_Data(list):
         if info: print("Generating Gaussian modes...")
 
         hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
-        #laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
-        self.gauss_modes = hermite_modes# + laguerre_modes
+        laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order) for j in range(max_order)]
+        self.gauss_modes = hermite_modes + laguerre_modes
 
-        if info: print("Done! Found " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
+        if info: print("Done! Found " + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
@@ -604,13 +604,16 @@ def add_exposure(image, exposure:tuple = (0.0, 1.0)):
     exp = np.vectorize(exposure_comparison)
     image = exp(image, upper_bound, lower_bound)
     return image
-    
+
 def exposure_comparison(val, upper_bound, lower_bound):
     if val > upper_bound:
         val = upper_bound
     elif val < lower_bound:
         val = lower_bound
     return val
+
+
+
 
 ##################################################
 ##########                              ##########
@@ -620,8 +623,6 @@ def exposure_comparison(val, upper_bound, lower_bound):
 
 
 if __name__ == '__main__':
-    
-
      x1 = Laguerre(0, 0)
      x1.add_phase(2)
      x1.amplitude = 0.2
