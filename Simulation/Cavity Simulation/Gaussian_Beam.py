@@ -90,7 +90,7 @@ class Hermite:
         '''
         return Hermite(self.l, self.m, self.amplitude, self.phase, self.w_0, self.wavelength, self.n)
 
-    def plot(self, title: bool = True):
+    def plot(self, save: bool = False, title: bool = True):
         '''
         Plot the Gaussian mode.
         '''
@@ -102,19 +102,8 @@ class Hermite:
         if title: plt.title(str(self))
         plt.axis('off')
 
-    def show(self, title: bool = True):
-        '''
-        Show the plot of the Gaussian mode.
-        '''
-        self.plot(title)
-        plt.show()
-
-    def save(self, title: bool = True):
-        '''
-        Save the plot of the Gaussian mode.
-        '''
-        self.plot(title)
-        plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+        if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+        else: plt.show()
 
 #    def E(self, r, z):
 #        '''
@@ -269,31 +258,20 @@ class Superposition(list):
             i.amplitude *= value
         return self
 
-    def plot(self, title: bool = True):
+    def plot(self, save: bool = False, title: bool = True, constituents: bool = False):
         '''
         Plot the superposition.
         '''
+        if constituents: [i.show() for i in self] # Plot the constituent Gaussian modes
+
         plt.figure(self.__class__.__name__)
         plt.imshow(self.superpose(), cmap='Greys_r')
 
         if title: plt.title(str(self))
         plt.axis('off')
 
-    def show(self, title: bool = True, constituents: bool = False):
-        '''
-        Show the plot of the Gaussian mode.
-        '''
-        if constituents: [i.show() for i in self] # Plot the constituent Gaussian modes
-
-        self.plot(title)
-        plt.show()
-
-    def save(self, title: bool = True):
-        '''
-        Save the plot of the Gaussian mode.
-        '''
-        self.plot(title)
-        plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+        if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+        else: plt.show()
 
     def superpose(self):
         '''
@@ -495,7 +473,7 @@ class Generate_Data(list):
         '''
         Get all possible Gaussian modes that could comprise a superposition.
         '''
-        return np.array(self.repeats * [[int(str(j)[:-1] in str(i))  for j in self.gauss_modes] for i in self.combs])
+        return np.array(self.repeats * [[int(str(j)[:-1] in str(i)) * 0.5 for j in self.gauss_modes] for i in self.combs])
 
     def get_classes(self):
         '''
