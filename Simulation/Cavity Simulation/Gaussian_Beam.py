@@ -333,7 +333,8 @@ class Laguerre(Superposition):
             for s in range(int((m)/2) + 1):
                 frac = ((fact(2*(q-s) + m)*fact(2*(p-q+s)))/(2**(2*p + m - 1) * fact(p) * fact(p+m) * (1 + choose(0, m))))**0.5
                 y = Hermite(2*(q - s) + m, 2*(p - q + s))
-                y.amplitude = (-1)**(s+p) * choose(p, q) * choose(m, 2*s) * frac
+                y.amplitude = choose(p, q) * choose(m, 2*s) * frac
+                y.add_phase((s+p)*np.pi)
                 self.modes.append(y)
 
         super().__init__(self.modes)
@@ -598,21 +599,8 @@ def exposure_comparison(val, upper_bound, lower_bound):
 if __name__ == '__main__':
     
 
-     x1 = Hermite(0,1)
-     x1.add_phase(1)
-     x2 = Hermite(1,0)
-     x2.add_phase(2.5)
-     
-     x3 = Hermite(0, 0)
-     x = Superposition([x3,x1, x2])
-     
-     im = add_exposure(add_noise(x.superpose(), 0.00), (0.2, 0.5))
-     plt.imshow(im, cmap='Greys_r')
-     plt.show()
-     x.plot()
-
-     for mode in x:
-         print(mode.phase)
+     x = Laguerre(2, 2)
+     x.show()
     # x = Generate_Data(5, 2, 0.0)
     # x.save(False)
 
