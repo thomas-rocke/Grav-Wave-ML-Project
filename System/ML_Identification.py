@@ -118,7 +118,7 @@ class ML:
 
             self.evaluate(val_inputs, val_outputs) # Evaluation
 
-        print("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n")
+        print("[INFO]  Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n")
 
     def generate_prelim(self):
         '''
@@ -214,7 +214,7 @@ class ML:
         model.add(Dense(len(self.solutions)))
         model.add(Activation('sigmoid'))
 
-        model.compile(loss='binary_crossentropy', optimizer=self.optimizer, metrics=['binary_accuracy'])
+        model.compile(loss='mean_squared_error', optimizer=self.optimizer, metrics=['binary_accuracy'])
 
         # We choose sigmoid and binary_crossentropy here because we have a multilabel neural network, which becomes K binary
         # classification problems. Using softmax would be wrong as it raises the probabiity on one class and lowers others.
@@ -333,6 +333,7 @@ class ML:
         data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
 
         prediction = self.model.predict(data)[0] # Make prediction using model (return index of superposition)
+        for i in range(len(prediction)): print(str(i + 1) + ": " + str(prediction[i]))
         prediction = [(self.solutions[i], prediction[i]) for i in range(len(prediction))]
         prediction = {i[0] : i[1] for i in prediction}
         prediction = {k : v for k, v in sorted(prediction.items(), key=lambda item: item[1])} # Sort list
@@ -348,7 +349,7 @@ class ML:
 
         return answer
 
-    def compare(self, sup: Superposition, show="Plot"):
+    def compare(self, sup: Superposition, save: bool = False):
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
@@ -364,8 +365,8 @@ class ML:
         ax2.set_title(r"$\bf{Prediction: }$" + str(pred))
         plt.axis('off')
 
-        if show == "Plot": plt.show()
-        if show == "Save": plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+        if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+        else: plt.show()
 
 
 
@@ -420,23 +421,29 @@ if __name__ == '__main__':
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
-    train_and_save(3, 5, 0.4, 0.4, repeats=50)
+    max_order = 3
+    number_of_modes = 3
+    amplitude_variation = 0.2
+    phase_variation = 0.2
+    noise_variation = 0.0
+    exposure = (0.0, 1.0)
+    repeats = 50
+
+    # train_and_save(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
 
     # train_and_save(3, 3, 0.2, 0.0, 50)
     # train_and_save(4, 3, 0.2, 0.0, 50)
     # train_and_save(5, 3, 0.2, 0.0, 50)
 
-    model = ML(max_order = 3,
-                  number_of_modes = 5,
-                  amplitude_variation = 0.2,
-                  phase_variation = 0.2,
-                  repeats = 50
-    )
+    model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
     model.load()
 
-    sup = Superposition([Hermite(1,2), Hermite(2,0), Hermite(0,1), Hermite(2,2), Hermite(0,0)])
-    model.compare(sup)
+    data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+    sup = data.get_random()
     print("Test: " + str(sup))
-    prediction = model.predict(sup.superpose())
-    sup.show()
-    prediction.show()
+    model.predict(sup)
+
+    # sup = Superposition([Hermite(1,2), Hermite(2,0), Hermite(0,1)])
+    # prediction = model.predict(sup.superpose())
+    # sup.show()
+    # prediction.show()
