@@ -51,6 +51,8 @@ class Hermite:
         self.k = (2 * np.pi * n) / wavelength # Wave number
 
         self.resolution = 50
+        
+        self.sortitems = [self.l**2 + self.m **2, self.l, self.m] #Define the sorting index for this mode (for Superposition sorting)
 
     def __str__(self):
         '''
@@ -211,7 +213,7 @@ class Superposition(list):
             elif type(mode) == Laguerre: # Process Laguerre modes in Hermite basis
                 mode_list.extend(mode)
         
-        self.modes = mode_list # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        self.modes = sorted(mode_list, key= lambda x: (x.sortitems[0], x.sortitems[1], x.sortitems[2])) # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         self.resolution = modes[0].resolution
         self.amplitude = amplitude
         self.phase = phase
@@ -221,9 +223,10 @@ class Superposition(list):
         amplitudes = [i.amplitude for i in self]
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
 
+        lowest_order_phase = self.modes[0].phase #Find phase of simplest mode
         for i in range(len(self)): 
             self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
-            self[i].add_phase(phase)
+            self[i].add_phase(phase - lowest_order_phase)
 
     def __str__(self):
         '''
@@ -320,6 +323,8 @@ class Laguerre(Superposition):
         self.m = m
         self.amplitude = amplitude
         self.phase = phase
+        
+        self.sortitems = [self.p**2 + self.m **2, self.p, self.m] #Define the sorting index for this mode (for Superposition sorting)
 
         # From https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=247715
 
@@ -594,18 +599,20 @@ if __name__ == '__main__':
     
 
      x1 = Hermite(0,1)
+     x1.add_phase(1)
      x2 = Hermite(1,0)
-     x = Superposition([x1,x2])
+     x2.add_phase(2.5)
+     
+     x3 = Hermite(0, 0)
+     x = Superposition([x3,x1, x2])
      
      im = add_exposure(add_noise(x.superpose(), 0.00), (0.2, 0.5))
      plt.imshow(im, cmap='Greys_r')
      plt.show()
      x.plot()
 
-     for i in range(len(im[:, 0])):
-         for j in range(len(im[0, :])):
-             if type(im[i, j]) != np.float64:
-                 print(type(im[i, j]))
+     for mode in x:
+         print(mode.phase)
     # x = Generate_Data(5, 2, 0.0)
     # x.save(False)
 
