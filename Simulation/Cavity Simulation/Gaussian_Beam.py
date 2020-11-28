@@ -213,7 +213,15 @@ class Superposition(list):
             elif type(mode) == Laguerre: # Process Laguerre modes in Hermite basis
                 mode_list.extend(mode)
         
-        self.modes = sorted(mode_list, key= lambda x: (x.sortitems[0], x.sortitems[1], x.sortitems[2])) # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        sorted_modes = sorted(mode_list, key= lambda x: (x.sortitems[0], x.sortitems[1], x.sortitems[2])) # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
+        self.modes=[]
+        for mode in sorted_modes:
+            existing_mode = [x for x in self.modes if (x.l == mode.l and x.m == mode.m)]
+            if len(existing_mode) == 0: #No identical matches
+                self.modes.append(mode)
+            else: #Duplicate exists
+                self.add_modes(existing_mode[0], mode) #Merge duplicate
+        
         self.resolution = modes[0].resolution
         self.amplitude = amplitude
         self.phase = phase
@@ -306,7 +314,22 @@ class Superposition(list):
         self.phase += phase
         self.phase = self.phase % 2 * np.pi
         [mode.add_phase(phase) for mode in self.modes]
-
+        
+    def add_modes(self, mode, new_mode):
+        '''
+        Combine mode amplitudes and phases in the event of Hermite duplicates
+        '''
+        r1 = mode.amplitude
+        r2 = new_mode.amplitude
+        phi1 = mode.phase
+        phi2 = new_mode.phase
+        
+        new_amp = np.sqrt(r1**2 + r2**2 + 2 * r1 * r2 * np.cos(phi1 - phi2))
+        new_phase = np.arctan((r1*np.sin(phi1) + r2*np.sin(phi2))/(r1*np.cos(phi1) + r2*np.cos(phi2)))
+        
+        mode.amplitude = new_amp
+        mode.add_phase(new_phase - mode.phase)
+        return mode
 
 
 
@@ -599,7 +622,14 @@ def exposure_comparison(val, upper_bound, lower_bound):
 if __name__ == '__main__':
     
 
-     x = Laguerre(2, 2)
+     x1 = Laguerre(0, 0)
+     x1.add_phase(2)
+     x1.amplitude = 0.2
+     
+     x2 = Hermite(0, 0)
+     x3 = Hermite(2, 1)
+     
+     x = Superposition([x1, x2, x3])
      x.show()
     # x = Generate_Data(5, 2, 0.0)
     # x.save(False)
