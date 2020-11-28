@@ -342,7 +342,7 @@ class ML:
         amplitudes = list(prediction.values())[-self.number_of_modes:]
 
         for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
-        answer = Superposition(modes) # Normalise the amplitudes
+        answer = Superposition(*modes) # Normalise the amplitudes
 
         if info: print("[PRED]  Done! Took " + str(round((perf_counter() - start_time) * 1000, 3)) + " milliseconds.")
         if info: print("[PRED]  Prediction: " + str(answer) + "\n")
@@ -440,10 +440,9 @@ if __name__ == '__main__':
 
     data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
     sup = data.get_random()
-    print("Test: " + str(sup))
-    model.predict(sup)
+    model.compare(sup)
 
-    # sup = Superposition([Hermite(1,2), Hermite(2,0), Hermite(0,1)])
+    # sup = Superposition(Hermite(1,2), Hermite(2,0), Hermite(0,1))
     # prediction = model.predict(sup.superpose())
     # sup.show()
     # prediction.show()
