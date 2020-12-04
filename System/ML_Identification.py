@@ -22,7 +22,7 @@ import multiprocessing
 import tensorflow as tf
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, MaxPool2D, Flatten
+# from keras.layers import Dense, Conv2D, MaxPool2D, Flatten
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.constraints import maxnorm
@@ -180,68 +180,68 @@ class ML:
         # Using the VGG16 convolutional neural net (CNN) architecture which was used to win ILSVR (Imagenet) competition in 2014.
         # It is considered to be one of the best vision model architectures to date.
 
-        model.add(Conv2D(input_shape=self.input_shape, filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+        # model.add(Conv2D(input_shape=self.input_shape, filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
-        model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+        # model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
-        model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+        # model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
-        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
-        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
-        model.add(Flatten())
-        model.add(Dense(units=4096, activation="relu"))
-        model.add(Dense(units=4096, activation="relu"))
+        # model.add(Flatten())
+        # model.add(Dense(units=4096, activation="relu"))
+        # model.add(Dense(units=4096, activation="relu"))
 
-        # model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
-        # model.add(Activation('relu'))
-        # model.add(MaxPooling2D(pool_size=(2, 2)))
-        # model.add(Dropout(0.2))
-        # model.add(BatchNormalization())
+        model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        # model.add(Conv2D(64, (3, 3), padding='same'))
-        # model.add(Activation('relu'))
-        # model.add(MaxPooling2D(pool_size=(2, 2)))
-        # model.add(Dropout(0.2))
-        # model.add(BatchNormalization())
-
-        # # model.add(Conv2D(128, (3, 3), padding='same'))
-        # # model.add(Activation('relu'))
-        # # model.add(MaxPooling2D(pool_size=(2, 2)))
-        # # model.add(Dropout(0.2))
-        # # model.add(BatchNormalization())
+        model.add(Conv2D(64, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
         # model.add(Conv2D(128, (3, 3), padding='same'))
         # model.add(Activation('relu'))
+        # model.add(MaxPooling2D(pool_size=(2, 2)))
         # model.add(Dropout(0.2))
         # model.add(BatchNormalization())
 
-        # model.add(Flatten())
-        # model.add(Dropout(0.2))
+        model.add(Conv2D(128, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        # # model.add(Dense(256, kernel_constraint=maxnorm(3)))
-        # # model.add(Activation('relu'))
-        # # model.add(Dropout(0.2))
-        # # model.add(BatchNormalization())
+        model.add(Flatten())
+        model.add(Dropout(0.2))
 
-        # model.add(Dense(64, kernel_constraint=maxnorm(3)))
+        # model.add(Dense(256, kernel_constraint=maxnorm(3)))
         # model.add(Activation('relu'))
         # model.add(Dropout(0.2))
         # model.add(BatchNormalization())
+
+        model.add(Dense(64, kernel_constraint=maxnorm(3)))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
         model.add(Dense(units=len(self.solutions)))
         model.add(Activation('sigmoid'))
@@ -460,7 +460,7 @@ if __name__ == '__main__':
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
     max_order = 3
-    number_of_modes = 3
+    number_of_modes = 5
     amplitude_variation = 0.2
     phase_variation = 0.0
     noise_variation = 0.0
