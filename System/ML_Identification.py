@@ -22,9 +22,10 @@ import multiprocessing
 import tensorflow as tf
 import keras
 from keras.models import Sequential
+from keras.layers import Dense, Conv2D, MaxPool2D, Flatten
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
-from keras.constraints import maxnorm
 from keras.layers.convolutional import Conv2D, MaxPooling2D
+from keras.constraints import maxnorm
 
 
 
@@ -52,18 +53,18 @@ class ML:
         self.exposure = exposure
         self.repeats = repeats
 
-        self.epoch = 1
         self.model = None
-        self.history = {"loss": [], "binary_accuracy": [], "val_loss": [], "val_binary_accuracy": []}
         self.solutions = None
+        self.pixels = None
+        self.epoch = 1
+        self.history = {"loss": [], "binary_accuracy": [], "val_loss": [], "val_binary_accuracy": []}
 
         self.max_epochs = 50
         self.start_number = 2
-        self.step_speed = 0.06
+        self.step_speed = 0.068
         self.batch_size = 128
-        self.success_performance = 0.95
+        self.success_performance = 0.98
         self.optimizer = "sgd"
-        self.input_shape = (120, 120, 1)
 
         # print("                    " + (len(str(self)) + 4) * "_")
         print("____________________| " + str(self) + " |____________________\n")
@@ -107,7 +108,7 @@ class ML:
                     self.epoch += 1
     
                     if self.history["binary_accuracy"][-1] >= self.success_performance:
-                        print("[TRAIN] " + str(int(self.success_performance * 100)) + "% acccuracy achieved at epoch " + str(self.epoch - 1) + "!")
+                        print("[TRAIN] " + str(int(self.success_performance * 100)) + "% acccuracy achieved at epoch " + str(self.epoch - 1) + ".")
                         break
 
             except KeyboardInterrupt:
@@ -128,6 +129,7 @@ class ML:
 
         prelim_data = Generate_Data(self.max_order, self.number_of_modes, info=False)
         self.solutions = prelim_data.get_classes()
+        self.input_shape = (prelim_data[0].pixels, prelim_data[0].pixels, 1)
 
         print("[INIT]  Done!\n")
 
@@ -175,43 +177,73 @@ class ML:
         # Dropout: Randomly sets input units to 0 to help prevent overfitting
         # MaxPooling2D: Downsamples the input representation
 
-        model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        # Using the VGG16 convolutional neural net (CNN) architecture which was used to win ILSVR (Imagenet) competition in 2014.
+        # It is considered to be one of the best vision model architectures to date.
 
-        model.add(Conv2D(64, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        model.add(Conv2D(input_shape=self.input_shape, filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
-        # model.add(Conv2D(128, (3, 3), padding='same'))
+        model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+
+        model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+
+        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+
+        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+        model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+
+        model.add(Flatten())
+        model.add(Dense(units=4096, activation="relu"))
+        model.add(Dense(units=4096, activation="relu"))
+
+        # model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
         # model.add(Activation('relu'))
         # model.add(MaxPooling2D(pool_size=(2, 2)))
         # model.add(Dropout(0.2))
         # model.add(BatchNormalization())
 
-        model.add(Conv2D(128, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        # model.add(Conv2D(64, (3, 3), padding='same'))
+        # model.add(Activation('relu'))
+        # model.add(MaxPooling2D(pool_size=(2, 2)))
+        # model.add(Dropout(0.2))
+        # model.add(BatchNormalization())
 
-        model.add(Flatten())
-        model.add(Dropout(0.2))
+        # # model.add(Conv2D(128, (3, 3), padding='same'))
+        # # model.add(Activation('relu'))
+        # # model.add(MaxPooling2D(pool_size=(2, 2)))
+        # # model.add(Dropout(0.2))
+        # # model.add(BatchNormalization())
 
-        # model.add(Dense(256, kernel_constraint=maxnorm(3)))
+        # model.add(Conv2D(128, (3, 3), padding='same'))
         # model.add(Activation('relu'))
         # model.add(Dropout(0.2))
         # model.add(BatchNormalization())
 
-        model.add(Dense(64, kernel_constraint=maxnorm(3)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        # model.add(Flatten())
+        # model.add(Dropout(0.2))
 
-        model.add(Dense(len(self.solutions)))
+        # # model.add(Dense(256, kernel_constraint=maxnorm(3)))
+        # # model.add(Activation('relu'))
+        # # model.add(Dropout(0.2))
+        # # model.add(BatchNormalization())
+
+        # model.add(Dense(64, kernel_constraint=maxnorm(3)))
+        # model.add(Activation('relu'))
+        # model.add(Dropout(0.2))
+        # model.add(BatchNormalization())
+
+        model.add(Dense(units=len(self.solutions)))
         model.add(Activation('sigmoid'))
 
         model.compile(loss='mean_squared_error', optimizer=self.optimizer, metrics=['binary_accuracy'])
@@ -230,13 +262,17 @@ class ML:
         Evaluate the model using some validation data.
         '''
         print("[EVAL]  Evaluating...")
+
         scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
+
         print("[EVAL]  Done! Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".\n")
 
-    def plot(self):
+    def plot(self, info: bool = True):
         '''
         Plot the history of the model whilst training.
         '''
+        if info: print("[PLOT]  Plotting history...")
+
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
         fig.suptitle("Training and Validation History for " + str(self))
 
@@ -260,16 +296,9 @@ class ML:
         ax1.legend()
         ax2.legend()
 
-    def show(self):
-        '''
-        Show the plot of the Gaussian mode.
-        '''
-        print("[PLOT]  Plotting history...")
-
-        self.plot()
-        plt.show()
-
-        print("[PLOT]  Done!\n")
+        if info:
+            plt.show()
+            print("[PLOT]  Done!\n")
 
     def save(self):
         '''
@@ -288,11 +317,11 @@ class ML:
 
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
 
-        self.plot()
+        self.plot(info=False)
         plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
 
         print("[SAVE]  Done!\n")
-    
+
     def load(self):
         '''
         Load a saved model.
@@ -307,10 +336,10 @@ class ML:
         self.history["val_binary_accuracy"] = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
 
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
-        self.solutions = [eval(i) for i in self.solutions]
+        self.solutions = [eval(i.replace("HG", "Hermite")) for i in self.solutions]
 
         print("[LOAD]  Done!\n")
-    
+
     def check_trained(self):
         '''
         Check if the model has been trained yet.
@@ -322,30 +351,37 @@ class ML:
             os.makedirs("Models/" + str(self), exist_ok=True) # Create directory for model
             return True
     
-    def predict(self, data, info: bool = True):
+    def predict(self, data, threshold: float = 0.6, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
         start_time = perf_counter()
-
         if info: print("[PRED]  Predicting... (shape = " + str(data.shape) + ")")
 
         data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
-
         prediction = self.model.predict(data)[0] # Make prediction using model (return index of superposition)
-        for i in range(len(prediction)): print(str(i + 1) + ": " + str(prediction[i]))
-        prediction = [(self.solutions[i], prediction[i]) for i in range(len(prediction))]
-        prediction = {i[0] : i[1] for i in prediction}
-        prediction = {k : v for k, v in sorted(prediction.items(), key=lambda item: item[1])} # Sort list
 
-        modes = list(prediction.keys())[-self.number_of_modes:]
-        amplitudes = list(prediction.values())[-self.number_of_modes:]
+        modes = []
+        for i in range(len(prediction)): # For all values of prediction
+            if info: print("[PRED]  " + str(self.solutions[i]) + ": " + str(round(prediction[i], 3)) + (prediction[i] > threshold) * " ***")
 
-        for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
+            if prediction[i] > threshold: # If the prediction is above a certain threshold
+                modes.append(self.solutions[i].copy()) # Copy the corresponding solution to modes
+                modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
+
+        # prediction = [(self.solutions[i], prediction[i]) for i in range(len(prediction))]
+        # prediction = {i[0] : i[1] for i in prediction}
+        # prediction = {k : v for k, v in sorted(prediction.items(), key=lambda item: item[1])} # Sort list
+
+        # modes = list(prediction.keys())[-self.number_of_modes:]
+        # amplitudes = list(prediction.values())[-self.number_of_modes:]
+
+        # for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
+
         answer = Superposition(*modes) # Normalise the amplitudes
 
         if info: print("[PRED]  Done! Took " + str(round((perf_counter() - start_time) * 1000, 3)) + " milliseconds.")
-        if info: print("[PRED]  Prediction: " + str(answer) + "\n")
+        if info: print("[PRED]  Reconstructed: " + str(answer) + "\n")
 
         return answer
 
@@ -353,6 +389,8 @@ class ML:
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
+        print("[PRED]  Actual: " + str(sup))
+
         pred = self.predict(sup.superpose())
 
         fig, (ax1, ax2) = plt.subplots(2)
@@ -361,8 +399,8 @@ class ML:
         ax1.imshow(sup.superpose(), cmap='Greys_r')
         ax2.imshow(pred.superpose(), cmap='Greys_r')
 
-        ax1.set_title(r"$\bf{Input: }$" + str(sup))
-        ax2.set_title(r"$\bf{Prediction: }$" + str(pred))
+        ax1.set_title(r"$\bf{Actual: }$" + repr(sup))
+        ax2.set_title(r"$\bf{Reconstructed: }$" + repr(pred))
         plt.axis('off')
 
         if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
@@ -424,23 +462,26 @@ if __name__ == '__main__':
     max_order = 3
     number_of_modes = 3
     amplitude_variation = 0.2
-    phase_variation = 0.2
+    phase_variation = 0.0
     noise_variation = 0.0
     exposure = (0.0, 1.0)
     repeats = 50
 
-    # train_and_save(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
+    # Training and saving
 
-    # train_and_save(3, 3, 0.2, 0.0, 50)
-    # train_and_save(4, 3, 0.2, 0.0, 50)
-    # train_and_save(5, 3, 0.2, 0.0, 50)
+    train_and_save(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
+
+    # Loading saved model
 
     model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
     model.load()
 
+    # Generating test data for comparisons
+
     data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
-    sup = data.get_random()
-    model.compare(sup)
+    while True:
+        sup = data.get_random()
+        model.compare(sup)
 
     # sup = Superposition(Hermite(1,2), Hermite(2,0), Hermite(0,1))
     # prediction = model.predict(sup.superpose())

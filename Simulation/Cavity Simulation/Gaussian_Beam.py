@@ -41,8 +41,8 @@ class Hermite:
         '''
         self.l = l
         self.m = m
-        self.amplitude = amplitude
-        self.phase = phase
+        self.amplitude = amplitude # 0 -> 1
+        self.phase = phase # 0 -> 2π
         self.w_0 = w_0 # Waist radius
         self.wavelength = wavelength
         self.n = n
@@ -50,7 +50,7 @@ class Hermite:
         self.z_R = (np.pi * w_0**2 * n) / wavelength # Rayleigh range
         self.k = (2 * np.pi * n) / wavelength # Wave number
 
-        self.resolution = 50
+        self.pixels = 128
 
         self.sort_items = [self.l**2 + self.m**2, self.l, self.m] # Define the sorting index for this mode (for Superposition sorting)
 
@@ -58,7 +58,7 @@ class Hermite:
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ")"
+        return "HG(" + str(self.l) + ", " + str(self.m) + ")"
 
     def __repr__(self):
         '''
@@ -97,7 +97,7 @@ class Hermite:
         '''
         Plot the Gaussian mode.
         '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / self.resolution), np.arange(-1.2, 1.2, 1.0 / self.resolution))
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / self.pixels), np.arange(-1.2, 1.2, 2.4 / self.pixels))
 
         plt.figure(self.__class__.__name__)
         plt.imshow(self.I(X, Y, 0), cmap='Greys_r')
@@ -193,15 +193,16 @@ class Superposition(list):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
+        # Merge Laguerre modes into the Hermite basis set
         mode_list = []
         for mode in modes:
             if type(mode) == Hermite: # Process Hermite modes
                 mode_list.append(mode)
             elif type(mode) == Laguerre: # Process Laguerre modes in Hermite basis
                 mode_list.extend(mode)
-        
-        sorted_modes = sorted(mode_list, key=lambda x: (x.sort_items[0], x.sort_items[1], x.sort_items[2])) # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
 
+        # Merge multiples of the same mode
+        sorted_modes = sorted(mode_list, key=lambda x: (x.sort_items[0], x.sort_items[1], x.sort_items[2])) # [mode.copy() for mode in modes] # Create duplicate of Gaussian modes for random normalised ampltidues
         self.modes = []
         for mode in sorted_modes:
             existing_mode = [x for x in self.modes if (x.l == mode.l and x.m == mode.m)]
@@ -210,7 +211,7 @@ class Superposition(list):
             else: # Duplicate exists
                 self.add_modes(existing_mode[0], mode) # Merge duplicate
 
-        self.resolution = self.modes[0].resolution
+        self.pixels = self.modes[0].pixels
         super().__init__(self.modes)
 
         amplitudes = [i.amplitude for i in self]
@@ -225,13 +226,13 @@ class Superposition(list):
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.modes)[1:-1] + ")"
+        return "S" + str(tuple([str(i) for i in self])).replace("'", "")
 
     def __repr__(self):
         '''
         Magic method for the repr() function.
         '''
-        return str(self)
+        return self.__class__.__name__ + "(" + str(self.modes)[1:-1] + ")"
 
     def __mul__(self, value):
         '''
@@ -251,19 +252,19 @@ class Superposition(list):
         '''
         Magic method for the *= operator.
         '''
-        for i in self:
-            i.amplitude *= value
+        for i in self: i.amplitude *= value
         return self
 
     def contains(self, mode: Hermite):
         '''
         Returns the mode that exists within the superposition.
         '''
-        for i in self:
-            if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
-                return i
-        
-        return Hermite(l=0, m=0, amplitude=0.0)
+        return int(str(mode) in str(self))
+        # for i in self:
+        #     if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
+        #         return i
+
+        # return Hermite(l=0, m=0, amplitude=0.0)
 
     def plot(self, save: bool = False, title: bool = True, constituents: bool = False):
         '''
@@ -284,7 +285,7 @@ class Superposition(list):
         '''
         Compute the superposition of the Gaussian modes.
         '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 1.0 / self.resolution), np.arange(-1.2, 1.2, 1.0 / self.resolution))
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / self.pixels), np.arange(-1.2, 1.2, 2.4 / self.pixels))
 
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
         # superposition = np.abs(self.E_mode(X, Y, 0)**2)
@@ -366,13 +367,13 @@ class Laguerre(Superposition):
         Make a copy of the object.
         '''
         return Laguerre(self.p, self.m, self.amplitude, self.phase)
-    
+
     def add_phase(self, phase):
         '''
         Add phase to superposition, and propagate down to component modes.
         '''
         self.phase += phase
-        self.phase = self.phase % 2 * np.pi
+        self.phase = round(self.phase % (2 * np.pi), 2)
         [mode.add_phase(phase) for mode in self.modes]
 
     def E_mode(self, x, y, z):
@@ -410,11 +411,11 @@ class Generate_Data(list):
                         + str(phase_variation) + "\nVariation in saturation noise: " + str(noise_variation) + "\nVariation in saturation exposure: " + str(exposure) + "\nRepeats of combinations: " + str(repeats) + "\n")
         if info: print("Generating Gaussian modes...")
 
-        hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
-        laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
-        self.gauss_modes = hermite_modes + laguerre_modes
+        self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
+        self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
-        if info: print("Done! Found " + str(len(hermite_modes)) + " hermite modes and " + str(len(laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
+        if info: print("Done! Found " + str(len(self.hermite_modes)) + " hermite modes and " + str(len(self.laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
@@ -477,14 +478,14 @@ class Generate_Data(list):
         Get all possible Gaussian modes that could comprise a superposition.
         '''
         # return np.array(self.repeats * [[int(str(j)[:-1] in str(i)) * 0.5 for j in self.gauss_modes] for i in self.combs])
-        return np.array([[i.contains(j).amplitude for j in self.gauss_modes] + [i.contains(j).phase for j in self.gauss_modes] for i in self])
+        return np.array([[i.contains(j) for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
 
     def get_classes(self):
         '''
         Get the num_classes result required for model creation.
         '''
-        return np.array(self.gauss_modes * 2, dtype=object) # * self.repeats
-    
+        return np.array(self.hermite_modes, dtype=object) # * self.repeats
+
     def randomise_amp_and_phase(self, mode):
         '''
         Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
@@ -610,7 +611,7 @@ def exposure_comparison(val, upper_bound, lower_bound):
 
 
 if __name__ == '__main__':
-     x1 = Laguerre(0, 0)
+     x1 = Hermite(1, 0)
      x1.add_phase(2)
      x1.amplitude = 0.2
      
