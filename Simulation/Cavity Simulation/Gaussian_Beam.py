@@ -482,7 +482,7 @@ class Generate_Data(list):
 
         # return np.array([[int(i.contains(j).amplitude and round(i.contains(j).phase / (2 * np.pi), 1) == p / 10) for j in self.hermite_modes for p in range(11)] for i in self]) # Phase via probability distribution
 
-        return np.array([[i.contains(j).amplitude for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
+        return np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [i.contains(j).phase / (2 * np.pi) for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
 
     def get_classes(self):
         '''
@@ -497,7 +497,7 @@ class Generate_Data(list):
 
         # return np.array(tmp, dtype=object)
 
-        return np.array(self.hermite_modes, dtype=object)
+        return np.array(self.hermite_modes * 2, dtype=object)
 
     def randomise_amp_and_phase(self, mode):
         '''

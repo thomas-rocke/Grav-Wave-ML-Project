@@ -69,8 +69,8 @@ class ML:
         self.step_speed = 0.067
         self.batch_size = 128
         self.success_performance = 0.99
-        self.optimizer = Adadelta()
-        # self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
+        # self.optimizer = Adadelta()
+        self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 
         # print("                    " + (len(str(self)) + 4) * "_")
         print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
@@ -125,7 +125,7 @@ class ML:
                     # self.update(data)
 
             except KeyboardInterrupt:
-                text("\n[WARN] Aborted!")
+                text("\n[WARN] Aborted at epoch " + str(self.epoch - 1) + "!")
             
             plt.show()
 
@@ -184,11 +184,11 @@ class ML:
         '''
         Loss function for assessing the performance of the neural network.
         '''
-        K.print_tensor(y_true)
-        K.print_tensor(y_pred)
+        # K.print_tensor(y_true)
+        # K.print_tensor(y_pred)
 
         loss = K.square(y_true - y_pred)
-        return K.sum(loss)
+        return K.mean(loss)
 
         # modes_true = [i.copy() for i in self.solutions]
         # K.print_tensor(y_true)
@@ -208,7 +208,7 @@ class ML:
         '''
         if self.input_shape == None: self.generate_prelim()
 
-        text("[MODEL] Generating model... (classes = " + str(len(self.solutions)) + ", shape = " + str(self.input_shape) + ")")
+        text("[MODEL] Generating model... (classes = " + str(len(self.solutions)) + ", input shape = " + str(self.input_shape) + ")")
 
         model = Sequential()
 
@@ -360,7 +360,7 @@ class ML:
         '''
         text("[LOAD] Loading model...")
 
-        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
+        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"loss": self.loss})
 
         self.history["loss"] = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
         self.history["binary_accuracy"] = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
@@ -383,7 +383,7 @@ class ML:
             os.makedirs("Models/" + str(self), exist_ok=True) # Create directory for model
             return True
     
-    def predict(self, data, threshold: float = 0.5, info: bool = True):
+    def predict(self, data, threshold: float = 0.2, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
@@ -394,13 +394,13 @@ class ML:
         prediction = self.model.predict(formatted_data)[0] # Make prediction using model (return index of superposition)
 
         modes = []
-        for i in range(len(prediction)): # For all values of prediction
+        for i in range(len(prediction) // 2): # For all values of prediction
             if info: text("[PRED] " + str(self.solutions[i]) + ": " + str(round(prediction[i], 3)) + Colour.FAIL + (prediction[i] > threshold) * " ***" + Colour.ENDC)
 
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.solutions[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                # modes[-1].phase = (i // 11) / 10
+                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
 
         # prediction = [(self.solutions[i], prediction[i]) for i in range(len(prediction))]
         # prediction = {i[0] : i[1] for i in prediction}
@@ -417,7 +417,7 @@ class ML:
 
         answer = Superposition(*modes) # Normalise the amplitudes
 
-        self.calculate_phase(data, answer)
+        # self.calculate_phase(data, answer)
 
         if info: text("[PRED] Done! Took " + str(round((perf_counter() - start_time) * 1000, 3)) + " milliseconds.")
         if info: text("[PRED] Reconstructed: " + str(answer) + "\n")
@@ -586,21 +586,18 @@ if __name__ == '__main__':
     max_order = 3
     number_of_modes = 3
     amplitude_variation = 0.4
-    phase_variation = 0.0
+    phase_variation = 0.6
     noise_variation = 0.0
     exposure = (0.0, 1.0)
-    repeats = 100
+    repeats = 20
 
     # Training and saving
 
-    train_and_save(max_order, number_of_modes, amplitude_variation, 0.0, noise_variation, exposure, repeats)
-    # train_and_save(5, 3, amplitude_variation, 0.0, noise_variation, exposure, 30)
-    # train_and_save(3, 5, amplitude_variation, 0.0, noise_variation, exposure, 30)
-    # train_and_save(5, 5, amplitude_variation, 0.0, noise_variation, exposure, 30)
+    train_and_save(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
 
     # Loading saved model
 
-    model = ML(max_order, number_of_modes, amplitude_variation, 0.0, noise_variation, exposure, repeats)
+    model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
     model.load()
 
     # Generating test data for comparisons
