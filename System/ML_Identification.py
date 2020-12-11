@@ -29,7 +29,7 @@ from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
 import keras.backend as K
-from keras.optimizers import SGD
+from keras.optimizers import SGD, Adadelta
 
 
 
@@ -69,7 +69,8 @@ class ML:
         self.step_speed = 0.067
         self.batch_size = 128
         self.success_performance = 0.99
-        self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
+        self.optimizer = Adadelta()
+        # self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 
         # print("                    " + (len(str(self)) + 4) * "_")
         print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
