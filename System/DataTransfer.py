@@ -4,7 +4,7 @@ import numpy as np
 import os
 import random
 import sys
-sys.path.insert(1, '../Simulation/Cavity Simulation') # Move to directory containing simulation files
+#sys.path.insert(1, '../Simulation/Cavity Simulation') # Move to directory containing simulation files
 from Gaussian_Beam import *
 from ML_Identification import *
 
@@ -26,7 +26,7 @@ def readCSV(fname, dir, headers=None, sep=',', skiprows=0):
     #Returns list of dicts of length rows, with each dict having columns keys.
 
     file_path = dir + os.sep + fname
-    raw_data = np.genfromtxt(file_path, delimiter=sep, skiprows=skiprows)
+    raw_data = np.genfromtxt(file_path, delimiter=sep)# skiprows=skiprows)
 
     if headers==None:
         headers = raw_data[0, :]
@@ -35,6 +35,7 @@ def readCSV(fname, dir, headers=None, sep=',', skiprows=0):
             d = dict()
             for j in range(len(headers)):
                 d[headers[j]] = raw_data[i+1, j]
+
             dict_list[i] = d
 
 
