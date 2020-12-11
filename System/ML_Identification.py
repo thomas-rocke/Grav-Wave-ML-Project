@@ -11,9 +11,9 @@
 import sys
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
-sys.path.insert(1, '../Simulation/Cavity Simulation') # Move to directory containing simulation files
+#sys.path.insert(1, '../Simulation/Cavity Simulation') # Move to directory containing simulation files
 
-from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data
+from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data, get_model_error
 from time import perf_counter
 import numpy as np
 import matplotlib.pyplot as plt
@@ -452,6 +452,28 @@ def train_and_save(max_order: int = 1, number_of_modes: int = 1, amplitude_varia
 # session = tf.compat.v1.Session(config=config)
 
 if __name__ == '__main__':
+    max_order = 3
+    number_of_modes = 5
+    amplitude_variation = 0.2
+    phase_variation = 0.0
+    noise_variation = 0.0
+    exposure = (0.0, 1.0)
+    repeats = 50
+
+    model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
+    #sys.path.insert(1, '../System') # Move to directory containing simulation files
+    model.load()
+
+    data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+
+    errs = get_model_error(model, data, 0.5)
+
+    print(errs[0])
+    print(errs[1])
+    plt.imshow(errs[2])
+    plt.show()
+
+    '''
     os.system('cls' if os.name == 'nt' else 'clear')
 
     print("█████▀█████████████████████████████████████████████████████████████████████████████\n"
@@ -486,4 +508,4 @@ if __name__ == '__main__':
     # sup = Superposition(Hermite(1,2), Hermite(2,0), Hermite(0,1))
     # prediction = model.predict(sup.superpose())
     # sup.show()
-    # prediction.show()
+    # prediction.show()'''
