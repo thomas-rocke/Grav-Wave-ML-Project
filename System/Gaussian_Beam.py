@@ -1,3 +1,4 @@
+<<<<<<< HEAD:Simulation/Cavity Simulation/Gaussian_Beam.py
 ##################################################
 ##########                              ##########
 ##########           GAUSSIAN           ##########
@@ -17,9 +18,6 @@ from tqdm import tqdm
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 import time
-import random
-import sys
-
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -76,7 +74,7 @@ class Hermite:
         x = self.copy()
         x *= val
         return x
-    
+
     def __rmul__(self, val):
         '''
         Magic method for reverse multiplication.
@@ -110,6 +108,16 @@ class Hermite:
 
         if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
         else: plt.show()
+
+#    def E(self, r, z):
+#        '''
+#        Electric field at a given radial distance and axial distance.
+#        '''
+#        w_ratio = self.w_0 / self.w(z)
+#        exp_1 = np.exp(-(r**2) / self.w(z)**2)
+#        exp_2 = np.exp(-1j * (self.k * z + self.k * (r**2 / (2 * self.R(z))) - self.phi(z)))
+#
+#        return np.array((w_ratio * exp_1 * exp_2) * self.amplitude * np.e**(1j*self.phase))
 
     def E_mode(self, x, y, z):
         '''
@@ -210,10 +218,9 @@ class Superposition(list):
         amplitudes = [i.amplitude for i in self]
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
 
-        lowest_order_phase = self.modes[0].phase # Find phase of simplest mode
         for i in range(len(self)): 
             self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
-            self[i].add_phase(1.0 - lowest_order_phase)
+            self[i].add_phase(self.modes[0].phase)
 
     def __str__(self):
         '''
@@ -252,12 +259,12 @@ class Superposition(list):
         '''
         Returns the mode that exists within the superposition.
         '''
-        return int(str(mode) in str(self))
-        # for i in self:
-        #     if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
-        #         return i
+        # return int(str(mode) in str(self))
+        for i in self:
+            if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
+                return i
 
-        # return Hermite(l=0, m=0, amplitude=0.0)
+        return Hermite(l=0, m=0, amplitude=0.0)
 
     def plot(self, save: bool = False, title: bool = True, constituents: bool = False):
         '''
@@ -287,7 +294,7 @@ class Superposition(list):
         
     def add_modes(self, mode, new_mode):
         '''
-        Combine mode amplitudes and phases in the event of Hermite duplicates
+        Combine mode amplitudes and phases in the event of Hermite duplicates.
         '''
         r1 = mode.amplitude
         r2 = new_mode.amplitude
@@ -377,6 +384,169 @@ class Laguerre(Superposition):
 
 
 
+
+class Generate_Data(list):
+    '''
+    Class representing many superpositions of multiple Guassian modes at a specified complexity.
+    '''
+
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True):
+        '''
+        Initialise the class with the required complexity.
+
+        'max_order': Max order of Guassian modes in superpositions (x > 0).
+        'number_of_modes': How many modes you want to superimpose together (x > 0).
+        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
+        '''
+        self.max_order = max_order
+        self.number_of_modes = number_of_modes
+        self.amplitude_variation = amplitude_variation
+        self.phase_variation = phase_variation
+        self.noise_variation = noise_variation
+        self.exposure = exposure
+        self.repeats = repeats
+
+        if info: print("\n_____| Generating Data |_____\n")
+        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: "
+                        + str(phase_variation) + "\nVariation in saturation noise: " + str(noise_variation) + "\nVariation in saturation exposure: " + str(exposure) + "\nRepeats of combinations: " + str(repeats) + "\n")
+        if info: print("Generating Gaussian modes...")
+
+        self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
+        self.gauss_modes = self.hermite_modes + self.laguerre_modes
+
+        if info: print("Done! Found " + str(len(self.hermite_modes)) + " hermite modes and " + str(len(self.laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
+
+        self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        self.combs = [i[j] for i in self.combs for j in range(len(i))]
+
+        super().__init__()
+
+        p = Pool(cpu_count())
+        self.extend(p.map(self.generate_process, self.combs * repeats))
+
+        if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+
+    def generate_process(self, item):
+        '''
+        Process for generating superposition objects across multiple threads in the CPU.
+        '''
+        randomised_item = [self.randomise_amp_and_phase(i) for i in item]
+        return Superposition(*randomised_item)
+
+    def plot(self, save: bool = False, title: bool = True):
+        '''
+        Plot and show / save all superpositions generated.
+        '''
+        if save:
+            print("Saving dataset...")
+
+            p = Pool(cpu_count())
+            p.map(self.save_process, self)
+
+            print("Done!\n")
+
+        else:
+            for i in self: i.plot(title=title)
+
+    def save_process(self, data):
+        '''
+        Process for saving images of the dataset across multiple threads in the CPU.
+        '''
+        data.plot(save=True)
+
+    def get_inputs(self, desc: str = None):
+        '''
+        Get all the superpositions for the dataset.
+        '''
+        # return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
+
+        # Below is support for multiprocessing of superpositions, however it is limited by disk speed and can cause memory overflow errors
+
+        p = Pool(cpu_count())
+        n = len(self) // (cpu_count() - 1)
+        jobs = [self[i:i + n] for i in range(0, len(self), n)]
+        threads = p.map(self.superpose_process, tqdm(jobs, desc))
+        return np.array([item for item in chain(*threads)])[..., np.newaxis]
+
+    def superpose_process(self, data):
+        '''
+        Process for superposing elements of the dataset across multiple threrads in the CPU.
+        '''
+        return [item.superpose(self.noise_variation, self.exposure) for item in data]
+
+    def get_outputs(self):
+        '''
+        Get all possible Gaussian modes that could comprise a superposition.
+        '''
+        # return np.array(self.repeats * [[int(str(j)[:-1] in str(i)) * 0.5 for j in self.gauss_modes] for i in self.combs])
+
+        # return np.array([[int(i.contains(j).amplitude and round(i.contains(j).phase / (2 * np.pi), 1) == p / 10) for j in self.hermite_modes for p in range(11)] for i in self]) # Phase via probability distribution
+
+        return np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [i.contains(j).phase / (2 * np.pi) for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
+
+    def get_classes(self):
+        '''
+        Get the num_classes result required for model creation.
+        '''
+        # tmp = []
+        # for i in range(11):
+        #     for j in self.hermite_modes:
+        #         mode = j.copy()
+        #         mode.phase = (i / 10) * (2 * np.pi)
+        #         tmp.append(mode)
+
+        # return np.array(tmp, dtype=object)
+
+        return np.array(self.hermite_modes * 2, dtype=object)
+
+    def randomise_amp_and_phase(self, mode):
+        '''
+        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
+        Returns new mode with randomised amp and phase.
+        '''
+        x = mode.copy()
+
+        x *= np.abs(round(np.random.normal(scale=self.amplitude_variation), 2) + 1)
+        x.add_phase(np.abs(round(np.random.normal(scale=self.phase_variation), 2)))
+
+        return x
+
+    def get_random(self):
+        '''
+        Returns a random superposition from the dataset.
+        '''
+        return self.__getitem__(np.random.randint(len(self)))
+
+    # def pool_handler(self, data, threads):
+    #     '''
+
+    #     '''
+    #     p = Pool(threads)
+    #     p.map(self.process, data)
+
+    # def process(self, data):
+    #     '''
+
+    #     '''
+    #     # print(self.combs.index(data), data)
+    #     data[0].append(Superposition(data[1], self.amplitude_variation))
+
+    # def __str__(self):
+    #     '''
+    #     Magic method for str() function.
+    #     '''
+    #     return self.__class__.__name__ + "(" + [self.__getitem__(i) for i in range(len(self))] + ")"
+
+    # def __repr__(self):
+    #     '''
+    #     Magic method for repr() function.
+    #     '''
+    #     return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ")"
+
+
+
+
 ##################################################
 ##########                              ##########
 ##########          FUNCTIONS           ##########
@@ -444,11 +614,69 @@ def exposure_comparison(val, upper_bound, lower_bound):
         val = lower_bound
     return val
 
+
+
+
 ##################################################
 ##########                              ##########
 ##########            MAIN              ##########
 ##########                              ##########
 ##################################################
 
-if __name__ == "__main__":
-    pass
+
+if __name__ == '__main__':
+     x1 = Hermite(1, 0)
+     x1.add_phase(2)
+     x1.amplitude = 0.2
+     
+     x2 = Hermite(0, 0)
+     x3 = Hermite(2, 1)
+     
+     x = Superposition(x1, x2, x3)
+     x.plot()
+
+
+
+
+##################################################
+##########                              ##########
+##########           TESTING            ##########
+##########                              ##########
+##################################################
+
+
+# def process(x):
+#     print("Process started for '" + x[0] + "' for k = " + str(x[1]) + " for event " + str(x[2]) + "...")
+#     fh.write_data(x[0], x[2], x[1])
+
+# def pool_handler(x, t):
+#     p = Pool(t)
+#     p.map(process, x)
+
+# if __name__ == '__main__':
+#     d = input("File: ")
+#     k = input("k: ")
+#     t = input("Threads: ")
+
+#     x = [(str(d), int(k), int(e)) for e in range(9999)]
+#     pool_handler(x, int(t))
+
+
+
+
+# TODO Animate Hermite-Gaussian modes as a GIF
+
+# data = []
+# for i in tqdm(range(1, 500)):
+#     mode = Hermite(0.4, 600, i)
+#     data.append(mode.E(X, Y))
+
+# def update(data):
+#     mat.set_data(data)
+#     return mat
+
+# def animate():
+#     for i in data: yield i # Animate the states of the game
+
+# mat = ax.imshow(np.real(mode.E(X, Y)))
+# anim = animation.FuncAnimation(fig, update, animate, interval=100, save_count=50) # Create the animation for state evolutio using Markov Chain
