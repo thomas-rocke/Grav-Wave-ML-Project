@@ -1,13 +1,9 @@
 # Grav-Wave-ML-Project
 
 ## File System
-### System
-The System subdirectory hosts all of the code and data required for Machine Learning.
-### Planning
-The Planning subdirectory hosts the code design criterion.
-### Documentation
-Documentation hosts the extracted documentation for each file.
 ### Simulation
-Simulation is where any simulations used to generate data are stored.
+The Simulation subdirectory hosts Legacy materials, including the setup for a Sin wave approximation experiment, and early beam images.
+### System
+The System subdirectory holds all of the python code behind the creation of modes, superpositions, beam images, as well as all machine learning and data handling scripts.
 
 ## Patch Notes
