@@ -39,6 +39,8 @@ def loadData(fname, path=None):
    return supers
 
 
+
+
 class Generate_Data(list):
     '''
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
@@ -115,6 +117,8 @@ class Generate_Data(list):
         '''
         # return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
 
+        # Below is support for multiprocessing of superpositions, however it is limited by disk speed and can cause memory overflow errors
+
         p = Pool(cpu_count())
         n = len(self) // (cpu_count() - 1)
         jobs = [self[i:i + n] for i in range(0, len(self), n)]
@@ -132,13 +136,25 @@ class Generate_Data(list):
         Get all possible Gaussian modes that could comprise a superposition.
         '''
         # return np.array(self.repeats * [[int(str(j)[:-1] in str(i)) * 0.5 for j in self.gauss_modes] for i in self.combs])
-        return np.array([[i.contains(j) for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
+
+        # return np.array([[int(i.contains(j).amplitude and round(i.contains(j).phase / (2 * np.pi), 1) == p / 10) for j in self.hermite_modes for p in range(11)] for i in self]) # Phase via probability distribution
+
+        return np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [i.contains(j).phase / (2 * np.pi) for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
 
     def get_classes(self):
         '''
         Get the num_classes result required for model creation.
         '''
-        return np.array(self.hermite_modes, dtype=object) # * self.repeats
+        # tmp = []
+        # for i in range(11):
+        #     for j in self.hermite_modes:
+        #         mode = j.copy()
+        #         mode.phase = (i / 10) * (2 * np.pi)
+        #         tmp.append(mode)
+
+        # return np.array(tmp, dtype=object)
+
+        return np.array(self.hermite_modes * 2, dtype=object)
 
     def randomise_amp_and_phase(self, mode):
         '''
@@ -157,6 +173,35 @@ class Generate_Data(list):
         Returns a random superposition from the dataset.
         '''
         return self.__getitem__(np.random.randint(len(self)))
+
+    # def pool_handler(self, data, threads):
+    #     '''
+
+    #     '''
+    #     p = Pool(threads)
+    #     p.map(self.process, data)
+
+    # def process(self, data):
+    #     '''
+
+    #     '''
+    #     # print(self.combs.index(data), data)
+    #     data[0].append(Superposition(data[1], self.amplitude_variation))
+
+    # def __str__(self):
+    #     '''
+    #     Magic method for str() function.
+    #     '''
+    #     return self.__class__.__name__ + "(" + [self.__getitem__(i) for i in range(len(self))] + ")"
+
+    # def __repr__(self):
+    #     '''
+    #     Magic method for repr() function.
+    #     '''
+    #     return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ")"
+
+
+
 
 class Dataset():
     '''
