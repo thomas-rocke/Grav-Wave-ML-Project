@@ -1,4 +1,3 @@
-<<<<<<< HEAD:Simulation/Cavity Simulation/Gaussian_Beam.py
 ##################################################
 ##########                              ##########
 ##########           GAUSSIAN           ##########
