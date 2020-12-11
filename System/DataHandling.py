@@ -160,6 +160,21 @@ class Generate_Data(list):
 
 class Dataset():
     '''
+    Class to load/generate dataset for Machine Learning
     '''
-    def __init__(self):
-        pass
+
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True):
+        '''
+        Initialise the class with the required complexity.
+
+        'max_order': Max order of Guassian modes in superpositions (x > 0).
+        'number_of_modes': How many modes you want to superimpose together (x > 0).
+        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
+        '''
+        self.max_order = max_order
+        self.number_of_modes = number_of_modes
+        self.amplitude_variation = amplitude_variation
+        self.phase_variation = phase_variation
+        self.noise_variation = noise_variation
+        self.exposure = exposure
+        self.repeats = repeats
