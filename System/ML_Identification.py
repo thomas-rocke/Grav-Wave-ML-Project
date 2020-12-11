@@ -575,25 +575,23 @@ def get_model_error(model, data_object:Generate_Data, test_number:int=10, sup:Su
         test_data = np.array([sup.copy() for i in range(test_number)]) # Make several copies of the target superposition
 
     test_data = np.array([data_object.randomise_amp_and_phase(i) for i in test_data]) # Randomise all amps and phases
-    
+
     model_predictions = np.array([model.predict(data.superpose()) for data in test_data]) # Predict superpositions through models
-    
-    
+
     test_amps = np.array([[mode.amplitude for mode in sup] for sup in test_data])
     model_amps = np.array([[mode.amplitude for mode in sup] for sup in model_predictions])
-    
+
     amp_err = (np.sum([(model_amps[i] - test_amps[i])**2 for i in range(len(test_amps))])/(len(test_amps) - 1))**0.5 # Predicts amplitude error assuming error is constant throughout multivariate space
-    
+
     test_phases = np.array([[mode.phase for mode in sup] for sup in test_data])
     model_phases = np.array([[mode.phase for mode in sup] for sup in model_predictions])
-    
+
     phase_err = (np.sum([(model_phases[i] - test_phases[i])**2 for i in range(len(test_phases))])/(len(test_phases) - 1))**0.5 # Predicts phase error assuming error is constant throughout multivariate space
-    
+
     test_imgs = np.array([sup.superpose() for sup in test_data])
     model_imgs = np.array([sup.superpose() for sup in model_predictions])
-    
+
     img_err = (np.sum([(model_imgs[i] - test_imgs[i])**2 for i in range(len(test_imgs))])/(len(test_imgs) - 1))**0.5 # Predicts img error assuming error is constant throughout multivariate space
-    
 
     return amp_err, phase_err, img_err
 
