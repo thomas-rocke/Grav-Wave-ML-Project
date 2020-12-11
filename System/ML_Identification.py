@@ -10,12 +10,13 @@
 # Imports
 import sys
 import os
+import random
 
-from tensorflow.python.keras.applications.vgg16 import VGG16
+#from tensorflow.python.keras.applications.vgg16 import VGG16
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
-#sys.path.insert(1, '../Simulation/Cavity Simulation') # Move to directory containing simulation files
 
-from Gaussian_Beam import Hermite, Superposition, Laguerre, Generate_Data, get_model_error
+from Gaussian_Beam import Hermite, Superposition, Laguerre
+from DataHandling import Generate_Data, Dataset
 from time import perf_counter
 import numpy as np
 import matplotlib.pyplot as plt
@@ -105,7 +106,7 @@ class ML:
             etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
             text("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + " or an accuracy of " + str(self.success_performance * 100) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
 
-            data = []
+            #data = []
             try:
                 for i in range(self.epoch, (self.max_epochs * (number_of_modes + 1 - self.start_number)) + 1): #, "[TRAIN] Training with " + str(number_of_modes) + " modes"):
                     history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=1)
@@ -560,6 +561,42 @@ def VGG16(input_shape, classes):
 
     return model
 
+
+def get_model_error(model, data_object:Generate_Data, test_number:int=10, sup:Superposition=None):
+    '''
+    Tests the accuracy of the model from data contained within data_object
+    
+    Assumes a gaussian resultant error through the Central Limit Theorem
+    
+    Tests on test_percent of the data given in the data_object
+    '''
+    if sup == None:
+        test_data = random.sample(data_object.combs, test_number) # Select superpositions randomly from combs
+    else:
+        test_data = np.array([sup.copy() for i in range(test_number)]) # Make several copies of the target superposition
+
+    test_data = np.array([data_object.randomise_amp_and_phase(i) for i in test_data]) # Randomise all amps and phases
+    
+    model_predictions = np.array([model.predict(data.superpose()) for data in test_data]) # Predict superpositions through models
+    
+    
+    test_amps = np.array([[mode.amplitude for mode in sup] for sup in test_data])
+    model_amps = np.array([[mode.amplitude for mode in sup] for sup in model_predictions])
+    
+    amp_err = (np.sum([(model_amps[i] - test_amps[i])**2 for i in range(len(test_amps))])/(len(test_amps) - 1))**0.5 # Predicts amplitude error assuming error is constant throughout multivariate space
+    
+    test_phases = np.array([[mode.phase for mode in sup] for sup in test_data])
+    model_phases = np.array([[mode.phase for mode in sup] for sup in model_predictions])
+    
+    phase_err = (np.sum([(model_phases[i] - test_phases[i])**2 for i in range(len(test_phases))])/(len(test_phases) - 1))**0.5 # Predicts phase error assuming error is constant throughout multivariate space
+    
+    test_imgs = np.array([sup.superpose() for sup in test_data])
+    model_imgs = np.array([sup.superpose() for sup in model_predictions])
+    
+    img_err = (np.sum([(model_imgs[i] - test_imgs[i])**2 for i in range(len(test_imgs))])/(len(test_imgs) - 1))**0.5 # Predicts img error assuming error is constant throughout multivariate space
+    
+
+    return amp_err, phase_err, img_err
 
 
 
