@@ -94,5 +94,3 @@ print(errs[0])
 print(errs[1])
 plt.imshow(errs[2])
 plt.show()
-    
-    

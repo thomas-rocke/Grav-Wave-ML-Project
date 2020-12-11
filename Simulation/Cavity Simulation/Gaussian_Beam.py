@@ -73,7 +73,7 @@ class Hermite:
         x = self.copy()
         x *= val
         return x
-    
+
     def __rmul__(self, val):
         '''
         Magic method for reverse multiplication.
@@ -217,10 +217,9 @@ class Superposition(list):
         amplitudes = [i.amplitude for i in self]
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
 
-        lowest_order_phase = self.modes[0].phase # Find phase of simplest mode
         for i in range(len(self)): 
             self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
-            self[i].add_phase(1.0 - lowest_order_phase)
+            self[i].add_phase(self.modes[0].phase)
 
     def __str__(self):
         '''
@@ -259,12 +258,12 @@ class Superposition(list):
         '''
         Returns the mode that exists within the superposition.
         '''
-        return int(str(mode) in str(self))
-        # for i in self:
-        #     if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
-        #         return i
+        # return int(str(mode) in str(self))
+        for i in self:
+            if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
+                return i
 
-        # return Hermite(l=0, m=0, amplitude=0.0)
+        return Hermite(l=0, m=0, amplitude=0.0)
 
     def plot(self, save: bool = False, title: bool = True, constituents: bool = False):
         '''
@@ -294,7 +293,7 @@ class Superposition(list):
         
     def add_modes(self, mode, new_mode):
         '''
-        Combine mode amplitudes and phases in the event of Hermite duplicates
+        Combine mode amplitudes and phases in the event of Hermite duplicates.
         '''
         r1 = mode.amplitude
         r2 = new_mode.amplitude
@@ -461,6 +460,8 @@ class Generate_Data(list):
         '''
         # return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
 
+        # Below is support for multiprocessing of superpositions, however it is limited by disk speed and can cause memory overflow errors
+
         p = Pool(cpu_count())
         n = len(self) // (cpu_count() - 1)
         jobs = [self[i:i + n] for i in range(0, len(self), n)]
@@ -478,13 +479,25 @@ class Generate_Data(list):
         Get all possible Gaussian modes that could comprise a superposition.
         '''
         # return np.array(self.repeats * [[int(str(j)[:-1] in str(i)) * 0.5 for j in self.gauss_modes] for i in self.combs])
-        return np.array([[i.contains(j) for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
+
+        # return np.array([[int(i.contains(j).amplitude and round(i.contains(j).phase / (2 * np.pi), 1) == p / 10) for j in self.hermite_modes for p in range(11)] for i in self]) # Phase via probability distribution
+
+        return np.array([[i.contains(j).amplitude for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
 
     def get_classes(self):
         '''
         Get the num_classes result required for model creation.
         '''
-        return np.array(self.hermite_modes, dtype=object) # * self.repeats
+        # tmp = []
+        # for i in range(11):
+        #     for j in self.hermite_modes:
+        #         mode = j.copy()
+        #         mode.phase = (i / 10) * (2 * np.pi)
+        #         tmp.append(mode)
+
+        # return np.array(tmp, dtype=object)
+
+        return np.array(self.hermite_modes, dtype=object)
 
     def randomise_amp_and_phase(self, mode):
         '''
