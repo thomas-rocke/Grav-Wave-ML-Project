@@ -10,6 +10,8 @@
 # Imports
 import sys
 import os
+
+from tensorflow.python.keras.applications.vgg16 import VGG16
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 sys.path.insert(1, '../Simulation/Cavity Simulation') # Move to directory containing simulation files
 
@@ -23,9 +25,11 @@ import tensorflow as tf
 import keras
 from keras.models import Sequential
 # from keras.layers import Dense, Conv2D, MaxPool2D, Flatten
-from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
-from keras.layers.convolutional import Conv2D, MaxPooling2D
+from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation, Input
+from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
+import keras.backend as K
+from keras.optimizers import SGD, Adadelta
 
 
 
@@ -55,19 +59,21 @@ class ML:
 
         self.model = None
         self.solutions = None
+        self.input_shape = None
         self.pixels = None
         self.epoch = 1
         self.history = {"loss": [], "binary_accuracy": [], "val_loss": [], "val_binary_accuracy": []}
 
-        self.max_epochs = 50
+        self.max_epochs = 200
         self.start_number = 2
-        self.step_speed = 0.068
+        self.step_speed = 0.067
         self.batch_size = 128
-        self.success_performance = 0.98
-        self.optimizer = "sgd"
+        self.success_performance = 0.99
+        self.optimizer = Adadelta()
+        # self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 
         # print("                    " + (len(str(self)) + 4) * "_")
-        print("____________________| " + str(self) + " |____________________\n")
+        print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
 
     def __str__(self):
         '''
@@ -89,8 +95,7 @@ class ML:
 
         # Initialisation
 
-        self.generate_prelim() # Generate preliminary data to determine all solutions (classes)
-        self.model = self.create_model(summary=False) # Create the model
+        self.model = self.create_model(summary=False) # Generate preliminary data to determine all solutions (classes) and create the model
 
         # Training
 
@@ -98,65 +103,75 @@ class ML:
             (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
 
             etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + " or an accuracy of " + str(int(self.success_performance * 100)) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
+            text("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + " or an accuracy of " + str(self.success_performance * 100) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
 
+            data = []
             try:
                 for i in range(self.epoch, (self.max_epochs * (number_of_modes + 1 - self.start_number)) + 1): #, "[TRAIN] Training with " + str(number_of_modes) + " modes"):
                     history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=1)
 
                     for i in self.history: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
                     self.epoch += 1
-    
+
                     if self.history["binary_accuracy"][-1] >= self.success_performance:
-                        print("[TRAIN] " + str(int(self.success_performance * 100)) + "% acccuracy achieved at epoch " + str(self.epoch - 1) + ".")
+                        text("[TRAIN] " + str(self.success_performance * 100) + "% acccuracy achieved at epoch " + str(self.epoch - 1) + ".")
                         break
 
-            except KeyboardInterrupt:
-                print("\n[WARN]  Aborted!")
+                    # if self.epoch == 2: 
+                    #     data = self.plot(False)
+                    #     plt.show(block=False)
+                    #     plt.pause(0.01)
+                    # self.plot(False)
+                    # self.update(data)
 
-            if self.epoch >= self.max_epochs * (number_of_modes + 1 - self.start_number): print("[WARN]  Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!")
-            print("[TRAIN] Done!\n")
+            except KeyboardInterrupt:
+                text("\n[WARN] Aborted!")
+            
+            plt.show()
+
+            if self.epoch >= self.max_epochs * (number_of_modes + 1 - self.start_number): text("[WARN] Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!")
+            text("[TRAIN] Done!\n")
 
             self.evaluate(val_inputs, val_outputs) # Evaluation
 
-        print("[INFO]  Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n")
+        text("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n")
 
     def generate_prelim(self):
         '''
         Gather preliminary data for the training of the model.
         '''
-        print("[INIT]  Generating preliminary data for model generation...")
+        text("[INIT] Generating preliminary data for model generation...")
 
         prelim_data = Generate_Data(self.max_order, self.number_of_modes, info=False)
         self.solutions = prelim_data.get_classes()
         self.input_shape = (prelim_data[0].pixels, prelim_data[0].pixels, 1)
 
-        print("[INIT]  Done!\n")
+        text("[INIT] Done!\n")
 
     def load_data(self, number_of_modes: int = 1):
         '''
         Load training and testing data.
         '''
         try:
-            print("[DATA]  Generating data for superpositions of " + str(number_of_modes) + " different modes...")
-            print("[DATA]  |")
+            text("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes...")
+            text("[DATA] |")
 
             train_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
-            train_inputs = train_data.get_inputs("[DATA]  |-> " + str(self.repeats) + " datasets of training data")
+            train_inputs = train_data.get_inputs(Colour.OKGREEN + "[DATA] " + Colour.ENDC + "|-> " + str(self.repeats) + " datasets of training data")
             train_outputs = train_data.get_outputs()
 
-            print("[DATA]  |")
+            text("[DATA] |")
 
             val_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
-            val_inputs = val_data.get_inputs("[DATA]  |-> 1 dataset of validation data")
+            val_inputs = val_data.get_inputs(Colour.OKGREEN + "[DATA] " + Colour.ENDC + "|-> 1 dataset of validation data")
             val_outputs = val_data.get_outputs()
 
-            print("[DATA]  V")
-            print("[DATA]  Done!\n")
+            text("[DATA] V")
+            text("[DATA] Done!\n")
 
-        except MemoryError:
-            print("[DATA] V")
-            print("[FATAL] Memory overflow!\n")
+        except MemoryError: # TODO Is not called when memory overflow occurs
+            text("[DATA] V")
+            text("[FATAL] Memory overflow!\n")
             sys.exit()
 
         # If our loss function was 'categorical_crossentropy':
@@ -165,11 +180,35 @@ class ML:
 
         return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
+    def loss(self, y_true, y_pred):
+        '''
+        Loss function for assessing the performance of the neural network.
+        '''
+        K.print_tensor(y_true)
+        K.print_tensor(y_pred)
+
+        loss = K.square(y_true - y_pred)
+        return K.sum(loss)
+
+        # modes_true = [i.copy() for i in self.solutions]
+        # K.print_tensor(y_true)
+        # K.print_tensor(y_true[0])
+        # for i in range(len(modes_true)): modes_true[i].amplitude = K.eval(y_true)[i]
+        # sup_true = Superposition(*modes_true)
+
+        # modes_pred = [i.copy() for i in self.solutions]
+        # for i in range(len(modes_pred)): modes_pred[i].amplitude = K.eval(y_pred)[i]
+        # sup_pred = Superposition(*modes_pred)
+
+        # return K.mean(K.square(sup_true.superpose() - sup_pred.superpose()), axis=1)
+
     def create_model(self, summary: bool = False):
         '''
         Create the Keras model in preparation for training.
         '''
-        print("[MODEL] Generating model... (classes = " + str(len(self.solutions)) + ", shape = " + str(self.input_shape) + ")")
+        if self.input_shape == None: self.generate_prelim()
+
+        text("[MODEL] Generating model... (classes = " + str(len(self.solutions)) + ", shape = " + str(self.input_shape) + ")")
 
         model = Sequential()
 
@@ -180,32 +219,7 @@ class ML:
         # Using the VGG16 convolutional neural net (CNN) architecture which was used to win ILSVR (Imagenet) competition in 2014.
         # It is considered to be one of the best vision model architectures to date.
 
-        # model.add(Conv2D(input_shape=self.input_shape, filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
-
-        # model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
-
-        # model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
-
-        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
-
-        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-        # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
-
-        # model.add(Flatten())
-        # model.add(Dense(units=4096, activation="relu"))
-        # model.add(Dense(units=4096, activation="relu"))
+        # Our custom architecture
 
         model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
         model.add(Activation('relu'))
@@ -219,13 +233,13 @@ class ML:
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
 
-        # model.add(Conv2D(128, (3, 3), padding='same'))
-        # model.add(Activation('relu'))
-        # model.add(MaxPooling2D(pool_size=(2, 2)))
-        # model.add(Dropout(0.2))
-        # model.add(BatchNormalization())
-
         model.add(Conv2D(128, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
+
+        model.add(Conv2D(256, (3, 3), padding='same'))
         model.add(Activation('relu'))
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
@@ -233,12 +247,12 @@ class ML:
         model.add(Flatten())
         model.add(Dropout(0.2))
 
-        # model.add(Dense(256, kernel_constraint=maxnorm(3)))
-        # model.add(Activation('relu'))
-        # model.add(Dropout(0.2))
-        # model.add(BatchNormalization())
+        model.add(Dense(512, kernel_constraint=maxnorm(3)))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.2))
+        model.add(BatchNormalization())
 
-        model.add(Dense(64, kernel_constraint=maxnorm(3)))
+        model.add(Dense(128, kernel_constraint=maxnorm(3)))
         model.add(Activation('relu'))
         model.add(Dropout(0.2))
         model.add(BatchNormalization())
@@ -246,14 +260,15 @@ class ML:
         model.add(Dense(units=len(self.solutions)))
         model.add(Activation('sigmoid'))
 
-        model.compile(loss='mean_squared_error', optimizer=self.optimizer, metrics=['binary_accuracy'])
+        # model = VGG16(self.input_shape, len(self.solutions)) # Override model with VGG16 model
+        model.compile(loss=self.loss, optimizer=self.optimizer, metrics=["binary_accuracy"])
 
         # We choose sigmoid and binary_crossentropy here because we have a multilabel neural network, which becomes K binary
         # classification problems. Using softmax would be wrong as it raises the probabiity on one class and lowers others.
 
-        print("[MODEL] Done!\n")
-        if summary: print(model.summary())
-        if summary: keras.utils.plot_model(model, str(self), show_shapes=True)
+        text("[MODEL] Done!\n")
+        if summary: text(model.summary())
+        # if summary: keras.utils.plot_model(model, str(self), show_shapes=True) # TODO Make work using packages
 
         return model
 
@@ -261,27 +276,42 @@ class ML:
         '''
         Evaluate the model using some validation data.
         '''
-        print("[EVAL]  Evaluating...")
+        text("[EVAL] Evaluating...")
 
         scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
 
-        print("[EVAL]  Done! Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".\n")
+        text("[EVAL] Done! Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".\n")
+
+    def update(self, data):
+        '''
+        Update the history plot.
+        '''
+        t = np.arange(1, self.epoch)
+        data[0].set_xdata(t)
+        data[1].set_xdata(t)
+        data[2].set_xdata(t)
+        data[3].set_xdata(t)
+        data[0].set_ydata(self.history["loss"])
+        data[1].set_ydata(self.history["binary_accuracy"])
+        data[2].set_ydata(self.history["val_loss"])
+        data[3].set_ydata(self.history["val_binary_accuracy"])
+        plt.pause(0.0001)
 
     def plot(self, info: bool = True):
         '''
         Plot the history of the model whilst training.
         '''
-        if info: print("[PLOT]  Plotting history...")
+        if info: text("[PLOT] Plotting history...")
 
         fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
         fig.suptitle("Training and Validation History for " + str(self))
 
         t = np.arange(1, self.epoch)
 
-        ax1.plot(t, self.history["loss"], label="Training Loss")
-        ax2.plot(t, self.history["binary_accuracy"], label="Training Accuracy")
-        ax1.plot(t, self.history["val_loss"], label="Validation Loss")
-        ax2.plot(t, self.history["val_binary_accuracy"], label="Validation Accuracy")
+        data1 = ax1.plot(t, self.history["loss"], label="Training Loss")[0]
+        data2 = ax2.plot(t, self.history["binary_accuracy"], label="Training Accuracy")[0]
+        data3 = ax1.plot(t, self.history["val_loss"], label="Validation Loss")[0]
+        data4 = ax2.plot(t, self.history["val_binary_accuracy"], label="Validation Accuracy")[0]
 
         ax1.set_ylabel("Loss")
         ax2.set_xlabel("Epoch")
@@ -298,7 +328,9 @@ class ML:
 
         if info:
             plt.show()
-            print("[PLOT]  Done!\n")
+            text("[PLOT] Done!\n")
+
+        return (data1, data2, data3, data4)
 
     def save(self):
         '''
@@ -306,7 +338,7 @@ class ML:
         '''
         if not self.check_trained(): return
 
-        print("[SAVE]  Saving model...")
+        text("[SAVE] Saving model...")
 
         self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
@@ -320,13 +352,13 @@ class ML:
         self.plot(info=False)
         plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
 
-        print("[SAVE]  Done!\n")
+        text("[SAVE] Done!\n")
 
     def load(self):
         '''
         Load a saved model.
         '''
-        print("[LOAD]  Loading model...")
+        text("[LOAD] Loading model...")
 
         self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")
 
@@ -338,36 +370,37 @@ class ML:
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
         self.solutions = [eval(i.replace("HG", "Hermite")) for i in self.solutions]
 
-        print("[LOAD]  Done!\n")
+        text("[LOAD] Done!\n")
 
     def check_trained(self):
         '''
         Check if the model has been trained yet.
         '''
         if self.model == None:
-            print("[ERROR] Model not yet trained!")
+            text("[FATAL] Model not yet trained!")
             return False
         else:
             os.makedirs("Models/" + str(self), exist_ok=True) # Create directory for model
             return True
     
-    def predict(self, data, threshold: float = 0.6, info: bool = True):
+    def predict(self, data, threshold: float = 0.5, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
         start_time = perf_counter()
-        if info: print("[PRED]  Predicting... (shape = " + str(data.shape) + ")")
+        if info: text("[PRED] Predicting... (shape = " + str(data.shape) + ")")
 
-        data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
-        prediction = self.model.predict(data)[0] # Make prediction using model (return index of superposition)
+        formatted_data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
+        prediction = self.model.predict(formatted_data)[0] # Make prediction using model (return index of superposition)
 
         modes = []
         for i in range(len(prediction)): # For all values of prediction
-            if info: print("[PRED]  " + str(self.solutions[i]) + ": " + str(round(prediction[i], 3)) + (prediction[i] > threshold) * " ***")
+            if info: text("[PRED] " + str(self.solutions[i]) + ": " + str(round(prediction[i], 3)) + Colour.FAIL + (prediction[i] > threshold) * " ***" + Colour.ENDC)
 
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.solutions[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
+                # modes[-1].phase = (i // 11) / 10
 
         # prediction = [(self.solutions[i], prediction[i]) for i in range(len(prediction))]
         # prediction = {i[0] : i[1] for i in prediction}
@@ -378,10 +411,16 @@ class ML:
 
         # for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
 
+        if len(modes) == 0:
+            text("[FATAL] Prediction failed! A threshold of " + str(threshold) + " is likely too high.\n")
+            sys.exit()
+
         answer = Superposition(*modes) # Normalise the amplitudes
 
-        if info: print("[PRED]  Done! Took " + str(round((perf_counter() - start_time) * 1000, 3)) + " milliseconds.")
-        if info: print("[PRED]  Reconstructed: " + str(answer) + "\n")
+        self.calculate_phase(data, answer)
+
+        if info: text("[PRED] Done! Took " + str(round((perf_counter() - start_time) * 1000, 3)) + " milliseconds.")
+        if info: text("[PRED] Reconstructed: " + str(answer) + "\n")
 
         return answer
 
@@ -389,7 +428,7 @@ class ML:
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
-        print("[PRED]  Actual: " + str(sup))
+        text("[PRED] Actual: " + str(sup))
 
         pred = self.predict(sup.superpose())
 
@@ -406,6 +445,31 @@ class ML:
         if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
         else: plt.show()
 
+    def calculate_phase(self, data, superposition: Superposition):
+        '''
+        Calculate the phases for modes in the superposition that minimises the MSE to the original data.
+        '''
+        for mode in superposition:
+            sups = []
+            for phase in range(11):
+                mode.phase = round((phase / 10) * (2 * np.pi), 2)
+                sups.append(np.mean(np.square(superposition.superpose() - data)))
+            mode.phase = round((np.argmin(sups) / 10) * (2 * np.pi), 2)
+
+
+
+
+class Colour:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 
 
@@ -416,11 +480,20 @@ class ML:
 ##################################################
 
 
+def text(message):
+    '''
+    Print message in the format given.
+    '''
+    if "INFO" in message: print(Colour.OKBLUE + message[:7] + Colour.ENDC + message[7:])
+    elif "WARN" in message: print(Colour.WARNING + message[:7] + Colour.ENDC + message[7:])
+    elif "FATAL" in message: print(Colour.FAIL + message[:7] + Colour.ENDC + message[7:])
+    else: print(Colour.OKGREEN + message[:7] + Colour.ENDC + message[7:])
+
 def process(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats):
     '''
     Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
     '''
-    print("[INFO]  Done!\n")
+    text("[INFO] Done!\n")
 
     model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
     model.train()
@@ -430,11 +503,62 @@ def train_and_save(max_order: int = 1, number_of_modes: int = 1, amplitude_varia
     '''
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
-    print("[INFO]  Starting process to ensure GPU memory is freed after taining is complete...")
+    text("[INFO] Starting process to ensure GPU memory is freed after taining is complete...")
 
     p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats))
     p.start()
     p.join()
+
+def VGG16(input_shape, classes):
+    '''
+    Returns the VGG16 model.
+    '''
+    model = Sequential()
+
+    model.add(ZeroPadding2D((1, 1), input_shape=input_shape))
+    model.add(Convolution2D(64, (3, 3), activation='relu'))
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(128, (3, 3), activation='relu'))
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(128, (3, 3), activation='relu'))
+    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(256, (3, 3), activation='relu'))
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(256, (3, 3), activation='relu'))
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(256, (3, 3), activation='relu'))
+    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(512, (3, 3), activation='relu'))
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(512, (3, 3), activation='relu'))
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(512, (3, 3), activation='relu'))
+    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(512, (3, 3), activation='relu'))
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(512, (3, 3), activation='relu'))
+    model.add(ZeroPadding2D((1, 1)))
+    model.add(Convolution2D(512, (3, 3), activation='relu'))
+    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+    model.add(Flatten())
+    model.add(Dense(4096, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(4096, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(classes, activation='sigmoid'))
+
+    return model
 
 
 
@@ -460,20 +584,23 @@ if __name__ == '__main__':
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
     max_order = 3
-    number_of_modes = 5
-    amplitude_variation = 0.2
+    number_of_modes = 3
+    amplitude_variation = 0.4
     phase_variation = 0.0
     noise_variation = 0.0
     exposure = (0.0, 1.0)
-    repeats = 50
+    repeats = 100
 
     # Training and saving
 
-    train_and_save(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
+    train_and_save(max_order, number_of_modes, amplitude_variation, 0.0, noise_variation, exposure, repeats)
+    # train_and_save(5, 3, amplitude_variation, 0.0, noise_variation, exposure, 30)
+    # train_and_save(3, 5, amplitude_variation, 0.0, noise_variation, exposure, 30)
+    # train_and_save(5, 5, amplitude_variation, 0.0, noise_variation, exposure, 30)
 
     # Loading saved model
 
-    model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
+    model = ML(max_order, number_of_modes, amplitude_variation, 0.0, noise_variation, exposure, repeats)
     model.load()
 
     # Generating test data for comparisons
