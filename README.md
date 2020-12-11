@@ -1,4 +1,6 @@
 # Grav-Wave-ML-Project
+Project repo for the 2020 Gravitational Waves Masters project.
+Use the "Issues" tab to add new feature requests, to report bugs, to see current focuses, or to see progress towards future milestones.
 
 ## File System
 ### Simulation
