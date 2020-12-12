@@ -104,7 +104,7 @@ class ML:
             (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
 
             etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print(text("[TRAIN] Training stage " + str(number_of_modes - 1) + "..."))
+            print(text("[TRAIN] Training stage " + str(number_of_modes - 1) + "/" + str(self.number_of_modes - 1) + "..."))
             print(text("[TRAIN] |"))
             print(text("[TRAIN] |-> Dataset             :  " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
             print(text("[TRAIN] |-> Success Condition   :  A loss of " + str(self.success_loss) + " or a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "."))
@@ -118,36 +118,28 @@ class ML:
                     for i in self.history: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
                     self.epoch += 1
 
-                    if self.history["loss"][-1] < self.success_loss:
+                    if self.history["loss"][-1] < self.success_loss: # Loss has reached success level
                         print(text("[TRAIN] |"))
                         print(text("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(self.epoch - 1) + "."))
                         break
 
                     if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
-                        print(text("[TRAIN] |"))
                         print(text("[TRAIN] V"))
                         print(text("[FATAL] Training failed! Gradient descent diverged at epoch " + str(self.epoch - 1) + ".\n"))
                         sys.exit()
 
-                    # if self.epoch == 2: 
-                    #     data = self.plot(False)
-                    #     plt.show(block=False)
-                    #     plt.pause(0.01)
-                    # self.plot(False)
-                    # self.update(data)
+                    if self.epoch >= self.max_epochs * (number_of_modes + 1 - self.start_number): # Reached max epoch
+                        print(text("[TRAIN] |"))
+                        print(text("[WARN]  |-> Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!"))
 
             except KeyboardInterrupt:
                 print(text("[TRAIN] |"))
                 print(text("[WARN]  |-> Aborted at epoch " + str(self.epoch) + "!"))
 
-            plt.show()
-
-            if self.epoch >= self.max_epochs * (number_of_modes + 1 - self.start_number):
-                print(text("[TRAIN] |"))
-                print(text("[WARN]  |-> Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!"))
-
             print(text("[TRAIN] |"))
-            self.evaluate(val_inputs, val_outputs) # Evaluation
+            print(text("[TRAIN] |-> Evaluating          :  "), end='')
+            scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
+            print("Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".")
             print(text("[TRAIN] V"))
             print(text("[TRAIN] Done!\n"))
 
@@ -185,15 +177,15 @@ class ML:
 
         return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
-    def loss(self, y_true, y_pred):
-        '''
-        Loss function for assessing the performance of the neural network.
-        '''
+    # def loss(self, y_true, y_pred):
+    #     '''
+    #     Loss function for assessing the performance of the neural network.
+    #     '''
         # K.print_tensor(y_true)
         # K.print_tensor(y_pred)
 
-        loss = K.square(y_true - y_pred)
-        return K.mean(loss)
+        # loss = K.square(y_true - y_pred)
+        # return K.mean(loss)
 
         # modes_true = [i.copy() for i in self.solutions]
         # K.print_tensor(y_true)
@@ -282,28 +274,20 @@ class ML:
 
         return model
 
-    def evaluate(self, val_inputs, val_outputs):
-        '''
-        Evaluate the model using some validation data.
-        '''
-        print(text("[TRAIN] |-> Evaluating          :  "), end='')
-        scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
-        print("Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".")
-
-    def update(self, data):
-        '''
-        Update the history plot.
-        '''
-        t = np.arange(1, self.epoch)
-        data[0].set_xdata(t)
-        data[1].set_xdata(t)
-        data[2].set_xdata(t)
-        data[3].set_xdata(t)
-        data[0].set_ydata(self.history["loss"])
-        data[1].set_ydata(self.history["binary_accuracy"])
-        data[2].set_ydata(self.history["val_loss"])
-        data[3].set_ydata(self.history["val_binary_accuracy"])
-        plt.pause(0.0001)
+    # def update(self, data):
+    #     '''
+    #     Update the history plot.
+    #     '''
+    #     t = np.arange(1, self.epoch)
+    #     data[0].set_xdata(t)
+    #     data[1].set_xdata(t)
+    #     data[2].set_xdata(t)
+    #     data[3].set_xdata(t)
+    #     data[0].set_ydata(self.history["loss"])
+    #     data[1].set_ydata(self.history["binary_accuracy"])
+    #     data[2].set_ydata(self.history["val_loss"])
+    #     data[3].set_ydata(self.history["val_binary_accuracy"])
+    #     plt.pause(0.0001)
 
     def plot(self, info: bool = True):
         '''
@@ -346,7 +330,7 @@ class ML:
         '''
         if not self.check_trained(): return
 
-        print(text("[SAVE] Saving model..."))
+        print(text("[SAVE] Saving model..."), end='')
 
         self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
@@ -360,13 +344,13 @@ class ML:
         self.plot(info=False)
         plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
 
-        print(text("[SAVE] Done!\n"))
+        print("Done!\n")
 
     def load(self):
         '''
         Load a saved model.
         '''
-        print(text("[LOAD] Loading model..."))
+        print(text("[LOAD] Loading model..."), end='')
 
         self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")#, custom_objects={"loss": self.loss})
 
@@ -378,7 +362,7 @@ class ML:
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
         self.solutions = [eval(i.replace("HG", "Hermite")) for i in self.solutions]
 
-        print(text("[LOAD] Done!\n"))
+        print("Done!\n")
 
     def check_trained(self):
         '''
@@ -397,13 +381,14 @@ class ML:
         '''
         start_time = perf_counter()
         if info: print(text("[PRED] Predicting... (shape = " + str(data.shape) + ")"))
+        if info: print(text("[PRED] |"))
 
         formatted_data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
         prediction = self.model.predict(formatted_data)[0] # Make prediction using model (return index of superposition)
 
         modes = []
         for i in range(len(prediction) // 2): # For all values of prediction
-            if info: print(text("[PRED] " + str(self.solutions[i]) + ": " + str(round(prediction[i], 3)) + Colour.FAIL + (prediction[i] > threshold) * " ***" + Colour.ENDC))
+            if info: print(text("[PRED] |-> " + str(self.solutions[i]) + ": " + str(round(prediction[i], 3)) + Colour.FAIL + (prediction[i] > threshold) * " ***" + Colour.ENDC))
 
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.solutions[i].copy()) # Copy the corresponding solution to modes
@@ -418,6 +403,8 @@ class ML:
         # amplitudes = list(prediction.values())[-self.number_of_modes:]
 
         # for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
+
+        if info: print(text("[PRED] V"))
 
         if len(modes) == 0:
             print(text("[FATAL] Prediction failed! A threshold of " + str(threshold) + " is likely too high.\n"))
@@ -535,7 +522,8 @@ def text(message):
     message = message.replace("[INIT]",     Colour.OKGREEN + "[INIT]" + Colour.ENDC)
     message = message.replace("[DATA]",     Colour.OKGREEN + "[DATA]" + Colour.ENDC)
     message = message.replace("[TRAIN]",    Colour.OKGREEN + "[TRAIN]" + Colour.ENDC)
-    message = message.replace("[EVAL]",     Colour.OKGREEN + "[EVAL]" + Colour.ENDC)
+    message = message.replace("[SAVE]",     Colour.OKGREEN + "[SAVE]" + Colour.ENDC)
+    message = message.replace("[LOAD]",     Colour.OKGREEN + "[LOAD]" + Colour.ENDC)
     return message
     # if " |->" in message: return (Colour.OKGREEN + message[:7] + Colour.OKCYAN + message[7:11] + Colour.ENDC + message[11:])
     # elif " |" in message: return (Colour.OKGREEN + message[:7] + Colour.OKCYAN + message[7:9] + Colour.ENDC + message[9:])
