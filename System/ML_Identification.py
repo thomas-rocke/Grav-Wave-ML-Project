@@ -148,7 +148,6 @@ class ML:
 
             print(text("[TRAIN] |"))
             self.evaluate(val_inputs, val_outputs) # Evaluation
-            print(text("[TRAIN] |"))
             print(text("[TRAIN] V"))
             print(text("[TRAIN] Done!\n"))
 
