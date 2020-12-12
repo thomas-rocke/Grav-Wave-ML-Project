@@ -171,7 +171,7 @@ class Generate_Data(list):
         x = mode.copy()
 
         x *= np.abs(np.random.normal(scale=self.amplitude_variation) + 1)
-        x.add_phase(np.abs(np.random.normal(scale=self.phase_variation)))
+        x.add_phase(np.random.normal(scale=self.phase_variation))
 
         return x
 
