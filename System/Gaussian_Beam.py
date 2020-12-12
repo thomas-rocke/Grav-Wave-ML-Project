@@ -17,9 +17,6 @@ from tqdm import tqdm
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 import time
-import random
-import sys
-
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -45,7 +42,7 @@ class Hermite:
         self.l = l
         self.m = m
         self.amplitude = amplitude # 0 -> 1
-        self.phase = phase # 0 -> 2π
+        self.phase = phase # -π -> π
         self.w_0 = w_0 # Waist radius
         self.wavelength = wavelength
         self.n = n
@@ -67,7 +64,7 @@ class Hermite:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(self.amplitude) + ", " + str(self.phase) + ")"
+        return self.__class__.__name__ + "(" + str(self.l) + ", " + str(self.m) + ", " + str(round(self.amplitude, 2)) + ", " + str(round(self.phase, 2)) + ")"
 
     def __mul__(self, val):
         '''
@@ -76,7 +73,7 @@ class Hermite:
         x = self.copy()
         x *= val
         return x
-    
+
     def __rmul__(self, val):
         '''
         Magic method for reverse multiplication.
@@ -96,20 +93,15 @@ class Hermite:
         '''
         return Hermite(self.l, self.m, self.amplitude, self.phase, self.w_0, self.wavelength, self.n)
 
-    def plot(self, save: bool = False, title: bool = True):
-        '''
-        Plot the Gaussian mode.
-        '''
-        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / self.pixels), np.arange(-1.2, 1.2, 2.4 / self.pixels))
-
-        plt.figure(self.__class__.__name__)
-        plt.imshow(self.I(X, Y, 0), cmap='Greys_r')
-
-        if title: plt.title(str(self))
-        plt.axis('off')
-
-        if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
-        else: plt.show()
+#    def E(self, r, z):
+#        '''
+#        Electric field at a given radial distance and axial distance.
+#        '''
+#        w_ratio = self.w_0 / self.w(z)
+#        exp_1 = np.exp(-(r**2) / self.w(z)**2)
+#        exp_2 = np.exp(-1j * (self.k * z + self.k * (r**2 / (2 * self.R(z))) - self.phi(z)))
+#
+#        return np.array((w_ratio * exp_1 * exp_2) * self.amplitude * np.e**(1j*self.phase))
 
     def E_mode(self, x, y, z):
         '''
@@ -167,12 +159,27 @@ class Hermite:
 
         return t1 * t2 * t3 * special.eval_hermite(J, t4) * t5
 
+    def plot(self, save: bool = False, title: bool = True):
+        '''
+        Plot the Gaussian mode.
+        '''
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / self.pixels), np.arange(-1.2, 1.2, 2.4 / self.pixels))
+
+        plt.figure(self.__class__.__name__)
+        plt.imshow(self.I(X, Y, 0), cmap='jet')
+
+        if title: plt.title(str(self))
+        plt.axis('off')
+
+        if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
+        else: plt.show()
+
     def add_phase(self, phase):
         '''
         Adds some phase value to current mode phase
         '''
-        self.phase += phase
-        self.phase = round(self.phase % (2 * np.pi), 2)
+        self.phase += np.pi + phase # Moving from -π -> π to 0 -> 2π and adding extra phase
+        self.phase = (self.phase % (2 * np.pi)) - np.pi # Ensuring phase stays within 2π, then moving back to -π -> π and rounding
 
 
 
@@ -186,6 +193,9 @@ class Superposition(list):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
+        self.noise_variation = 0.0
+        self.exposure = (0.0, 1.0)
+
         # Merge Laguerre modes into the Hermite basis set
         mode_list = []
         for mode in modes:
@@ -210,10 +220,7 @@ class Superposition(list):
         amplitudes = [i.amplitude for i in self]
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
 
-        lowest_order_phase = self.modes[0].phase # Find phase of simplest mode
-        for i in range(len(self)): 
-            self[i].amplitude = round(normalised_amplitudes[i], 2) # Set the normalised amplitude variations to the modes
-            self[i].add_phase(1.0 - lowest_order_phase)
+        for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
 
     def __str__(self):
         '''
@@ -252,12 +259,12 @@ class Superposition(list):
         '''
         Returns the mode that exists within the superposition.
         '''
-        return int(str(mode) in str(self))
-        # for i in self:
-        #     if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
-        #         return i
+        # return int(str(mode) in str(self))
+        for i in self:
+            if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
+                return i
 
-        # return Hermite(l=0, m=0, amplitude=0.0)
+        return Hermite(l=0, m=0, amplitude=0.0)
 
     def plot(self, save: bool = False, title: bool = True, constituents: bool = False):
         '''
@@ -265,29 +272,41 @@ class Superposition(list):
         '''
         if constituents: [i.show() for i in self] # Plot the constituent Gaussian modes
 
-        plt.figure(self.__class__.__name__)
-        plt.imshow(self.superpose(), cmap='Greys_r')
+        fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
 
-        if title: plt.title(str(self))
-        plt.axis('off')
+        ax1.imshow(self.superpose(), cmap='jet')
+        ax2.imshow(self.phase_map(), cmap='jet')
+
+        if title: fig.suptitle(str(self))
+        ax1.axis('off')
+        ax2.axis('off')
 
         if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
         else: plt.show()
 
-    def superpose(self, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0)):
+    def superpose(self):
         '''
         Compute the superposition of the Gaussian modes.
         '''
         X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / self.pixels), np.arange(-1.2, 1.2, 2.4 / self.pixels))
 
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
-        # superposition = np.abs(self.E_mode(X, Y, 0)**2)
 
-        return add_exposure(add_noise(superposition / np.linalg.norm(superposition), noise_variation), exposure) # Normalise the superposition and add noise and exposure effects
-        
+        return add_exposure(add_noise(superposition / np.linalg.norm(superposition), self.noise_variation), self.exposure) # Normalise the superposition and add noise and exposure effects
+
+    def phase_map(self):
+        '''
+        Returns the phase map for the superposition.
+        '''
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / self.pixels), np.arange(-1.2, 1.2, 2.4 / self.pixels))
+
+        superposition = sum([i.E_mode(X, Y, 0) for i in self])**2
+
+        return np.arctan(np.imag(superposition / np.real(superposition)))
+
     def add_modes(self, mode, new_mode):
         '''
-        Combine mode amplitudes and phases in the event of Hermite duplicates
+        Combine mode amplitudes and phases in the event of Hermite duplicates.
         '''
         r1 = mode.amplitude
         r2 = new_mode.amplitude
@@ -345,7 +364,7 @@ class Laguerre(Superposition):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ", " + str(self.amplitude) + ", " + str(self.phase) + ")"
+        return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ", " + str(round(self.amplitude, 2)) + ", " + str(round(self.phase, 2)) + ")"
 
     def __mul__(self, value):
         '''
@@ -365,8 +384,8 @@ class Laguerre(Superposition):
         '''
         Add phase to superposition, and propagate down to component modes.
         '''
-        self.phase += phase
-        self.phase = round(self.phase % (2 * np.pi), 2)
+        self.phase += np.pi + phase
+        self.phase = (self.phase % (2 * np.pi)) - np.pi
         [mode.add_phase(phase) for mode in self.modes]
 
     def E_mode(self, x, y, z):
@@ -374,6 +393,7 @@ class Laguerre(Superposition):
         Electric field amplitude at x, y, z for the superposition.
         '''
         return sum([i.E_mode(x, y, z) for i in self])
+
 
 
 
@@ -444,11 +464,63 @@ def exposure_comparison(val, upper_bound, lower_bound):
         val = lower_bound
     return val
 
+
+
+
 ##################################################
 ##########                              ##########
 ##########            MAIN              ##########
 ##########                              ##########
 ##################################################
 
-if __name__ == "__main__":
-    pass
+
+if __name__ == '__main__':
+     x = Superposition(Hermite(0,1,0.2,0), Hermite(1,2,0.6,np.pi/2), Hermite(2,1,0.4,0))
+     print(x)
+     x.plot()
+
+
+
+
+##################################################
+##########                              ##########
+##########           TESTING            ##########
+##########                              ##########
+##################################################
+
+
+# def process(x):
+#     print("Process started for '" + x[0] + "' for k = " + str(x[1]) + " for event " + str(x[2]) + "...")
+#     fh.write_data(x[0], x[2], x[1])
+
+# def pool_handler(x, t):
+#     p = Pool(t)
+#     p.map(process, x)
+
+# if __name__ == '__main__':
+#     d = input("File: "š
+#     k = input("k: ")
+#     t = input("Threads: ")
+
+#     x = [(str(d), int(k), int(e)) for e in range(9999)]
+#     pool_handler(x, int(t))
+
+
+
+
+# TODO Animate Hermite-Gaussian modes as a GIF
+
+# data = []
+# for i in tqdm(range(1, 500)):
+#     mode = Hermite(0.4, 600, i)
+#     data.append(mode.E(X, Y))
+
+# def update(data):
+#     mat.set_data(data)
+#     return mat
+
+# def animate():
+#     for i in data: yield i # Animate the states of the game
+
+# mat = ax.imshow(np.real(mode.E(X, Y)))
+# anim = animation.FuncAnimation(fig, update, animate, interval=100, save_count=50) # Create the animation for state evolutio using Markov Chain
