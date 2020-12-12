@@ -51,6 +51,8 @@ class ML:
         '''
         Initialise the class.
         '''
+        print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
+
         self.max_order = max_order
         self.number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
@@ -59,7 +61,7 @@ class ML:
         self.exposure = exposure
         self.repeats = repeats
 
-        self.model = None
+        self.model = self.create_model(summary=False) # Generate preliminary data to determine all solutions (classes) and create the model
         self.solutions = None
         self.input_shape = None
         self.pixels = None
@@ -73,9 +75,6 @@ class ML:
         self.success_loss = 0.01
         self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True) # Or Adadelta()
 
-        # print("                    " + (len(str(self)) + 4) * "_")
-        print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
-
     def __str__(self):
         '''
         Magic method for the str() function.
@@ -87,117 +86,6 @@ class ML:
         Magic method for the repr() function.
         '''
         return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.noise_variation) + ", " + str(self.exposure) + ", " + str(self.repeats) + ")"
-
-    def train(self):
-        '''
-        Train the model.
-        '''
-        start_time = perf_counter()
-
-        # Initialisation
-
-        self.model = self.create_model(summary=False) # Generate preliminary data to determine all solutions (classes) and create the model
-
-        # Training
-
-        for number_of_modes in range(self.start_number, self.number_of_modes + 1):
-            (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
-
-            etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print(text("[TRAIN] Training stage " + str(number_of_modes - 1) + "/" + str(self.number_of_modes - 1) + "..."))
-            print(text("[TRAIN] |"))
-            print(text("[TRAIN] |-> Dataset             :  " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
-            print(text("[TRAIN] |-> Success Condition   :  A loss of " + str(self.success_loss) + " or a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "."))
-            print(text("[TRAIN] |-> Estimated Duration  :  " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
-            print(text("[TRAIN] |"))
-
-            try:
-                for i in tqdm(range(self.epoch, (self.max_epochs * (number_of_modes + 1 - self.start_number)) + 1), text("[TRAIN] |-> Training            ")):
-                    history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=0)
-
-                    for i in self.history: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
-                    self.epoch += 1
-
-                    if self.history["loss"][-1] < self.success_loss: # Loss has reached success level
-                        print(text("[TRAIN] |"))
-                        print(text("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(self.epoch - 1) + "."))
-                        break
-
-                    if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
-                        print(text("[TRAIN] V"))
-                        print(text("[FATAL] Training failed! Gradient descent diverged at epoch " + str(self.epoch - 1) + ".\n"))
-                        sys.exit()
-
-                    if self.epoch >= self.max_epochs * (number_of_modes + 1 - self.start_number): # Reached max epoch
-                        print(text("[TRAIN] |"))
-                        print(text("[WARN]  |-> Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!"))
-
-            except KeyboardInterrupt:
-                print(text("[TRAIN] |"))
-                print(text("[WARN]  |-> Aborted at epoch " + str(self.epoch) + "!"))
-
-            print(text("[TRAIN] |"))
-            print(text("[TRAIN] |-> Evaluating          :  "), end='')
-            scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
-            print("Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".")
-            print(text("[TRAIN] V"))
-            print(text("[TRAIN] Done!\n"))
-
-        print(text("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n"))
-
-    def load_data(self, number_of_modes: int = 1):
-        '''
-        Load training and testing data.
-        '''
-        try:
-            print(text("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
-            print(text("[DATA] |"))
-
-            train_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
-            train_inputs = train_data.get_inputs(text("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
-            train_outputs = train_data.get_outputs()
-
-            print(text("[DATA] |"))
-
-            val_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
-            val_inputs = val_data.get_inputs(text("[DATA] |-> 1 dataset of validation data"))
-            val_outputs = val_data.get_outputs()
-
-            print(text("[DATA] V"))
-            print(text("[DATA] Done!\n"))
-
-        except MemoryError: # TODO Is not called when memory overflow occurs
-            print(text("[DATA] V"))
-            print(text("[FATAL] Memory overflow!\n"))
-            sys.exit()
-
-        # If our loss function was 'categorical_crossentropy':
-        # train_outputs = np_utils.to_categorical(train_outputs)
-        # val_outputs = np_utils.to_categorical(val_outputs)
-
-        return (train_inputs, train_outputs), (val_inputs, val_outputs)
-
-    # def loss(self, y_true, y_pred):
-    #     '''
-    #     Loss function for assessing the performance of the neural network.
-    #     '''
-        # K.print_tensor(y_true)
-        # K.print_tensor(y_pred)
-
-        # loss = K.square(y_true - y_pred)
-        # return K.mean(loss)
-
-        # modes_true = [i.copy() for i in self.solutions]
-        # K.print_tensor(y_true)
-        # K.print_tensor(y_true[0])
-        # for i in range(len(modes_true)): modes_true[i].amplitude = K.eval(y_true)[i]
-        # sup_true = Superposition(*modes_true)
-
-        # modes_pred = [i.copy() for i in self.solutions]
-        # for i in range(len(modes_pred)): modes_pred[i].amplitude = K.eval(y_pred)[i]
-        # sup_pred = Superposition(*modes_pred)
-
-        # return K.mean(K.square(sup_true.superpose() - sup_pred.superpose()), axis=1)
 
     def create_model(self, summary: bool = False):
         '''
@@ -274,20 +162,84 @@ class ML:
 
         return model
 
-    # def update(self, data):
-    #     '''
-    #     Update the history plot.
-    #     '''
-    #     t = np.arange(1, self.epoch)
-    #     data[0].set_xdata(t)
-    #     data[1].set_xdata(t)
-    #     data[2].set_xdata(t)
-    #     data[3].set_xdata(t)
-    #     data[0].set_ydata(self.history["loss"])
-    #     data[1].set_ydata(self.history["binary_accuracy"])
-    #     data[2].set_ydata(self.history["val_loss"])
-    #     data[3].set_ydata(self.history["val_binary_accuracy"])
-    #     plt.pause(0.0001)
+    def train(self):
+        '''
+        Train the model.
+        '''
+        start_time = perf_counter()
+
+        for number_of_modes in range(self.start_number, self.number_of_modes + 1):
+            (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
+
+            etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
+            print(text("[TRAIN] Training stage " + str(number_of_modes - 1) + "/" + str(self.number_of_modes - 1) + "..."))
+            print(text("[TRAIN] |"))
+            print(text("[TRAIN] |-> Dataset             :  " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
+            print(text("[TRAIN] |-> Success Condition   :  A loss of " + str(self.success_loss) + " or a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "."))
+            print(text("[TRAIN] |-> Estimated Duration  :  " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
+            print(text("[TRAIN] |"))
+
+            try:
+                iterator = tqdm(range(self.epoch, (self.max_epochs * (number_of_modes + 1 - self.start_number)) + 1), text("[TRAIN] |-> Training            "))
+                for i in iterator:
+                    history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=0)
+
+                    for i in self.history: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
+                    self.epoch += 1
+
+                    if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
+                        print(text("\n[TRAIN] V"))
+                        print(text("[FATAL] Training failed! Gradient descent diverged at epoch " + str(self.epoch - 1) + ".\n"))
+                        sys.exit()
+                    elif self.history["loss"][-1] < self.success_loss: # Loss has reached success level
+                        print(text("\n[TRAIN] |"))
+                        print(text("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(self.epoch - 1) + "."))
+                        iterator.close()
+                        break
+                    elif self.epoch >= self.max_epochs * (number_of_modes + 1 - self.start_number): # Reached max epoch
+                        print(text("\n[TRAIN] |"))
+                        print(text("[WARN]  |-> Reached max epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + "!"))
+
+            except KeyboardInterrupt:
+                print(text("[TRAIN] |"))
+                print(text("[WARN]  |-> Aborted at epoch " + str(self.epoch) + "!"))
+
+            print(text("[TRAIN] |"))
+            print(text("[TRAIN] |-> Evaluating          :  "), end='')
+            scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
+            print("Accuracy: " + str(round(scores[1] * 100, 1)) + "%, loss: " + str(round(scores[0], 3)) + ".")
+            print(text("[TRAIN] V"))
+            print(text("[TRAIN] Done!\n"))
+
+        print(text("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n"))
+
+    def load_data(self, number_of_modes: int = 1):
+        '''
+        Load training and testing data.
+        '''
+        try:
+            print(text("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
+            print(text("[DATA] |"))
+
+            train_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
+            train_inputs = train_data.get_inputs(text("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
+            train_outputs = train_data.get_outputs()
+
+            print(text("[DATA] |"))
+
+            val_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
+            val_inputs = val_data.get_inputs(text("[DATA] |-> 1 dataset of validation data"))
+            val_outputs = val_data.get_outputs()
+
+            print(text("[DATA] V"))
+            print(text("[DATA] Done!\n"))
+
+        except MemoryError: # TODO Is not called when memory overflow occurs
+            print(text("[DATA] V"))
+            print(text("[FATAL] Memory overflow!\n"))
+            sys.exit()
+
+        return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
     def plot(self, info: bool = True):
         '''
@@ -395,17 +347,7 @@ class ML:
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
                 modes[-1].phase = np.arccos(prediction[i + (len(prediction) // 2)]) # Set the phase to the corresponding modes phase
 
-        # prediction = [(self.solutions[i], prediction[i]) for i in range(len(prediction))]
-        # prediction = {i[0] : i[1] for i in prediction}
-        # prediction = {k : v for k, v in sorted(prediction.items(), key=lambda item: item[1])} # Sort list
-
-        # modes = list(prediction.keys())[-self.number_of_modes:]
-        # amplitudes = list(prediction.values())[-self.number_of_modes:]
-
-        # for i in range(len(modes)): modes[i].amplitude = amplitudes[i] # Set the amplitudes
-
         if info: print(text("[PRED] V"))
-
         if len(modes) == 0:
             print(text("[FATAL] Prediction failed! A threshold of " + str(threshold) + " is likely too high.\n"))
             sys.exit()
@@ -525,13 +467,6 @@ def text(message):
     message = message.replace("[SAVE]",     Colour.OKGREEN + "[SAVE]" + Colour.ENDC)
     message = message.replace("[LOAD]",     Colour.OKGREEN + "[LOAD]" + Colour.ENDC)
     return message
-    # if " |->" in message: return (Colour.OKGREEN + message[:7] + Colour.OKCYAN + message[7:11] + Colour.ENDC + message[11:])
-    # elif " |" in message: return (Colour.OKGREEN + message[:7] + Colour.OKCYAN + message[7:9] + Colour.ENDC + message[9:])
-    # elif " V" in message: return (Colour.OKGREEN + message[:7] + Colour.OKCYAN + message[7:9] + Colour.ENDC + message[9:])
-    # elif "INFO" in message: return (Colour.OKBLUE + message[:7] + Colour.ENDC + message[7:])
-    # elif "WARN" in message: return (Colour.WARNING + message[:7] + Colour.ENDC + message[7:])
-    # elif "FATAL" in message: return (Colour.FAIL + message[:7] + Colour.ENDC + message[7:])
-    # else: return (Colour.OKGREEN + message[:7] + Colour.ENDC + message[7:])
 
 def auto_label(rects, ax):
     '''
@@ -541,9 +476,9 @@ def auto_label(rects, ax):
         height = rect.get_height()
         ax.annotate('{}'.format(round(height, 2)),
                     xy=(rect.get_x() + rect.get_width() / 2, height),
-                    xytext=(0, 3),  # 3 points vertical offset
+                    xytext=(0, 3 if height > 0 else -3),  # 3 points vertical offset
                     textcoords="offset points",
-                    ha='center', va='bottom')
+                    ha="center", va="bottom")
 
 def process(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats):
     '''
