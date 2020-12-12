@@ -87,8 +87,15 @@ class Generate_Data(list):
         '''
         Process for generating superposition objects across multiple threads in the CPU.
         '''
+        # Generate superposition with random amplitude and phase modes
         randomised_item = [self.randomise_amp_and_phase(i) for i in item]
-        return Superposition(*randomised_item)
+        sup = Superposition(*randomised_item)
+
+        # Set noise variation and exposure correctly
+        sup.noise_variation = self.noise_variation
+        sup.exposure = self.exposure
+
+        return sup
 
     def plot(self, save: bool = False, title: bool = True):
         '''
@@ -129,7 +136,7 @@ class Generate_Data(list):
         '''
         Process for superposing elements of the dataset across multiple threrads in the CPU.
         '''
-        return [item.superpose(self.noise_variation, self.exposure) for item in data]
+        return [item.superpose() for item in data]
 
     def get_outputs(self):
         '''
@@ -139,7 +146,7 @@ class Generate_Data(list):
 
         # return np.array([[int(i.contains(j).amplitude and round(i.contains(j).phase / (2 * np.pi), 1) == p / 10) for j in self.hermite_modes for p in range(11)] for i in self]) # Phase via probability distribution
 
-        return np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [i.contains(j).phase / (2 * np.pi) for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
+        return np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.abs(np.cos(i.contains(j).phase)) for j in self.hermite_modes] for i in self]) # + [(i.contains(j).phase / (2 * np.pi)) % 1 for j in self.hermite_modes]
 
     def get_classes(self):
         '''
@@ -163,8 +170,8 @@ class Generate_Data(list):
         '''
         x = mode.copy()
 
-        x *= np.abs(round(np.random.normal(scale=self.amplitude_variation), 2) + 1)
-        x.add_phase(np.abs(round(np.random.normal(scale=self.phase_variation), 2)))
+        x *= np.abs(np.random.normal(scale=self.amplitude_variation) + 1)
+        x.add_phase(np.abs(np.random.normal(scale=self.phase_variation)))
 
         return x
 

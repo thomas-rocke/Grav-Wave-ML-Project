@@ -18,6 +18,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and err
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 from DataHandling import Generate_Data, Dataset
 from time import perf_counter
+from math import isnan
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -63,18 +64,17 @@ class ML:
         self.input_shape = None
         self.pixels = None
         self.epoch = 1
-        self.history = {"loss": [], "binary_accuracy": [], "val_loss": [], "val_binary_accuracy": []}
+        self.history = {"loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
 
-        self.max_epochs = 200
+        self.max_epochs = 100
         self.start_number = 2
-        self.step_speed = 0.067
+        self.step_speed = 0.072
         self.batch_size = 128
-        self.success_performance = 0.99
-        # self.optimizer = Adadelta()
-        self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
+        self.success_loss = 0.01
+        self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True) # Or Adadelta()
 
         # print("                    " + (len(str(self)) + 4) * "_")
-        print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
+        print(Colour.OKCYAN + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
 
     def __str__(self):
         '''
@@ -104,9 +104,8 @@ class ML:
             (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
 
             etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            text("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + " or an accuracy of " + str(self.success_performance * 100) + "%... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
+            text("[TRAIN] Training model using " + str(self.repeats) + " datasets of " + str(len(train_inputs)) + " elements in batches of " + str(self.batch_size) + " to a maximum epoch of " + str(self.max_epochs * (number_of_modes + 1 - self.start_number)) + " or a loss of " + str(self.success_loss) + "... (ETL: " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes)")
 
-            #data = []
             try:
                 for i in range(self.epoch, (self.max_epochs * (number_of_modes + 1 - self.start_number)) + 1): #, "[TRAIN] Training with " + str(number_of_modes) + " modes"):
                     history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=1)
@@ -114,9 +113,13 @@ class ML:
                     for i in self.history: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
                     self.epoch += 1
 
-                    if self.history["binary_accuracy"][-1] >= self.success_performance:
-                        text("[TRAIN] " + str(self.success_performance * 100) + "% acccuracy achieved at epoch " + str(self.epoch - 1) + ".")
+                    if self.history["loss"][-1] < self.success_loss:
+                        text("[TRAIN] " + str(self.success_loss) + " loss achieved at epoch " + str(self.epoch - 1) + ".")
                         break
+
+                    if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
+                        text("[FATAL] Training failed! Gradient descent diverged at epoch " + str(self.epoch - 1) + ".\n")
+                        sys.exit()
 
                     # if self.epoch == 2: 
                     #     data = self.plot(False)
@@ -126,7 +129,7 @@ class ML:
                     # self.update(data)
 
             except KeyboardInterrupt:
-                text("\n[WARN] Aborted at epoch " + str(self.epoch - 1) + "!")
+                text("\n[WARN] Aborted at epoch " + str(self.epoch) + "!")
             
             plt.show()
 
@@ -262,7 +265,7 @@ class ML:
         model.add(Activation('sigmoid'))
 
         # model = VGG16(self.input_shape, len(self.solutions)) # Override model with VGG16 model
-        model.compile(loss=self.loss, optimizer=self.optimizer, metrics=["binary_accuracy"])
+        model.compile(loss="mse", optimizer=self.optimizer, metrics=["accuracy"])
 
         # We choose sigmoid and binary_crossentropy here because we have a multilabel neural network, which becomes K binary
         # classification problems. Using softmax would be wrong as it raises the probabiity on one class and lowers others.
@@ -293,9 +296,9 @@ class ML:
         data[2].set_xdata(t)
         data[3].set_xdata(t)
         data[0].set_ydata(self.history["loss"])
-        data[1].set_ydata(self.history["binary_accuracy"])
+        data[1].set_ydata(self.history["accuracy"])
         data[2].set_ydata(self.history["val_loss"])
-        data[3].set_ydata(self.history["val_binary_accuracy"])
+        data[3].set_ydata(self.history["val_accuracy"])
         plt.pause(0.0001)
 
     def plot(self, info: bool = True):
@@ -310,9 +313,9 @@ class ML:
         t = np.arange(1, self.epoch)
 
         data1 = ax1.plot(t, self.history["loss"], label="Training Loss")[0]
-        data2 = ax2.plot(t, self.history["binary_accuracy"], label="Training Accuracy")[0]
+        data2 = ax2.plot(t, self.history["accuracy"], label="Training Accuracy")[0]
         data3 = ax1.plot(t, self.history["val_loss"], label="Validation Loss")[0]
-        data4 = ax2.plot(t, self.history["val_binary_accuracy"], label="Validation Accuracy")[0]
+        data4 = ax2.plot(t, self.history["val_accuracy"], label="Validation Accuracy")[0]
 
         ax1.set_ylabel("Loss")
         ax2.set_xlabel("Epoch")
@@ -344,9 +347,9 @@ class ML:
         self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
         np.savetxt("Models/" + str(self) + "/loss_history.txt", self.history["loss"], delimiter=",")
-        np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.history["binary_accuracy"], delimiter=",")
+        np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.history["accuracy"], delimiter=",")
         np.savetxt("Models/" + str(self) + "/val_loss_history.txt", self.history["val_loss"], delimiter=",")
-        np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.history["val_binary_accuracy"], delimiter=",")
+        np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.history["val_accuracy"], delimiter=",")
 
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
 
@@ -361,12 +364,12 @@ class ML:
         '''
         text("[LOAD] Loading model...")
 
-        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"loss": self.loss})
+        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5")#, custom_objects={"loss": self.loss})
 
         self.history["loss"] = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
-        self.history["binary_accuracy"] = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
+        self.history["accuracy"] = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
         self.history["val_loss"] = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
-        self.history["val_binary_accuracy"] = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
+        self.history["val_accuracy"] = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
 
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
         self.solutions = [eval(i.replace("HG", "Hermite")) for i in self.solutions]
@@ -401,7 +404,7 @@ class ML:
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.solutions[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
+                modes[-1].phase = np.arccos(prediction[i + (len(prediction) // 2)]) # Set the phase to the corresponding modes phase
 
         # prediction = [(self.solutions[i], prediction[i]) for i in range(len(prediction))]
         # prediction = {i[0] : i[1] for i in prediction}
@@ -430,19 +433,53 @@ class ML:
         Plot given superposition against predicted superposition for visual comparison.
         '''
         text("[PRED] Actual: " + str(sup))
-
         pred = self.predict(sup.superpose())
 
-        fig, (ax1, ax2) = plt.subplots(2)
+        labels = [str(i) for i in sup]
+        sup_amps = [i.amplitude for i in sup]
+        pred_amps = [pred.contains(i).amplitude for i in sup]
+        sup_phases = [i.phase for i in sup]
+        pred_phases = [pred.contains(i).phase for i in sup]
+
+        x = np.arange(len(labels))  # Label locations
+        width = 0.35  # Width of the bars
+
+        fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2, figsize=(10, 8))
         fig.suptitle(r"$\bf{" + str(self) + "}$")
-        
-        ax1.imshow(sup.superpose(), cmap='Greys_r')
-        ax2.imshow(pred.superpose(), cmap='Greys_r')
+        ax1.set_title(r"$\bf{Actual: }$" + str(sup))
+        ax2.set_title(r"$\bf{Reconstructed: }$" + str(pred))
+        ax3.set_title(r"$\bf{Mode}$ $\bf{Amplitudes}$")
+        ax4.set_title(r"$\bf{Mode}$ $\bf{Phases}$")
 
-        ax1.set_title(r"$\bf{Actual: }$" + repr(sup))
-        ax2.set_title(r"$\bf{Reconstructed: }$" + repr(pred))
-        plt.axis('off')
+        ax1.imshow(sup.superpose(), cmap='jet')
+        ax2.imshow(pred.superpose(), cmap='jet')
+        rects1 = ax3.bar(x - (width / 2), sup_amps, width, label='Actual', zorder=3)
+        rects2 = ax3.bar(x + (width / 2), pred_amps, width, label='Reconstructed', zorder=3)
+        rects3 = ax4.bar(x - (width / 2), sup_phases, width, label='Actual')
+        rects4 = ax4.bar(x + (width / 2), pred_phases, width, label='Reconstructed')
 
+        # ax1.colorbar()
+        # ax2.colorbar()
+        ax1.axis('off')
+        ax2.axis('off')
+        ax3.grid(zorder=0)
+        ax4.grid(zorder=0)
+
+        ax3.set_xticks(x)
+        ax3.set_xticklabels(labels)
+        ax3.set_ylim(0.0, 1.1)
+        ax3.legend()
+        ax4.set_xticks(x)
+        ax4.set_xticklabels(labels)
+        ax4.set_ylim(-np.pi, np.pi)
+        ax4.legend()
+
+        auto_label(rects1, ax3)
+        auto_label(rects2, ax3)
+        auto_label(rects3, ax4)
+        auto_label(rects4, ax4)
+
+        # fig.tight_layout()
         if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
         else: plt.show()
 
@@ -489,6 +526,18 @@ def text(message):
     elif "WARN" in message: print(Colour.WARNING + message[:7] + Colour.ENDC + message[7:])
     elif "FATAL" in message: print(Colour.FAIL + message[:7] + Colour.ENDC + message[7:])
     else: print(Colour.OKGREEN + message[:7] + Colour.ENDC + message[7:])
+
+def auto_label(rects, ax):
+    '''
+    Attach a text label above each bar in rects displaying its height.
+    '''
+    for rect in rects:
+        height = rect.get_height()
+        ax.annotate('{}'.format(round(height, 2)),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom')
 
 def process(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats):
     '''
@@ -619,16 +668,20 @@ if __name__ == '__main__':
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
     max_order = 3
-    number_of_modes = 3
+    number_of_modes = 5
     amplitude_variation = 0.4
     phase_variation = 0.6
-    noise_variation = 0.0
+    noise_variation = 0.1
     exposure = (0.0, 1.0)
     repeats = 20
 
     # Training and saving
 
-    train_and_save(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
+    # for r in [20, 50, 100]:
+    #     train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)
+    #     train_and_save(3, 5, amplitude_variation, phase_variation, noise_variation, exposure, r)
+    #     train_and_save(5, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)
+    #     train_and_save(5, 5, amplitude_variation, phase_variation, noise_variation, exposure, r)
 
     # Loading saved model
 
