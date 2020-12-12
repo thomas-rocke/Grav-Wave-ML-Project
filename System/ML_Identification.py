@@ -458,8 +458,8 @@ class ML:
         rects3 = ax4.bar(x - (width / 2), sup_phases, width, label='Actual')
         rects4 = ax4.bar(x + (width / 2), pred_phases, width, label='Reconstructed')
 
-        ax1.colorbar()
-        ax2.colorbar()
+        # ax1.colorbar()
+        # ax2.colorbar()
         ax1.axis('off')
         ax2.axis('off')
         ax3.grid(zorder=0)
@@ -476,8 +476,8 @@ class ML:
 
         auto_label(rects1, ax3)
         auto_label(rects2, ax3)
-        auto_label(rects3, ax3)
-        auto_label(rects4, ax3)
+        auto_label(rects3, ax4)
+        auto_label(rects4, ax4)
 
         # fig.tight_layout()
         if save: plt.savefig("Images/" + str(self) + ".png", bbox_inches='tight', pad_inches=0)
@@ -668,7 +668,7 @@ if __name__ == '__main__':
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
 
     max_order = 3
-    number_of_modes = 3
+    number_of_modes = 5
     amplitude_variation = 0.4
     phase_variation = 0.6
     noise_variation = 0.1
@@ -677,11 +677,11 @@ if __name__ == '__main__':
 
     # Training and saving
 
-    for r in [20, 50, 100]:
-        train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)
-        train_and_save(3, 5, amplitude_variation, phase_variation, noise_variation, exposure, r)
-        train_and_save(5, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)
-        train_and_save(5, 5, amplitude_variation, phase_variation, noise_variation, exposure, r)
+    # for r in [20, 50, 100]:
+    #     train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)
+    #     train_and_save(3, 5, amplitude_variation, phase_variation, noise_variation, exposure, r)
+    #     train_and_save(5, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)
+    #     train_and_save(5, 5, amplitude_variation, phase_variation, noise_variation, exposure, r)
 
     # Loading saved model
 
