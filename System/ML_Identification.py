@@ -559,7 +559,7 @@ def train_and_save(max_order: int = 1, number_of_modes: int = 1, amplitude_varia
     '''
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
-    print(text("[INFO] Starting process to ensure GPU memory is freed after taining is complete... "), end='')
+    print(text("[INFO] Starting process to ensure GPU memory is freed after training is complete... "), end='')
 
     p = multiprocessing.Process(target=process, args=(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats))
     p.start()
