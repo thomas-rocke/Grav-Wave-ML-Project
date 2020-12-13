@@ -131,5 +131,5 @@ dmypy.json
 *.sqlite
 
 # Other
-*Old_Models
+# *Old_Models
 *.h5
