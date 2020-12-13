@@ -628,6 +628,8 @@ def compare_models(*models: ML):
 
     for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats))
     plt.show()
+    
+    keras.backend.clear_session() # Unload the models from memory to allow future training
 
 def plot_batch_sizes():
     '''
@@ -692,7 +694,7 @@ if __name__ == '__main__':
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
 
-    # plot_repeats()
+    plot_repeats()
     plot_batch_sizes()
 
     # for r in [20, 50, 100]:
