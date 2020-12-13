@@ -68,7 +68,7 @@ class ML:
         self.success_loss = 0.01
         # self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True) # Or Adadelta()
         self.optimizer = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
-        self.history = {"loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
+        self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
 
     def __str__(self):
@@ -95,7 +95,7 @@ class ML:
         '''
         return K.mean(K.equal(K.round(y_true), K.round(y_pred)))
 
-    def create_model(self, summary: bool = False):
+    def create_model(self, summary: bool = True):
         '''
         Create the Keras model in preparation for training.
         '''
@@ -175,7 +175,7 @@ class ML:
         Train the model.
         '''
         if self.exists():
-            print("[WARN] Model already exists!\n")
+            print(text("[WARN] Model already exists!\n"))
             self.load()
             return
 
@@ -200,7 +200,10 @@ class ML:
                 for n in iterator:
                     history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=int(info))
 
-                    for i in self.history: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
+                    for i in self.history:
+                        if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
+                        else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
+
                     iterator.set_description(text("[TRAIN] |-> Loss: " + str(round(self.history["loss"][-1], 3)) + " - Accuracy: " + str(round(self.history["accuracy"][-1] * 100, 1)) + "% "))
 
                     if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
@@ -315,11 +318,7 @@ class ML:
 
         self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
-        np.savetxt("Models/" + str(self) + "/loss_history.txt", self.history["loss"], delimiter=",")
-        np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.history["accuracy"], delimiter=",")
-        np.savetxt("Models/" + str(self) + "/val_loss_history.txt", self.history["val_loss"], delimiter=",")
-        np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.history["val_accuracy"], delimiter=",")
-
+        for i in self.history: np.savetxt("Models/" + str(self) + "/" + i + ".txt", self.history[i], delimiter=",")
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
 
         self.plot(info=False)
@@ -340,11 +339,7 @@ class ML:
 
         self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"metrics": [self.accuracy]})
 
-        self.history["loss"] = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
-        self.history["accuracy"] = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
-        self.history["val_loss"] = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
-        self.history["val_accuracy"] = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
-
+        for i in self.history: self.history[i] = np.loadtxt("Models/" + str(self) + "/" + i + ".txt", delimiter=",")
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
         self.solutions = [eval(i.replace("HG", "Hermite")) for i in self.solutions]
 
@@ -631,18 +626,32 @@ def compare_models(*models: ML):
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
     fig.suptitle("Model Comparisons")
 
-    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Batch Size: " + str(m.batch_size))
+    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats))
     plt.show()
 
 def plot_batch_sizes():
     '''
     Plot a graph of the performance of models with varying batch sizes.
     '''
-    for batch_size in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 100, batch_size)
+    for batch_size in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, batch_size)
 
     models = []
     for batch_size in [2**n for n in range(9)]:
-        m = ML(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 100, batch_size)
+        m = ML(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, batch_size)
+        m.load()
+        models.append(m)
+
+    compare_models(*models)
+
+def plot_repeats():
+    '''
+    Plot a graph of the performance of models with varying batch sizes.
+    '''
+    for repeats in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), repeats, 128)
+
+    models = []
+    for repeats in [2**n for n in range(9)]:
+        m = ML(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), repeats, 128)
         m.load()
         models.append(m)
 
@@ -683,6 +692,7 @@ if __name__ == '__main__':
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
 
+    # plot_repeats()
     plot_batch_sizes()
 
     # for r in [20, 50, 100]:
