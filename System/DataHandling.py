@@ -62,7 +62,7 @@ class Generate_Data(list):
         self.exposure = exposure
         self.repeats = repeats
 
-        if info: print("\n_____| Generating Data |_____\n")
+        if info: print("_____| Generating Data |_____\n")
         if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: "
                         + str(phase_variation) + "\nVariation in saturation noise: " + str(noise_variation) + "\nVariation in saturation exposure: " + str(exposure) + "\nRepeats of combinations: " + str(repeats) + "\n")
         if info: print("Generating Gaussian modes...")
@@ -218,8 +218,15 @@ class Dataset():
         dat_file = open(self.dir + os.sep + self.dat_fname, 'r')
         sup_file = open(self.dir + os.sep + self.sup_fname, 'r') #Open files to read
 
-        self.dat_batches = grouper(dat_file, self.batch_size)
-        self.sup_batches = grouper(sup_file, self.batch_size)
+        dat_lines = [str(line) for line in dat_file]
+        sup_lines = [str(line) for line in sup_file]
+
+        dat_file.close()
+        sup_file.close()
+
+        self.pixels = int(sup_lines[0])
+        self.dat_batches = grouper(dat_lines, self.batch_size)
+        self.sup_batches = grouper(sup_lines[1:], self.batch_size)
 
     
 
@@ -228,18 +235,11 @@ class Dataset():
         Checks if data files exist, and creates them if not
         '''
 
-        dat_exists = 1
-        sup_exists = 1
-
-        if self.dat_fname not in self.files: #data file not present
-            dat_exists = 0
-        
-        if self.sup_fname not in self.files: #Superposition file not present
-            sup_exists = 0
+        dat_exists, sup_exists = self.dat_fname in self.files, self.sup_fname in self.files #check if data files exist
         
         if not dat_exists or not sup_exists:
             combs = self.make_data()
-            self.save_data(combs, dat_exists, sup_exists)
+            self.save_data(combs, dat_exists, sup_exists) #save data if files not present
         
     def make_data(self):
         '''
@@ -266,27 +266,34 @@ class Dataset():
         '''
 
         if not dat_exists:
-            dat_file = open(self.dir + os.sep + self.dat_fname, 'x')
+            dat_file = open(self.dir + os.sep + self.dat_fname, 'x') # Create the file and open it
+        else:
+            dat_file = open(self.dir + os.sep + self.dat_fname, 'w') # Open the file to overwrite
         
         if not sup_exists:
-            sup_file =  open(self.dir + os.sep + self.sup_fname, 'x')
+            sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
+        else:
+            sup_file =  open(self.dir + os.sep + self.sup_fname, 'w') # Open to overwrite
         
         p = Pool(cpu_count())
-
-        for j in range(self.repeats):
+        print(combs[0][0])
+        sup_file.write(str(combs[0][0].pixels) + '\n')
+        print("Saving Data:")
+        for j in tqdm(range(self.repeats), desc='Stepping through Repeats'):
             batches = grouper(combs, cpu_count())
             for batch in batches:
                 sups, imgs = zip(*p.map(self.generate_process, batch))
 
                 sups = [s for s in sups if s is not None]
                 imgs = [i for i in imgs if i is not None] # Remove Nonetype elements from lists
-                for img in imgs:
-                    if not dat_exists and img is not None:
-                        np.savetxt(dat_file, img.reshape((1, np.size(img))))
-
-                for sup in sups:
-                    if not sup_exists and sup is not None:
-                        sup_file.write(repr(sup) + os.linesep)
+                for i in range(len(imgs)):
+                    if imgs[i] is not None and sups[i] is not None:
+                        vec = imgs[i].flatten() #Flatten image data to vector
+                        vec_string = ', '.join(str(v) for v in vec) + '\n'
+                        dat_file.write(vec_string)
+                        sup_file.write(repr(sups[i]) + '\n')
+        dat_file.close()
+        sup_file.close()
 
     def generate_process(self, item):
         '''
@@ -303,6 +310,7 @@ class Dataset():
         '''
         Load a batch of data from files
         '''
+
         dat_batch = next(islice(self.dat_batches, batch_number, None), None)
         sup_batch = next(islice(self.sup_batches, batch_number, None), None) # Fetch the [batch_number] batch of file lines
         
@@ -332,7 +340,9 @@ class Dataset():
         if dat is None:
             return None
         else:
-            return np.fromstring(dat)
+            new_dat = dat.split(', ') # Split up data line at each comma delimiter
+            new_dat = np.array([float(d) for d in new_dat]) # Cast elements back to floats
+            return new_dat.reshape((self.pixels, self.pixels))
     
     def randomise_amp_and_phase(self, mode):
         '''
@@ -363,11 +373,13 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__ == "__main__": 
     dir = 'System' + os.sep + 'TestData'
-    data_obj = Dataset(2, 2, 0.3, batch_size=10, repeats=2, foldername=dir)
+    data_obj = Dataset(3, 5, 0.6, batch_size=10, repeats=3, foldername=dir)
 
     start_time = time.time()
-    sups, imgs = data_obj.load_data(2)
+    sups, imgs = data_obj.load_data(7)
     end_time = time.time()
 
     print(end_time - start_time)
-    sups[0].plot()
+    sups[1].plot()
+    plt.imshow(imgs[0])
+    plt.show()

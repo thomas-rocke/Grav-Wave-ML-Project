@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 .vs/Grav-Wave-ML-Project/v16/.suo
 *.sqlite
+*.txt
