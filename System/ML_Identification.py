@@ -166,7 +166,7 @@ class ML:
 
         print("Done!\n")
         if summary: text(model.summary())
-        # if summary: keras.utils.plot_model(model, str(self), show_shapes=True) # TODO Make work using packages
+        if summary: keras.utils.plot_model(model, str(self), show_shapes=True) # TODO Make work using packages
 
         return model
 
@@ -175,7 +175,7 @@ class ML:
         Train the model.
         '''
         if self.exists():
-            print("[INFO] Model already exists!\n")
+            print("[WARN] Model already exists!\n")
             self.load()
             return
 
@@ -331,6 +331,11 @@ class ML:
         '''
         Load a saved model.
         '''
+        if not self.exists():
+            print(text("[WARN] Model has not yet been trained!"))
+            self.train()
+            return
+
         print(text("[LOAD] Loading model... "), end='')
 
         self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"metrics": [self.accuracy]})
@@ -687,26 +692,30 @@ if __name__ == '__main__':
     #     train_and_save(5, 5, amplitude_variation, phase_variation, noise_variation, exposure, r)
 
     # Loading saved model
-    print(tf.config.list_physical_devices())
-    with tf.device("gpu:0"):
-        model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
-        try:
-            model.load()
-        except:
-            model.train()
-            model.save
-
-        # Generating test data for comparisons
-
-        data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
 
     data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+
+    model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
+    model.load()
 
     # for i in tqdm(data): model.compare(i, info=False, save=True)
 
     while True:
         sup = data.get_random()
         model.compare(sup)
+
+    # print(tf.config.list_physical_devices())
+    # with tf.device("gpu:0"):
+    #     model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
+    #     try:
+    #         model.load()
+    #     except:
+    #         model.train()
+    #         model.save
+
+    #     # Generating test data for comparisons
+
+    #     data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
 
     # sup = Superposition(Hermite(1,2), Hermite(2,0), Hermite(0,1))
     # prediction = model.predict(sup.superpose())
