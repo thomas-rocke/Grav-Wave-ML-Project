@@ -89,6 +89,12 @@ class ML:
         '''
         return os.path.exists("Models/" + str(self))
 
+    def trained(self):
+        '''
+        Check if the model has been trained before.
+        '''
+        return os.path.exists("Models/" + str(self) + "/" + str(self) + ".h5")
+
     def accuracy(self, y_true, y_pred):
         '''
         Custom metric to determine the accuracy of our regression problem using rounded accuracy.
@@ -266,13 +272,14 @@ class ML:
 
         return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
-    def plot(self, info: bool = True, axes: tuple = None, label: str = False):
+    def plot(self, info: bool = True, axes: tuple = None, label: str = False, elapsed_time: bool = False):
         '''
         Plot the history of the model whilst training.
         '''
         if info: print(text("[PLOT] Plotting history..."))
 
-        t = np.arange(1, len(self.history["loss"]) + 1)
+        if elapsed_time: t = self.history["time"]
+        else: t = np.arange(1, len(self.history["loss"]) + 1)
 
         if axes == None:
             fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
@@ -308,7 +315,7 @@ class ML:
 
         return (ax1, ax2)
 
-    def save(self):
+    def save(self, save_model: bool = True):
         '''
         Save the history of the training to text files.
         '''
@@ -316,7 +323,7 @@ class ML:
 
         print(text("[SAVE] Saving model... "), end='')
 
-        self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
+        if save_model: self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
         for i in self.history: np.savetxt("Models/" + str(self) + "/" + i + ".txt", self.history[i], delimiter=",")
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
@@ -331,13 +338,15 @@ class ML:
         Load a saved model.
         '''
         if not self.exists():
-            print(text("[WARN] Model has not yet been trained!"))
+            print(text("[WARN] Model does not exist! Will now train.\n"))
             self.train()
             return
+        elif not self.trained():
+            print(text("[WARN] Model has not been trained! Will only load history.\n"))
 
         print(text("[LOAD] Loading model... "), end='')
 
-        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"metrics": [self.accuracy]})
+        if self.trained(): self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"metrics": [self.accuracy]})
 
         for i in self.history: self.history[i] = np.loadtxt("Models/" + str(self) + "/" + i + ".txt", delimiter=",")
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
@@ -349,6 +358,13 @@ class ML:
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
+        if not self.exists():
+            print(text("[WARN] Model does not exist!\n"))
+            return
+        elif not self.trained():
+            print(text("[WARN] Model has not been trained!\n"))
+            return
+
         start_time = perf_counter()
         if info: print(text("[PRED] Predicting... (shape = " + str(data.shape) + ")"))
         if info: print(text("[PRED] |"))
@@ -626,9 +642,12 @@ def compare_models(*models: ML):
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
     fig.suptitle("Model Comparisons")
 
-    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats))
+    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats), elapsed_time=False)
     plt.show()
-    
+
+    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats), elapsed_time=True)
+    plt.show()
+
     keras.backend.clear_session() # Unload the models from memory to allow future training
 
 def plot_batch_sizes():
