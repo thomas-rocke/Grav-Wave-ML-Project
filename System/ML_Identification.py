@@ -640,10 +640,13 @@ def compare_models(*models: ML):
     Compare the history of multiple models.
     '''
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-    fig.suptitle("Model Comparisons")
+    fig.suptitle("Model Comparisons by Epoch")
 
     for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats), elapsed_time=False)
     plt.show()
+
+    fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+    fig.suptitle("Model Comparisons by Elapsed Time")
 
     for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats), elapsed_time=True)
     plt.show()
