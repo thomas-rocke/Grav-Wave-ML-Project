@@ -47,7 +47,7 @@ class ML:
     '''
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, batch_size: int = 32):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, batch_size: int = 128):
         '''
         Initialise the class.
         '''
@@ -297,11 +297,12 @@ class ML:
             ax2.plot(t, self.history["accuracy"], label=label)[0]
 
         ax1.set_ylabel("Loss")
-        ax2.set_xlabel("Epoch")
+        if elapsed_time: ax2.set_xlabel("Elapsed Time")
+        else: ax2.set_xlabel("Epoch")
         ax2.set_ylabel("Accuracy")
 
-        plt.xlim(0, len(self.history["loss"]) + 1)
-        ax1.set_ylim(0, np.max(self.history["loss"]))
+        plt.xlim(0, t[-1])
+        # ax1.set_ylim(0, np.max(self.history["loss"]))
         ax2.set_ylim(0, 1)
 
         ax1.grid()
@@ -635,20 +636,20 @@ def get_model_error(model, data_object:Generate_Data, test_number:int=10, sup:Su
 
     return amp_err, phase_err, img_err
 
-def compare_models(*models: ML):
+def compare_models(title: str, *models: ML):
     '''
     Compare the history of multiple models.
     '''
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-    fig.suptitle("Model Comparisons by Epoch")
+    fig.suptitle(title + " by Epoch")
 
-    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats), elapsed_time=False)
+    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Batch Size: " + str(m.batch_size), elapsed_time=False)
     plt.show()
 
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-    fig.suptitle("Model Comparisons by Elapsed Time")
+    fig.suptitle(title + " by Elapsed Time")
 
-    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Repeats: " + str(m.repeats), elapsed_time=True)
+    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Batch Size: " + str(m.batch_size), elapsed_time=True)
     plt.show()
 
     keras.backend.clear_session() # Unload the models from memory to allow future training
@@ -657,7 +658,7 @@ def plot_batch_sizes():
     '''
     Plot a graph of the performance of models with varying batch sizes.
     '''
-    for batch_size in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, batch_size)
+    # for batch_size in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, batch_size)
 
     models = []
     for batch_size in [2**n for n in range(9)]:
@@ -665,13 +666,13 @@ def plot_batch_sizes():
         m.load()
         models.append(m)
 
-    compare_models(*models)
+    compare_models("Comparing Batch Size", *models)
 
 def plot_repeats():
     '''
     Plot a graph of the performance of models with varying batch sizes.
     '''
-    for repeats in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), repeats, 128)
+    # for repeats in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), repeats, 128)
 
     models = []
     for repeats in [2**n for n in range(9)]:
@@ -679,7 +680,7 @@ def plot_repeats():
         m.load()
         models.append(m)
 
-    compare_models(*models)
+    compare_models("Comparing Repeats", *models)
 
 
 
@@ -710,14 +711,14 @@ if __name__ == '__main__':
     phase_variation = 1.0
     noise_variation = 0.1
     exposure = (0.0, 1.0)
-    repeats = 100
+    repeats = 128
 
     # Training and saving
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
 
-    plot_repeats()
-    plot_batch_sizes()
+    # plot_repeats()
+    # plot_batch_sizes()
 
     # for r in [20, 50, 100]:
     #     train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)
