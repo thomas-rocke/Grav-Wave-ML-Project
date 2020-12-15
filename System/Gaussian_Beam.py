@@ -447,11 +447,14 @@ def add_noise(image, noise_variance: float = 0.0):
     Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
     Noise Variance defined as a %age of maximal intensity
     '''
+
+    actual_variance = np.abs(np.random.normal(0, noise_variance)) 
+    # Noise Variance parameter gives maximum noise level for whole dataset
+    # Actual Noise is the gaussian noise variance used for a specific add_noise call
+
     max_val = np.max(image)
-    norm = lambda i: np.random.normal(loc=i, scale=noise_variance*max_val)
-    f = np.vectorize(norm)
-    image = f(image)
-    return image
+    return np.random.normal(loc=image, scale=actual_variance*max_val) # Variance then scaled as fraction of brightest intensity
+
 
 def add_exposure(image, exposure:tuple = (0.0, 1.0)):
     '''
