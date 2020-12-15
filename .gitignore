@@ -130,3 +130,4 @@ dmypy.json
 .vs/Grav-Wave-ML-Project/v16/.suo
 *.sqlite
 *.txt
+*.h5
