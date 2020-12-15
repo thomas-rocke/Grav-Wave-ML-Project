@@ -47,7 +47,7 @@ class ML:
     '''
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, batch_size: int = 32):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, batch_size: int = 128):
         '''
         Initialise the class.
         '''
@@ -68,7 +68,7 @@ class ML:
         self.success_loss = 0.01
         # self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True) # Or Adadelta()
         self.optimizer = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
-        self.history = {"loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
+        self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
 
     def __str__(self):
@@ -89,13 +89,19 @@ class ML:
         '''
         return os.path.exists("Models/" + str(self))
 
+    def trained(self):
+        '''
+        Check if the model has been trained before.
+        '''
+        return os.path.exists("Models/" + str(self) + "/" + str(self) + ".h5")
+
     def accuracy(self, y_true, y_pred):
         '''
         Custom metric to determine the accuracy of our regression problem using rounded accuracy.
         '''
         return K.mean(K.equal(K.round(y_true), K.round(y_pred)))
 
-    def create_model(self, summary: bool = False):
+    def create_model(self, summary: bool = True):
         '''
         Create the Keras model in preparation for training.
         '''
@@ -175,7 +181,7 @@ class ML:
         Train the model.
         '''
         if self.exists():
-            print("[WARN] Model already exists!\n")
+            print(text("[WARN] Model already exists!\n"))
             self.load()
             return
 
@@ -200,7 +206,10 @@ class ML:
                 for n in iterator:
                     history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=int(info))
 
-                    for i in self.history: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
+                    for i in self.history:
+                        if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
+                        else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
+
                     iterator.set_description(text("[TRAIN] |-> Loss: " + str(round(self.history["loss"][-1], 3)) + " - Accuracy: " + str(round(self.history["accuracy"][-1] * 100, 1)) + "% "))
 
                     if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
@@ -263,13 +272,14 @@ class ML:
 
         return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
-    def plot(self, info: bool = True, axes: tuple = None, label: str = False):
+    def plot(self, info: bool = True, axes: tuple = None, label: str = False, elapsed_time: bool = False):
         '''
         Plot the history of the model whilst training.
         '''
         if info: print(text("[PLOT] Plotting history..."))
 
-        t = np.arange(1, len(self.history["loss"]) + 1)
+        if elapsed_time: t = self.history["time"]
+        else: t = np.arange(1, len(self.history["loss"]) + 1)
 
         if axes == None:
             fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
@@ -287,11 +297,12 @@ class ML:
             ax2.plot(t, self.history["accuracy"], label=label)[0]
 
         ax1.set_ylabel("Loss")
-        ax2.set_xlabel("Epoch")
+        if elapsed_time: ax2.set_xlabel("Elapsed Time")
+        else: ax2.set_xlabel("Epoch")
         ax2.set_ylabel("Accuracy")
 
-        plt.xlim(0, len(self.history["loss"]) + 1)
-        ax1.set_ylim(0, np.max(self.history["loss"]))
+        plt.xlim(0, t[-1])
+        # ax1.set_ylim(0, np.max(self.history["loss"]))
         ax2.set_ylim(0, 1)
 
         ax1.grid()
@@ -305,7 +316,7 @@ class ML:
 
         return (ax1, ax2)
 
-    def save(self):
+    def save(self, save_model: bool = True):
         '''
         Save the history of the training to text files.
         '''
@@ -313,13 +324,9 @@ class ML:
 
         print(text("[SAVE] Saving model... "), end='')
 
-        self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
+        if save_model: self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
-        np.savetxt("Models/" + str(self) + "/loss_history.txt", self.history["loss"], delimiter=",")
-        np.savetxt("Models/" + str(self) + "/accuracy_history.txt", self.history["accuracy"], delimiter=",")
-        np.savetxt("Models/" + str(self) + "/val_loss_history.txt", self.history["val_loss"], delimiter=",")
-        np.savetxt("Models/" + str(self) + "/val_accuracy_history.txt", self.history["val_accuracy"], delimiter=",")
-
+        for i in self.history: np.savetxt("Models/" + str(self) + "/" + i + ".txt", self.history[i], delimiter=",")
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
 
         self.plot(info=False)
@@ -332,19 +339,17 @@ class ML:
         Load a saved model.
         '''
         if not self.exists():
-            print(text("[WARN] Model has not yet been trained!"))
+            print(text("[WARN] Model does not exist! Will now train.\n"))
             self.train()
             return
+        elif not self.trained():
+            print(text("[WARN] Model has not been trained! Will only load history.\n"))
 
         print(text("[LOAD] Loading model... "), end='')
 
-        self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"metrics": [self.accuracy]})
+        if self.trained(): self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"metrics": [self.accuracy]})
 
-        self.history["loss"] = np.loadtxt("Models/" + str(self) + "/loss_history.txt", delimiter=",")
-        self.history["accuracy"] = np.loadtxt("Models/" + str(self) + "/accuracy_history.txt", delimiter=",")
-        self.history["val_loss"] = np.loadtxt("Models/" + str(self) + "/val_loss_history.txt", delimiter=",")
-        self.history["val_accuracy"] = np.loadtxt("Models/" + str(self) + "/val_accuracy_history.txt", delimiter=",")
-
+        for i in self.history: self.history[i] = np.loadtxt("Models/" + str(self) + "/" + i + ".txt", delimiter=",")
         self.solutions = np.loadtxt("Models/" + str(self) + "/solutions.txt", dtype=str, delimiter="\n")
         self.solutions = [eval(i.replace("HG", "Hermite")) for i in self.solutions]
 
@@ -354,6 +359,13 @@ class ML:
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
+        if not self.exists():
+            print(text("[WARN] Model does not exist!\n"))
+            return
+        elif not self.trained():
+            print(text("[WARN] Model has not been trained!\n"))
+            return
+
         start_time = perf_counter()
         if info: print(text("[PRED] Predicting... (shape = " + str(data.shape) + ")"))
         if info: print(text("[PRED] |"))
@@ -624,29 +636,51 @@ def get_model_error(model, data_object:Generate_Data, test_number:int=10, sup:Su
 
     return amp_err, phase_err, img_err
 
-def compare_models(*models: ML):
+def compare_models(title: str, *models: ML):
     '''
     Compare the history of multiple models.
     '''
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-    fig.suptitle("Model Comparisons")
+    fig.suptitle(title + " by Epoch")
 
-    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Batch Size: " + str(m.batch_size))
+    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Batch Size: " + str(m.batch_size), elapsed_time=False)
     plt.show()
+
+    fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+    fig.suptitle(title + " by Elapsed Time")
+
+    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Batch Size: " + str(m.batch_size), elapsed_time=True)
+    plt.show()
+
+    keras.backend.clear_session() # Unload the models from memory to allow future training
 
 def plot_batch_sizes():
     '''
     Plot a graph of the performance of models with varying batch sizes.
     '''
-    for batch_size in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 100, batch_size)
+    # for batch_size in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, batch_size)
 
     models = []
     for batch_size in [2**n for n in range(9)]:
-        m = ML(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 100, batch_size)
+        m = ML(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, batch_size)
         m.load()
         models.append(m)
 
-    compare_models(*models)
+    compare_models("Comparing Batch Size", *models)
+
+def plot_repeats():
+    '''
+    Plot a graph of the performance of models with varying batch sizes.
+    '''
+    # for repeats in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), repeats, 128)
+
+    models = []
+    for repeats in [2**n for n in range(9)]:
+        m = ML(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), repeats, 128)
+        m.load()
+        models.append(m)
+
+    compare_models("Comparing Repeats", *models)
 
 
 
@@ -677,13 +711,14 @@ if __name__ == '__main__':
     phase_variation = 1.0
     noise_variation = 0.1
     exposure = (0.0, 1.0)
-    repeats = 100
+    repeats = 128
 
     # Training and saving
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
 
-    plot_batch_sizes()
+    # plot_repeats()
+    # plot_batch_sizes()
 
     # for r in [20, 50, 100]:
     #     train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)

@@ -129,5 +129,10 @@ dmypy.json
 .pyre/
 .vs/Grav-Wave-ML-Project/v16/.suo
 *.sqlite
-*.txt
+
+# Other
+# *Old_Models
 *.h5
+
+# Dataset files
+*.txt
