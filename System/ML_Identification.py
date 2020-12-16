@@ -45,6 +45,20 @@ from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nada
 ##################################################
 
 
+class Colour:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+
+
 class ML:
     '''
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
@@ -64,25 +78,14 @@ class ML:
         self.optimizer = optimizer
         self.learning_rate = learning_rate
 
-        print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
-
         self.max_epochs = 100
         self.start_number = 2
         self.step_speed = 0.072
         self.success_loss = 0.001
-
-        # self.optimizer = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
-        # if optimizer_name == "SGD": self.optimizer = SGD()#(learning_rate=0.01, momentum=0.9, nesterov=True)
-        # elif optimizer_name == "RMSprop": self.optimizer = RMSprop()
-        # elif optimizer_name == "Adam": self.optimizer = Adam()
-        # elif optimizer_name == "Adadelta": self.optimizer = Adadelta()
-        # elif optimizer_name == "Adagrad": self.optimizer = Adagrad()
-        # elif optimizer_name == "Adamax": self.optimizer = Adamax(learning_rate=learning_rate)
-        # elif optimizer_name == "Nadam": self.optimizer = Nadam()#(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
-        # elif optimizer_name == "Ftrl": self.optimizer = Ftrl()
-
         self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
+
+        print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
 
     def __str__(self):
         '''
@@ -193,8 +196,8 @@ class ML:
         '''
         Train the model.
         '''
-        if self.exists():
-            print(text("[WARN] Model already exists!\n"))
+        if self.trained():
+            print(text("[WARN] Trained model already exists!\n"))
             self.load()
             return
 
@@ -210,7 +213,7 @@ class ML:
             print(text("[TRAIN] |-> Dataset             : " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
             print(text("[TRAIN] |-> Success Condition   : A loss of " + str(self.success_loss) + "."))
             print(text("[TRAIN] |-> Terminate Condition : Reaching epoch " + str(len(self.history["loss"]) + self.max_epochs) + " or 5 consecutive epochs of stagnation."))
-            print(text("[TRAIN] |-> Estimated Duration  : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
+            print(text("[TRAIN] |-> Maximum Duration    : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
             print(text("[TRAIN] |"))
 
             n = 0
@@ -280,7 +283,7 @@ class ML:
             print(text("[DATA] V"))
             print(text("[DATA] Done!\n"))
 
-        except MemoryError: # TODO Is not called when memory overflow occurs
+        except MemoryError:
             print(text("[DATA] V"))
             print(text("[FATAL] Memory overflow!\n"))
             sys.exit()
@@ -343,8 +346,10 @@ class ML:
         for i in self.history: np.savetxt("Models/" + str(self) + "/" + i + ".txt", self.history[i], delimiter=",")
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
 
-        self.plot(info=False)
-        plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
+        self.plot(info=False, elapsed_time=False)
+        plt.savefig("Models/" + str(self) + "/history_epoch.png", bbox_inches='tight', pad_inches=0)
+        self.plot(info=False, elapsed_time=True)
+        plt.savefig("Models/" + str(self) + "/history_elapsed_time.png", bbox_inches='tight', pad_inches=0)
 
         print("Done!\n")
 
@@ -508,20 +513,6 @@ class ML:
 
 
 
-class Colour:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
-
-
 ##################################################
 ##########                              ##########
 ##########          FUNCTIONS           ##########
@@ -531,21 +522,21 @@ class Colour:
 
 def text(message):
     '''
-    Print message in the format given.
+    Return message in the format given.
     '''
-    message = message.replace("->",         Colour.OKCYAN + "->" + Colour.ENDC)
-    message = message.replace(" |",         Colour.OKCYAN + " |" + Colour.ENDC)
-    message = message.replace(" V",         Colour.OKCYAN + " V" + Colour.ENDC)
-    message = message.replace("[INFO]",     Colour.OKBLUE + "[INFO]" + Colour.ENDC)
-    message = message.replace("[WARN]",     Colour.WARNING + "[WARN]" + Colour.ENDC)
-    message = message.replace("[FATAL]",    Colour.FAIL + "[FATAL]" + Colour.ENDC)
-    message = message.replace("[INIT]",     Colour.OKGREEN + "[INIT]" + Colour.ENDC)
-    message = message.replace("[DATA]",     Colour.OKGREEN + "[DATA]" + Colour.ENDC)
-    message = message.replace("[TRAIN]",    Colour.OKGREEN + "[TRAIN]" + Colour.ENDC)
-    message = message.replace("[PLOT]",     Colour.OKGREEN + "[PLOT]" + Colour.ENDC)
-    message = message.replace("[SAVE]",     Colour.OKGREEN + "[SAVE]" + Colour.ENDC)
-    message = message.replace("[LOAD]",     Colour.OKGREEN + "[LOAD]" + Colour.ENDC)
-    message = message.replace("[PRED]",     Colour.OKGREEN + "[PRED]" + Colour.ENDC)
+    message = message.replace("->",         Colour.OKCYAN   + "->"      + Colour.ENDC)
+    message = message.replace(" |",         Colour.OKCYAN   + " |"      + Colour.ENDC)
+    message = message.replace(" V",         Colour.OKCYAN   + " V"      + Colour.ENDC)
+    message = message.replace("[INFO]",     Colour.OKBLUE   + "[INFO]"  + Colour.ENDC)
+    message = message.replace("[WARN]",     Colour.WARNING  + "[WARN]"  + Colour.ENDC)
+    message = message.replace("[FATAL]",    Colour.FAIL     + "[FATAL]" + Colour.ENDC)
+    message = message.replace("[INIT]",     Colour.OKGREEN  + "[INIT]"  + Colour.ENDC)
+    message = message.replace("[DATA]",     Colour.OKGREEN  + "[DATA]"  + Colour.ENDC)
+    message = message.replace("[TRAIN]",    Colour.OKGREEN  + "[TRAIN]" + Colour.ENDC)
+    message = message.replace("[PLOT]",     Colour.OKGREEN  + "[PLOT]"  + Colour.ENDC)
+    message = message.replace("[SAVE]",     Colour.OKGREEN  + "[SAVE]"  + Colour.ENDC)
+    message = message.replace("[LOAD]",     Colour.OKGREEN  + "[LOAD]"  + Colour.ENDC)
+    message = message.replace("[PRED]",     Colour.OKGREEN  + "[PRED]"  + Colour.ENDC)
     return message
 
 def VGG16(input_shape, classes):
@@ -665,7 +656,7 @@ def get_model_error(model, data_object:Generate_Data, test_number:int=10, sup:Su
 
     return amp_err, phase_err, img_err
 
-def optimize(param_name: str, param_range: str) -> None:
+def optimize(param_name: str, param_range: str, plot: bool = True) -> None:
     '''
     Loading / training multiple models and plotting comparison graphs of their performances.
     '''
@@ -677,14 +668,15 @@ def optimize(param_name: str, param_range: str) -> None:
         m.load(save_trained=False) # Load the model, and if the model does not exist then train and save it
         models.append(m) # Add the model to the list 
 
-    for time in (True, False):
-        fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-        fig.suptitle(f"Comparing {param_name} by {'Elapsed Time' if time else 'Epoch'}")
-        ax1.grid()
-        ax2.grid()
+    if plot:
+        for time in (True, False):
+            fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+            fig.suptitle(f"Comparing {param_name} by {'Elapsed Time' if time else 'Epoch'}")
+            ax1.grid()
+            ax2.grid()
 
-        for m in models: m.plot(info=False, axes=(ax1, ax2), label=param_name + ": " + str(getattr(m, param_name)), elapsed_time=time)
-        plt.show()
+            for m in models: m.plot(info=False, axes=(ax1, ax2), label=param_name + ": " + str(getattr(m, param_name)), elapsed_time=time)
+            plt.show()
 
 
 
@@ -721,10 +713,11 @@ if __name__ == '__main__':
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
 
-    optimize("batch_size", [2**n for n in range(9)])
-    optimize("optimizer", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"])
-    optimize("learning_rate", [round(0.1**n, n) for n in range(8)])
-    optimize("repeats", [2**n for n in range(9)])
+    optimize("batch_size", [2**n for n in range(9)], plot=False)
+    optimize("optimizer", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=False)
+    optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=False)
+    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=False)
+    optimize("repeats", [2**n for n in range(9)], plot=False)
 
     # for r in [20, 50, 100]:
     #     train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)

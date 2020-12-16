@@ -189,7 +189,7 @@ class Dataset():
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True, stage:int = 1, foldername:str = "defaultdata", batch_size:int = 10):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True, stage: int = 1, foldername: str = "defaultdata", batch_size: int = 128):
         '''
         Initialise the class with the required complexity.
 
@@ -233,13 +233,10 @@ class Dataset():
         self.dat_batches = grouper(dat_lines, self.batch_size)
         self.sup_batches = grouper(sup_lines[1:], self.batch_size)
 
-    
-
     def check_data(self):
         '''
         Checks if data files exist, and creates them if not
         '''
-
         dat_exists, sup_exists = self.dat_fname in self.files, self.sup_fname in self.files #check if data files exist
         
         if not dat_exists or not sup_exists:
@@ -263,40 +260,47 @@ class Dataset():
 
         combs = [list(combinations(self.gauss_modes, i)) for i in range(1, self.number_of_modes + 1)]
         combs = [i[j] for i in combs for j in range(len(i))]
+
         return combs
 
     def save_data(self, combs, dat_exists, sup_exists):
         '''
         Creates and saves down dataset
         '''
+        dat_file = open(self.dir + os.sep + self.dat_fname, 'w' if dat_exists else 'x')
+        sup_file = open(self.dir + os.sep + self.sup_fname, 'w' if sup_exists else 'x')
 
-        if not dat_exists:
-            dat_file = open(self.dir + os.sep + self.dat_fname, 'x') # Create the file and open it
-        else:
-            dat_file = open(self.dir + os.sep + self.dat_fname, 'w') # Open the file to overwrite
+        # if not dat_exists:
+        #     dat_file = open(self.dir + os.sep + self.dat_fname, 'x') # Create the file and open it
+        # else:
+        #     dat_file = open(self.dir + os.sep + self.dat_fname, 'w') # Open the file to overwrite
         
-        if not sup_exists:
-            sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
-        else:
-            sup_file =  open(self.dir + os.sep + self.sup_fname, 'w') # Open to overwrite
-        
+        # if not sup_exists:
+        #     sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
+        # else:
+        #     sup_file =  open(self.dir + os.sep + self.sup_fname, 'w') # Open to overwrite
+
         p = Pool(cpu_count())
         print(combs[0][0])
         sup_file.write(str(combs[0][0].pixels) + '\n')
         print("Saving Data:")
+
         for j in tqdm(range(self.repeats), desc='Stepping through Repeats'):
             batches = grouper(combs, cpu_count())
+
             for batch in batches:
                 sups, imgs = zip(*p.map(self.generate_process, batch))
 
                 sups = [s for s in sups if s is not None]
                 imgs = [i for i in imgs if i is not None] # Remove Nonetype elements from lists
+
                 for i in range(len(imgs)):
                     if imgs[i] is not None and sups[i] is not None:
                         vec = imgs[i].flatten() #Flatten image data to vector
                         vec_string = ', '.join(str(v) for v in vec) + '\n'
                         dat_file.write(vec_string)
                         sup_file.write(repr(sups[i]) + '\n')
+
         dat_file.close()
         sup_file.close()
 
@@ -304,21 +308,20 @@ class Dataset():
         '''
         Process for generating superposition objects across multiple threads in the CPU.
         '''
-        if item is None:
-            return None, None
-        else:
-            randomised_item = [self.randomise_amp_and_phase(i) for i in item]
-            s = Superposition(*randomised_item)
-            return s, s.superpose()
+        if item is None: return None, None
+
+        randomised_item = [self.randomise_amp_and_phase(i) for i in item]
+        s = Superposition(*randomised_item)
+
+        return s, s.superpose()
 
     def load_data(self, batch_number):
         '''
         Load a batch of data from files
         '''
-
         dat_batch = next(islice(self.dat_batches, batch_number, None), None)
         sup_batch = next(islice(self.sup_batches, batch_number, None), None) # Fetch the [batch_number] batch of file lines
-        
+
         p = Pool(cpu_count())
 
         dats = p.map(self.load_dat_process, dat_batch)
@@ -326,28 +329,30 @@ class Dataset():
 
         dats = [d for d in dats if d is not None]
         sups = [s for s in sups if s is not None] # Remove any Nonetype elements
+
         return sups, dats
 
     def load_sup_process(self, sup):
         '''
         Process for loading superposition objects across multiple threads in the CPU.
         '''
-        if sup is None:
-            return None
-        else:
-            return eval(sup)
+        return None if sup is None else eval(sup)
 
+        # if sup is None:
+        #     return None
+        # else:
+        #     return eval(sup)
 
     def load_dat_process(self, dat):
         '''
         Load image data across multiple threads
         '''
-        if dat is None:
-            return None
-        else:
-            new_dat = dat.split(', ') # Split up data line at each comma delimiter
-            new_dat = np.array([float(d) for d in new_dat]) # Cast elements back to floats
-            return new_dat.reshape((self.pixels, self.pixels))
+        if dat is None: return None
+
+        new_dat = dat.split(', ') # Split up data line at each comma delimiter
+        new_dat = np.array([float(d) for d in new_dat]) # Cast elements back to floats
+
+        return new_dat.reshape((self.pixels, self.pixels))
     
     def randomise_amp_and_phase(self, mode):
         '''
@@ -360,7 +365,6 @@ class Dataset():
         x.add_phase(np.abs(round(np.random.normal(scale=self.phase_variation), 2)))
 
         return x
-
 
 
 
