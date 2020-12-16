@@ -4,8 +4,8 @@ import numpy as np
 def getImageFourier (img_data):
     #Takes the fourier transform of each colour of the image indepentantly
     img_fourier = np.zeros_like(img_data)
-    for i in range(3):
-        img_fourier[:, :, i] = np.abs(fft.fft2(img_data[:, :, i]))
+    img_fourier = np.abs(fft.fft2(img_data))
+    img_fourier = fft.fftshift(img_fourier)
     return img_fourier
 
 def meanError (data):
