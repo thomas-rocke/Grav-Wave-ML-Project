@@ -133,3 +133,6 @@ dmypy.json
 # Other
 # *Old_Models
 *.h5
+
+# Dataset files
+*.txt

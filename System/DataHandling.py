@@ -224,7 +224,12 @@ class Dataset():
         dat_file.close()
         sup_file.close()
 
-        self.pixels = int(sup_lines[0])
+        self.pixels = int(sup_lines[0]) # Recover pixels saved from file
+
+        mapIndexPosition = list(zip(dat_lines, sup_lines)) # Create a list of the zipped data lists (so indeces map together)
+        random.shuffle(mapIndexPosition) # Shuffle list randomly
+        dat_lines, sup_lines = zip(*mapIndexPosition) # Unzip the lists
+
         self.dat_batches = grouper(dat_lines, self.batch_size)
         self.sup_batches = grouper(sup_lines[1:], self.batch_size)
 
