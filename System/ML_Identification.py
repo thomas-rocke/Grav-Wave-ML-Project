@@ -8,18 +8,19 @@
 # TODO Header for file
 
 # Imports
+from re import ASCII
 import sys
 import os
-import random
+import gc
 
-#from tensorflow.python.keras.applications.vgg16 import VGG16
-os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
+# os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 from DataHandling import Generate_Data, Dataset
 from time import perf_counter
 from math import isnan
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -31,7 +32,8 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
-from keras.optimizers import SGD, Nadam, Adam
+from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
+
 
 
 
@@ -43,11 +45,25 @@ from keras.optimizers import SGD, Nadam, Adam
 ##################################################
 
 
+class Colour:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+
+
 class ML:
     '''
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, batch_size: int = 128):
+    def __init__(self, max_order: int = 3, number_of_modes: int = 3, amplitude_variation: float = 0.5, phase_variation: float = 1.0, noise_variation: float = 0.1, exposure: tuple = (0.0, 1.0), repeats: int = 100, batch_size: int = 128, optimizer: str = "Adamax", learning_rate: float = 0.002):
         '''
         Initialise the class.
         '''
@@ -59,17 +75,17 @@ class ML:
         self.exposure = exposure
         self.repeats = repeats
         self.batch_size = batch_size
-
-        print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
+        self.optimizer = optimizer
+        self.learning_rate = learning_rate
 
         self.max_epochs = 100
         self.start_number = 2
         self.step_speed = 0.072
-        self.success_loss = 0.01
-        # self.optimizer = SGD(learning_rate=0.01, momentum=0.9, nesterov=True) # Or Adadelta()
-        self.optimizer = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
+        self.success_loss = 0.001
         self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
+
+        print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
 
     def __str__(self):
         '''
@@ -81,7 +97,7 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.noise_variation) + ", " + str(self.exposure) + ", " + str(self.repeats) + ", " + str(self.batch_size) + ")"
+        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.noise_variation) + ", " + str(self.exposure) + ", " + str(self.repeats) + ", " + str(self.batch_size) + ", " + str(self.optimizer) + ", " + str(self.learning_rate) + ")"
 
     def exists(self):
         '''
@@ -112,7 +128,7 @@ class ML:
         self.input_shape = (prelim_data[0].pixels, prelim_data[0].pixels, 1)
 
         print("Done!")
-        print(text("[INIT] Generating model (classes = " + str(len(self.solutions)) + ", input shape = " + str(self.input_shape) + ")... "), end='')
+        print(text("[INIT] Generating model (input shape = " + str(self.input_shape) + ", classes = " + str(len(self.solutions)) + ", optimizer: " + self.optimizer + ")... "), end='')
 
         model = Sequential()
 
@@ -165,7 +181,7 @@ class ML:
         model.add(Activation('sigmoid'))
 
         # model = VGG16(self.input_shape, len(self.solutions)) # Override model with VGG16 model
-        model.compile(loss="mse", optimizer=self.optimizer, metrics=[self.accuracy])
+        model.compile(loss="mse", optimizer=eval(self.optimizer + "(learning_rate=" + str(self.learning_rate) + ")"), metrics=[self.accuracy])
 
         # We choose sigmoid and binary_crossentropy here because we have a multilabel neural network, which becomes K binary
         # classification problems. Using softmax would be wrong as it raises the probabiity on one class and lowers others.
@@ -180,8 +196,8 @@ class ML:
         '''
         Train the model.
         '''
-        if self.exists():
-            print(text("[WARN] Model already exists!\n"))
+        if self.trained():
+            print(text("[WARN] Trained model already exists!\n"))
             self.load()
             return
 
@@ -197,7 +213,7 @@ class ML:
             print(text("[TRAIN] |-> Dataset             : " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
             print(text("[TRAIN] |-> Success Condition   : A loss of " + str(self.success_loss) + "."))
             print(text("[TRAIN] |-> Terminate Condition : Reaching epoch " + str(len(self.history["loss"]) + self.max_epochs) + " or 5 consecutive epochs of stagnation."))
-            print(text("[TRAIN] |-> Estimated Duration  : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
+            print(text("[TRAIN] |-> Maximum Duration    : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
             print(text("[TRAIN] |"))
 
             n = 0
@@ -242,6 +258,8 @@ class ML:
             print(text("[TRAIN] V"))
             print(text("[TRAIN] Done!\n"))
 
+            del train_inputs, train_outputs, val_inputs, val_outputs # Releasing RAM memory
+
         print(text("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n"))
 
     def load_data(self, number_of_modes: int = 1):
@@ -265,7 +283,7 @@ class ML:
             print(text("[DATA] V"))
             print(text("[DATA] Done!\n"))
 
-        except MemoryError: # TODO Is not called when memory overflow occurs
+        except MemoryError:
             print(text("[DATA] V"))
             print(text("[FATAL] Memory overflow!\n"))
             sys.exit()
@@ -284,6 +302,8 @@ class ML:
         if axes == None:
             fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
             fig.suptitle("Training and Validation History for " + str(self))
+            ax1.grid()
+            ax2.grid()
 
             ax1.plot(t, self.history["loss"], label="Training Loss")[0]
             ax2.plot(t, self.history["accuracy"], label="Training Accuracy")[0]
@@ -297,16 +317,13 @@ class ML:
             ax2.plot(t, self.history["accuracy"], label=label)[0]
 
         ax1.set_ylabel("Loss")
-        if elapsed_time: ax2.set_xlabel("Elapsed Time")
+        if elapsed_time: ax2.set_xlabel("Elapsed Time (s)")
         else: ax2.set_xlabel("Epoch")
         ax2.set_ylabel("Accuracy")
 
         plt.xlim(0, t[-1])
         # ax1.set_ylim(0, np.max(self.history["loss"]))
         ax2.set_ylim(0, 1)
-
-        ax1.grid()
-        ax2.grid()
         ax1.legend()
         ax2.legend()
 
@@ -316,7 +333,7 @@ class ML:
 
         return (ax1, ax2)
 
-    def save(self, save_model: bool = True):
+    def save(self, save_trained: bool = True):
         '''
         Save the history of the training to text files.
         '''
@@ -324,26 +341,30 @@ class ML:
 
         print(text("[SAVE] Saving model... "), end='')
 
-        if save_model: self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
+        if save_trained: self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
         for i in self.history: np.savetxt("Models/" + str(self) + "/" + i + ".txt", self.history[i], delimiter=",")
         np.savetxt("Models/" + str(self) + "/solutions.txt", self.solutions, fmt="%s", delimiter=",")
 
-        self.plot(info=False)
-        plt.savefig("Models/" + str(self) + "/history.png", bbox_inches='tight', pad_inches=0)
+        self.plot(info=False, elapsed_time=False)
+        plt.savefig("Models/" + str(self) + "/history_epoch.png", bbox_inches='tight', pad_inches=0)
+        self.plot(info=False, elapsed_time=True)
+        plt.savefig("Models/" + str(self) + "/history_elapsed_time.png", bbox_inches='tight', pad_inches=0)
 
         print("Done!\n")
 
-    def load(self):
+    def load(self, save_trained: bool = True):
         '''
         Load a saved model.
         '''
         if not self.exists():
-            print(text("[WARN] Model does not exist! Will now train.\n"))
+            print(text("[WARN] Model does not exist! Will now train and save.\n"))
             self.train()
+            self.save(save_trained)
+            if not save_trained: self.free()
             return
         elif not self.trained():
-            print(text("[WARN] Model has not been trained! Will only load history.\n"))
+            print(text("[WARN] Model exists but has not been trained! Will only load history.\n"))
 
         print(text("[LOAD] Loading model... "), end='')
 
@@ -476,19 +497,18 @@ class ML:
                 sups.append(np.mean(np.square(superposition.superpose() - data)))
             mode.phase = ((np.argmin(sups) / 10) * (2 * np.pi)) - np.pi
 
+    def free(self):
+        '''
+        Free GPU memory of this model.
+        '''
+        print(text("[INFO] Deleting model and freeing GPU memory... "), end='')
 
+        del self.model
+        self.model = None
+        K.clear_session()
+        collected = gc.collect()
 
-
-class Colour:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+        print("Done! Collected: " + str(collected) + ".\n")
 
 
 
@@ -502,21 +522,21 @@ class Colour:
 
 def text(message):
     '''
-    Print message in the format given.
+    Return message in the format given.
     '''
-    message = message.replace("->",         Colour.OKCYAN + "->" + Colour.ENDC)
-    message = message.replace(" |",         Colour.OKCYAN + " |" + Colour.ENDC)
-    message = message.replace(" V",         Colour.OKCYAN + " V" + Colour.ENDC)
-    message = message.replace("[INFO]",     Colour.OKBLUE + "[INFO]" + Colour.ENDC)
-    message = message.replace("[WARN]",     Colour.WARNING + "[WARN]" + Colour.ENDC)
-    message = message.replace("[FATAL]",    Colour.FAIL + "[FATAL]" + Colour.ENDC)
-    message = message.replace("[INIT]",     Colour.OKGREEN + "[INIT]" + Colour.ENDC)
-    message = message.replace("[DATA]",     Colour.OKGREEN + "[DATA]" + Colour.ENDC)
-    message = message.replace("[TRAIN]",    Colour.OKGREEN + "[TRAIN]" + Colour.ENDC)
-    message = message.replace("[PLOT]",     Colour.OKGREEN + "[PLOT]" + Colour.ENDC)
-    message = message.replace("[SAVE]",     Colour.OKGREEN + "[SAVE]" + Colour.ENDC)
-    message = message.replace("[LOAD]",     Colour.OKGREEN + "[LOAD]" + Colour.ENDC)
-    message = message.replace("[PRED]",     Colour.OKGREEN + "[PRED]" + Colour.ENDC)
+    message = message.replace("->",         Colour.OKCYAN   + "->"      + Colour.ENDC)
+    message = message.replace(" |",         Colour.OKCYAN   + " |"      + Colour.ENDC)
+    message = message.replace(" V",         Colour.OKCYAN   + " V"      + Colour.ENDC)
+    message = message.replace("[INFO]",     Colour.OKBLUE   + "[INFO]"  + Colour.ENDC)
+    message = message.replace("[WARN]",     Colour.WARNING  + "[WARN]"  + Colour.ENDC)
+    message = message.replace("[FATAL]",    Colour.FAIL     + "[FATAL]" + Colour.ENDC)
+    message = message.replace("[INIT]",     Colour.OKGREEN  + "[INIT]"  + Colour.ENDC)
+    message = message.replace("[DATA]",     Colour.OKGREEN  + "[DATA]"  + Colour.ENDC)
+    message = message.replace("[TRAIN]",    Colour.OKGREEN  + "[TRAIN]" + Colour.ENDC)
+    message = message.replace("[PLOT]",     Colour.OKGREEN  + "[PLOT]"  + Colour.ENDC)
+    message = message.replace("[SAVE]",     Colour.OKGREEN  + "[SAVE]"  + Colour.ENDC)
+    message = message.replace("[LOAD]",     Colour.OKGREEN  + "[LOAD]"  + Colour.ENDC)
+    message = message.replace("[PRED]",     Colour.OKGREEN  + "[PRED]"  + Colour.ENDC)
     return message
 
 def VGG16(input_shape, classes):
@@ -582,23 +602,23 @@ def auto_label(rects, ax):
                     textcoords="offset points",
                     ha="center", va="bottom")
 
-def process(*args):
+def process(**kwargs):
     '''
     Runs a process that creates a model, trains it and then saves it. Can be run on a separate thread to free GPU memory after training for multiple training runs.
     '''
     print("Done!\n")
 
-    model = ML(*args)
+    model = ML(**kwargs)
     model.train()
-    model.save()
+    model.save(save_trained=False)
 
-def train_and_save(*args):
+def train_and_save(**kwargs):
     '''
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
     print(text("[INFO] Starting process to ensure GPU memory is freed after training is complete... "), end='')
 
-    p = multiprocessing.Process(target=process, args=args)
+    p = multiprocessing.Process(target=process, args=kwargs)
     p.start()
     p.join()
 
@@ -636,51 +656,27 @@ def get_model_error(model, data_object:Generate_Data, test_number:int=10, sup:Su
 
     return amp_err, phase_err, img_err
 
-def compare_models(title: str, *models: ML):
+def optimize(param_name: str, param_range: str, plot: bool = True) -> None:
     '''
-    Compare the history of multiple models.
+    Loading / training multiple models and plotting comparison graphs of their performances.
     '''
-    fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-    fig.suptitle(title + " by Epoch")
-
-    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Batch Size: " + str(m.batch_size), elapsed_time=False)
-    plt.show()
-
-    fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-    fig.suptitle(title + " by Elapsed Time")
-
-    for m in models: m.plot(info=False, axes=(ax1, ax2), label="Batch Size: " + str(m.batch_size), elapsed_time=True)
-    plt.show()
-
-    keras.backend.clear_session() # Unload the models from memory to allow future training
-
-def plot_batch_sizes():
-    '''
-    Plot a graph of the performance of models with varying batch sizes.
-    '''
-    # for batch_size in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, batch_size)
+    print(text("[INFO] Optimizing parameter '" + param_name + "' across range '" + str(param_range) + "'.\n"))
 
     models = []
-    for batch_size in [2**n for n in range(9)]:
-        m = ML(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, batch_size)
-        m.load()
-        models.append(m)
+    for test in param_range:
+        m = ML(**{param_name: test})
+        m.load(save_trained=False) # Load the model, and if the model does not exist then train and save it
+        models.append(m) # Add the model to the list 
 
-    compare_models("Comparing Batch Size", *models)
+    if plot:
+        for time in (True, False):
+            fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+            fig.suptitle(f"Comparing {param_name} by {'Elapsed Time' if time else 'Epoch'}")
+            ax1.grid()
+            ax2.grid()
 
-def plot_repeats():
-    '''
-    Plot a graph of the performance of models with varying batch sizes.
-    '''
-    # for repeats in [2**n for n in range(9)]: train_and_save(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), repeats, 128)
-
-    models = []
-    for repeats in [2**n for n in range(9)]:
-        m = ML(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), repeats, 128)
-        m.load()
-        models.append(m)
-
-    compare_models("Comparing Repeats", *models)
+            for m in models: m.plot(info=False, axes=(ax1, ax2), label=param_name + ": " + str(getattr(m, param_name)), elapsed_time=time)
+            plt.show()
 
 
 
@@ -693,9 +689,9 @@ def plot_repeats():
 
 
 # This is supposed to automatically allocate memory to the GPU when it is needed instead of reserving the full space.
-# config = tf.compat.v1.ConfigProto()
-# config.gpu_options.allow_growth = True
-# session = tf.compat.v1.Session(config=config)
+# config = tf.ConfigProto()
+# config.gpu_options.allow_growth=True
+# sess = tf.Session(config=config)
 
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -717,8 +713,11 @@ if __name__ == '__main__':
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
 
-    # plot_repeats()
-    # plot_batch_sizes()
+    optimize("batch_size", [2**n for n in range(9)], plot=False)
+    optimize("optimizer", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=False)
+    optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=False)
+    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=False)
+    optimize("repeats", [2**n for n in range(9)], plot=False)
 
     # for r in [20, 50, 100]:
     #     train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)
