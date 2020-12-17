@@ -189,7 +189,7 @@ class Dataset():
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True, stage: int = 1, foldername: str = "defaultdata", batch_size: int = 128):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True, stage:int = 1, foldername:str = "defaultdata", batch_size:int = 10):
         '''
         Initialise the class with the required complexity.
 
@@ -226,13 +226,14 @@ class Dataset():
 
         self.hermite_modes = [Hermite(l=i, m=j) for i in range(self.max_order) for j in range(self.max_order)]
 
+    
+
     def check_data(self):
         '''
         Checks if data files exist, and creates them if not
         '''
 
         file_exists = self.sup_fname in self.files # Check if data file exists
-
         
         if not file_exists:
             combs = self.make_data()
@@ -254,7 +255,6 @@ class Dataset():
 
         combs = [list(combinations(self.gauss_modes, i)) for i in range(1, self.number_of_modes + 1)]
         combs = [i[j] for i in combs for j in range(len(i))]
-
         return combs
 
     def save_data(self, combs):
@@ -264,11 +264,6 @@ class Dataset():
         
         sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
         
-        # if not sup_exists:
-        #     sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
-        # else:
-        #     sup_file =  open(self.dir + os.sep + self.sup_fname, 'w') # Open to overwrite
-
         p = Pool(cpu_count())
         sup_file.write(str(combs[0][0].pixels) + '\n')
         print("Saving Data:")
@@ -297,12 +292,10 @@ class Dataset():
         p.join() # Wait for processes to finish
         return data
 
-
     def load_process(self, sup_string):
         '''
         Process for loading superposition objects across multiple threads in the CPU.
         '''
-
         if sup_string is None:
             return None
         else:
@@ -313,7 +306,6 @@ class Dataset():
 
             output_data = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
             return input_data, output_data
-
     
     def randomise_amp_and_phase(self, mode):
         '''
@@ -326,6 +318,7 @@ class Dataset():
         x.add_phase(np.abs(round(np.random.normal(scale=self.phase_variation), 2)))
 
         return x
+
 
 
 
