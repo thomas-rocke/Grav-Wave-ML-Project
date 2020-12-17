@@ -10,8 +10,8 @@ import time
 import random
 import sys
 import os
-
-from Gaussian_Beam import Hermite, Superposition, Laguerre
+from Utils import meanError
+from Gaussian_Beam import Hermite, Superposition, Laguerre, add_noise, add_exposure
 
 
 def saveData(superposList, fname, path=None):    
@@ -204,44 +204,39 @@ class Dataset():
         self.noise_variation = noise_variation
         self.exposure = exposure
         self.repeats = repeats
-        self.dir = os.getcwd() + os.sep + foldername #saves path to files
+        self.dir = os.getcwd() + os.sep + foldername #saves path to file
         self.files = os.listdir(self.dir)
         self.stage = stage
         self.info = info
         self.batch_size = batch_size
 
-        self.sup_fname = "Stage_{}_sup.txt".format(self.stage)
-        self.dat_fname = "Stage_{}_dat.txt".format(self.stage)
+        self.sup_fname = "Stage_{}.txt".format(self.stage)
 
-        self.check_data() #Check if files exist, create them if empty
+        self.check_data() #Check if file exists, create if empty
 
-        dat_file = open(self.dir + os.sep + self.dat_fname, 'r')
-        sup_file = open(self.dir + os.sep + self.sup_fname, 'r') #Open files to read
+        sup_file = open(self.dir + os.sep + self.sup_fname, 'r') #Open file to read
 
-        dat_lines = [str(line) for line in dat_file]
         sup_lines = [str(line) for line in sup_file]
 
-        dat_file.close()
         sup_file.close()
 
         self.pixels = int(sup_lines[0]) # Recover pixels saved from file
 
-        mapIndexPosition = list(zip(dat_lines, sup_lines)) # Create a list of the zipped data lists (so indeces map together)
-        random.shuffle(mapIndexPosition) # Shuffle list randomly
-        dat_lines, sup_lines = zip(*mapIndexPosition) # Unzip the lists
+        self.sup_strings = sup_lines[1:] # Save down all possible combs to memory
 
-        self.dat_batches = grouper(dat_lines, self.batch_size)
-        self.sup_batches = grouper(sup_lines[1:], self.batch_size)
+        self.hermite_modes = [Hermite(l=i, m=j) for i in range(self.max_order) for j in range(self.max_order)]
 
     def check_data(self):
         '''
         Checks if data files exist, and creates them if not
         '''
-        dat_exists, sup_exists = self.dat_fname in self.files, self.sup_fname in self.files #check if data files exist
+
+        file_exists = self.sup_fname in self.files # Check if data file exists
+
         
-        if not dat_exists or not sup_exists:
+        if not file_exists:
             combs = self.make_data()
-            self.save_data(combs, dat_exists, sup_exists) #save data if files not present
+            self.save_data(combs) # Save data if files not present
         
     def make_data(self):
         '''
@@ -252,7 +247,6 @@ class Dataset():
                         + str(self.phase_variation) + "\nVariation in saturation noise: " + str(self.noise_variation) + "\nVariation in saturation exposure: " + str(self.exposure) + "\nRepeats of combinations: " + str(self.repeats) + "\n")
         if self.info: print("Generating Gaussian modes...")
 
-        self.hermite_modes = [Hermite(l=i, m=j) for i in range(self.max_order) for j in range(self.max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
@@ -263,17 +257,12 @@ class Dataset():
 
         return combs
 
-    def save_data(self, combs, dat_exists, sup_exists):
+    def save_data(self, combs):
         '''
         Creates and saves down dataset
         '''
-        dat_file = open(self.dir + os.sep + self.dat_fname, 'w' if dat_exists else 'x')
-        sup_file = open(self.dir + os.sep + self.sup_fname, 'w' if sup_exists else 'x')
-
-        # if not dat_exists:
-        #     dat_file = open(self.dir + os.sep + self.dat_fname, 'x') # Create the file and open it
-        # else:
-        #     dat_file = open(self.dir + os.sep + self.dat_fname, 'w') # Open the file to overwrite
+        
+        sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
         
         # if not sup_exists:
         #     sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
@@ -281,78 +270,50 @@ class Dataset():
         #     sup_file =  open(self.dir + os.sep + self.sup_fname, 'w') # Open to overwrite
 
         p = Pool(cpu_count())
-        print(combs[0][0])
         sup_file.write(str(combs[0][0].pixels) + '\n')
         print("Saving Data:")
-
-        for j in tqdm(range(self.repeats), desc='Stepping through Repeats'):
-            batches = grouper(combs, cpu_count())
-
-            for batch in batches:
-                sups, imgs = zip(*p.map(self.generate_process, batch))
-
-                sups = [s for s in sups if s is not None]
-                imgs = [i for i in imgs if i is not None] # Remove Nonetype elements from lists
-
-                for i in range(len(imgs)):
-                    if imgs[i] is not None and sups[i] is not None:
-                        vec = imgs[i].flatten() #Flatten image data to vector
-                        vec_string = ', '.join(str(v) for v in vec) + '\n'
-                        dat_file.write(vec_string)
-                        sup_file.write(repr(sups[i]) + '\n')
-
-        dat_file.close()
+        batches = grouper(combs, cpu_count())
+        for batch in tqdm(batches, desc='Processing data in batches of {}'.format(cpu_count())):
+            sups = [s for s in batch if s is not None] # Remove any Nonetype elements from the grouped batches
+            for sup in sups:
+                    sup_file.write('; '.join([repr(mode) for mode in sup]) + '\n')
         sup_file.close()
 
-    def generate_process(self, item):
+    def load_data(self):
         '''
-        Process for generating superposition objects across multiple threads in the CPU.
+        Load a batch of data from files.
+        Returns [input_data, output_data]
+        Where:
+        input_data[0] is the 0th Image np.array
+        output_data[0] is the 0th Neural Net ouput array containing mode amps and cos(phase)s
         '''
-        if item is None: return None, None
 
-        randomised_item = [self.randomise_amp_and_phase(i) for i in item]
-        s = Superposition(*randomised_item)
-
-        return s, s.superpose()
-
-    def load_data(self, batch_number):
-        '''
-        Load a batch of data from files
-        '''
-        dat_batch = next(islice(self.dat_batches, batch_number, None), None)
-        sup_batch = next(islice(self.sup_batches, batch_number, None), None) # Fetch the [batch_number] batch of file lines
-
+        batch = random.sample(self.sup_strings, self.batch_size) # Take random sample of combs
+        
         p = Pool(cpu_count())
 
-        dats = p.map(self.load_dat_process, dat_batch)
-        sups = p.map(self.load_sup_process, sup_batch)
+        data = zip(*p.map(self.load_process, batch))
+        p.close()
+        p.join() # Wait for processes to finish
+        return data
 
-        dats = [d for d in dats if d is not None]
-        sups = [s for s in sups if s is not None] # Remove any Nonetype elements
 
-        return sups, dats
-
-    def load_sup_process(self, sup):
+    def load_process(self, sup_string):
         '''
         Process for loading superposition objects across multiple threads in the CPU.
         '''
-        return None if sup is None else eval(sup)
 
-        # if sup is None:
-        #     return None
-        # else:
-        #     return eval(sup)
+        if sup_string is None:
+            return None
+        else:
+            components = sup_string.split("; ")
+            mode_components = [self.randomise_amp_and_phase(eval(c)) for c in components]
+            s = Superposition(*mode_components)
+            input_data = add_exposure(add_noise(s.superpose(), self.noise_variation), self.exposure) # Generate noise image
 
-    def load_dat_process(self, dat):
-        '''
-        Load image data across multiple threads
-        '''
-        if dat is None: return None
+            output_data = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
+            return input_data, output_data
 
-        new_dat = dat.split(', ') # Split up data line at each comma delimiter
-        new_dat = np.array([float(d) for d in new_dat]) # Cast elements back to floats
-
-        return new_dat.reshape((self.pixels, self.pixels))
     
     def randomise_amp_and_phase(self, mode):
         '''
@@ -382,13 +343,14 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__ == "__main__": 
     dir = 'System' + os.sep + 'TestData'
-    data_obj = Dataset(3, 5, 0.6, batch_size=10, repeats=3, foldername=dir)
-
-    start_time = time.time()
-    sups, imgs = data_obj.load_data(7)
-    end_time = time.time()
-
-    print(end_time - start_time)
-    sups[1].plot()
-    plt.imshow(imgs[0])
-    plt.show()
+    data_obj = Dataset(3, 5, 0.6, batch_size=1, foldername=dir)
+    times = [0]*10
+    for i in range(10):
+        start_time = time.time()
+        data_obj.load_data()
+        end_time = time.time()
+        time_diff = end_time - start_time
+        times[i] = time_diff
+    
+    mean, err = meanError(times)
+    print("{}+-{}".format(mean, err))
