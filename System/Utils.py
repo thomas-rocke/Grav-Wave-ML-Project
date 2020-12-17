@@ -22,6 +22,12 @@ def meanError (data):
         return 0, 0
     return mean, err
 
+def find_cm(image):
+    threshold_value = filters.threshold_otsu(image)
+    labeled_foreground = (image > threshold_value).astype(int)
+    properties = regionprops(labeled_foreground, image)
+    center_of_mass = properties[0].centroid
+    return center_of_mass[1], center_of_mass[0]
 
 
 
