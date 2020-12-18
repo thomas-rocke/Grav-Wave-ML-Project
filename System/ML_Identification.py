@@ -17,7 +17,7 @@ import gc
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
 from Gaussian_Beam import Hermite, Superposition, Laguerre
-from DataHandling import Dataset
+from DataHandling import Dataset, Generate_Data
 from time import perf_counter
 from math import isnan
 import random
