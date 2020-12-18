@@ -287,10 +287,16 @@ class Dataset():
         
         p = Pool(cpu_count())
 
-        data = zip(*p.map(self.load_process, batch))
+        input_data, output_data = zip(*p.map(self.load_process, batch))
         p.close()
         p.join() # Wait for processes to finish
-        return data
+
+        #input_data = np.array([np.array(input_data)[..., np.newaxis]]) # Convert to arrays of correct shape for Machine Learning
+        #output_data = np.array([np.array(output_data)[..., np.newaxis]])
+
+        input_data = np.array(input_data)[..., np.newaxis]
+        output_data = np.array(output_data)[..., np.newaxis]
+        return input_data, output_data
 
     def load_process(self, sup_string):
         '''
@@ -336,14 +342,15 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__ == "__main__": 
     dir = 'System' + os.sep + 'TestData'
-    data_obj = Dataset(3, 5, 0.6, batch_size=1, foldername=dir)
+    data_obj = Dataset(3, 5, 0.6, batch_size=12, foldername=dir)
     times = [0]*10
-    for i in range(10):
+    for i in range(1):
         start_time = time.time()
-        data_obj.load_data()
+        data = data_obj.load_data()
         end_time = time.time()
         time_diff = end_time - start_time
         times[i] = time_diff
     
-    mean, err = meanError(times)
-    print("{}+-{}".format(mean, err))
+    print(np.shape(data[0]))
+    print(np.shape(data[1]))
+    print(type(data[0]))
