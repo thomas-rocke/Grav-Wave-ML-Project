@@ -189,129 +189,51 @@ class Dataset():
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True, stage:int = 1, foldername:str = "defaultdata", batch_size:int = 10):
+    def __init__(self, max_order, image_params = [0, (0, 1)], info: bool = True, stage:int = 1, batch_size:int = 10, pixels=128):
         '''
         Initialise the class with the required complexity.
 
         'max_order': Max order of Guassian modes in superpositions (x > 0).
-        'number_of_modes': How many modes you want to superimpose together (x > 0).
-        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
+        'image_params': sets image noise params [noise_variance, (exposure_minimum, exposure_maximum)]
         '''
         self.max_order = max_order
-        self.number_of_modes = number_of_modes
-        self.amplitude_variation = amplitude_variation
-        self.phase_variation = phase_variation
-        self.noise_variation = noise_variation
-        self.exposure = exposure
-        self.repeats = repeats
-        self.dir = os.getcwd() + os.sep + foldername #saves path to file
-        self.files = os.listdir(self.dir)
+        self.noise_variation = image_params[0]
+        self.exposure = image_params[1]
         self.stage = stage
         self.info = info
         self.batch_size = batch_size
+        self.pixels = pixels
 
-        self.sup_fname = "Stage_{}.txt".format(self.stage)
-
-        self.check_data() #Check if file exists, create if empty
-
-        sup_file = open(self.dir + os.sep + self.sup_fname, 'r') #Open file to read
-
-        sup_lines = [str(line) for line in sup_file]
-
-        sup_file.close()
-
-        self.pixels = int(sup_lines[0]) # Recover pixels saved from file
-
-        self.sup_strings = sup_lines[1:] # Save down all possible combs to memory
-
-        self.hermite_modes = [Hermite(l=i, m=j) for i in range(self.max_order) for j in range(self.max_order)]
-
-    
-
-    def check_data(self):
-        '''
-        Checks if data files exist, and creates them if not
-        '''
-
-        file_exists = self.sup_fname in self.files # Check if data file exists
-        
-        if not file_exists:
-            combs = self.make_data()
-            self.save_data(combs) # Save data if files not present
-        
-    def make_data(self):
-        '''
-        Generates initial dataset of all potential superposition combinations
-        '''
         if self.info: print("\n_____| Generating Data |_____\n")
-        if self.info: print("Max order of mode: " + str(self.max_order) + "\nNumber of modes in superposition: " + str(self.number_of_modes) + "\nVariation in mode amplitude: " + str(self.amplitude_variation) + "\nVariation in mode phase: "
-                        + str(self.phase_variation) + "\nVariation in saturation noise: " + str(self.noise_variation) + "\nVariation in saturation exposure: " + str(self.exposure) + "\nRepeats of combinations: " + str(self.repeats) + "\n")
+        if self.info: print("Max order of mode: " + str(self.max_order) + "\nVariation in saturation noise: " + str(self.noise_variation) + "\nVariation in saturation exposure: " + str(self.exposure)  + "\n")
         if self.info: print("Generating Gaussian modes...")
-
-        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
+        
+        self.hermite_modes = [Hermite(l=i, m=j, pixels=self.pixels) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j, pixels=self.pixels) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
-        if self.info: print("Done! Found " + str(len(self.hermite_modes)) + " hermite modes and " + str(len(self.laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
-
-        combs = [list(combinations(self.gauss_modes, i)) for i in range(1, self.number_of_modes + 1)]
-        combs = [i[j] for i in combs for j in range(len(i))]
-        return combs
-
-    def save_data(self, combs):
-        '''
-        Creates and saves down dataset
-        '''
-        
-        sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
-        
-        p = Pool(cpu_count())
-        sup_file.write(str(combs[0][0].pixels) + '\n')
-        print("Saving Data:")
-        batches = grouper(combs, cpu_count())
-        for batch in tqdm(batches, desc='Processing data in batches of {}'.format(cpu_count())):
-            sups = [s for s in batch if s is not None] # Remove any Nonetype elements from the grouped batches
-            for sup in sups:
-                    sup_file.write('; '.join([repr(mode) for mode in sup]) + '\n')
-        sup_file.close()
 
     def load_data(self):
         '''
-        Load a batch of data from files.
+        Generates a single batch of data
         Returns [input_data, output_data]
         Where:
         input_data[0] is the 0th Image np.array
         output_data[0] is the 0th Neural Net ouput array containing mode amps and cos(phase)s
         '''
+        input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
+        output_data = np.zeros((self.batch_size, np.size(self.hermite_modes)*2))
+        for b in range(self.batch_size):
+            mode_components = [self.randomise_amp_and_phase(mode) for mode in self.gauss_modes]
+            s = Superposition(*mode_components, pixels=self.pixels)
+            input_data[b, :, :] = add_exposure(add_noise(s.superpose(), self.noise_variation), self.exposure) # Generate noise image
 
-        batch = random.sample(self.sup_strings, self.batch_size) # Take random sample of combs
+            output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
         
-        p = Pool(cpu_count())
-
-        input_data, output_data = zip(*p.map(self.load_process, batch))
-        p.close()
-        p.join() # Wait for processes to finish
-
-        #input_data = np.array([np.array(input_data)[..., np.newaxis]]) # Convert to arrays of correct shape for Machine Learning
-        #output_data = np.array([np.array(output_data)[..., np.newaxis]])
 
         input_data = np.array(input_data)[..., np.newaxis]
-        output_data = np.array(output_data)[..., np.newaxis]
+        output_data = np.array(output_data) # Convert to arrays of correct shape
         return input_data, output_data
-
-    def load_process(self, sup_string):
-        '''
-        Process for loading superposition objects across multiple threads in the CPU.
-        '''
-        if sup_string is None:
-            return None
-        else:
-            components = sup_string.split("; ")
-            mode_components = [self.randomise_amp_and_phase(eval(c)) for c in components]
-            s = Superposition(*mode_components)
-            input_data = add_exposure(add_noise(s.superpose(), self.noise_variation), self.exposure) # Generate noise image
-
-            output_data = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
-            return input_data, output_data
     
     def randomise_amp_and_phase(self, mode):
         '''
@@ -320,8 +242,8 @@ class Dataset():
         '''
         x = mode.copy()
 
-        x *= np.abs(round(np.random.normal(scale=self.amplitude_variation), 2) + 1)
-        x.add_phase(np.abs(round(np.random.normal(scale=self.phase_variation), 2)))
+        x *= random.random()
+        x.add_phase(random.random()* 2 * np.pi)
 
         return x
 
@@ -341,16 +263,12 @@ def grouper(iterable, n, fillvalue=None):
 
 
 if __name__ == "__main__": 
-    dir = 'System' + os.sep + 'TestData'
-    data_obj = Dataset(3, 5, 0.6, batch_size=12, foldername=dir)
-    times = [0]*10
-    for i in range(1):
-        start_time = time.time()
-        data = data_obj.load_data()
-        end_time = time.time()
-        time_diff = end_time - start_time
-        times[i] = time_diff
     
+    x = Dataset(10, batch_size=12)
+    t1 = time.time()
+    for i in range(10):
+        data = x.load_data()
+    t2 = time.time() - t1
     print(np.shape(data[0]))
     print(np.shape(data[1]))
-    print(type(data[0]))
+    print(t2/10)
