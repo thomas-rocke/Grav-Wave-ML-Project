@@ -296,7 +296,7 @@ class Superposition(list):
 
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
 
-        return add_exposure(add_noise(superposition / np.linalg.norm(superposition), self.noise_variation), self.exposure) # Normalise the superposition and add noise and exposure effects
+        return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
     def phase_map(self):
         '''
