@@ -10,9 +10,11 @@ import time
 import random
 import sys
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 from Utils import meanError
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 import keras
+
 
 class Generate_Data(list):
     '''
@@ -215,12 +217,20 @@ class Dataset(keras.utils.Sequence):
         output_data[n] is the nth Superposition object
         '''
         input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
-        output_data = np.zeros((self.batch_size))
-        for b in range(self.batch_size):
-            s = Superpose_effects(self.gauss_modes, self.sup_params)
-            input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
 
-            output_data[b, :] = s
+        p = Pool(cpu_count())
+        inp, output_data = zip(*p.map(self.batch_load_process, range(self.batch_size)))
+        p.close()
+        p.join()
+        input_data = np.array(inp) 
+
+        return input_data, output_data
+
+    def batch_load_process(self, n):
+        s = Superpose_effects(self.gauss_modes, self.sup_params)
+        input_data = Image_Processing(s.superpose(), self.image_params) # Generate noise image
+
+        output_data = s
 
         return input_data, output_data
 
@@ -379,11 +389,11 @@ def grouper(iterable, n, fillvalue=None):
 
 
 if __name__ == "__main__": 
-    x = Dataset(5, [0.2, 10, (0.2, 0.8), True], batch_size=1)
-
-    dat = x.__getitem__(0)[0]
-
-    plt.imshow(dat[0, :, :])
-    plt.show()
-
-
+    x = Dataset(5, [0.2, 10, (0.2, 0.8), True], batch_size=128)
+    ts = np.zeros(5)
+    for i in range(5):
+        t = time.time()
+        dat = x.__getitem__(1)
+        ts[i] = time.time() - t
+    
+    print(meanError(ts))
