@@ -296,7 +296,7 @@ class Superposition(list):
 
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
 
-        return add_exposure(add_noise(superposition / np.linalg.norm(superposition), self.noise_variation), self.exposure) # Normalise the superposition and add noise and exposure effects
+        return superposition / np.linalg.norm(superposition) # Normalise the superposition
 
     def phase_map(self):
         '''
@@ -412,17 +412,6 @@ class Laguerre(Superposition):
 ##########                              ##########
 ##################################################
 
-
-def randomise_amplitudes(mode_list, variance):
-    amplitudes = np.zeros((len(mode_list)))
-    new_modes = []
-    for i in range(len(mode_list)):
-        amplitudes[i] = abs(round(np.random.normal(scale=variance), 2) + 1) # Make randomised amplitude based on normal distribution
-    amplitudes /= np.linalg.norm(amplitudes) # Normalise amplitudes
-    for i, mode in enumerate(mode_list):
-        new_modes.append(mode * amplitudes[i])
-    return new_modes
-
 def unpack_and_superpose(mode_list):
     modes = []
     for mode in mode_list:
@@ -441,40 +430,6 @@ def fact(x):
 
 def choose(n, r):
     return fact(n)/(fact(r)*fact(n-r))
-
-def add_noise(image, noise_variance: float = 0.0):
-    '''
-    Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
-    Noise Variance defined as a %age of maximal intensity
-    '''
-
-    actual_variance = np.abs(np.random.normal(0, noise_variance)) 
-    # Noise Variance parameter gives maximum noise level for whole dataset
-    # Actual Noise is the gaussian noise variance used for a specific add_noise call
-
-    max_val = np.max(image)
-    return np.random.normal(loc=image, scale=actual_variance*max_val) # Variance then scaled as fraction of brightest intensity
-
-
-def add_exposure(image, exposure:tuple = (0.0, 1.0)):
-    '''
-    Adds in exposure limits to the image, using percentile limits defined by exposure.
-    exposure[0] is the x% lower limit of detection, exposure[1] is the upper.
-    Percents calculated as a function of the maximum image intensity.
-    '''
-    max_val = np.max(image)
-    lower_bound = max_val * exposure[0]
-    upper_bound = max_val * exposure[1]
-    exp = np.vectorize(exposure_comparison)
-    image = exp(image, upper_bound, lower_bound)
-    return image
-
-def exposure_comparison(val, upper_bound, lower_bound):
-    if val > upper_bound:
-        val = upper_bound
-    elif val < lower_bound:
-        val = lower_bound
-    return val
 
 
 
