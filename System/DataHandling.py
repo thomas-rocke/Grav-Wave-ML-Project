@@ -12,10 +12,10 @@ import sys
 import os
 from Utils import meanError
 from Gaussian_Beam import Hermite, Superposition, Laguerre
+import keras
 
 
-
-class Dataset():
+class Dataset(keras.utils.Sequence):
     '''
     Class to load/generate dataset for Machine Learning
     '''
@@ -44,13 +44,15 @@ class Dataset():
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
 
-    def load_data(self):
+    def __getitem__(self, index):
         '''
-        Generates a single batch of data
+        Generates a single batch of data for use in Keras model.fit_generator
         Returns [input_data, output_data]
         Where:
-        input_data[0] is the 0th Image np.array
-        output_data[0] is the 0th Neural Net ouput array containing mode amps and cos(phase)s
+        input_data[n, :, :, 0] is the Image np.array for the nth batch element
+        output_data[n, :] is the nth Neural Net ouput array containing mode amps and cos(phase)s
+
+        The index param is unused, and is included for compatability with keras model.fit_generator
         '''
         input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes)*2))
@@ -65,6 +67,30 @@ class Dataset():
         output_data = np.array(output_data) # Convert to arrays of correct shape
         return input_data, output_data
 
+    def load_batch(self):
+        '''
+        Generates a single batch of data for use in non-keras applications
+        Returns [input_data, output_data]
+        Where:
+        input_data[n, :, :] is the Image np.array for the nth batch element
+        output_data[n] is the nth Superposition object
+        '''
+        input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
+        output_data = np.zeros((self.batch_size))
+        for b in range(self.batch_size):
+            s = Superpose_effects(self.gauss_modes, self.sup_params)
+            input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
+
+            output_data[b, :] = s
+            
+        return input_data, output_data
+
+    def on_epoch_end(self):
+        '''
+        Space to perform processing after an epoch has ended.
+        Unused as not needed, but included for compatibility with keras model.fit_generator
+        '''
+        pass
 
 
 
@@ -216,7 +242,7 @@ def grouper(iterable, n, fillvalue=None):
 if __name__ == "__main__": 
     x = Dataset(5, [0.2, 10, (0.2, 0.8), True], batch_size=1)
 
-    dat = x.load_data()[0]
+    dat = x.__getitem__(0)[0]
 
     plt.imshow(dat[0, :, :, 0])
     plt.show()
