@@ -20,15 +20,17 @@ class Dataset():
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order, image_params = [0, 0, (0, 1), False], info: bool = True, batch_size:int = 10, pixels=128):
+    def __init__(self, max_order, image_params = [0, 0, (0, 1), False], sup_params=[0], info: bool = True, batch_size:int = 10, pixels=128):
         '''
         Initialise the class with the required complexity.
 
         'max_order': Max order of Guassian modes in superpositions (x > 0).
         'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), quantize_image]
+        'sup_params': sets superposition params [w_0_variance]
         '''
         self.max_order = max_order
         self.image_params = image_params
+        self.sup_params = sup_params
         self.info = info
         self.batch_size = batch_size
         self.pixels = pixels
@@ -53,8 +55,7 @@ class Dataset():
         input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes)*2))
         for b in range(self.batch_size):
-            mode_components = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
-            s = Superposition(*mode_components, pixels=self.pixels)
+            s = Superpose_effects(self.gauss_modes, self.sup_params)
             input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
 
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
@@ -75,6 +76,21 @@ class Dataset():
 
 #### Functions affecting Superpositions, Hermites, Laguerres
 
+def Superpose_effects(modes, sup_params):
+    '''
+    Permorms all randomisation processes on a list of modes to turn them into a superposition for ML
+    'sup_params': sets all params affecting superpositions [w_0_variance]
+    '''
+
+    ## Processes before Superposition
+    randomised_modes = [randomise_amp_and_phase(m) for m in modes]
+    w_0_variance = sup_params[0]
+    varied_w_0_modes = vary_w_0(randomised_modes, w_0_variance)
+    s = Superposition(*varied_w_0_modes)
+    ## Processes after superposition
+
+    return s
+
 def randomise_amp_and_phase(mode):
     '''
     Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
@@ -87,11 +103,15 @@ def randomise_amp_and_phase(mode):
 
     return x
 
-def vary_w_0(superposition, w_0_variance):
-    new_w_0 = np.random.normal(superposition.w_0, w_0_variance)
-    new_s = superposition.copy()
-    new_s.w_0 = new_w_0
-    return new_s
+def vary_w_0(modes, w_0_variance):
+    '''
+    Varies w_0 param for all modes within a superposition
+    '''
+    new_w_0 = np.random.normal(modes[0].w_0, w_0_variance)
+    new_modes = [mode.copy() for mode in modes]
+    for m in new_modes:
+        m.w_0 = new_w_0
+    return new_modes
 
 
 
@@ -194,11 +214,11 @@ def grouper(iterable, n, fillvalue=None):
 
 
 if __name__ == "__main__": 
-    s = Superposition(Hermite(0, 0))
-    im = s.superpose()
+    x = Dataset(5, [0.2, 10, (0.2, 0.8), True], batch_size=1)
 
-    new_im = quantize_image(im)
-    plt.imshow(new_im)
+    dat = x.load_data()[0]
+
+    plt.imshow(dat[0, :, :, 0])
     plt.show()
 
 
