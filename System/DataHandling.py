@@ -25,7 +25,7 @@ import keras
 ##################################################
 
 
-class Generate_Data(list):
+class GenerateData(list):
     '''
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
     '''
@@ -239,7 +239,7 @@ class Dataset(keras.utils.Sequence):
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes)*2))
 
         for b in range(self.batch_size):
-            s = Superpose_effects(self.gauss_modes, self.sup_params)
+            s = superpose_effects(self.gauss_modes, self.sup_params)
             input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
 
@@ -266,7 +266,7 @@ class Dataset(keras.utils.Sequence):
         return input_data, output_data
 
     def batch_load_process(self, n):
-        s = Superpose_effects(self.gauss_modes, self.sup_params)
+        s = superpose_effects(self.gauss_modes, self.sup_params)
 
         input_data = Image_Processing(s.superpose(), self.image_params) # Generate noise image
         output_data = s
@@ -291,7 +291,7 @@ class Dataset(keras.utils.Sequence):
 
 #### Functions affecting Superpositions, Hermites, Laguerres
 
-def Superpose_effects(modes, sup_params):
+def superpose_effects(modes, sup_params):
     '''
     Permorms all randomisation processes on a list of modes to turn them into a superposition for ML
     'sup_params': sets all params affecting superpositions [w_0_variance]
@@ -363,7 +363,6 @@ def add_noise(image, noise_variance: float = 0.0):
 
     max_val = np.max(image)
     return np.random.normal(loc=image, scale=actual_variance*max_val) # Variance then scaled as fraction of brightest intensity
-
 
 def add_exposure(image, exposure:tuple = (0.0, 1.0)):
     '''
