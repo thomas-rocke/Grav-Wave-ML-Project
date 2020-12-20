@@ -161,12 +161,12 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order, image_params = [0, 0, (0, 1), False], sup_params=[0], info: bool = True, batch_size:int = 10, pixels=128):
+    def __init__(self, max_order, image_params = [0, 0, (0, 1), 0], sup_params=[0], info: bool = True, batch_size:int = 10, pixels=128):
         '''
         Initialise the class with the required complexity.
 
         'max_order': Max order of Guassian modes in superpositions (x > 0).
-        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), quantize_image]
+        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits]
         'sup_params': sets superposition params [w_0_variance]
         '''
         self.max_order = max_order
@@ -295,18 +295,19 @@ def vary_w_0(modes, w_0_variance):
 def Image_Processing(image, image_params):
     '''
     Performs all image processing on target image
-    'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), quantize_image]
+    'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits]
     '''
     noise_variance = image_params[0]
     max_pixel_shift = image_params[1]
     exposure_lims = image_params[2]
+    bits = image_params[3]
 
     shifted_image = shift_image(image, max_pixel_shift) # Shift the image in x and y coords
     noisy_image = add_noise(shifted_image, noise_variance) # Add Gaussian Noise to the image
     exposed_image = add_exposure(noisy_image, exposure_lims) # Add exposure
 
-    if image_params[3]:
-        quantized_image = quantize_image(exposed_image)
+    if bits: # Bits > 0 therefore quantize
+        quantized_image = quantize_image(exposed_image, bits)
         return quantized_image
     else:
         return exposed_image
@@ -365,12 +366,13 @@ def shift_image(image, max_pixel_shift):
                 copy[i, j] = 0
     return copy
 
-def quantize_image(image):
+def quantize_image(image, bits):
     '''
     Quantize the image, so that only 255 evenly spaced values possible
     '''
     max_val = np.max(image)
-    bins = np.linspace(0, max_val, 255, endpoint=1)
+    vals = 2**bits - 1
+    bins = np.linspace(0, max_val, vals, endpoint=1)
     quantized_image = np.digitize(image, bins)
     return quantized_image
 
