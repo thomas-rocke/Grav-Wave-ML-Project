@@ -16,6 +16,15 @@ from Gaussian_Beam import Hermite, Superposition, Laguerre
 import keras
 
 
+
+
+##################################################
+##########                              ##########
+##########           CLASSES            ##########
+##########                              ##########
+##################################################
+
+
 class Generate_Data(list):
     '''
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
@@ -211,11 +220,10 @@ class Dataset(keras.utils.Sequence):
         if self.info: print("\n_____| Generating Data |_____\n")
         if self.info: print("Max order of mode: " + str(self.max_order) + "\nVariation in noise: " + str(self.image_params[0]) + "\nVariation in exposure: " + str(self.image_params[2]) + "\nMax coordinate shift: " + str(self.image_params[1])  + "\n")
         if self.info: print("Generating Gaussian modes...")
-        
+
         self.hermite_modes = [Hermite(l=i, m=j, pixels=self.pixels) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, pixels=self.pixels) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
-
 
     def __getitem__(self, index):
         '''
@@ -229,12 +237,11 @@ class Dataset(keras.utils.Sequence):
         '''
         input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes)*2))
+
         for b in range(self.batch_size):
             s = Superpose_effects(self.gauss_modes, self.sup_params)
             input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
-
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
-        
 
         input_data = np.array(input_data)[..., np.newaxis]
         output_data = np.array(output_data) # Convert to arrays of correct shape
@@ -260,8 +267,8 @@ class Dataset(keras.utils.Sequence):
 
     def batch_load_process(self, n):
         s = Superpose_effects(self.gauss_modes, self.sup_params)
-        input_data = Image_Processing(s.superpose(), self.image_params) # Generate noise image
 
+        input_data = Image_Processing(s.superpose(), self.image_params) # Generate noise image
         output_data = s
 
         return input_data, output_data
@@ -272,6 +279,8 @@ class Dataset(keras.utils.Sequence):
         Unused as not needed, but included for compatibility with keras model.fit_generator
         '''
         pass
+
+
 
 
 ##################################################
@@ -320,7 +329,6 @@ def vary_w_0(modes, w_0_variance):
     return new_modes
 
 
-
 ##### Functions affecting image matrices
 
 def Image_Processing(image, image_params):
@@ -342,8 +350,6 @@ def Image_Processing(image, image_params):
         return quantized_image
     else:
         return exposed_image
-
-
 
 def add_noise(image, noise_variance: float = 0.0):
     '''
@@ -379,7 +385,6 @@ def exposure_comparison(val, upper_bound, lower_bound):
         val = lower_bound
     return val
 
-
 def shift_image(image, max_pixel_shift):
     '''
     Will translate target image in both x and y by integer pixels by random numbers in the range (-max_pixel_shift, max_pixel_shift)
@@ -410,7 +415,6 @@ def quantize_image(image, bits):
 
 #### Misc functions
 
-
 def grouper(iterable, n, fillvalue=None):
     '''
     Itertools grouper recipe.
@@ -419,6 +423,13 @@ def grouper(iterable, n, fillvalue=None):
     return zip_longest(*args, fillvalue=fillvalue)
 
 
+
+
+##################################################
+##########                              ##########
+##########             MAIN             ##########
+##########                              ##########
+##################################################
 
 
 if __name__ == "__main__": 
