@@ -110,10 +110,6 @@ class Generate_Data(list):
         '''
         Get all the superpositions for the dataset.
         '''
-        # return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
-
-        # Below is support for multiprocessing of superpositions, however it is limited by disk speed and can cause memory overflow errors
-
         # if os.path.exists("Data/" + str(self) + ".txt"): # Data already exists
         #     print(desc + "... ", end='')
         #     data = np.loadtxt("Data/" + str(self) + ".txt").reshape((len(self), self[0][0].pixels, self[0][0].pixels, 1))
@@ -121,6 +117,10 @@ class Generate_Data(list):
         #     return data
 
         # else: # Generate and save new data
+
+        # Below is support for multiprocessing of superpositions, however it is limited by disk speed and can cause memory overflow errors
+
+        if len(self) < cpu_count(): return np.array([i.superpose() for i in tqdm(self, desc)])[..., np.newaxis]
 
         p = Pool(cpu_count())
         jobs = np.reshape(np.array(self, dtype=object), [-1, len(self.combs)]) # Split data into repeats and process each in a new thread
@@ -184,6 +184,8 @@ class Generate_Data(list):
         Returns a random superposition from the dataset.
         '''
         return self.__getitem__(np.random.randint(len(self)))
+
+
 
 
 class Dataset(keras.utils.Sequence):
