@@ -16,7 +16,16 @@ from Gaussian_Beam import Hermite, Superposition, Laguerre
 import keras
 
 
-class Generate_Data(list):
+
+
+##################################################
+##########                              ##########
+##########           CLASSES            ##########
+##########                              ##########
+##################################################
+
+
+class GenerateData(list):
     '''
     Class representing many superpositions of multiple Guassian modes at a specified complexity.
     '''
@@ -193,7 +202,7 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order, image_params = [0, 0, (0, 1), 0], sup_params=[0], info: bool = True, batch_size:int = 10, pixels=128):
+    def __init__(self, max_order: int = 5, image_params: list = [0, 0, (0, 1), 0], sup_params = [0], info: bool = True, batch_size: int = 128, pixels = 128):
         '''
         Initialise the class with the required complexity.
 
@@ -208,14 +217,27 @@ class Dataset(keras.utils.Sequence):
         self.batch_size = batch_size
         self.pixels = pixels
 
-        if self.info: print("\n_____| Generating Data |_____\n")
-        if self.info: print("Max order of mode: " + str(self.max_order) + "\nVariation in noise: " + str(self.image_params[0]) + "\nVariation in exposure: " + str(self.image_params[2]) + "\nMax coordinate shift: " + str(self.image_params[1])  + "\n")
-        if self.info: print("Generating Gaussian modes...")
-        
+        if self.info: print("\n_____| Dataset |_____\n")
+        if self.info: print(f"Max order of mode: {self.max_order}\n"
+                            f"Variation in noise: {self.image_params[0]}\n"
+                            f"Variation in exposure: {self.image_params[2]}\n"
+                            f"Max coordinate shift: {self.image_params[1]}\n")
+
         self.hermite_modes = [Hermite(l=i, m=j, pixels=self.pixels) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, pixels=self.pixels) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return repr(self)
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.info}, {self.batch_size}, {self.pixels})"
 
     def __getitem__(self, index):
         '''
@@ -229,12 +251,11 @@ class Dataset(keras.utils.Sequence):
         '''
         input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes)*2))
-        for b in range(self.batch_size):
-            s = Superpose_effects(self.gauss_modes, self.sup_params)
-            input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
 
+        for b in range(self.batch_size):
+            s = superpose_effects(self.gauss_modes, self.sup_params)
+            input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
-        
 
         input_data = np.array(input_data)[..., np.newaxis]
         output_data = np.array(output_data) # Convert to arrays of correct shape
@@ -259,9 +280,9 @@ class Dataset(keras.utils.Sequence):
         return input_data, output_data
 
     def batch_load_process(self, n):
-        s = Superpose_effects(self.gauss_modes, self.sup_params)
-        input_data = Image_Processing(s.superpose(), self.image_params) # Generate noise image
+        s = superpose_effects(self.gauss_modes, self.sup_params)
 
+        input_data = Image_Processing(s.superpose(), self.image_params) # Generate noise image
         output_data = s
 
         return input_data, output_data
@@ -274,6 +295,8 @@ class Dataset(keras.utils.Sequence):
         pass
 
 
+
+
 ##################################################
 ##########                              ##########
 ##########          FUNCTIONS           ##########
@@ -282,7 +305,7 @@ class Dataset(keras.utils.Sequence):
 
 #### Functions affecting Superpositions, Hermites, Laguerres
 
-def Superpose_effects(modes, sup_params):
+def superpose_effects(modes, sup_params):
     '''
     Permorms all randomisation processes on a list of modes to turn them into a superposition for ML
     'sup_params': sets all params affecting superpositions [w_0_variance]
@@ -320,7 +343,6 @@ def vary_w_0(modes, w_0_variance):
     return new_modes
 
 
-
 ##### Functions affecting image matrices
 
 def Image_Processing(image, image_params):
@@ -343,8 +365,6 @@ def Image_Processing(image, image_params):
     else:
         return exposed_image
 
-
-
 def add_noise(image, noise_variance: float = 0.0):
     '''
     Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
@@ -357,7 +377,6 @@ def add_noise(image, noise_variance: float = 0.0):
 
     max_val = np.max(image)
     return np.random.normal(loc=image, scale=actual_variance*max_val) # Variance then scaled as fraction of brightest intensity
-
 
 def add_exposure(image, exposure:tuple = (0.0, 1.0)):
     '''
@@ -378,7 +397,6 @@ def exposure_comparison(val, upper_bound, lower_bound):
     elif val < lower_bound:
         val = lower_bound
     return val
-
 
 def shift_image(image, max_pixel_shift):
     '''
@@ -410,7 +428,6 @@ def quantize_image(image, bits):
 
 #### Misc functions
 
-
 def grouper(iterable, n, fillvalue=None):
     '''
     Itertools grouper recipe.
@@ -419,6 +436,13 @@ def grouper(iterable, n, fillvalue=None):
     return zip_longest(*args, fillvalue=fillvalue)
 
 
+
+
+##################################################
+##########                              ##########
+##########             MAIN             ##########
+##########                              ##########
+##################################################
 
 
 if __name__ == "__main__": 
