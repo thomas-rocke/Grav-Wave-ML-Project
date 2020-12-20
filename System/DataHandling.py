@@ -35,6 +35,7 @@ class Generate_Data(list):
         self.noise_variation = noise_variation
         self.exposure = exposure
         self.repeats = repeats
+        self.info = info
 
         if info: print("_____| Generating Data |_____\n")
         if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: "
@@ -51,11 +52,24 @@ class Generate_Data(list):
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
 
         super().__init__()
+        # self.extend(self.combs)
 
         p = Pool(cpu_count())
         self.extend(p.map(self.generate_process, self.combs * repeats))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return repr(self)
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return self.__class__.__name__ + f"({self.max_order}, {self.number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.info})"
 
     def generate_process(self, item):
         '''
@@ -100,11 +114,27 @@ class Generate_Data(list):
 
         # Below is support for multiprocessing of superpositions, however it is limited by disk speed and can cause memory overflow errors
 
+        # if os.path.exists("Data/" + str(self) + ".txt"): # Data already exists
+        #     print(desc + "... ", end='')
+        #     data = np.loadtxt("Data/" + str(self) + ".txt").reshape((len(self), self[0][0].pixels, self[0][0].pixels, 1))
+        #     print(f"Done! Loaded from file: '{str(self)}'.")
+        #     return data
+
+        # else: # Generate and save new data
+
         p = Pool(cpu_count())
-        n = len(self) // (cpu_count() - 1)
-        jobs = [self[i:i + n] for i in range(0, len(self), n)]
+        jobs = np.reshape(np.array(self, dtype=object), [-1, len(self.combs)]) # Split data into repeats and process each in a new thread
         threads = p.map(self.superpose_process, tqdm(jobs, desc))
-        return np.array([item for item in chain(*threads)])[..., np.newaxis]
+        return np.array([item for item in chain(*threads)])[..., np.newaxis] # Chain the threads together
+
+        # np.savetxt("Data/" + str(self) + ".txt", data.reshape((len(self), -1)))
+        # return data
+
+        # p = Pool(cpu_count())
+        # n = len(self) // (cpu_count() - 1)
+        # jobs = [self[i:i + n] for i in range(0, len(self), n)]
+        # threads = p.map(self.superpose_process, tqdm(jobs, desc))
+        # return np.array([item for item in chain(*threads)])[..., np.newaxis]
 
     def superpose_process(self, data):
         '''
@@ -240,7 +270,6 @@ class Dataset(keras.utils.Sequence):
         Unused as not needed, but included for compatibility with keras model.fit_generator
         '''
         pass
-
 
 
 ##################################################
@@ -382,7 +411,7 @@ def quantize_image(image, bits):
 
 def grouper(iterable, n, fillvalue=None):
     '''
-    Itertools grouper recipe
+    Itertools grouper recipe.
     '''
     args = [iter(iterable)] * n
     return zip_longest(*args, fillvalue=fillvalue)
