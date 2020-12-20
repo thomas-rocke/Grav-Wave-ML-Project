@@ -33,7 +33,8 @@ from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
 from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
-
+from itertools import combinations, chain
+from multiprocessing import Pool, cpu_count
 
 
 
@@ -55,6 +56,106 @@ class Colour:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
+
+
+
+class DataGenerator(keras.utils.Sequence):
+    '''
+    The class 'DataGenerator' that generates data for Keras in training in real-time.
+    '''
+
+    def __init__(self, max_order: int = 3, number_of_modes: int = 3, amplitude_variation: float = 0.5, phase_variation: float = 1.0, noise_variation: float = 0.1, exposure: tuple = (0.0, 1.0), repeats: int = 100, batch_size: int = 128):
+        '''
+        Initialise the class with the required complexity.
+
+        'max_order': Max order of Guassian modes in superpositions (x > 0).
+        'number_of_modes': How many modes you want to superimpose together (x > 0).
+        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
+        '''
+        self.max_order = max_order
+        self.number_of_modes = number_of_modes
+        self.amplitude_variation = amplitude_variation
+        self.phase_variation = phase_variation
+        self.noise_variation = noise_variation
+        self.exposure = exposure
+        self.repeats = repeats
+        self.batch_size = batch_size
+
+        self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
+        self.gauss_modes = self.hermite_modes + self.laguerre_modes
+
+        self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        self.combs = [i[j] for i in self.combs for j in range(len(i))]
+
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return repr(self)
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return self.__class__.__name__ + f"({self.max_order}, {self.number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size})"
+
+    def __len__(self):
+        '''
+        Denotes the number of batches per epoch.
+        For us this is the (total number of combinations * repeats) / batch size.
+        '''
+        return int((len(self.combs) * self.repeats) / self.batch_size)
+
+    def __getitem__(self, index):
+        '''
+        Generates and returns one batch of data.
+        '''
+        combs = [self.combs[np.random.randint(len(self.combs))] for i in range(self.batch_size)] # Take random combs from self.combs
+        sups = [self.generate_superposition(comb) for comb in combs]
+
+        X = np.array(self.get_inputs(*sups))[..., np.newaxis]
+        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) for j in self.hermite_modes] for i in sups])
+
+        return X, Y
+
+    def generate_superposition(self, comb):
+        '''
+        Generates the superposition with randomised amplitudes, phase, noise and exposure for a given combination.
+        '''
+        return Superposition(*[self.randomise_amp_and_phase(i) for i in comb])
+
+    def get_inputs(self, *sups):
+        '''
+        Get inputs from list of superpositions.
+        '''
+        inputs = []
+        for sup in sups:
+            sup.noise_variation = self.noise_variation
+            sup.exposure = self.exposure
+
+            inputs.append(sup.superpose())
+
+        return inputs
+
+    def get_classes(self):
+        '''
+        Get the num_classes result required for model creation.
+        '''
+        return np.array(self.hermite_modes * 2, dtype=object)
+
+    def randomise_amp_and_phase(self, mode):
+        '''
+        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
+        Returns new mode with randomised amp and phase.
+        '''
+        x = mode.copy()
+
+        x *= np.abs(np.random.normal(scale=self.amplitude_variation) + 1)
+        x.add_phase(np.random.normal(scale=self.phase_variation))
+
+        return x
 
 
 
@@ -82,7 +183,7 @@ class ML:
         self.start_number = 2
         self.step_speed = 0.072
         self.success_loss = 0.001
-        self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
+        self.history = {"time": [], "loss": [], "accuracy": []}#, "val_loss": [], "val_accuracy": []}
         self.model = None
 
         print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
@@ -97,7 +198,7 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.noise_variation) + ", " + str(self.exposure) + ", " + str(self.repeats) + ", " + str(self.batch_size) + ", " + str(self.optimizer) + ", " + str(self.learning_rate) + ")"
+        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.noise_variation) + ", " + str(self.exposure) + ", " + str(self.repeats) + ", " + str(self.batch_size) + ", '" + str(self.optimizer) + "', " + str(self.learning_rate) + ")"
 
     def exists(self):
         '''
@@ -123,9 +224,10 @@ class ML:
         '''
         print(text("[INIT] Generating preliminary data for model generation... "), end='')
 
-        prelim_data = Generate_Data(self.max_order, self.number_of_modes, info=False)
+        prelim_data = DataGenerator(self.max_order, self.number_of_modes)
         self.solutions = prelim_data.get_classes()
-        self.input_shape = (prelim_data[0].pixels, prelim_data[0].pixels, 1)
+        # self.input_shape = (prelim_data[0].pixels, prelim_data[0].pixels, 1)
+        self.input_shape = (128, 128, 1)
 
         print("Done!")
         print(text("[INIT] Generating model (input shape = " + str(self.input_shape) + ", classes = " + str(len(self.solutions)) + ", optimizer: " + self.optimizer + ")... "), end='')
@@ -205,22 +307,29 @@ class ML:
         self.model = self.create_model(summary=False) # Generate preliminary data to determine all solutions (classes) and create the model
 
         for number_of_modes in range(self.start_number, self.number_of_modes + 1):
-            (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
+            training_generator = DataGenerator(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size)
 
-            etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
+            # (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
+
+            # etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
             print(text("[TRAIN] Training stage " + str(number_of_modes - 1) + "/" + str(self.number_of_modes - 1) + "..."))
             print(text("[TRAIN] |"))
-            print(text("[TRAIN] |-> Dataset             : " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
+            # print(text("[TRAIN] |-> Dataset             : " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
             print(text("[TRAIN] |-> Success Condition   : A loss of " + str(self.success_loss) + "."))
             print(text("[TRAIN] |-> Terminate Condition : Reaching epoch " + str(len(self.history["loss"]) + self.max_epochs) + " or 5 consecutive epochs of stagnation."))
-            print(text("[TRAIN] |-> Maximum Duration    : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
+            # print(text("[TRAIN] |-> Maximum Duration    : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
             print(text("[TRAIN] |"))
 
             n = 0
             try:
                 iterator = tqdm(range(self.max_epochs), text("[TRAIN] |-> Training "))
                 for n in iterator:
-                    history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=int(info))
+                    history_callback = self.model.fit(training_generator,
+                                                      use_multiprocessing=True,
+                                                      workers=cpu_count(),
+                                                      batch_size=self.batch_size,
+                                                      verbose=int(info))
+                    # history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=int(info))
 
                     for i in self.history:
                         if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
@@ -253,12 +362,12 @@ class ML:
                 print(text("[WARN]  |-> Reached max epoch of " + str(len(self.history["loss"])) + "!"))
 
             print(text("[TRAIN] |-> Evaluating : "), end='')
-            scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
-            print("Loss: " + str(round(scores[0], 3)) + " - Accuracy: " + str(round(scores[1] * 100, 1)) + "%.")
+            # scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
+            # print("Loss: " + str(round(scores[0], 3)) + " - Accuracy: " + str(round(scores[1] * 100, 1)) + "%.")
             print(text("[TRAIN] V"))
             print(text("[TRAIN] Done!\n"))
 
-            del train_inputs, train_outputs, val_inputs, val_outputs # Releasing RAM memory
+            # del train_inputs, train_outputs, val_inputs, val_outputs # Releasing RAM memory
 
         print(text("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n"))
 
@@ -322,7 +431,7 @@ class ML:
         ax2.set_ylabel("Accuracy")
 
         plt.xlim(0, t[-1])
-        # ax1.set_ylim(0, np.max(self.history["loss"]))
+        ax1.set_ylim(self.success_loss, np.max(self.history["loss"]))
         ax2.set_ylim(0, 1)
         ax1.legend()
         ax2.legend()

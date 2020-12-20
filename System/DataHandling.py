@@ -61,6 +61,7 @@ class Generate_Data(list):
         self.noise_variation = noise_variation
         self.exposure = exposure
         self.repeats = repeats
+        self.info = info
 
         if info: print("_____| Generating Data |_____\n")
         if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: "
@@ -77,11 +78,24 @@ class Generate_Data(list):
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
 
         super().__init__()
+        # self.extend(self.combs)
 
         p = Pool(cpu_count())
         self.extend(p.map(self.generate_process, self.combs * repeats))
 
         if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return repr(self)
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return self.__class__.__name__ + f"({self.max_order}, {self.number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.info})"
 
     def generate_process(self, item):
         '''
@@ -126,11 +140,27 @@ class Generate_Data(list):
 
         # Below is support for multiprocessing of superpositions, however it is limited by disk speed and can cause memory overflow errors
 
+        # if os.path.exists("Data/" + str(self) + ".txt"): # Data already exists
+        #     print(desc + "... ", end='')
+        #     data = np.loadtxt("Data/" + str(self) + ".txt").reshape((len(self), self[0][0].pixels, self[0][0].pixels, 1))
+        #     print(f"Done! Loaded from file: '{str(self)}'.")
+        #     return data
+
+        # else: # Generate and save new data
+
         p = Pool(cpu_count())
-        n = len(self) // (cpu_count() - 1)
-        jobs = [self[i:i + n] for i in range(0, len(self), n)]
+        jobs = np.reshape(np.array(self, dtype=object), [-1, len(self.combs)]) # Split data into repeats and process each in a new thread
         threads = p.map(self.superpose_process, tqdm(jobs, desc))
-        return np.array([item for item in chain(*threads)])[..., np.newaxis]
+        return np.array([item for item in chain(*threads)])[..., np.newaxis] # Chain the threads together
+
+        # np.savetxt("Data/" + str(self) + ".txt", data.reshape((len(self), -1)))
+        # return data
+
+        # p = Pool(cpu_count())
+        # n = len(self) // (cpu_count() - 1)
+        # jobs = [self[i:i + n] for i in range(0, len(self), n)]
+        # threads = p.map(self.superpose_process, tqdm(jobs, desc))
+        # return np.array([item for item in chain(*threads)])[..., np.newaxis]
 
     def superpose_process(self, data):
         '''
@@ -189,13 +219,12 @@ class Dataset():
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True, stage: int = 1, foldername: str = "defaultdata", batch_size: int = 128):
+    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, stage: int = 1, folder_name: str = "Data", batch_size: int = 128, info: bool = True):
         '''
         Initialise the class with the required complexity.
 
         'max_order': Max order of Guassian modes in superpositions (x > 0).
         'number_of_modes': How many modes you want to superimpose together (x > 0).
-        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
         '''
         self.max_order = max_order
         self.number_of_modes = number_of_modes
@@ -204,19 +233,22 @@ class Dataset():
         self.noise_variation = noise_variation
         self.exposure = exposure
         self.repeats = repeats
-        self.dir = os.getcwd() + os.sep + foldername #saves path to files
-        self.files = os.listdir(self.dir)
         self.stage = stage
-        self.info = info
+        self.folder_name = folder_name
         self.batch_size = batch_size
+        self.info = info
 
-        self.sup_fname = "Stage_{}_sup.txt".format(self.stage)
-        self.dat_fname = "Stage_{}_dat.txt".format(self.stage)
+        self.dir = os.getcwd() + os.sep + folder_name + os.sep + str(self) # Saves path to files
+        os.makedirs(self.dir, exist_ok=True)
+        self.files = os.listdir(self.dir)
 
-        self.check_data() #Check if files exist, create them if empty
+        self.sup_fname = f"Stage_{self.stage}_sup.txt"
+        self.dat_fname = f"Stage_{self.stage}_dat.txt"
+
+        self.check_data() # Check if files exist, create them if empty
 
         dat_file = open(self.dir + os.sep + self.dat_fname, 'r')
-        sup_file = open(self.dir + os.sep + self.sup_fname, 'r') #Open files to read
+        sup_file = open(self.dir + os.sep + self.sup_fname, 'r') # Open files to read
 
         dat_lines = [str(line) for line in dat_file]
         sup_lines = [str(line) for line in sup_file]
@@ -233,16 +265,28 @@ class Dataset():
         self.dat_batches = grouper(dat_lines, self.batch_size)
         self.sup_batches = grouper(sup_lines[1:], self.batch_size)
 
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return repr(self)
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return self.__class__.__name__ + f"({self.max_order}, {self.number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.stage}, {self.folder_name}, {self.batch_size}, {self.info})"
+
     def check_data(self):
         '''
         Checks if data files exist, and creates them if not
         '''
         dat_exists, sup_exists = self.dat_fname in self.files, self.sup_fname in self.files #check if data files exist
-        
+
         if not dat_exists or not sup_exists:
             combs = self.make_data()
             self.save_data(combs, dat_exists, sup_exists) #save data if files not present
-        
+
     def make_data(self):
         '''
         Generates initial dataset of all potential superposition combinations
@@ -269,16 +313,6 @@ class Dataset():
         '''
         dat_file = open(self.dir + os.sep + self.dat_fname, 'w' if dat_exists else 'x')
         sup_file = open(self.dir + os.sep + self.sup_fname, 'w' if sup_exists else 'x')
-
-        # if not dat_exists:
-        #     dat_file = open(self.dir + os.sep + self.dat_fname, 'x') # Create the file and open it
-        # else:
-        #     dat_file = open(self.dir + os.sep + self.dat_fname, 'w') # Open the file to overwrite
-        
-        # if not sup_exists:
-        #     sup_file =  open(self.dir + os.sep + self.sup_fname, 'x') # Create and open
-        # else:
-        #     sup_file =  open(self.dir + os.sep + self.sup_fname, 'w') # Open to overwrite
 
         p = Pool(cpu_count())
         print(combs[0][0])
@@ -372,7 +406,7 @@ class Dataset():
 
 def grouper(iterable, n, fillvalue=None):
     '''
-    Itertools grouper recipe
+    Itertools grouper recipe.
     '''
     args = [iter(iterable)] * n
     return zip_longest(*args, fillvalue=fillvalue)
