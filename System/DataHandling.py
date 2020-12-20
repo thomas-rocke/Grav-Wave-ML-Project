@@ -10,35 +10,10 @@ import time
 import random
 import sys
 import os
-
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
+from Utils import meanError
 from Gaussian_Beam import Hermite, Superposition, Laguerre
-
-
-def saveData(superposList, fname, path=None):    
-    if(path==None):
-        path = os.getcwd() + r'\Simulation\Cavity Simulation\Data'
-    file = path + os.sep + fname
-
-    superposStrings = [repr(superpos) + '\n' for superpos in superposList]
-    with open(file, 'w') as f:
-        f.writelines(superposStrings)
-        
-
-
-
-
-def loadData(fname, path=None):
-   import numpy as np
-   if(path==None):
-        path = os.getcwd() + r'\Simulation\Cavity Simulation\Data'
-   file = path + os.sep + fname
-    
-   with open(file, 'r') as f:
-       superText = np.genfromtxt(f, delimiter='\n', dtype=str)
-   supers = [eval(superposition) for superposition in superText]
-   return supers
-
-
+import keras
 
 
 class Generate_Data(list):
@@ -49,7 +24,6 @@ class Generate_Data(list):
     def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, info: bool = True):
         '''
         Initialise the class with the required complexity.
-
         'max_order': Max order of Guassian modes in superpositions (x > 0).
         'number_of_modes': How many modes you want to superimpose together (x > 0).
         'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
@@ -212,196 +186,227 @@ class Generate_Data(list):
         return self.__getitem__(np.random.randint(len(self)))
 
 
-
-
-class Dataset():
+class Dataset(keras.utils.Sequence):
     '''
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order: int = 1, number_of_modes: int = 1, amplitude_variation: float = 0.0, phase_variation: float = 0.0, noise_variation: float = 0.0, exposure: tuple = (0.0, 1.0), repeats: int = 1, stage: int = 1, folder_name: str = "Data", batch_size: int = 128, info: bool = True):
+    def __init__(self, max_order, image_params = [0, 0, (0, 1), 0], sup_params=[0], info: bool = True, batch_size:int = 10, pixels=128):
         '''
         Initialise the class with the required complexity.
 
         'max_order': Max order of Guassian modes in superpositions (x > 0).
-        'number_of_modes': How many modes you want to superimpose together (x > 0).
+        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits]
+        'sup_params': sets superposition params [w_0_variance]
         '''
         self.max_order = max_order
-        self.number_of_modes = number_of_modes
-        self.amplitude_variation = amplitude_variation
-        self.phase_variation = phase_variation
-        self.noise_variation = noise_variation
-        self.exposure = exposure
-        self.repeats = repeats
-        self.stage = stage
-        self.folder_name = folder_name
-        self.batch_size = batch_size
+        self.image_params = image_params
+        self.sup_params = sup_params
         self.info = info
+        self.batch_size = batch_size
+        self.pixels = pixels
 
-        self.dir = os.getcwd() + os.sep + folder_name + os.sep + str(self) # Saves path to files
-        os.makedirs(self.dir, exist_ok=True)
-        self.files = os.listdir(self.dir)
-
-        self.sup_fname = f"Stage_{self.stage}_sup.txt"
-        self.dat_fname = f"Stage_{self.stage}_dat.txt"
-
-        self.check_data() # Check if files exist, create them if empty
-
-        dat_file = open(self.dir + os.sep + self.dat_fname, 'r')
-        sup_file = open(self.dir + os.sep + self.sup_fname, 'r') # Open files to read
-
-        dat_lines = [str(line) for line in dat_file]
-        sup_lines = [str(line) for line in sup_file]
-
-        dat_file.close()
-        sup_file.close()
-
-        self.pixels = int(sup_lines[0]) # Recover pixels saved from file
-
-        mapIndexPosition = list(zip(dat_lines, sup_lines)) # Create a list of the zipped data lists (so indeces map together)
-        random.shuffle(mapIndexPosition) # Shuffle list randomly
-        dat_lines, sup_lines = zip(*mapIndexPosition) # Unzip the lists
-
-        self.dat_batches = grouper(dat_lines, self.batch_size)
-        self.sup_batches = grouper(sup_lines[1:], self.batch_size)
-
-    def __str__(self):
-        '''
-        Magic method for the str() function.
-        '''
-        return repr(self)
-
-    def __repr__(self):
-        '''
-        Magic method for the repr() function.
-        '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.stage}, {self.folder_name}, {self.batch_size}, {self.info})"
-
-    def check_data(self):
-        '''
-        Checks if data files exist, and creates them if not
-        '''
-        dat_exists, sup_exists = self.dat_fname in self.files, self.sup_fname in self.files #check if data files exist
-
-        if not dat_exists or not sup_exists:
-            combs = self.make_data()
-            self.save_data(combs, dat_exists, sup_exists) #save data if files not present
-
-    def make_data(self):
-        '''
-        Generates initial dataset of all potential superposition combinations
-        '''
         if self.info: print("\n_____| Generating Data |_____\n")
-        if self.info: print("Max order of mode: " + str(self.max_order) + "\nNumber of modes in superposition: " + str(self.number_of_modes) + "\nVariation in mode amplitude: " + str(self.amplitude_variation) + "\nVariation in mode phase: "
-                        + str(self.phase_variation) + "\nVariation in saturation noise: " + str(self.noise_variation) + "\nVariation in saturation exposure: " + str(self.exposure) + "\nRepeats of combinations: " + str(self.repeats) + "\n")
+        if self.info: print("Max order of mode: " + str(self.max_order) + "\nVariation in noise: " + str(self.image_params[0]) + "\nVariation in exposure: " + str(self.image_params[2]) + "\nMax coordinate shift: " + str(self.image_params[1])  + "\n")
         if self.info: print("Generating Gaussian modes...")
-
-        self.hermite_modes = [Hermite(l=i, m=j) for i in range(self.max_order) for j in range(self.max_order)]
-        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
+        
+        self.hermite_modes = [Hermite(l=i, m=j, pixels=self.pixels) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j, pixels=self.pixels) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
-        if self.info: print("Done! Found " + str(len(self.hermite_modes)) + " hermite modes and " + str(len(self.laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
 
-        combs = [list(combinations(self.gauss_modes, i)) for i in range(1, self.number_of_modes + 1)]
-        combs = [i[j] for i in combs for j in range(len(i))]
-
-        return combs
-
-    def save_data(self, combs, dat_exists, sup_exists):
+    def __getitem__(self, index):
         '''
-        Creates and saves down dataset
+        Generates a single batch of data for use in Keras model.fit_generator
+        Returns [input_data, output_data]
+        Where:
+        input_data[n, :, :, 0] is the Image np.array for the nth batch element
+        output_data[n, :] is the nth Neural Net ouput array containing mode amps and cos(phase)s
+
+        The index param is unused, and is included for compatability with keras model.fit_generator
         '''
-        dat_file = open(self.dir + os.sep + self.dat_fname, 'w' if dat_exists else 'x')
-        sup_file = open(self.dir + os.sep + self.sup_fname, 'w' if sup_exists else 'x')
+        input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
+        output_data = np.zeros((self.batch_size, np.size(self.hermite_modes)*2))
+        for b in range(self.batch_size):
+            s = Superpose_effects(self.gauss_modes, self.sup_params)
+            input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
+
+            output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
+        
+
+        input_data = np.array(input_data)[..., np.newaxis]
+        output_data = np.array(output_data) # Convert to arrays of correct shape
+        return input_data, output_data
+
+    def load_batch(self):
+        '''
+        Generates a single batch of data for use in non-keras applications
+        Returns [input_data, output_data]
+        Where:
+        input_data[n, :, :] is the Image np.array for the nth batch element
+        output_data[n] is the nth Superposition object
+        '''
+        input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
 
         p = Pool(cpu_count())
-        print(combs[0][0])
-        sup_file.write(str(combs[0][0].pixels) + '\n')
-        print("Saving Data:")
+        inp, output_data = zip(*p.map(self.batch_load_process, range(self.batch_size)))
+        p.close()
+        p.join()
+        input_data = np.array(inp) 
 
-        for j in tqdm(range(self.repeats), desc='Stepping through Repeats'):
-            batches = grouper(combs, cpu_count())
+        return input_data, output_data
 
-            for batch in batches:
-                sups, imgs = zip(*p.map(self.generate_process, batch))
+    def batch_load_process(self, n):
+        s = Superpose_effects(self.gauss_modes, self.sup_params)
+        input_data = Image_Processing(s.superpose(), self.image_params) # Generate noise image
 
-                sups = [s for s in sups if s is not None]
-                imgs = [i for i in imgs if i is not None] # Remove Nonetype elements from lists
+        output_data = s
 
-                for i in range(len(imgs)):
-                    if imgs[i] is not None and sups[i] is not None:
-                        vec = imgs[i].flatten() #Flatten image data to vector
-                        vec_string = ', '.join(str(v) for v in vec) + '\n'
-                        dat_file.write(vec_string)
-                        sup_file.write(repr(sups[i]) + '\n')
+        return input_data, output_data
 
-        dat_file.close()
-        sup_file.close()
-
-    def generate_process(self, item):
+    def on_epoch_end(self):
         '''
-        Process for generating superposition objects across multiple threads in the CPU.
+        Space to perform processing after an epoch has ended.
+        Unused as not needed, but included for compatibility with keras model.fit_generator
         '''
-        if item is None: return None, None
+        pass
 
-        randomised_item = [self.randomise_amp_and_phase(i) for i in item]
-        s = Superposition(*randomised_item)
 
-        return s, s.superpose()
+##################################################
+##########                              ##########
+##########          FUNCTIONS           ##########
+##########                              ##########
+##################################################
 
-    def load_data(self, batch_number):
-        '''
-        Load a batch of data from files
-        '''
-        dat_batch = next(islice(self.dat_batches, batch_number, None), None)
-        sup_batch = next(islice(self.sup_batches, batch_number, None), None) # Fetch the [batch_number] batch of file lines
+#### Functions affecting Superpositions, Hermites, Laguerres
 
-        p = Pool(cpu_count())
+def Superpose_effects(modes, sup_params):
+    '''
+    Permorms all randomisation processes on a list of modes to turn them into a superposition for ML
+    'sup_params': sets all params affecting superpositions [w_0_variance]
+    '''
 
-        dats = p.map(self.load_dat_process, dat_batch)
-        sups = p.map(self.load_sup_process, sup_batch)
+    ## Processes before Superposition
+    randomised_modes = [randomise_amp_and_phase(m) for m in modes]
+    w_0_variance = sup_params[0]
+    varied_w_0_modes = vary_w_0(randomised_modes, w_0_variance)
+    s = Superposition(*varied_w_0_modes)
+    ## Processes after superposition
 
-        dats = [d for d in dats if d is not None]
-        sups = [s for s in sups if s is not None] # Remove any Nonetype elements
+    return s
 
-        return sups, dats
+def randomise_amp_and_phase(mode):
+    '''
+    Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
+    Returns new mode with randomised amp and phase.
+    '''
+    x = mode.copy()
 
-    def load_sup_process(self, sup):
-        '''
-        Process for loading superposition objects across multiple threads in the CPU.
-        '''
-        return None if sup is None else eval(sup)
+    x *= random.random() # Change amp by random amount
+    x.add_phase(random.random()* 2 * np.pi) # Add random amount of phase
 
-        # if sup is None:
-        #     return None
-        # else:
-        #     return eval(sup)
+    return x
 
-    def load_dat_process(self, dat):
-        '''
-        Load image data across multiple threads
-        '''
-        if dat is None: return None
-
-        new_dat = dat.split(', ') # Split up data line at each comma delimiter
-        new_dat = np.array([float(d) for d in new_dat]) # Cast elements back to floats
-
-        return new_dat.reshape((self.pixels, self.pixels))
-    
-    def randomise_amp_and_phase(self, mode):
-        '''
-        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
-        Returns new mode with randomised amp and phase.
-        '''
-        x = mode.copy()
-
-        x *= np.abs(round(np.random.normal(scale=self.amplitude_variation), 2) + 1)
-        x.add_phase(np.abs(round(np.random.normal(scale=self.phase_variation), 2)))
-
-        return x
+def vary_w_0(modes, w_0_variance):
+    '''
+    Varies w_0 param for all modes within a superposition
+    '''
+    new_w_0 = np.random.normal(modes[0].w_0, w_0_variance)
+    new_modes = [mode.copy() for mode in modes]
+    for m in new_modes:
+        m.w_0 = new_w_0
+    return new_modes
 
 
 
+##### Functions affecting image matrices
+
+def Image_Processing(image, image_params):
+    '''
+    Performs all image processing on target image
+    'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits]
+    '''
+    noise_variance = image_params[0]
+    max_pixel_shift = image_params[1]
+    exposure_lims = image_params[2]
+    bits = image_params[3]
+
+    shifted_image = shift_image(image, max_pixel_shift) # Shift the image in x and y coords
+    noisy_image = add_noise(shifted_image, noise_variance) # Add Gaussian Noise to the image
+    exposed_image = add_exposure(noisy_image, exposure_lims) # Add exposure
+
+    if bits: # Bits > 0 therefore quantize
+        quantized_image = quantize_image(exposed_image, bits)
+        return quantized_image
+    else:
+        return exposed_image
+
+
+
+def add_noise(image, noise_variance: float = 0.0):
+    '''
+    Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
+    Noise Variance defined as a %age of maximal intensity
+    '''
+
+    actual_variance = np.abs(np.random.normal(0, noise_variance)) 
+    # Noise Variance parameter gives maximum noise level for whole dataset
+    # Actual Noise is the gaussian noise variance used for a specific add_noise call
+
+    max_val = np.max(image)
+    return np.random.normal(loc=image, scale=actual_variance*max_val) # Variance then scaled as fraction of brightest intensity
+
+
+def add_exposure(image, exposure:tuple = (0.0, 1.0)):
+    '''
+    Adds in exposure limits to the image, using percentile limits defined by exposure.
+    exposure[0] is the x% lower limit of detection, exposure[1] is the upper.
+    Percents calculated as a function of the maximum image intensity.
+    '''
+    max_val = np.max(image)
+    lower_bound = max_val * exposure[0]
+    upper_bound = max_val * exposure[1]
+    exp = np.vectorize(exposure_comparison)
+    image = exp(image, upper_bound, lower_bound)
+    return image
+
+def exposure_comparison(val, upper_bound, lower_bound):
+    if val > upper_bound:
+        val = upper_bound
+    elif val < lower_bound:
+        val = lower_bound
+    return val
+
+
+def shift_image(image, max_pixel_shift):
+    '''
+    Will translate target image in both x and y by integer pixels by random numbers in the range (-max_pixel_shift, max_pixel_shift)
+    '''
+    copy = np.zeros_like(image)
+    x_shift = random.randint(-max_pixel_shift, max_pixel_shift)
+    y_shift = random.randint(-max_pixel_shift, max_pixel_shift)
+    shape = np.shape(image)
+    for i in range(shape[0]):
+        for j in range(shape[1]):
+            new_coords = [i + x_shift, j + y_shift]
+            if new_coords[0] in range(shape[0]) and new_coords[1] in range(shape[1]): # New coordinates still within image bounds
+                copy[i, j] = image[new_coords[0], new_coords[1]]
+            else:
+                copy[i, j] = 0
+    return copy
+
+def quantize_image(image, bits):
+    '''
+    Quantize the image, so that only 255 evenly spaced values possible
+    '''
+    max_val = np.max(image)
+    vals = 2**bits - 1
+    bins = np.linspace(0, max_val, vals, endpoint=1)
+    quantized_image = np.digitize(image, bins)
+    return quantized_image
+
+
+#### Misc functions
 
 
 def grouper(iterable, n, fillvalue=None):
@@ -415,14 +420,7 @@ def grouper(iterable, n, fillvalue=None):
 
 
 if __name__ == "__main__": 
-    dir = 'System' + os.sep + 'TestData'
-    data_obj = Dataset(3, 5, 0.6, batch_size=10, repeats=3, foldername=dir)
+    x = Dataset(5, [0.2, 10, (0.2, 0.8), True], batch_size=128)
+    for i in range(2):
 
-    start_time = time.time()
-    sups, imgs = data_obj.load_data(7)
-    end_time = time.time()
-
-    print(end_time - start_time)
-    sups[1].plot()
-    plt.imshow(imgs[0])
-    plt.show()
+        dat = x.__getitem__(1)

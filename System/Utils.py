@@ -4,8 +4,8 @@ import numpy as np
 def getImageFourier (img_data):
     #Takes the fourier transform of each colour of the image indepentantly
     img_fourier = np.zeros_like(img_data)
-    for i in range(3):
-        img_fourier[:, :, i] = np.abs(fft.fft2(img_data[:, :, i]))
+    img_fourier = np.abs(fft.fft2(img_data))
+    img_fourier = fft.fftshift(img_fourier)
     return img_fourier
 
 def meanError (data):
@@ -22,6 +22,12 @@ def meanError (data):
         return 0, 0
     return mean, err
 
+def find_cm(image):
+    threshold_value = filters.threshold_otsu(image)
+    labeled_foreground = (image > threshold_value).astype(int)
+    properties = regionprops(labeled_foreground, image)
+    center_of_mass = properties[0].centroid
+    return center_of_mass[1], center_of_mass[0]
 
 
 
