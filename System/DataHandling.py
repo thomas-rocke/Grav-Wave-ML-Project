@@ -202,7 +202,7 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order, image_params = [0, 0, (0, 1), 0], sup_params=[0], info: bool = True, batch_size:int = 10, pixels=128):
+    def __init__(self, max_order: int = 5, image_params: list = [0, 0, (0, 1), 0], sup_params = [0], info: bool = True, batch_size: int = 128, pixels = 128):
         '''
         Initialise the class with the required complexity.
 
@@ -217,9 +217,11 @@ class Dataset(keras.utils.Sequence):
         self.batch_size = batch_size
         self.pixels = pixels
 
-        if self.info: print("\n_____| Generating Data |_____\n")
-        if self.info: print("Max order of mode: " + str(self.max_order) + "\nVariation in noise: " + str(self.image_params[0]) + "\nVariation in exposure: " + str(self.image_params[2]) + "\nMax coordinate shift: " + str(self.image_params[1])  + "\n")
-        if self.info: print("Generating Gaussian modes...")
+        if self.info: print("\n_____| Dataset |_____\n")
+        if self.info: print(f"Max order of mode: {self.max_order}\n"
+                            f"Variation in noise: {self.image_params[0]}\n"
+                            f"Variation in exposure: {self.image_params[2]}\n"
+                            f"Max coordinate shift: {self.image_params[1]}\n")
 
         self.hermite_modes = [Hermite(l=i, m=j, pixels=self.pixels) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, pixels=self.pixels) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
