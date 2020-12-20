@@ -171,26 +171,27 @@ class ML:
     '''
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
-    def __init__(self, max_order: int = 3, number_of_modes: int = 3, amplitude_variation: float = 0.5, phase_variation: float = 1.0, noise_variation: float = 0.1, exposure: tuple = (0.0, 1.0), repeats: int = 100, batch_size: int = 128, optimizer: str = "Adamax", learning_rate: float = 0.002):
+    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, steps_per_epoch: int = 100, optimizer: str = "Adamax", learning_rate: float = 0.002):
         '''
         Initialise the class.
+        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits].
+        'sup_params': sets superposition params [w_0_variance].
         '''
         self.max_order = max_order
-        self.number_of_modes = number_of_modes
-        self.amplitude_variation = amplitude_variation
-        self.phase_variation = phase_variation
-        self.noise_variation = noise_variation
-        self.exposure = exposure
-        self.repeats = repeats
+        self.image_params = image_params
+        self.sup_params = sup_params
+        self.resolution = resolution
         self.batch_size = batch_size
+        self.steps_per_epoch = steps_per_epoch
         self.optimizer = optimizer
         self.learning_rate = learning_rate
 
-        self.max_epochs = 100
-        self.start_number = 2
-        self.step_speed = 0.072
-        self.success_loss = 0.001
-        self.history = {"time": [], "loss": [], "accuracy": []}#, "val_loss": [], "val_accuracy": []}
+        self.max_epochs = 100 # Max epochs before training is terminated
+        # self.step_speed = 0.072 # Speed in seconds for each step of an epoch
+        self.success_loss = 0.001 # Loss at which the training is considered successful
+        self.stagnation = 5 # Epochs of stagnation before terminating training stage
+        self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
+        self.input_shape = (self.resolution, self.resolution, 1)
         self.model = None
 
         print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
@@ -205,7 +206,7 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.noise_variation) + ", " + str(self.exposure) + ", " + str(self.repeats) + ", " + str(self.batch_size) + ", '" + str(self.optimizer) + "', " + str(self.learning_rate) + ")"
+        return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.resolution}, {self.batch_size}, {self.steps_per_epoch}, {self.optimizer}, {self.learning_rate})"
 
     def exists(self):
         '''
@@ -229,14 +230,6 @@ class ML:
         '''
         Create the Keras model in preparation for training.
         '''
-        print(log("[INIT] Generating preliminary data for model generation... "), end='')
-
-        prelim_data = DataGenerator(self.max_order, self.number_of_modes)
-        self.solutions = prelim_data.get_classes()
-        # self.input_shape = (prelim_data[0].pixels, prelim_data[0].pixels, 1)
-        self.input_shape = (128, 128, 1)
-
-        print("Done!")
         print(log("[INIT] Generating model (input shape = " + str(self.input_shape) + ", classes = " + str(len(self.solutions)) + ", optimizer: " + self.optimizer + ")... "), end='')
 
         model = Sequential()
@@ -301,7 +294,7 @@ class ML:
 
         return model
 
-    def train(self, info: bool = False):
+    def train(self, info: bool = True):
         '''
         Train the model.
         '''
@@ -311,106 +304,115 @@ class ML:
             return
 
         start_time = perf_counter()
-        self.model = self.create_model(summary=False) # Generate preliminary data to determine all solutions (classes) and create the model
 
-        for number_of_modes in range(self.start_number, self.number_of_modes + 1):
-            training_generator = DataGenerator(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size)
+        print(log("[INIT] Initialising dataset... "), end='')
+        dataset = Dataset(self.max_order, self.image_params, self.sup_params, self.resolution, self.batch_size, self.steps_per_epoch, False)
+        self.solutions = np.array(dataset.hermite_modes * 2, dtype=object)
+        print("Done!")
 
-            # (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
+        self.model = self.create_model(summary=False) # Create the Keras model
 
-            # etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print(log("[TRAIN] Training stage " + str(number_of_modes - 1) + "/" + str(self.number_of_modes - 1) + "..."))
+        # for number_of_modes in range(self.start_number, self.number_of_modes + 1):
+        # (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
+        # training_generator = DataGenerator(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size)
+        # etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
+        # print(log("[TRAIN] |-> Dataset             : " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
+        # print(log("[TRAIN] |-> Maximum Duration    : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
+        # history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=int(info))
+
+        print(log("[TRAIN] Training..."))
+        print(log("[TRAIN] |"))
+        print(log("[TRAIN] |-> Dataset             : " + str(dataset) + "."))
+        print(log("[TRAIN] |-> Success Condition   : A loss of " + str(self.success_loss) + "."))
+        print(log("[TRAIN] |-> Terminate Condition : Reaching epoch " + str(len(self.history["loss"]) + self.max_epochs) + " or " + str(self.stagnation) + " consecutive epochs of stagnation."))
+        print(log("[TRAIN] |"))
+
+        n = 0
+        try:
+            iterator = tqdm(range(self.max_epochs), log("[TRAIN] |-> Training "))
+            for n in iterator:
+                history_callback = self.model.fit(dataset,
+                                                  validation_data=dataset,
+                                                  steps_per_epoch=self.steps_per_epoch,
+                                                  validation_steps=10,
+                                                  batch_size=self.batch_size,
+                                                  use_multiprocessing=True,
+                                                  workers=cpu_count(),
+                                                  verbose=int(info))
+
+                for i in self.history:
+                    if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
+                    else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
+
+                stagnates = len(np.where(np.round(self.history["loss"][-min(n + 1, 5)], 3) <= np.round(self.history["loss"][-min(n, 4):], 3))[0])
+                if stagnates == 0: indicator = Colour.OKGREEN + '+ ' + Colour.ENDC
+                elif stagnates >= 3: indicator = Colour.FAIL + f'-{stagnates}' + Colour.ENDC
+                else: indicator = Colour.WARNING + f'-{stagnates}' + Colour.ENDC
+
+                iterator.set_description(log("[TRAIN] |-> " + indicator + " Loss: " + str(round(self.history["loss"][-1], 3)) + " - Accuracy: " + str(round(self.history["accuracy"][-1] * 100, 1)) + "% "))
+
+                if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
+                    print(log("\n[TRAIN] V"))
+                    print(log("[FATAL] Training failed! Gradient descent diverged at epoch " + str(len(self.history["loss"])) + ".\n"))
+                    sys.exit()
+                elif self.history["loss"][-1] < self.success_loss: # Loss has reached success level
+                    iterator.close()
+                    print(log("[TRAIN] |"))
+                    print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history["loss"])) + "."))
+                    break
+                elif stagnates == self.stagnation:
+                # elif n >= 4: # Check there is enough history to check for stagnation
+                #     if np.all(round(self.history["loss"][-5], 3) <= np.round(self.history["loss"][-4:], 3)): # Learning has stagnated
+                    iterator.close()
+                    print(log("[TRAIN] |"))
+                    print(log("[WARN]  |-> Learning stagnated at epoch " + str(len(self.history["loss"])) + "."))
+                    break
+
+        except KeyboardInterrupt:
             print(log("[TRAIN] |"))
-            # print(log("[TRAIN] |-> Dataset             : " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
-            print(log("[TRAIN] |-> Success Condition   : A loss of " + str(self.success_loss) + "."))
-            print(log("[TRAIN] |-> Terminate Condition : Reaching epoch " + str(len(self.history["loss"]) + self.max_epochs) + " or 5 consecutive epochs of stagnation."))
-            # print(log("[TRAIN] |-> Maximum Duration    : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
+            print(log("[WARN]  |-> Aborted at epoch " + str(len(self.history["loss"]) + 1) + "!"))
+
+        if n == self.max_epochs - 1: # Reached max epoch
             print(log("[TRAIN] |"))
+            print(log("[WARN]  |-> Reached max epoch of " + str(len(self.history["loss"])) + "!"))
 
-            n = 0
-            try:
-                iterator = tqdm(range(self.max_epochs), log("[TRAIN] |-> Training "))
-                for n in iterator:
-                    history_callback = self.model.fit(training_generator,
-                                                      use_multiprocessing=True,
-                                                      workers=cpu_count(),
-                                                      batch_size=self.batch_size,
-                                                      verbose=int(info))
-                    # history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=int(info))
+        # print(log("[TRAIN] |-> Evaluating : "), end='')
+        # scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
+        # print("Loss: " + str(round(scores[0], 3)) + " - Accuracy: " + str(round(scores[1] * 100, 1)) + "%.")
+        print(log("[TRAIN] V"))
+        print(log("[TRAIN] Done!\n"))
 
-                    for i in self.history:
-                        if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
-                        else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
-
-                    stagnates = len(np.where(np.round(self.history["loss"][-min(n + 1, 5)], 3) <= np.round(self.history["loss"][-min(n, 4):], 3))[0])
-                    if stagnates == 0: indicator = Colour.OKGREEN + '+ ' + Colour.ENDC
-                    elif stagnates >= 3: indicator = Colour.FAIL + f'-{stagnates}' + Colour.ENDC
-                    else: indicator = Colour.WARNING + f'-{stagnates}' + Colour.ENDC
-
-                    iterator.set_description(log("[TRAIN] |-> " + indicator + " Loss: " + str(round(self.history["loss"][-1], 3)) + " - Accuracy: " + str(round(self.history["accuracy"][-1] * 100, 1)) + "% "))
-
-                    if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
-                        print(log("\n[TRAIN] V"))
-                        print(log("[FATAL] Training failed! Gradient descent diverged at epoch " + str(len(self.history["loss"])) + ".\n"))
-                        sys.exit()
-                    elif self.history["loss"][-1] < self.success_loss: # Loss has reached success level
-                        iterator.close()
-                        print(log("[TRAIN] |"))
-                        print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history["loss"])) + "."))
-                        break
-                    elif stagnates == 4:
-                    # elif n >= 4: # Check there is enough history to check for stagnation
-                    #     if np.all(round(self.history["loss"][-5], 3) <= np.round(self.history["loss"][-4:], 3)): # Learning has stagnated
-                        iterator.close()
-                        print(log("[TRAIN] |"))
-                        print(log("[WARN]  |-> Learning stagnated at epoch " + str(len(self.history["loss"])) + "."))
-                        break
-
-            except KeyboardInterrupt:
-                print(log("[TRAIN] |"))
-                print(log("[WARN]  |-> Aborted at epoch " + str(len(self.history["loss"]) + 1) + "!"))
-
-            if n == self.max_epochs - 1: # Reached max epoch
-                print(log("[TRAIN] |"))
-                print(log("[WARN]  |-> Reached max epoch of " + str(len(self.history["loss"])) + "!"))
-
-            print(log("[TRAIN] |-> Evaluating : "), end='')
-            # scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
-            # print("Loss: " + str(round(scores[0], 3)) + " - Accuracy: " + str(round(scores[1] * 100, 1)) + "%.")
-            print(log("[TRAIN] V"))
-            print(log("[TRAIN] Done!\n"))
-
-            # del train_inputs, train_outputs, val_inputs, val_outputs # Releasing RAM memory
+        # del train_inputs, train_outputs, val_inputs, val_outputs # Releasing RAM memory
 
         print(log("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n"))
 
-    def load_data(self, number_of_modes: int = 1):
-        '''
-        Load training and testing data.
-        '''
-        try:
-            print(log("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
-            print(log("[DATA] |"))
+    # def load_data(self, number_of_modes: int = 1):
+    #     '''
+    #     Load training and testing data.
+    #     '''
+    #     try:
+    #         print(log("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
+    #         print(log("[DATA] |"))
 
-            train_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
-            train_inputs = train_data.get_inputs(log("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
-            train_outputs = train_data.get_outputs()
+    #         train_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
+    #         train_inputs = train_data.get_inputs(log("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
+    #         train_outputs = train_data.get_outputs()
 
-            print(log("[DATA] |"))
+    #         print(log("[DATA] |"))
 
-            val_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
-            val_inputs = val_data.get_inputs(log("[DATA] |-> 1 dataset of validation data"))
-            val_outputs = val_data.get_outputs()
+    #         val_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
+    #         val_inputs = val_data.get_inputs(log("[DATA] |-> 1 dataset of validation data"))
+    #         val_outputs = val_data.get_outputs()
 
-            print(log("[DATA] V"))
-            print(log("[DATA] Done!\n"))
+    #         print(log("[DATA] V"))
+    #         print(log("[DATA] Done!\n"))
 
-        except MemoryError:
-            print(log("[DATA] V"))
-            print(log("[FATAL] Memory overflow!\n"))
-            sys.exit()
+    #     except MemoryError:
+    #         print(log("[DATA] V"))
+    #         print(log("[FATAL] Memory overflow!\n"))
+    #         sys.exit()
 
-        return (train_inputs, train_outputs), (val_inputs, val_outputs)
+    #     return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
     def plot(self, info: bool = True, axes: tuple = None, label: str = False, elapsed_time: bool = False):
         '''
