@@ -17,7 +17,7 @@ import gc
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
 from Gaussian_Beam import Hermite, Superposition, Laguerre
-from DataHandling import Dataset, Generate_Data
+from DataHandling import Dataset, GenerateData
 from time import perf_counter
 from math import isnan
 import random
@@ -379,13 +379,13 @@ class ML:
             print(text("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
             print(text("[DATA] |"))
 
-            train_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
+            train_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
             train_inputs = train_data.get_inputs(text("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
             train_outputs = train_data.get_outputs()
 
             print(text("[DATA] |"))
 
-            val_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
+            val_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
             val_inputs = val_data.get_inputs(text("[DATA] |-> 1 dataset of validation data"))
             val_outputs = val_data.get_outputs()
 
@@ -731,7 +731,7 @@ def train_and_save(**kwargs):
     p.start()
     p.join()
 
-def get_model_error(model, data_object:Generate_Data, test_number:int=10, sup:Superposition=None):
+def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Superposition=None):
     '''
     Tests the accuracy of the model from data contained within data_object
     
@@ -836,7 +836,7 @@ if __name__ == '__main__':
 
     # Loading saved model
 
-    data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+    data = GenerateData(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
 
     model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
     model.load()
@@ -858,7 +858,7 @@ if __name__ == '__main__':
 
     #     # Generating test data for comparisons
 
-    #     data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+    #     data = GenerateData(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
 
     # sup = Superposition(Hermite(1,2), Hermite(2,0), Hermite(0,1))
     # prediction = model.predict(sup.superpose())
@@ -877,7 +877,7 @@ if __name__ == '__main__':
     # #sys.path.insert(1, '../System') # Move to directory containing simulation files
     # model.load()
 
-    # data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+    # data = GenerateData(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
 
     # errs = get_model_error(model, data, 0.5)
 

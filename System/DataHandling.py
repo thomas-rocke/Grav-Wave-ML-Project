@@ -227,6 +227,18 @@ class Dataset(keras.utils.Sequence):
         self.laguerre_modes = [Laguerre(p=i, m=j, pixels=self.pixels) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return repr(self)
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.info}, {self.batch_size}, {self.pixels})"
+
     def __getitem__(self, index):
         '''
         Generates a single batch of data for use in Keras model.fit_generator
