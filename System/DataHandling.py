@@ -121,7 +121,7 @@ class GenerateData(list):
         '''
         # if os.path.exists("Data/" + str(self) + ".txt"): # Data already exists
         #     print(desc + "... ", end='')
-        #     data = np.loadtxt("Data/" + str(self) + ".txt").reshape((len(self), self[0][0].pixels, self[0][0].pixels, 1))
+        #     data = np.loadtxt("Data/" + str(self) + ".txt").reshape((len(self), self[0][0].resolution, self[0][0].resolution, 1))
         #     print(f"Done! Loaded from file: '{str(self)}'.")
         #     return data
 
@@ -202,20 +202,21 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order: int = 5, image_params: list = [0, 0, (0, 1), 0], sup_params = [0], info: bool = True, batch_size: int = 128, pixels = 128):
+    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, steps_per_epoch: int = 100, info: bool = True):
         '''
         Initialise the class with the required complexity.
 
         'max_order': Max order of Guassian modes in superpositions (x > 0).
-        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits]
-        'sup_params': sets superposition params [w_0_variance]
+        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits].
+        'sup_params': sets superposition params [w_0_variance].
         '''
         self.max_order = max_order
         self.image_params = image_params
         self.sup_params = sup_params
-        self.info = info
+        self.resolution = resolution
         self.batch_size = batch_size
-        self.pixels = pixels
+        self.steps_per_epoch = steps_per_epoch
+        self.info = info
 
         if self.info: print("\n_____| Dataset |_____\n")
         if self.info: print(f"Max order of mode: {self.max_order}\n"
@@ -223,8 +224,8 @@ class Dataset(keras.utils.Sequence):
                             f"Variation in exposure: {self.image_params[2]}\n"
                             f"Max coordinate shift: {self.image_params[1]}\n")
 
-        self.hermite_modes = [Hermite(l=i, m=j, pixels=self.pixels) for i in range(max_order) for j in range(max_order)]
-        self.laguerre_modes = [Laguerre(p=i, m=j, pixels=self.pixels) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
+        self.hermite_modes = [Hermite(l=i, m=j, resolution=self.resolution) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j, resolution=self.resolution) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
     def __str__(self):
@@ -237,7 +238,14 @@ class Dataset(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.info}, {self.batch_size}, {self.pixels})"
+        return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.resolution}, {self.batch_size}, {self.steps_per_epoch}, {self.info})"
+
+    def __len__(self):
+        '''
+        Denotes the number of batches per epoch.
+        For us this is the (total number of combinations * repeats) / batch size.
+        '''
+        return self.steps_per_epoch
 
     def __getitem__(self, index):
         '''
@@ -249,12 +257,12 @@ class Dataset(keras.utils.Sequence):
 
         The index param is unused, and is included for compatability with keras model.fit_generator
         '''
-        input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
-        output_data = np.zeros((self.batch_size, np.size(self.hermite_modes)*2))
+        input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
+        output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
 
         for b in range(self.batch_size):
             s = superpose_effects(self.gauss_modes, self.sup_params)
-            input_data[b, :, :] = Image_Processing(s.superpose(), self.image_params) # Generate noise image
+            input_data[b, :, :] = image_processing(s.superpose(), self.image_params) # Generate noise image
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
 
         input_data = np.array(input_data)[..., np.newaxis]
@@ -269,7 +277,7 @@ class Dataset(keras.utils.Sequence):
         input_data[n, :, :] is the Image np.array for the nth batch element
         output_data[n] is the nth Superposition object
         '''
-        input_data = np.zeros((self.batch_size, self.pixels, self.pixels))
+        input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
 
         p = Pool(cpu_count())
         inp, output_data = zip(*p.map(self.batch_load_process, range(self.batch_size)))
@@ -282,7 +290,7 @@ class Dataset(keras.utils.Sequence):
     def batch_load_process(self, n):
         s = superpose_effects(self.gauss_modes, self.sup_params)
 
-        input_data = Image_Processing(s.superpose(), self.image_params) # Generate noise image
+        input_data = image_processing(s.superpose(), self.image_params) # Generate noise image
         output_data = s
 
         return input_data, output_data
@@ -328,7 +336,7 @@ def randomise_amp_and_phase(mode):
     x = mode.copy()
 
     x *= random.random() # Change amp by random amount
-    x.add_phase(random.random()* 2 * np.pi) # Add random amount of phase
+    x.add_phase(random.random() * 2 * np.pi) # Add random amount of phase
 
     return x
 
@@ -345,7 +353,7 @@ def vary_w_0(modes, w_0_variance):
 
 ##### Functions affecting image matrices
 
-def Image_Processing(image, image_params):
+def image_processing(image, image_params):
     '''
     Performs all image processing on target image
     'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits]
@@ -400,7 +408,7 @@ def exposure_comparison(val, upper_bound, lower_bound):
 
 def shift_image(image, max_pixel_shift):
     '''
-    Will translate target image in both x and y by integer pixels by random numbers in the range (-max_pixel_shift, max_pixel_shift)
+    Will translate target image in both x and y by integer resolution by random numbers in the range (-max_pixel_shift, max_pixel_shift)
     '''
     copy = np.zeros_like(image)
     x_shift = random.randint(-max_pixel_shift, max_pixel_shift)
