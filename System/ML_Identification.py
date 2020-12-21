@@ -344,7 +344,7 @@ class ML:
                     if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
                     else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
 
-                stagnates = len(np.where(np.round(self.history["loss"][-min(n + 1, self.stagnation)], 3) <= np.round(self.history["loss"][-min(n, self.stagnation - 1):], 3))[0])
+                stagnates = len(np.where(np.round(self.history["loss"][-1], 3) >= np.round(self.history["loss"][-min(n, self.stagnation):-self.history["loss"][-1]], 3))[0])
                 if stagnates == 0: indicator = Colour.OKGREEN + '+ ' + Colour.ENDC
                 elif stagnates >= self.stagnation - 2: indicator = Colour.FAIL + f'-{stagnates}' + Colour.ENDC
                 else: indicator = Colour.WARNING + f'-{stagnates}' + Colour.ENDC
