@@ -346,7 +346,7 @@ class ML:
 
                 stagnates = len(np.where(np.round(self.history["loss"][-min(n + 1, self.stagnation)], 3) <= np.round(self.history["loss"][-min(n, self.stagnation - 1):], 3))[0])
                 if stagnates == 0: indicator = Colour.OKGREEN + '+ ' + Colour.ENDC
-                elif stagnates >= 3: indicator = Colour.FAIL + f'-{stagnates}' + Colour.ENDC
+                elif stagnates >= self.stagnation - 2: indicator = Colour.FAIL + f'-{stagnates}' + Colour.ENDC
                 else: indicator = Colour.WARNING + f'-{stagnates}' + Colour.ENDC
 
                 iterator.set_description(log("[TRAIN] |-> " + indicator + " Loss: " + str(round(self.history["loss"][-1], 3)) + " - Accuracy: " + str(round(self.history["accuracy"][-1] * 100, 1)) + "% "))
@@ -648,7 +648,7 @@ def log(message):
     '''
     Return message in the format given.
     '''
-    logging.debug(message)
+    logging.debug(message.replace(Colour.OKGREEN, '').replace(Colour.WARNING, '').replace(Colour.FAIL, '').replace(Colour.ENDC, ''))
 
     message = message.replace("->",         Colour.OKCYAN   + "->"      + Colour.ENDC)
     message = message.replace(" |",         Colour.OKCYAN   + " |"      + Colour.ENDC)
