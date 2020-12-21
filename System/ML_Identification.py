@@ -15,7 +15,7 @@ import gc
 import logging
 
 # os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 from DataHandling import Dataset, GenerateData
@@ -294,7 +294,7 @@ class ML:
 
         return model
 
-    def train(self, info: bool = True):
+    def train(self, info: bool = False):
         '''
         Train the model.
         '''
@@ -334,7 +334,7 @@ class ML:
                 history_callback = self.model.fit(dataset,
                                                   validation_data=dataset,
                                                   steps_per_epoch=self.steps_per_epoch,
-                                                  validation_steps=10,
+                                                  validation_steps=1,
                                                   batch_size=self.batch_size,
                                                   use_multiprocessing=True,
                                                   workers=cpu_count(),
@@ -344,7 +344,7 @@ class ML:
                     if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
                     else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
 
-                stagnates = len(np.where(np.round(self.history["loss"][-min(n + 1, 5)], 3) <= np.round(self.history["loss"][-min(n, 4):], 3))[0])
+                stagnates = len(np.where(np.round(self.history["loss"][-min(n + 1, self.stagnation)], 3) <= np.round(self.history["loss"][-min(n, self.stagnation - 1):], 3))[0])
                 if stagnates == 0: indicator = Colour.OKGREEN + '+ ' + Colour.ENDC
                 elif stagnates >= 3: indicator = Colour.FAIL + f'-{stagnates}' + Colour.ENDC
                 else: indicator = Colour.WARNING + f'-{stagnates}' + Colour.ENDC
@@ -360,7 +360,7 @@ class ML:
                     print(log("[TRAIN] |"))
                     print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history["loss"])) + "."))
                     break
-                elif stagnates == self.stagnation:
+                elif stagnates == self.stagnation - 1:
                 # elif n >= 4: # Check there is enough history to check for stagnation
                 #     if np.all(round(self.history["loss"][-5], 3) <= np.round(self.history["loss"][-4:], 3)): # Learning has stagnated
                     iterator.close()
@@ -840,11 +840,11 @@ if __name__ == '__main__':
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
 
-    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=False)
+    optimize("steps_per_epoch", [2**n for n in range(9)], plot=False)
     optimize("batch_size", [2**n for n in range(9)], plot=False)
     optimize("optimizer", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=False)
     optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=False)
-    optimize("repeats", [2**n for n in range(9)], plot=False)
+    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=False)
 
     # for r in [20, 50, 100]:
     #     train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, r)

@@ -295,12 +295,12 @@ class Dataset(keras.utils.Sequence):
 
         return input_data, output_data
 
-    def on_epoch_end(self):
-        '''
-        Space to perform processing after an epoch has ended.
-        Unused as not needed, but included for compatibility with keras model.fit_generator
-        '''
-        pass
+    # def on_epoch_end(self):
+    #     '''
+    #     Space to perform processing after an epoch has ended.
+    #     Unused as not needed, but included for compatibility with keras model.fit_generator
+    #     '''
+    #     pass
 
 
 
