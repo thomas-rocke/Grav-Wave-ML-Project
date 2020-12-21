@@ -20,6 +20,7 @@ import logging
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 from DataHandling import Dataset, GenerateData
 from time import perf_counter
+from datetime import datetime
 from math import isnan
 import random
 import numpy as np
@@ -41,7 +42,7 @@ logging.getLogger('tensorflow').setLevel(logging.FATAL)
 
 log_format = "%(asctime)s::%(levelname)s::%(name)s::"\
              "%(filename)s::%(lineno)d::%(message)s"
-logging.basicConfig(filename='history.log', level='DEBUG', format=log_format)
+logging.basicConfig(filename="Logs" + os.sep + "{:%d-%m-%Y}.log".format(datetime.now()), level="DEBUG", format=log_format)
 
 
 
@@ -344,10 +345,10 @@ class ML:
                     if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
                     else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
 
-                stagnates = len(np.where(np.round(self.history["loss"][-1], 3) >= np.round(self.history["loss"][-min(n, self.stagnation):-1], 3))[0])
-                if stagnates == 0: indicator = Colour.OKGREEN + '+ ' + Colour.ENDC
-                elif stagnates >= self.stagnation - 2: indicator = Colour.FAIL + f'-{stagnates}' + Colour.ENDC
-                else: indicator = Colour.WARNING + f'-{stagnates}' + Colour.ENDC
+                stagnates = len(np.where(np.round(self.history["loss"][-1], 3) >= np.round(self.history["loss"][:-1], 3))[0])
+                if stagnates == 0: indicator = Colour.OKGREEN + '+' + str(len(self.history["loss"]) - stagnates) + Colour.ENDC
+                elif stagnates >= self.stagnation - 2: indicator = Colour.FAIL + '-' + str(stagnates) + Colour.ENDC
+                else: indicator = Colour.WARNING + '-' + str(stagnates) + Colour.ENDC
 
                 iterator.set_description(log("[TRAIN] |-> " + indicator + " Loss: " + str(round(self.history["loss"][-1], 3)) + " - Accuracy: " + str(round(self.history["accuracy"][-1] * 100, 1)) + "% "))
 
@@ -360,7 +361,7 @@ class ML:
                     print(log("[TRAIN] |"))
                     print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history["loss"])) + "."))
                     break
-                elif stagnates == self.stagnation - 1:
+                elif stagnates >= self.stagnation:
                 # elif n >= 4: # Check there is enough history to check for stagnation
                 #     if np.all(round(self.history["loss"][-5], 3) <= np.round(self.history["loss"][-4:], 3)): # Learning has stagnated
                     iterator.close()
@@ -839,6 +840,10 @@ if __name__ == '__main__':
     # Training and saving
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
+
+    m = ML()
+    m.train()
+    m.save()
 
     optimize("steps_per_epoch", [2**n for n in range(9)], plot=False)
     optimize("batch_size", [2**n for n in range(9)], plot=False)
