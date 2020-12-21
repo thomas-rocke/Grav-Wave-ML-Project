@@ -1,5 +1,7 @@
 import scipy.fftpack as fft
 import numpy as np
+from skimage.measure import regionprops
+from skimage.filters import threshold_otsu
 
 def getImageFourier (img_data):
     #Takes the fourier transform of each colour of the image indepentantly
@@ -23,7 +25,7 @@ def meanError (data):
     return mean, err
 
 def find_cm(image):
-    threshold_value = filters.threshold_otsu(image)
+    threshold_value = threshold_otsu(image)
     labeled_foreground = (image > threshold_value).astype(int)
     properties = regionprops(labeled_foreground, image)
     center_of_mass = properties[0].centroid

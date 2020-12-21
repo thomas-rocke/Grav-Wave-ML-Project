@@ -161,7 +161,7 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, max_order, image_params = [0, 0, (0, 1), 0], sup_params=[0], info: bool = True, batch_size:int = 10, pixels=128):
+    def __init__(self, max_order, image_params = [0, 0, (0, 1), 0], sup_params=[0], info: bool = True, batch_size:int = 10, pixels=128, batches_per_epoch:int = 20):
         '''
         Initialise the class with the required complexity.
 
@@ -175,6 +175,7 @@ class Dataset(keras.utils.Sequence):
         self.info = info
         self.batch_size = batch_size
         self.pixels = pixels
+        self.batches_per_epoch = batches_per_epoch
 
         if self.info: print("\n_____| Generating Data |_____\n")
         if self.info: print("Max order of mode: " + str(self.max_order) + "\nVariation in noise: " + str(self.image_params[0]) + "\nVariation in exposure: " + str(self.image_params[2]) + "\nMax coordinate shift: " + str(self.image_params[1])  + "\n")
@@ -240,6 +241,9 @@ class Dataset(keras.utils.Sequence):
         Unused as not needed, but included for compatibility with keras model.fit_generator
         '''
         pass
+
+    def __len__(self):
+        return self.batches_per_epoch
 
 
 
