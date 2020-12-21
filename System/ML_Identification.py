@@ -12,12 +12,13 @@ from re import ASCII
 import sys
 import os
 import gc
+import logging
 
 # os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
 from Gaussian_Beam import Hermite, Superposition, Laguerre
-from DataHandling import Dataset, Generate_Data
+from DataHandling import Dataset, GenerateData
 from time import perf_counter
 from math import isnan
 import random
@@ -33,7 +34,14 @@ from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
 from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
+from itertools import combinations, chain
+from multiprocessing import Pool, cpu_count
 
+logging.getLogger('tensorflow').setLevel(logging.FATAL)
+
+log_format = "%(asctime)s::%(levelname)s::%(name)s::"\
+             "%(filename)s::%(lineno)d::%(message)s"
+logging.basicConfig(filename='history.log', level='DEBUG', format=log_format)
 
 
 
@@ -59,13 +67,18 @@ class Colour:
 
 
 
-class ML:
+class DataGenerator(keras.utils.Sequence):
     '''
-    The class 'ML' that represents a Keras model using datasets from Gaussian modes.
+    The class 'DataGenerator' that generates data for Keras in training in real-time.
     '''
-    def __init__(self, max_order: int = 3, number_of_modes: int = 3, amplitude_variation: float = 0.5, phase_variation: float = 1.0, noise_variation: float = 0.1, exposure: tuple = (0.0, 1.0), repeats: int = 100, batch_size: int = 128, optimizer: str = "Adamax", learning_rate: float = 0.002):
+
+    def __init__(self, max_order: int = 3, number_of_modes: int = 3, amplitude_variation: float = 0.5, phase_variation: float = 1.0, noise_variation: float = 0.1, exposure: tuple = (0.0, 1.0), repeats: int = 100, batch_size: int = 128):
         '''
-        Initialise the class.
+        Initialise the class with the required complexity.
+
+        'max_order': Max order of Guassian modes in superpositions (x > 0).
+        'number_of_modes': How many modes you want to superimpose together (x > 0).
+        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
         '''
         self.max_order = max_order
         self.number_of_modes = number_of_modes
@@ -75,14 +88,110 @@ class ML:
         self.exposure = exposure
         self.repeats = repeats
         self.batch_size = batch_size
+
+        self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
+        self.gauss_modes = self.hermite_modes + self.laguerre_modes
+
+        self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
+        self.combs = [i[j] for i in self.combs for j in range(len(i))]
+
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return repr(self)
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return self.__class__.__name__ + f"({self.max_order}, {self.number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size})"
+
+    def __len__(self):
+        '''
+        Denotes the number of batches per epoch.
+        For us this is the (total number of combinations * repeats) / batch size.
+        '''
+        return int((len(self.combs) * self.repeats) / self.batch_size)
+
+    def __getitem__(self, index):
+        '''
+        Generates and returns one batch of data.
+        '''
+        combs = [self.combs[np.random.randint(len(self.combs))] for i in range(self.batch_size)] # Take random combs from self.combs
+        sups = [self.generate_superposition(comb) for comb in combs]
+
+        X = np.array(self.get_inputs(*sups))[..., np.newaxis]
+        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) for j in self.hermite_modes] for i in sups])
+
+        return X, Y
+
+    def generate_superposition(self, comb):
+        '''
+        Generates the superposition with randomised amplitudes, phase, noise and exposure for a given combination.
+        '''
+        return Superposition(*[self.randomise_amp_and_phase(i) for i in comb])
+
+    def get_inputs(self, *sups):
+        '''
+        Get inputs from list of superpositions.
+        '''
+        inputs = []
+        for sup in sups:
+            sup.noise_variation = self.noise_variation
+            sup.exposure = self.exposure
+
+            inputs.append(sup.superpose())
+
+        return inputs
+
+    def get_classes(self):
+        '''
+        Get the num_classes result required for model creation.
+        '''
+        return np.array(self.hermite_modes * 2, dtype=object)
+
+    def randomise_amp_and_phase(self, mode):
+        '''
+        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
+        Returns new mode with randomised amp and phase.
+        '''
+        x = mode.copy()
+
+        x *= np.abs(np.random.normal(scale=self.amplitude_variation) + 1)
+        x.add_phase(np.random.normal(scale=self.phase_variation))
+
+        return x
+
+
+
+
+class ML:
+    '''
+    The class 'ML' that represents a Keras model using datasets from Gaussian modes.
+    '''
+    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, steps_per_epoch: int = 100, optimizer: str = "Adamax", learning_rate: float = 0.002):
+        '''
+        Initialise the class.
+        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits].
+        'sup_params': sets superposition params [w_0_variance].
+        '''
+        self.max_order = max_order
+        self.image_params = image_params
+        self.sup_params = sup_params
+        self.resolution = resolution
+        self.batch_size = batch_size
+        self.steps_per_epoch = steps_per_epoch
         self.optimizer = optimizer
         self.learning_rate = learning_rate
 
-        self.max_epochs = 100
-        self.start_number = 2
-        self.step_speed = 0.072
-        self.success_loss = 0.001
+        self.max_epochs = 100 # Max epochs before training is terminated
+        # self.step_speed = 0.072 # Speed in seconds for each step of an epoch
+        self.success_loss = 0.001 # Loss at which the training is considered successful
+        self.stagnation = 5 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
+        self.input_shape = (self.resolution, self.resolution, 1)
         self.model = None
 
         print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
@@ -97,7 +206,7 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.max_order) + ", " + str(self.number_of_modes) + ", " + str(self.amplitude_variation) + ", " + str(self.phase_variation) + ", " + str(self.noise_variation) + ", " + str(self.exposure) + ", " + str(self.repeats) + ", " + str(self.batch_size) + ", " + str(self.optimizer) + ", " + str(self.learning_rate) + ")"
+        return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.resolution}, {self.batch_size}, {self.steps_per_epoch}, {self.optimizer}, {self.learning_rate})"
 
     def exists(self):
         '''
@@ -121,14 +230,7 @@ class ML:
         '''
         Create the Keras model in preparation for training.
         '''
-        print(text("[INIT] Generating preliminary data for model generation... "), end='')
-
-        prelim_data = Generate_Data(self.max_order, self.number_of_modes, info=False)
-        self.solutions = prelim_data.get_classes()
-        self.input_shape = (prelim_data[0].pixels, prelim_data[0].pixels, 1)
-
-        print("Done!")
-        print(text("[INIT] Generating model (input shape = " + str(self.input_shape) + ", classes = " + str(len(self.solutions)) + ", optimizer: " + self.optimizer + ")... "), end='')
+        print(log("[INIT] Generating model (input shape = " + str(self.input_shape) + ", classes = " + str(len(self.solutions)) + ", optimizer: " + self.optimizer + ")... "), end='')
 
         model = Sequential()
 
@@ -187,114 +289,136 @@ class ML:
         # classification problems. Using softmax would be wrong as it raises the probabiity on one class and lowers others.
 
         print("Done!\n")
-        if summary: text(model.summary())
+        if summary: print(model.summary())
         if summary: keras.utils.plot_model(model, str(self), show_shapes=True) # TODO Make work using packages
 
         return model
 
-    def train(self, info: bool = False):
+    def train(self, info: bool = True):
         '''
         Train the model.
         '''
         if self.trained():
-            print(text("[WARN] Trained model already exists!\n"))
+            print(log("[WARN] Trained model already exists!\n"))
             self.load()
             return
 
         start_time = perf_counter()
-        self.model = self.create_model(summary=False) # Generate preliminary data to determine all solutions (classes) and create the model
 
-        for number_of_modes in range(self.start_number, self.number_of_modes + 1):
-            (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
+        print(log("[INIT] Initialising dataset... "), end='')
+        dataset = Dataset(self.max_order, self.image_params, self.sup_params, self.resolution, self.batch_size, self.steps_per_epoch, False)
+        self.solutions = np.array(dataset.hermite_modes * 2, dtype=object)
+        print("Done!")
 
-            etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
-            print(text("[TRAIN] Training stage " + str(number_of_modes - 1) + "/" + str(self.number_of_modes - 1) + "..."))
-            print(text("[TRAIN] |"))
-            print(text("[TRAIN] |-> Dataset             : " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
-            print(text("[TRAIN] |-> Success Condition   : A loss of " + str(self.success_loss) + "."))
-            print(text("[TRAIN] |-> Terminate Condition : Reaching epoch " + str(len(self.history["loss"]) + self.max_epochs) + " or 5 consecutive epochs of stagnation."))
-            print(text("[TRAIN] |-> Maximum Duration    : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
-            print(text("[TRAIN] |"))
+        self.model = self.create_model(summary=False) # Create the Keras model
 
-            n = 0
-            try:
-                iterator = tqdm(range(self.max_epochs), text("[TRAIN] |-> Training "))
-                for n in iterator:
-                    history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=int(info))
+        # for number_of_modes in range(self.start_number, self.number_of_modes + 1):
+        # (train_inputs, train_outputs), (val_inputs, val_outputs) = self.load_data(number_of_modes) # Load training and validation data
+        # training_generator = DataGenerator(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size)
+        # etl = (((len(train_inputs) / self.batch_size) * self.step_speed) * self.max_epochs) / 60
+        # print(log("[TRAIN] |-> Dataset             : " + str(len(train_inputs)) + " data elements in batches of " + str(self.batch_size) + "."))
+        # print(log("[TRAIN] |-> Maximum Duration    : " + str(int(round(etl / 60, 0))) + " hours " + str(int(round(etl % 60, 0))) + " minutes."))
+        # history_callback = self.model.fit(train_inputs, train_outputs, validation_data=(val_inputs, val_outputs), batch_size=self.batch_size, verbose=int(info))
 
-                    for i in self.history:
-                        if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
-                        else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
+        print(log("[TRAIN] Training..."))
+        print(log("[TRAIN] |"))
+        print(log("[TRAIN] |-> Dataset             : " + str(dataset) + "."))
+        print(log("[TRAIN] |-> Success Condition   : A loss of " + str(self.success_loss) + "."))
+        print(log("[TRAIN] |-> Terminate Condition : Reaching epoch " + str(len(self.history["loss"]) + self.max_epochs) + " or " + str(self.stagnation) + " consecutive epochs of stagnation."))
+        print(log("[TRAIN] |"))
 
-                    iterator.set_description(text("[TRAIN] |-> Loss: " + str(round(self.history["loss"][-1], 3)) + " - Accuracy: " + str(round(self.history["accuracy"][-1] * 100, 1)) + "% "))
-
-                    if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
-                        print(text("\n[TRAIN] V"))
-                        print(text("[FATAL] Training failed! Gradient descent diverged at epoch " + str(len(self.history["loss"])) + ".\n"))
-                        sys.exit()
-                    elif self.history["loss"][-1] < self.success_loss: # Loss has reached success level
-                        iterator.close()
-                        print(text("[TRAIN] |"))
-                        print(text("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history["loss"])) + "."))
-                        break
-                    elif n >= 4: # Check there is enough history to check for stagnation
-                        if np.all(round(self.history["loss"][-5], 3) <= np.round(self.history["loss"][-4:], 3)): # Learning has stagnated
-                            iterator.close()
-                            print(text("[TRAIN] |"))
-                            print(text("[WARN]  |-> Learning stagnated at epoch " + str(len(self.history["loss"])) + "."))
-                            break
-
-            except KeyboardInterrupt:
-                print(text("[TRAIN] |"))
-                print(text("[WARN]  |-> Aborted at epoch " + str(len(self.history["loss"]) + 1) + "!"))
-
-            if n == self.max_epochs - 1: # Reached max epoch
-                print(text("[TRAIN] |"))
-                print(text("[WARN]  |-> Reached max epoch of " + str(len(self.history["loss"])) + "!"))
-
-            print(text("[TRAIN] |-> Evaluating : "), end='')
-            scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
-            print("Loss: " + str(round(scores[0], 3)) + " - Accuracy: " + str(round(scores[1] * 100, 1)) + "%.")
-            print(text("[TRAIN] V"))
-            print(text("[TRAIN] Done!\n"))
-
-            del train_inputs, train_outputs, val_inputs, val_outputs # Releasing RAM memory
-
-        print(text("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n"))
-
-    def load_data(self, number_of_modes: int = 1):
-        '''
-        Load training and testing data.
-        '''
+        n = 0
         try:
-            print(text("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
-            print(text("[DATA] |"))
+            iterator = tqdm(range(self.max_epochs), log("[TRAIN] |-> Training "))
+            for n in iterator:
+                history_callback = self.model.fit(dataset,
+                                                  validation_data=dataset,
+                                                  steps_per_epoch=self.steps_per_epoch,
+                                                  validation_steps=10,
+                                                  batch_size=self.batch_size,
+                                                  use_multiprocessing=True,
+                                                  workers=cpu_count(),
+                                                  verbose=int(info))
 
-            train_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
-            train_inputs = train_data.get_inputs(text("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
-            train_outputs = train_data.get_outputs()
+                for i in self.history:
+                    if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
+                    else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
 
-            print(text("[DATA] |"))
+                stagnates = len(np.where(np.round(self.history["loss"][-min(n + 1, 5)], 3) <= np.round(self.history["loss"][-min(n, 4):], 3))[0])
+                if stagnates == 0: indicator = Colour.OKGREEN + '+ ' + Colour.ENDC
+                elif stagnates >= 3: indicator = Colour.FAIL + f'-{stagnates}' + Colour.ENDC
+                else: indicator = Colour.WARNING + f'-{stagnates}' + Colour.ENDC
 
-            val_data = Generate_Data(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
-            val_inputs = val_data.get_inputs(text("[DATA] |-> 1 dataset of validation data"))
-            val_outputs = val_data.get_outputs()
+                iterator.set_description(log("[TRAIN] |-> " + indicator + " Loss: " + str(round(self.history["loss"][-1], 3)) + " - Accuracy: " + str(round(self.history["accuracy"][-1] * 100, 1)) + "% "))
 
-            print(text("[DATA] V"))
-            print(text("[DATA] Done!\n"))
+                if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
+                    print(log("\n[TRAIN] V"))
+                    print(log("[FATAL] Training failed! Gradient descent diverged at epoch " + str(len(self.history["loss"])) + ".\n"))
+                    sys.exit()
+                elif self.history["loss"][-1] < self.success_loss: # Loss has reached success level
+                    iterator.close()
+                    print(log("[TRAIN] |"))
+                    print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history["loss"])) + "."))
+                    break
+                elif stagnates == self.stagnation:
+                # elif n >= 4: # Check there is enough history to check for stagnation
+                #     if np.all(round(self.history["loss"][-5], 3) <= np.round(self.history["loss"][-4:], 3)): # Learning has stagnated
+                    iterator.close()
+                    print(log("[TRAIN] |"))
+                    print(log("[WARN]  |-> Learning stagnated at epoch " + str(len(self.history["loss"])) + "."))
+                    break
 
-        except MemoryError:
-            print(text("[DATA] V"))
-            print(text("[FATAL] Memory overflow!\n"))
-            sys.exit()
+        except KeyboardInterrupt:
+            print(log("[TRAIN] |"))
+            print(log("[WARN]  |-> Aborted at epoch " + str(len(self.history["loss"]) + 1) + "!"))
 
-        return (train_inputs, train_outputs), (val_inputs, val_outputs)
+        if n == self.max_epochs - 1: # Reached max epoch
+            print(log("[TRAIN] |"))
+            print(log("[WARN]  |-> Reached max epoch of " + str(len(self.history["loss"])) + "!"))
+
+        # print(log("[TRAIN] |-> Evaluating : "), end='')
+        # scores = self.model.evaluate(val_inputs, val_outputs, verbose=0)
+        # print("Loss: " + str(round(scores[0], 3)) + " - Accuracy: " + str(round(scores[1] * 100, 1)) + "%.")
+        print(log("[TRAIN] V"))
+        print(log("[TRAIN] Done!\n"))
+
+        # del train_inputs, train_outputs, val_inputs, val_outputs # Releasing RAM memory
+
+        print(log("[INFO] Training complete after " + str(int((perf_counter() - start_time) // 60)) + " minutes " + str(int((perf_counter() - start_time) % 60)) + " seconds.\n"))
+
+    # def load_data(self, number_of_modes: int = 1):
+    #     '''
+    #     Load training and testing data.
+    #     '''
+    #     try:
+    #         print(log("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
+    #         print(log("[DATA] |"))
+
+    #         train_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
+    #         train_inputs = train_data.get_inputs(log("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
+    #         train_outputs = train_data.get_outputs()
+
+    #         print(log("[DATA] |"))
+
+    #         val_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
+    #         val_inputs = val_data.get_inputs(log("[DATA] |-> 1 dataset of validation data"))
+    #         val_outputs = val_data.get_outputs()
+
+    #         print(log("[DATA] V"))
+    #         print(log("[DATA] Done!\n"))
+
+    #     except MemoryError:
+    #         print(log("[DATA] V"))
+    #         print(log("[FATAL] Memory overflow!\n"))
+    #         sys.exit()
+
+    #     return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
     def plot(self, info: bool = True, axes: tuple = None, label: str = False, elapsed_time: bool = False):
         '''
         Plot the history of the model whilst training.
         '''
-        if info: print(text("[PLOT] Plotting history..."))
+        if info: print(log("[PLOT] Plotting history..."))
 
         if elapsed_time: t = self.history["time"]
         else: t = np.arange(1, len(self.history["loss"]) + 1)
@@ -322,24 +446,24 @@ class ML:
         ax2.set_ylabel("Accuracy")
 
         plt.xlim(0, t[-1])
-        # ax1.set_ylim(0, np.max(self.history["loss"]))
+        ax1.set_ylim(self.success_loss, np.max(self.history["loss"]))
         ax2.set_ylim(0, 1)
         ax1.legend()
         ax2.legend()
 
         if info:
             plt.show()
-            print(text("[PLOT] Done!\n"))
+            print(log("[PLOT] Done!\n"))
 
         return (ax1, ax2)
 
     def save(self, save_trained: bool = True):
         '''
-        Save the history of the training to text files.
+        Save the history of the training to log files.
         '''
         os.makedirs("Models/" + str(self), exist_ok=True) # Create directory for model
 
-        print(text("[SAVE] Saving model... "), end='')
+        print(log("[SAVE] Saving model... "), end='')
 
         if save_trained: self.model.save("Models/" + str(self) + "/" + str(self) + ".h5")
 
@@ -358,15 +482,15 @@ class ML:
         Load a saved model.
         '''
         if not self.exists():
-            print(text("[WARN] Model does not exist! Will now train and save.\n"))
+            print(log("[WARN] Model does not exist! Will now train and save.\n"))
             self.train()
             self.save(save_trained)
             if not save_trained: self.free()
             return
         elif not self.trained():
-            print(text("[WARN] Model exists but has not been trained! Will only load history.\n"))
+            print(log("[WARN] Model exists but has not been trained! Will only load history.\n"))
 
-        print(text("[LOAD] Loading model... "), end='')
+        print(log("[LOAD] Loading model... "), end='')
 
         if self.trained(): self.model = keras.models.load_model("Models/" + str(self) + "/" + str(self) + ".h5", custom_objects={"metrics": [self.accuracy]})
 
@@ -381,39 +505,39 @@ class ML:
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
         if not self.exists():
-            print(text("[WARN] Model does not exist!\n"))
+            print(log("[WARN] Model does not exist!\n"))
             return
         elif not self.trained():
-            print(text("[WARN] Model has not been trained!\n"))
+            print(log("[WARN] Model has not been trained!\n"))
             return
 
         start_time = perf_counter()
-        if info: print(text("[PRED] Predicting... (shape = " + str(data.shape) + ")"))
-        if info: print(text("[PRED] |"))
+        if info: print(log("[PRED] Predicting... (shape = " + str(data.shape) + ")"))
+        if info: print(log("[PRED] |"))
 
         formatted_data = np.array([data[..., np.newaxis]]) # Convert to the correct format for our neural network
         prediction = self.model.predict(formatted_data)[0] # Make prediction using model (return index of superposition)
 
         modes = []
         for i in range(len(prediction) // 2): # For all values of prediction
-            if info: print(text("[PRED] |-> " + str(self.solutions[i]) + ": " + str(round(prediction[i], 3)) + Colour.FAIL + int(prediction[i] > threshold) * " ***" + Colour.ENDC))
+            if info: print(log("[PRED] |-> " + str(self.solutions[i]) + ": " + str(round(prediction[i], 3)) + Colour.FAIL + int(prediction[i] > threshold) * " ***" + Colour.ENDC))
 
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.solutions[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
                 modes[-1].phase = np.arccos(prediction[i + (len(prediction) // 2)]) # Set the phase to the corresponding modes phase
 
-        if info: print(text("[PRED] V"))
+        if info: print(log("[PRED] V"))
         if len(modes) == 0:
-            print(text("[FATAL] Prediction failed! A threshold of " + str(threshold) + " is likely too high.\n"))
+            print(log("[FATAL] Prediction failed! A threshold of " + str(threshold) + " is likely too high.\n"))
             sys.exit()
 
         answer = Superposition(*modes) # Normalise the amplitudes
 
         # self.calculate_phase(data, answer)
 
-        if info: print(text("[PRED] Done! Took " + str(round((perf_counter() - start_time) * 1000, 3)) + " milliseconds."))
-        if info: print(text("[PRED] Reconstructed: " + str(answer) + "\n"))
+        if info: print(log("[PRED] Done! Took " + str(round((perf_counter() - start_time) * 1000, 3)) + " milliseconds."))
+        if info: print(log("[PRED] Reconstructed: " + str(answer) + "\n"))
 
         return answer
 
@@ -421,7 +545,7 @@ class ML:
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
-        if info: print(text("[PRED] Actual: " + str(sup)))
+        if info: print(log("[PRED] Actual: " + str(sup)))
         pred = self.predict(sup.superpose(), info=info)
 
         labels = [str(i) for i in sup]
@@ -501,7 +625,7 @@ class ML:
         '''
         Free GPU memory of this model.
         '''
-        print(text("[INFO] Deleting model and freeing GPU memory... "), end='')
+        print(log("[INFO] Deleting model and freeing GPU memory... "), end='')
 
         del self.model
         self.model = None
@@ -520,10 +644,12 @@ class ML:
 ##################################################
 
 
-def text(message):
+def log(message):
     '''
     Return message in the format given.
     '''
+    logging.debug(message)
+
     message = message.replace("->",         Colour.OKCYAN   + "->"      + Colour.ENDC)
     message = message.replace(" |",         Colour.OKCYAN   + " |"      + Colour.ENDC)
     message = message.replace(" V",         Colour.OKCYAN   + " V"      + Colour.ENDC)
@@ -537,6 +663,7 @@ def text(message):
     message = message.replace("[SAVE]",     Colour.OKGREEN  + "[SAVE]"  + Colour.ENDC)
     message = message.replace("[LOAD]",     Colour.OKGREEN  + "[LOAD]"  + Colour.ENDC)
     message = message.replace("[PRED]",     Colour.OKGREEN  + "[PRED]"  + Colour.ENDC)
+
     return message
 
 def VGG16(input_shape, classes):
@@ -592,14 +719,14 @@ def VGG16(input_shape, classes):
 
 def auto_label(rects, ax):
     '''
-    Attach a text label above each bar in rects displaying its height.
+    Attach a log label above each bar in rects displaying its height.
     '''
     for rect in rects:
         height = rect.get_height()
         ax.annotate('{}'.format(round(height, 2)),
                     xy=(rect.get_x() + rect.get_width() / 2, height),
-                    xytext=(0, 3 if height > 0 else -15),  # 3 points vertical offset
-                    textcoords="offset points",
+                    xylog=(0, 3 if height > 0 else -15),  # 3 points vertical offset
+                    logcoords="offset points",
                     ha="center", va="bottom")
 
 def process(**kwargs):
@@ -616,13 +743,13 @@ def train_and_save(**kwargs):
     '''
     Starts a thread for training and saving of a model to ensure GPU memory is freed after training is complete.
     '''
-    print(text("[INFO] Starting process to ensure GPU memory is freed after training is complete... "), end='')
+    print(log("[INFO] Starting process to ensure GPU memory is freed after training is complete... "), end='')
 
     p = multiprocessing.Process(target=process, args=kwargs)
     p.start()
     p.join()
 
-def get_model_error(model, data_object:Generate_Data, test_number:int=10, sup:Superposition=None):
+def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Superposition=None):
     '''
     Tests the accuracy of the model from data contained within data_object
     
@@ -660,7 +787,7 @@ def optimize(param_name: str, param_range: str, plot: bool = True) -> None:
     '''
     Loading / training multiple models and plotting comparison graphs of their performances.
     '''
-    print(text("[INFO] Optimizing parameter '" + param_name + "' across range '" + str(param_range) + "'.\n"))
+    print(log("[INFO] Optimizing parameter '" + param_name + "' across range '" + str(param_range) + "'.\n"))
 
     models = []
     for test in param_range:
@@ -713,10 +840,10 @@ if __name__ == '__main__':
 
     # train_and_save(3, 3, amplitude_variation, phase_variation, noise_variation, exposure, 20, 128)
 
+    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=False)
     optimize("batch_size", [2**n for n in range(9)], plot=False)
     optimize("optimizer", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=False)
     optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=False)
-    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=False)
     optimize("repeats", [2**n for n in range(9)], plot=False)
 
     # for r in [20, 50, 100]:
@@ -727,7 +854,7 @@ if __name__ == '__main__':
 
     # Loading saved model
 
-    data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+    data = GenerateData(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
 
     model = ML(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure, repeats)
     model.load()
@@ -749,7 +876,7 @@ if __name__ == '__main__':
 
     #     # Generating test data for comparisons
 
-    #     data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+    #     data = GenerateData(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
 
     # sup = Superposition(Hermite(1,2), Hermite(2,0), Hermite(0,1))
     # prediction = model.predict(sup.superpose())
@@ -768,7 +895,7 @@ if __name__ == '__main__':
     # #sys.path.insert(1, '../System') # Move to directory containing simulation files
     # model.load()
 
-    # data = Generate_Data(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
+    # data = GenerateData(max_order, number_of_modes, amplitude_variation, phase_variation, noise_variation, exposure)
 
     # errs = get_model_error(model, data, 0.5)
 
