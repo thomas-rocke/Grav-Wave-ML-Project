@@ -458,7 +458,10 @@ def grouper(iterable, n, fillvalue=None):
 
 
 if __name__ == "__main__": 
-    x = Dataset(5, [0.2, 10, (0.2, 0.8), True], batch_size=128)
-    for i in range(2):
-
-        dat = x.__getitem__(1)
+    x = Dataset(5, [0.2, 10, (0.0, 1.0), 0], batch_size=5)
+    dat = x.load_batch()[0]
+    fig, ax = plt.subplots(ncols=5)
+    for i in range(5):
+        ax[i].imshow(dat[i, :, :])
+    plt.show()
+    
