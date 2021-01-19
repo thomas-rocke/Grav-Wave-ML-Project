@@ -3,20 +3,26 @@ import cv2
 from skimage.measure import regionprops
 from skimage.filters import threshold_otsu
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+from matplotlib.animation import ArtistAnimation
 from scipy.ndimage.interpolation import shift
 from scipy.ndimage import zoom
-from scipy.optimize import brute
+from scipy.optimize import basinhopping
 import time
 from Utils import meanError
 from Gaussian_Beam import Superposition, Hermite
+from multiprocessing import cpu_count, Pool
+from skimage.measure import regionprops
+from skimage.filters import threshold_otsu
 
 class BaseProcessor(list):
     def __init__(self, target_resolution:tuple = (128, 128), frames_per_reset:int = 10):
         self.frames_processed = 0
         self.target_resolution = target_resolution
         self.frames_per_reset = frames_per_reset
-        self.cm = (0, 0)
-        self.scale_factor = 20
+        self.SquareX = 0
+        self.SquareY = 0
+        self.SquareScale = 0 # Set Bounding box defaults
 
     def ToGreyscale(self, image):
         '''
@@ -26,58 +32,52 @@ class BaseProcessor(list):
         grey_image = np.dot(image[..., :3], grey_vec)
         return grey_image
 
-    def Recenter(self, image):
+    def _getCenterOfMass(self, image):
         '''
-        Recenter target greyscale image on the center of mass
-        '''
-        diff = (int(image.shape[0]/2 - self.cm[0]), int(image.shape[1]/2 - self.cm[1]))
-        return shift(image, diff, cval=0)
-        
-
-    def Rescale(self, image):
-        '''
-        Rescale target image
-        '''
-        zoom_factor = 1.8 * self.scale_factor # 99% of Gaussian within 1.8 sig radius
-        dims = image.shape
-        new_dims = (dims[0]/zoom_factor, dims[1]/zoom_factor)
-        crop_start = (int(dims[0]/2 - new_dims[0]/2), int(dims[1]/2 - new_dims[1]/2))
-        crop_end = (int(crop_start[0] + new_dims[0]/2), int(crop_start[1] + new_dims[1]/2))
-        return image[crop_start[0]:crop_end[0], crop_start[1]:crop_end[1]]
-
-    def _resetCenter(self, image):
-        '''
-        Resets the coordinate used to center the images
+        Searches for center of mass of target image, and changes center of bounding box to lie on this position
         '''
         threshold_value = threshold_otsu(image)
         labeled_foreground = (image > threshold_value).astype(int)
         properties = regionprops(labeled_foreground, image)
         center_of_mass = properties[0].centroid
-        self.cm = tuple(center_of_mass)
+        self.SquareX, self.SquareY = center_of_mass[1], center_of_mass[0]
 
-    def _resetScale(self, image):
+    def _resetSquare(self, image):
         '''
-        Resets the scale factor used to rescale the images
+        Resets the Square bounding box size
         '''
-        normed_image = image/np.linalg.norm(image)
-        vals = np.array([WidthModel(w, normed_image) for w in np.arange(1, 100)])
-        self.scale_factor = np.argmin(vals)
+        max_sidelength = np.min(image.shape) # Get the length of the shortest image side
+        test_sides = np.arange(int(0.3*max_sidelength), max_sidelength)
+        least_square_vals = [self._WidthModel(side_length, image) for side_length in test_sides]
+        self.SquareSide = test_sides[np.argmax(least_square_vals)]
+    
+    def _WidthModel(self, SquareSide, image):
+        # Model used in maximisation problem to find bounding box
+        x_start = int(image.shape[0]/2 + self.SquareX - SquareSide/2)
+        y_start = int(image.shape[1]/2 + self.SquareY - SquareSide/2)
+        x_end = int(min(x_start + SquareSide, image.shape[0]))
+        y_end = int(min(y_start + SquareSide, image.shape[1]))
+        mean_square = (image[x_start:x_end, y_start:y_end]**2).mean(axis=None)
+        Square_area = SquareSide**2
+        return (mean_square - 1e-5*(Square_area/image.size))
 
     def MakeSquare(self, image):
         '''
-        Crops the target greyscale image so the aspect ratio is square
+        Crops the target greyscale image so the aspect ratio is the square given by self.SquareX, self.SquareY and self.SquareScale. Image pixels outside the original image default to 0
         '''
-        min_pixels = np.min(image.shape)
-        max_pixels = np.max(image.shape)
-        offset = int((max_pixels - min_pixels)/2)
-        square_image = np.empty((min_pixels, min_pixels))
-        if image.shape[0] == max_pixels:
-            # Long side is first axis
-            square_image = image[offset:(offset+min_pixels), :]
-        else:
-            square_image = image[:, offset:(offset+min_pixels)]
-        return square_image
-
+        new_image = np.zeros((self.SquareSide, self.SquareSide))
+        x_start = int(image.shape[0]/2 + self.SquareX - self.SquareSide/2)
+        y_start = int(image.shape[1]/2 + self.SquareY - self.SquareSide/2)
+        for i in range(self.SquareSide):
+            for j in range(self.SquareSide):
+                x = i + x_start
+                y = j + y_start
+                if x > 0 and y > 0:
+                    try:
+                        new_image[i, j] = image[x, y]
+                    except:
+                        pass
+        return new_image
 
     def ChangeResolution(self, image):
         '''
@@ -91,23 +91,21 @@ class BaseProcessor(list):
         '''
         return image / np.linalg.norm(image)
 
-    def Process(self):
+    def getImages(self, batch_size:int = 1):
         '''
-        Perform all operations to generate an image usable by Neural Net
+        Perform all operations to generate an image usable by Neural Net, and return a batch of batch_size images
         '''
-        image = self[self.frames_processed]
-        grey_image = self.ToGreyscale(image)
-        if  not (self.frames_processed % self.frames_per_reset):
-            self._resetCenter(grey_image)
-            self._resetScale(grey_image)
-        centered_image = self.Recenter(grey_image)
-        scaled_image = self.Rescale(centered_image)
-        squared_image = self.MakeSquare(scaled_image)
-        rezzed_image = self.ChangeResolution(squared_image)
-        normed_image = self.Normalise(rezzed_image)
-        self.frames_processed += 1
-        return normed_image
-
+        images = [self[self.frames_processed + i] for i in range(batch_size)]
+        self._resetSquare(self.ToGreyscale(images[0])) # Resets the size of the bounding box based on the first image of the batch
+        processed_images = [0]*len(images)
+        for i, image in enumerate(images):
+            grey_image = self.ToGreyscale(image)
+            squared_image = self.MakeSquare(grey_image)
+            rezzed_image = self.ChangeResolution(squared_image)
+            normed_image = self.Normalise(rezzed_image)
+            processed_images[i] = normed_image
+            self.frames_processed += 1
+        return processed_images
 
 class VideoProcessor(BaseProcessor):
 
@@ -115,6 +113,7 @@ class VideoProcessor(BaseProcessor):
         super().__init__(target_resolution, frames_per_reset)
         self.cap = cv2.VideoCapture(video_file)
         self.frameCount = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        self.framerate = int(self.cap.get(cv2.CAP_PROP_FPS))
         frameWidth = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         frameHeight = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
@@ -129,66 +128,15 @@ class VideoProcessor(BaseProcessor):
             self.cap.release() # Close video file
             raise IndexError('End of video file reached')
 
-
-def WidthModel(width, image):
-    x_center = int(image.shape[0]/2)
-    y_center = int(image.shape[1]/2)
-    func_im = np.fromfunction(lambda i, j: np.exp(-((i - x_center)**2 + (j - y_center)**2)/width**2), image.shape)
-    return ((image - func_im/np.sqrt(2*np.pi*width**2))**2).mean(axis=None)
-
-def clipped_zoom(img, zoom_factor, **kwargs):
-
-    h, w = img.shape[:2]
-
-    # For multichannel images we don't want to apply the zoom factor to the RGB
-    # dimension, so instead we create a tuple of zoom factors, one per array
-    # dimension, with 1's for any trailing dimensions after the width and height.
-    zoom_tuple = (zoom_factor,) * 2 + (1,) * (img.ndim - 2)
-
-    # Zooming out
-    if zoom_factor < 1:
-
-        # Bounding box of the zoomed-out image within the output array
-        zh = int(np.round(h * zoom_factor))
-        zw = int(np.round(w * zoom_factor))
-        top = (h - zh) // 2
-        left = (w - zw) // 2
-
-        # Zero-padding
-        out = np.zeros_like(img)
-        out[top:top+zh, left:left+zw] = zoom(img, zoom_tuple, **kwargs)
-
-    # Zooming in
-    elif zoom_factor > 1:
-
-        # Bounding box of the zoomed-in region within the input array
-        zh = int(np.round(h / zoom_factor))
-        zw = int(np.round(w / zoom_factor))
-        top = (h - zh) // 2
-        left = (w - zw) // 2
-
-        out = zoom(img[top:top+zh, left:left+zw], zoom_tuple, **kwargs)
-
-        # `out` might still be slightly larger than `img` due to rounding, so
-        # trim off any extra pixels at the edges
-        trim_top = ((out.shape[0] - h) // 2)
-        trim_left = ((out.shape[1] - w) // 2)
-        out = out[trim_top:trim_top+h, trim_left:trim_left+w]
-
-    # If zoom_factor == 1, just return the input array
-    else:
-        out = img
-    return out
-
 if __name__ == "__main__":
-    fname = r'C:\Users\Tom\Google Drive\corrected second suite\Tom Horn 1.mp4'
-    vid = VideoProcessor(fname)
-    ts = [0]*50
-    for i in range(50):
-        t = time.time()
-        vid.Process()
-        ts[i] = time.time() - t
-    print(meanError(ts))
-    plt.plot(range(50), ts)
-    plt.show()
+    fname = r'C:\Users\Tom\Downloads\EditedBeamModes.mp4'
+    vid = VideoProcessor(fname, frames_per_reset=1)
     
+    fig, ax = plt.subplots(ncols=5)
+    vid.target_resolution = (1920, 1080)
+    ims = vid.getImages(5)
+    print(vid.SquareSide)
+    for i in range(5):
+        ax[i].imshow(ims[i])
+    
+    plt.show()
