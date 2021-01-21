@@ -203,7 +203,7 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, info: bool = True):
+    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
         '''
         Initialise the class with the required complexity.
 
@@ -317,7 +317,7 @@ class Dataset(keras.utils.Sequence):
         self.epoch += 1
         self.seed = self.get_seed(self.stage, self.epoch)
     
-    def get_seed(stage, epoch):
+    def get_seedself, (stage, epoch):
         '''
         Function which gets a unique seed per epoch, per training stage.
         The function n**2 + n + 41 produces a unique prime number for 0 <= n < 40
