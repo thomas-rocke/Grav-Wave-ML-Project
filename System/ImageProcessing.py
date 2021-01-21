@@ -2,73 +2,73 @@ import numpy as np
 import cv2
 from skimage.measure import regionprops
 from skimage.filters import threshold_otsu, gaussian
-from Gaussian_Beam import Superposition, Hermite
+from Gaussian_Beam import Superposition, Hermite, Laguerre
 from multiprocessing import cpu_count, Pool
 import matplotlib.pyplot as plt
 import time
 from Utils import meanError
 
 class BaseProcessor(list):
-    def __init__(self, target_resolution:tuple = (128, 128), frames_per_reset:int = 10):
+    def __init__(self, target_resolution:tuple = (128, 128)):
         self.frames_processed = 0
         self.target_resolution = target_resolution
-        self.frames_per_reset = frames_per_reset
-        self.SquareX = 0
-        self.SquareY = 0
-        self.SquareScale = 0 # Set Bounding box defaults
 
     def toGreyscale(self, image):
         '''
         Convert target image to greyscale
         '''
-        grey_vec = [0.2989, 0.5870, 0.1140]
-        grey_image = np.dot(image[..., :3], grey_vec)
-        return grey_image
+        if len(image.shape) == 3:
+            grey_vec = [0.2989, 0.5870, 0.1140]
+            grey_image = np.dot(image[..., :3], grey_vec)
+            return grey_image
+        else:
+            return image
 
     def _getCenterOfMass(self, image):
         '''
-        Searches for center of mass of target image, and changes center of bounding box to lie on this position
+        Searches for center of mass of target image
         '''
         threshold_value = threshold_otsu(image)
         labeled_foreground = (image > threshold_value).astype(int)
         properties = regionprops(labeled_foreground, image)
         center_of_mass = properties[0].centroid
-        self.SquareX, self.SquareY = center_of_mass[1], center_of_mass[0]
+        return center_of_mass[1], center_of_mass[0]
 
     def _resetSquare(self, image):
         '''
         Resets the Square bounding box size
         '''
+        SquareX, SquareY = self._getCenterOfMass(image)
         max_sidelength = np.min(image.shape) # Get the length of the shortest image side
-        test_sides = np.arange(int(0.3*max_sidelength), max_sidelength)
-        least_square_vals = [self._widthModel(side_length, image) for side_length in test_sides]
-        self.SquareSide = test_sides[np.argmax(least_square_vals)]
-        return self.SquareSide
+        test_sides = np.arange(0, max_sidelength)
+        least_square_vals = [self._widthModel(side_length, SquareX, SquareY, image) for side_length in test_sides]
+        SquareSide = test_sides[np.argmax(least_square_vals)]
+        return SquareSide, SquareX, SquareY
     
-    def _widthModel(self, SquareSide, image):
+    def _widthModel(self, SquareSide, SquareX, SquareY, image):
         # Model used in maximisation problem to find bounding box
-        x_start = int(image.shape[0]/2 + self.SquareX - SquareSide/2)
-        y_start = int(image.shape[1]/2 + self.SquareY - SquareSide/2)
+        x_start = int(SquareX - SquareSide/2)
+        y_start = int(SquareY - SquareSide/2)
         x_end = int(min(x_start + SquareSide, image.shape[0]))
         y_end = int(min(y_start + SquareSide, image.shape[1]))
         mean_square = (image[x_start:x_end, y_start:y_end]**2).mean(axis=None)
-        Square_area = SquareSide**2
-        return (mean_square - 1e-5*(Square_area/image.size))
+        return (mean_square - (SquareSide/max(image.shape)))
 
-    def makeSquare(self, image, SquareSide=0):
+    def makeSquare(self, image, SquareSide=0, SquareX=0, SquareY=0):
         '''
-        Crops the target greyscale image so the aspect ratio is the square given by self.SquareX, self.SquareY and SquareSide (defaulting to self.SquareSide). Image pixels outside the original image default to 0
+        Crops the target greyscale image so the aspect ratio is the square given by SquareX, SquareY and SquareSide (defaulting to min(image.shape)). Image pixels outside the original image default to 0
         '''
         if SquareSide == 0:
-            SquareSide = self.SquareSide
+            SquareSide = min(image.shape)
+
         new_image = np.zeros((SquareSide, SquareSide))
-        x_start = int(image.shape[0]/2 + self.SquareX - self.SquareSide/2)
-        y_start = int(image.shape[1]/2 + self.SquareY - self.SquareSide/2)
+        x_start = int(SquareX - SquareSide/2)
+        y_start = int(SquareY - SquareSide/2)
         for i in range(SquareSide):
             for j in range(SquareSide):
                 x = i + x_start
                 y = j + y_start
-                if x > 0 and y > 0:
+                if x >= 0 and y >= 0:
                     try:
                         new_image[i, j] = image[x, y]
                     except:
@@ -89,9 +89,9 @@ class BaseProcessor(list):
         '''
         return image / np.linalg.norm(image)
 
-    def processImage(self, image):
+    def processImage(self, image, SquareSide=0, SquareX=0, SquareY=0):
         grey_image = self.toGreyscale(image)
-        squared_image = self.makeSquare(grey_image)
+        squared_image = self.makeSquare(grey_image, SquareSide, SquareX, SquareY)
         rezzed_image = self.changeResolution(squared_image)
         normed_image = self.normalise(rezzed_image)
         return normed_image
@@ -101,8 +101,8 @@ class BaseProcessor(list):
         Perform all operations to generate an image usable by Neural Net, and return a batch of batch_size images
         '''
         images = [self[self.frames_processed + i] for i in range(batch_size)]
-        self._resetSquare(self.ToGreyscale(images[0])) # Resets the size of the bounding box based on the first image of the batch
-        processed_images = [self.processImage(image) for image in images]
+        SquareSide, SquareX, SquareY = self._resetSquare(self.toGreyscale(images[0])) # Resets the size of the bounding box based on the first image of the batch
+        processed_images = [self.processImage(image, SquareSide, SquareX, SquareY) for image in images]
         self.frames_processed += batch_size
         return processed_images
 
@@ -127,11 +127,9 @@ class VideoProcessor(BaseProcessor):
             self.cap.release() # Close video file
             raise IndexError('End of video file reached')
 
-
 class ModeProcessor(BaseProcessor):
-    def __init__(self, camera_params:dict = {}, model_params:dict = {}):
+    def __init__(self, camera_params:dict = {}, target_resolution:tuple=(128, 128)):
         camera_keys = camera_params.keys()
-        model_keys = model_params.keys()
 
         # Set up camera properties
         # Assume ideal camera if property not defined
@@ -154,22 +152,16 @@ class ModeProcessor(BaseProcessor):
             self.blur_variance = camera_params['blur_variance']
         else:
             self.blur_variance = 0
-        
-        # Set up properties from the model
-        if 'resolution' in model_keys:
-            self.resolution = model_params['resolution']
-        else:
-            self.resolution = (128, 128)
 
-        super().__init__(self.resolution)
+        super().__init__(target_resolution)
         self.expose = np.vectorize(self._exposure_comparison) # Create function to handle exposure
 
-    def processImage(self, raw_image):
+    def errorEffects(self, raw_image):
         '''
-        Performs all image processing on target image, using params from class init
+        Performs all image processing for noise effects on target image, using params from class init
         '''
         #shifted_image = shift_image(image,) # Shift the image in x and y coords
-        noisy_image = self.add_noise(image, self.noise_variance) # Add Gaussian Noise to the image
+        noisy_image = self.add_noise(raw_image, self.noise_variance) # Add Gaussian Noise to the image
         blurred_image = self.blur_image(noisy_image, self.blur_variance)
         exposed_image = self.add_exposure(blurred_image, self.exposure_limits) # Add exposure
 
@@ -179,6 +171,15 @@ class ModeProcessor(BaseProcessor):
         else:
             return exposed_image
 
+    def getImage(self, raw_image):
+        '''
+        Perform all processing on target superposition image to preprare it for training.
+        '''
+        noisy_image = self.errorEffects(raw_image)
+        SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
+        resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
+        return resized_image
+
     # Error/Noise functions:
     def randomise_amp_and_phase(self, mode):
         '''
@@ -186,8 +187,8 @@ class ModeProcessor(BaseProcessor):
         Returns new mode with randomised amp and phase.
         '''
         x = mode.copy()
-        x *= np.random.random() # Change amp by random amount
-        x.add_phase(np.random.random() * 2 * np.pi) # Add random amount of phase
+        x *= np.random.rand() # Change amp by random amount
+        x.add_phase(np.random.rand() * 2 * np.pi) # Add random amount of phase
         return x
 
     def vary_w_0(self, modes, w_0_variance):
@@ -237,8 +238,8 @@ class ModeProcessor(BaseProcessor):
         Will translate target image in both x and y by integer resolution by random numbers in the range (-max_pixel_shift, max_pixel_shift)
         '''
         copy = np.zeros_like(image)
-        x_shift = random.randint(-max_pixel_shift, max_pixel_shift)
-        y_shift = random.randint(-max_pixel_shift, max_pixel_shift)
+        x_shift = np.random.randint(-max_pixel_shift, max_pixel_shift)
+        y_shift = np.random.randint(-max_pixel_shift, max_pixel_shift)
         shape = np.shape(image)
         for i in range(shape[0]):
             for j in range(shape[1]):
@@ -259,19 +260,56 @@ class ModeProcessor(BaseProcessor):
         quantized_image = np.digitize(image, bins)
         return quantized_image
     
-    def blur_image(self, image):
+    def blur_image(self, image, blur_variance:float=0):
         blur_amount = np.random.normal(0, self.blur_variance)**2
         return gaussian(image, blur_amount)
 
+camera_presets = {
+    'ideal_camera' : {
+        'noise_variance' : 0,
+        'exposure_limits' : (0, 1),
+        'bit_depth' : 0,
+        'blur_variance' : 0
+    },
 
+    'poor_noise' : {
+        'noise_variance' : 0.4,
+        'exposure_limits' : (0, 1),
+        'bit_depth' : 0,
+        'blur_variance' : 0
+    },
+
+    'poor_exposure' : {
+        'noise_variance' : 0,
+        'exposure_limits' : (0.3, 0.7),
+        'bit_depth' : 0,
+        'blur_variance' : 0
+    },
+
+    'poor_bit_depth' : {
+        'noise_variance' : 0,
+        'exposure_limits' : (0, 1),
+        'bit_depth' : 8,
+        'blur_variance' : 0
+    },
+
+    'poor_blur' : {
+        'noise_variance' : 0,
+        'exposure_limits' : (0, 1),
+        'bit_depth' : 0,
+        'blur_variance' : 0.5
+    },
+}
 
 if __name__ == "__main__":
-    fname = r'C:\Users\Tom\Downloads\EditedBeamModes.mp4'
-    vid = VideoProcessor(fname, frames_per_reset=1)
-    
-    fig, ax = plt.subplots(ncols=5)
-    ims = vid.getImages(5)
-    for i in range(5):
-        ax[i].imshow(ims[i])
-    
+    camera = camera_presets['poor_noise']
+    mode_processor = ModeProcessor(camera)
+    s = Superposition(Hermite(1, 1), Laguerre(3, 3), resolution=480)
+    img = s.superpose()
+    processed_img = mode_processor.getImage(img)
+    fig, ax = plt.subplots(ncols=3)
+    ax[0].imshow(img)
+    ax[1].imshow(processed_img)
+    ax[2].imshow(mode_processor.changeResolution(img) - processed_img)
     plt.show()
+    
