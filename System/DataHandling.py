@@ -203,7 +203,7 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, steps_per_epoch: int = 100, info: bool = True):
+    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
         '''
         Initialise the class with the required complexity.
 
@@ -216,8 +216,16 @@ class Dataset(keras.utils.Sequence):
         self.sup_params = sup_params
         self.resolution = resolution
         self.batch_size = batch_size
-        self.steps_per_epoch = steps_per_epoch
+        self.steps = batches_per_repeat
+        self.repeats = repeats_per_epoch
+        self.steps_per_epoch = self.steps * self.repeats
+        self.stage = training_stage
         self.info = info
+
+        self.epoch = 1
+        self.current_step = 0
+        self.current_repeat = -1
+        self.seed = self.get_seed(self.stage, self.epoch)
 
         if self.info: print("\n_____| Dataset |_____\n")
         if self.info: print(f"Max order of mode: {self.max_order}\n"
@@ -258,6 +266,10 @@ class Dataset(keras.utils.Sequence):
 
         The index param is unused, and is included for compatability with keras model.fit_generator
         '''
+        if self.current_step % self.steps == 0: # Processed a full repeat
+            np.random.seed(self.seed) # Reset randomness between repeats
+            self.current_repeat += 1
+
         input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
 
@@ -268,6 +280,8 @@ class Dataset(keras.utils.Sequence):
 
         input_data = np.array(input_data)[..., np.newaxis]
         output_data = np.array(output_data) # Convert to arrays of correct shape
+
+        self.current_step += 1
         return input_data, output_data
 
     def load_batch(self):
@@ -295,7 +309,23 @@ class Dataset(keras.utils.Sequence):
         output_data = s
 
         return input_data, output_data
-
+    
+    def on_epoch_end(self):
+        '''
+        Defines steps taken at the end of each epoch - changing the seed for np.random and iterating the self.epoch
+        '''
+        self.epoch += 1
+        self.seed = self.get_seed(self.stage, self.epoch)
+    
+    def get_seedself, (stage, epoch):
+        '''
+        Function which gets a unique seed per epoch, per training stage.
+        The function n**2 + n + 41 produces a unique prime number for 0 <= n < 40
+        p**m will always be unique for a unique combination of prime p and non-zero integer m
+        '''
+        base = stage**2 + stage + 41
+        seed = base ** epoch
+        return seed
 
 
 
