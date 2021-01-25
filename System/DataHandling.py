@@ -14,7 +14,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 from Utils import meanError
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 import keras
-from ImageProcessing import ModeProcessor
+from ImageProcessing import ModeProcessor, camera_presets
 
 
 
@@ -204,10 +204,11 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, mode_processor:ModeProcessor,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
+    def __init__(self, mode_processor:ModeProcessor, mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
+        self.mode_mask = mode_mask
         self.mode_processor = mode_processor
         self.max_order = max_order
         self.resolution = resolution
@@ -269,6 +270,10 @@ class Dataset(keras.utils.Sequence):
 
         for b in range(self.batch_size):
             s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+            if self.mode_mask:
+                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                    mode.amplitude = 0
+                    mode.phase = 0
             input_data[b, :, :] = self.mode_processor.getImage(s.superpose()) # Generate noise image
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
 
@@ -298,7 +303,10 @@ class Dataset(keras.utils.Sequence):
 
     def batch_load_process(self, n):
         s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
-
+        if self.mode_mask:
+                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                    mode.amplitude = 0
+                    mode.phase = 0
         input_data = self.mode_processor.getImage(s.superpose()) # Generate noise image
         output_data = s
 
@@ -469,3 +477,10 @@ def grouper(iterable, n, fillvalue=None):
 ##########             MAIN             ##########
 ##########                              ##########
 ##################################################
+
+if __name__=='__main__':
+    processor = ModeProcessor(camera_presets['ideal_camera'])
+    x = Dataset(processor, mode_mask=1)
+    img = x.load_batch()[0][0]
+    plt.imshow(img)
+    plt.show()
