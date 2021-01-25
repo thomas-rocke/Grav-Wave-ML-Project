@@ -2,6 +2,7 @@ import scipy.fftpack as fft
 import numpy as np
 from skimage.measure import regionprops
 from skimage.filters import threshold_otsu
+import matplotlib.pyplot as plt
 
 def getImageFourier (img_data):
     #Takes the fourier transform of each colour of the image indepentantly
@@ -31,5 +32,8 @@ def find_cm(image):
     center_of_mass = properties[0].centroid
     return center_of_mass[1], center_of_mass[0]
 
+def getPrime(n):
+    # Works for n <= 40
+    return n**2 + n + 41
 
-
+print(getPrime(40))
