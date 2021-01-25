@@ -31,9 +31,3 @@ def find_cm(image):
     properties = regionprops(labeled_foreground, image)
     center_of_mass = properties[0].centroid
     return center_of_mass[1], center_of_mass[0]
-
-def getPrime(n):
-    # Works for n <= 40
-    return n**2 + n + 41
-
-print(getPrime(40))
