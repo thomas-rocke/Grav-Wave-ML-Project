@@ -128,33 +128,36 @@ class VideoProcessor(BaseProcessor):
             raise IndexError('End of video file reached')
 
 class ModeProcessor(BaseProcessor):
-    def __init__(self, camera_params:dict = {}, target_resolution:tuple=(128, 128)):
-        camera_keys = camera_params.keys()
+    def __init__(self, camera:dict = {}, target_resolution:tuple=(128, 128)):
+        self.change_camera(camera)
+
+        super().__init__(target_resolution)
+        self.expose = np.vectorize(self._exposure_comparison) # Create function to handle exposure
+
+    def change_camera(self, camera:dict):
+        camera_keys = camera.keys()
 
         # Set up camera properties
         # Assume ideal camera if property not defined
         if 'noise_variance' in camera_keys:
-            self.noise_variance = camera_params['noise_variance']
+            self.noise_variance = camera['noise_variance']
         else:
             self.noise_variance = 0
         
         if 'exposure_limits' in camera_keys:
-            self.exposure_limits = camera_params['exposure_limits']
+            self.exposure_limits = camera['exposure_limits']
         else:
             self.exposure_limits = (0, 1)
         
         if 'bit_depth' in camera_keys:
-            self.bit_depth = camera_params['bit_depth']
+            self.bit_depth = camera['bit_depth']
         else:
             self.bit_depth = 0
         
         if 'blur_variance' in camera_keys:
-            self.blur_variance = camera_params['blur_variance']
+            self.blur_variance = camera['blur_variance']
         else:
             self.blur_variance = 0
-
-        super().__init__(target_resolution)
-        self.expose = np.vectorize(self._exposure_comparison) # Create function to handle exposure
 
     def errorEffects(self, raw_image):
         '''
@@ -224,6 +227,7 @@ class ModeProcessor(BaseProcessor):
         lower_bound = max_val * exposure[0]
         upper_bound = max_val * exposure[1]
         image = self.expose(image, upper_bound, lower_bound)
+        image -= lower_bound
         return image
 
     def _exposure_comparison(self, val, upper_bound, lower_bound):

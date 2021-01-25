@@ -14,6 +14,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 from Utils import meanError
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 import keras
+from ImageProcessing import ModeProcessor, camera_presets
 
 
 
@@ -203,17 +204,13 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
+    def __init__(self, mode_processor:ModeProcessor, mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
         '''
         Initialise the class with the required complexity.
-
-        'max_order': Max order of Guassian modes in superpositions (x > 0).
-        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits].
-        'sup_params': sets superposition params [w_0_variance].
         '''
+        self.mode_mask = mode_mask
+        self.mode_processor = mode_processor
         self.max_order = max_order
-        self.image_params = image_params
-        self.sup_params = sup_params
         self.resolution = resolution
         self.batch_size = batch_size
         self.steps = batches_per_repeat
@@ -228,10 +225,7 @@ class Dataset(keras.utils.Sequence):
         self.seed = self.get_seed(self.stage, self.epoch)
 
         if self.info: print("\n_____| Dataset |_____\n")
-        if self.info: print(f"Max order of mode: {self.max_order}\n"
-                            f"Variation in noise: {self.image_params[0]}\n"
-                            f"Variation in exposure: {self.image_params[2]}\n"
-                            f"Max coordinate shift: {self.image_params[1]}\n")
+        if self.info: print(f"Max order of mode: {self.max_order}\n")
 
         self.hermite_modes = [Hermite(l=i, m=j, resolution=self.resolution) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, resolution=self.resolution) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
@@ -247,7 +241,8 @@ class Dataset(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.resolution}, {self.batch_size}, {self.steps_per_epoch}, {self.info})"
+        #TODO: Fix repr
+        #return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.resolution}, {self.batch_size}, {self.steps_per_epoch}, {self.info})"
 
     def __len__(self):
         '''
@@ -274,8 +269,12 @@ class Dataset(keras.utils.Sequence):
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
 
         for b in range(self.batch_size):
-            s = superpose_effects(self.gauss_modes, self.sup_params)
-            input_data[b, :, :] = image_processing(s.superpose(), self.image_params) # Generate noise image
+            s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+            if self.mode_mask:
+                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                    mode.amplitude = 0
+                    mode.phase = 0
+            input_data[b, :, :] = self.mode_processor.getImage(s.superpose()) # Generate noise image
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
 
         input_data = np.array(input_data)[..., np.newaxis]
@@ -303,9 +302,12 @@ class Dataset(keras.utils.Sequence):
         return input_data, output_data
 
     def batch_load_process(self, n):
-        s = superpose_effects(self.gauss_modes, self.sup_params)
-
-        input_data = image_processing(s.superpose(), self.image_params) # Generate noise image
+        s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+        if self.mode_mask:
+                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                    mode.amplitude = 0
+                    mode.phase = 0
+        input_data = self.mode_processor.getImage(s.superpose()) # Generate noise image
         output_data = s
 
         return input_data, output_data
@@ -329,6 +331,18 @@ class Dataset(keras.utils.Sequence):
         base = stage**2 + stage + 41
         seed = base ** epoch
         return seed
+    
+    def change_stage(self, new_camera:dict = None, new_mask:int = None, new_stage:int = None):
+        if new_camera is not None:
+            self.mode_processor.change_camera(new_camera)
+        
+        if new_mask is not None:
+            self.mode_mask = new_mask
+        
+        if new_stage is not None:
+            self.stage = new_stage
+        else:
+            self.stage += 1
 
 
 
@@ -479,7 +493,15 @@ def grouper(iterable, n, fillvalue=None):
 ##########                              ##########
 ##################################################
 
+if __name__=='__main__':
+    fig, ax = plt.subplots(ncols=2)
+    
+    processor = ModeProcessor(camera_presets['ideal_camera'])
+    x = Dataset(processor, mode_mask=1)
+    img = x.load_batch()[0][0]
+    ax[0].imshow(img)
 
-if __name__ == "__main__": 
-    x = Dataset(5, [0.2, 10, (0.0, 1.0), 0], batch_size=5)
-    print(len(x.hermite_modes))
+    x.change_stage(new_mask=0, new_camera=camera_presets['poor_exposure'])
+    img = x.load_batch()[0][0]
+    ax[1].imshow(img)
+    plt.show()
