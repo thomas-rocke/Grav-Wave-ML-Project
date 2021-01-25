@@ -343,6 +343,19 @@ class Dataset(keras.utils.Sequence):
             self.stage = new_stage
         else:
             self.stage += 1
+        
+    def reconstruct_superposition(self, amps_and_phases:list):
+        '''
+        Reconstruct a superposition from the ML prediction output
+        '''
+        half_index = len(amps_and_phases)//2
+        amps = amps_and_phases[:half_index]
+        phases = amps_and_phases[half_index:]
+        s = Superposition(*self.hermite_modes)
+        for i, mode in enumerate(s):
+            mode.amplitude = amps[i]
+            mode.phase = phases[i]
+        return s
 
 
 
