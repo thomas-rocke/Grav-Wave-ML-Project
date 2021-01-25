@@ -328,6 +328,18 @@ class Dataset(keras.utils.Sequence):
         base = stage**2 + stage + 41
         seed = base ** epoch
         return seed
+    
+    def change_stage(self, new_camera:dict = None, new_mask:int = None, new_stage:int = None):
+        if new_camera is not None:
+            self.mode_processor.change_camera(new_camera)
+        
+        if new_mask is not None:
+            self.mode_mask = new_mask
+        
+        if new_stage is not None:
+            self.stage = new_stage
+        else:
+            self.stage += 1
 
 
 
@@ -479,8 +491,14 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
+    fig, ax = plt.subplots(ncols=2)
+    
     processor = ModeProcessor(camera_presets['ideal_camera'])
     x = Dataset(processor, mode_mask=1)
     img = x.load_batch()[0][0]
-    plt.imshow(img)
+    ax[0].imshow(img)
+
+    x.change_stage(new_mask=0, new_camera=camera_presets['poor_exposure'])
+    img = x.load_batch()[0][0]
+    ax[1].imshow(img)
     plt.show()
