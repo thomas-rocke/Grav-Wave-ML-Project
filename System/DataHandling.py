@@ -320,7 +320,7 @@ class Dataset(keras.utils.Sequence):
         self.epoch += 1
         self.seed = self.get_seed(self.stage, self.epoch)
     
-    def get_seedself, (stage, epoch):
+    def get_seed(self, stage, epoch):
         '''
         Function which gets a unique seed per epoch, per training stage.
         The function n**2 + n + 41 produces a unique prime number for 0 <= n < 40
