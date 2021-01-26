@@ -133,6 +133,13 @@ class ModeProcessor(BaseProcessor):
 
         super().__init__(target_resolution)
         self.expose = np.vectorize(self._exposure_comparison) # Create function to handle exposure
+        raw_bins = np.zeros((2**self.bit_depth - 1, 2**self.bit_depth - 1, 2**self.bit_depth - 1)) # (R, G, B) matrix quantised to self.bit_depth
+        shape = self.raw_bins.shape
+        for i in range(shape[0]):
+            for j in range(shape[1]):
+                for k in range(shape[2]):
+                    raw_bins[i, j, k] = 0.2989 * i + 0.5870 * j + 0.1140 * k # Convert quantisation to greyscale
+        self.raw_bins = np.sort(np.flatten(raw_bins))
 
     def change_camera(self, camera:dict):
         camera_keys = camera.keys()
@@ -163,6 +170,11 @@ class ModeProcessor(BaseProcessor):
             self.rotational_variance = camera['rotational_variance']
         else:
             self.rotational_variance = 0
+        
+        if 'stretch_variance' in camera_keys:
+            self.stretch_variance = camera['stretch_variance']
+        else:
+            self.stretch_variance = 0
 
     def errorEffects(self, raw_image):
         '''
@@ -170,7 +182,8 @@ class ModeProcessor(BaseProcessor):
         '''
         #shifted_image = shift_image(image,) # Shift the image in x and y coords
         rotated_image = self.add_rotational_error(raw_image, self.rotational_variance) # Perform rotation
-        noisy_image = self.add_noise(rotated_image, self.noise_variance) # Add Gaussian Noise to the image
+        stretched_image = self.add_random_stretch(rotated_image, self.stretch_variance) # Add rstretch warping in random direction
+        noisy_image = self.add_noise(stretched_image, self.noise_variance) # Add Gaussian Noise to the image
         blurred_image = self.blur_image(noisy_image, self.blur_variance) # Add gaussian blur
         exposed_image = self.add_exposure(blurred_image, self.exposure_limits) # Add exposure
         quantized_image = self.quantize_image(exposed_image, self.bit_depth) # Quantize
@@ -261,9 +274,7 @@ class ModeProcessor(BaseProcessor):
         Quantize the image, so that only 2**bits - 1 evenly spaced values possible
         '''
         if bits:
-            max_val = np.max(image)
-            vals = 2**bits - 1
-            bins = np.linspace(0, max_val, vals, endpoint=1)
+            bins = self.raw_bins * np.max(image)
             quantized_image = np.digitize(image, bins)
             return quantized_image
         else:
