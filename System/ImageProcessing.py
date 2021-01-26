@@ -108,8 +108,8 @@ class BaseProcessor(list):
 
 class VideoProcessor(BaseProcessor):
 
-    def __init__(self, video_file, target_resolution:tuple = (128, 128), frames_per_reset=10):
-        super().__init__(target_resolution, frames_per_reset)
+    def __init__(self, video_file, target_resolution:tuple = (128, 128)):
+        super().__init__(target_resolution)
         self.cap = cv2.VideoCapture(video_file)
         self.frameCount = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
         self.framerate = int(self.cap.get(cv2.CAP_PROP_FPS))
@@ -158,21 +158,23 @@ class ModeProcessor(BaseProcessor):
             self.blur_variance = camera['blur_variance']
         else:
             self.blur_variance = 0
+        
+        if 'rotational_variance' in camera_keys:
+            self.rotational_variance = camera['rotational_variance']
+        else:
+            self.rotational_variance = 0
 
     def errorEffects(self, raw_image):
         '''
         Performs all image processing for noise effects on target image, using params from class init
         '''
         #shifted_image = shift_image(image,) # Shift the image in x and y coords
-        noisy_image = self.add_noise(raw_image, self.noise_variance) # Add Gaussian Noise to the image
-        blurred_image = self.blur_image(noisy_image, self.blur_variance)
+        rotated_image = self.add_rotational_error(raw_image, self.rotational_variance) # Perform rotation
+        noisy_image = self.add_noise(rotated_image, self.noise_variance) # Add Gaussian Noise to the image
+        blurred_image = self.blur_image(noisy_image, self.blur_variance) # Add gaussian blur
         exposed_image = self.add_exposure(blurred_image, self.exposure_limits) # Add exposure
-
-        if self.bit_depth: # Bits > 0 therefore quantize
-            quantized_image = self.quantize_image(exposed_image, self.bit_depth)
-            return quantized_image
-        else:
-            return exposed_image
+        quantized_image = self.quantize_image(exposed_image, self.bit_depth) # Quantize
+        return quantized_image
 
     def getImage(self, raw_image):
         '''
@@ -256,13 +258,16 @@ class ModeProcessor(BaseProcessor):
     
     def quantize_image(self, image, bits):
         '''
-        Quantize the image, so that only 255 evenly spaced values possible
+        Quantize the image, so that only 2**bits - 1 evenly spaced values possible
         '''
-        max_val = np.max(image)
-        vals = 2**bits - 1
-        bins = np.linspace(0, max_val, vals, endpoint=1)
-        quantized_image = np.digitize(image, bins)
-        return quantized_image
+        if bits:
+            max_val = np.max(image)
+            vals = 2**bits - 1
+            bins = np.linspace(0, max_val, vals, endpoint=1)
+            quantized_image = np.digitize(image, bins)
+            return quantized_image
+        else:
+            return image
     
     def blur_image(self, image, blur_variance:float=0):
         blur_amount = np.random.normal(0, self.blur_variance)**2
@@ -277,6 +282,26 @@ class ModeProcessor(BaseProcessor):
         M = cv2.getRotationMatrix2D((cols/2,rows/2), 360*(angle/(2*np.pi)), 1)
         rotated_img = cv2.warpAffine(image, M, (cols,rows))
         return rotated_img
+    
+    def add_rotational_error(self, image, rotational_variance):
+        '''
+        Rotate the image by a random amount according to rotational_variance
+        '''
+        angle = np.random.normal(0, rotational_variance)
+        rotated_image = self.rotate_image(image, angle)
+        return rotated_image
+    
+    def add_random_stretch(self, image, stretch_variance):
+        '''
+        Stretch the image randomly in a random direction, according to stretch_variance
+        '''
+        stretch_factor = np.abs(np.random.normal(1, stretch_variance))
+        angle = np.random.uniform(0, 2*np.pi)
+        rotated_im = self.rotate_image(image, angle)
+        stretched_dims = (rotated_im.shape[0], int(rotated_im.shape[1]*stretch_factor))
+        stretched_im = cv2.resize(rotated_im, stretched_dims, interpolation=cv2.INTER_CUBIC)
+        restored_im = self.rotate_image(stretched_im, -angle)
+        return restored_im
 
 camera_presets = {
     'ideal_camera' : {
@@ -322,6 +347,6 @@ if __name__ == "__main__":
     img = s.superpose()
     fig, ax = plt.subplots(ncols=2)
     ax[0].imshow(img)
-    ax[1].imshow(mode_processor.rotate_image(img, np.pi/6))
+    ax[1].imshow(mode_processor.add_random_stretch(img, 0.1))
     plt.show()
     
