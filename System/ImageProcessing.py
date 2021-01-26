@@ -267,6 +267,16 @@ class ModeProcessor(BaseProcessor):
     def blur_image(self, image, blur_variance:float=0):
         blur_amount = np.random.normal(0, self.blur_variance)**2
         return gaussian(image, blur_amount)
+    
+    def rotate_image(self, image, angle):
+        '''
+        Rotate image by [angle] radians
+        '''
+        rows, cols = image.shape
+
+        M = cv2.getRotationMatrix2D((cols/2,rows/2), 360*(angle/(2*np.pi)), 1)
+        rotated_img = cv2.warpAffine(image, M, (cols,rows))
+        return rotated_img
 
 camera_presets = {
     'ideal_camera' : {
@@ -310,10 +320,8 @@ if __name__ == "__main__":
     mode_processor = ModeProcessor(camera)
     s = Superposition(Hermite(1, 1), Laguerre(3, 3), resolution=480)
     img = s.superpose()
-    processed_img = mode_processor.getImage(img)
-    fig, ax = plt.subplots(ncols=3)
+    fig, ax = plt.subplots(ncols=2)
     ax[0].imshow(img)
-    ax[1].imshow(processed_img)
-    ax[2].imshow(mode_processor.changeResolution(img) - processed_img)
+    ax[1].imshow(mode_processor.rotate_image(img, np.pi/6))
     plt.show()
     
