@@ -364,21 +364,6 @@ class Dataset(keras.utils.Sequence):
 
 #### Functions affecting Superpositions, Hermites, Laguerres
 
-def superpose_effects(modes, sup_params):
-    '''
-    Permorms all randomisation processes on a list of modes to turn them into a superposition for ML
-    'sup_params': sets all params affecting superpositions [w_0_variance]
-    '''
-
-    ## Processes before Superposition
-    randomised_modes = [randomise_amp_and_phase(m) for m in modes]
-    w_0_variance = sup_params[0]
-    varied_w_0_modes = vary_w_0(randomised_modes, w_0_variance)
-    s = Superposition(*varied_w_0_modes)
-    ## Processes after superposition
-
-    return s
-
 def randomise_amp_and_phase(mode):
     '''
     Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
