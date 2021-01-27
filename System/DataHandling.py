@@ -363,7 +363,6 @@ class Dataset(keras.utils.Sequence):
 ##################################################
 
 #### Functions affecting Superpositions, Hermites, Laguerres
-
 def randomise_amp_and_phase(mode):
     '''
     Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
@@ -388,60 +387,6 @@ def vary_w_0(modes, w_0_variance):
 
 
 ##### Functions affecting image matrices
-
-def image_processing(image, image_params):
-    '''
-    Performs all image processing on target image
-    'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits]
-    '''
-    noise_variance = image_params[0]
-    max_pixel_shift = image_params[1]
-    exposure_lims = image_params[2]
-    bits = image_params[3]
-
-    shifted_image = shift_image(image, max_pixel_shift) # Shift the image in x and y coords
-    noisy_image = add_noise(shifted_image, noise_variance) # Add Gaussian Noise to the image
-    exposed_image = add_exposure(noisy_image, exposure_lims) # Add exposure
-
-    if bits: # Bits > 0 therefore quantize
-        quantized_image = quantize_image(exposed_image, bits)
-        return quantized_image
-    else:
-        return exposed_image
-
-def add_noise(image, noise_variance: float = 0.0):
-    '''
-    Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
-    Noise Variance defined as a %age of maximal intensity
-    '''
-
-    actual_variance = np.abs(np.random.normal(0, noise_variance)) 
-    # Noise Variance parameter gives maximum noise level for whole dataset
-    # Actual Noise is the gaussian noise variance used for a specific add_noise call
-
-    max_val = np.max(image)
-    return np.random.normal(loc=image, scale=actual_variance*max_val) # Variance then scaled as fraction of brightest intensity
-
-def add_exposure(image, exposure:tuple = (0.0, 1.0)):
-    '''
-    Adds in exposure limits to the image, using percentile limits defined by exposure.
-    exposure[0] is the x% lower limit of detection, exposure[1] is the upper.
-    Percents calculated as a function of the maximum image intensity.
-    '''
-    max_val = np.max(image)
-    lower_bound = max_val * exposure[0]
-    upper_bound = max_val * exposure[1]
-    exp = np.vectorize(exposure_comparison)
-    image = exp(image, upper_bound, lower_bound)
-    return image
-
-def exposure_comparison(val, upper_bound, lower_bound):
-    if val > upper_bound:
-        val = upper_bound
-    elif val < lower_bound:
-        val = lower_bound
-    return val
-
 def shift_image(image, max_pixel_shift):
     '''
     Will translate target image in both x and y by integer resolution by random numbers in the range (-max_pixel_shift, max_pixel_shift)
@@ -458,17 +403,6 @@ def shift_image(image, max_pixel_shift):
             else:
                 copy[i, j] = 0
     return copy
-
-def quantize_image(image, bits):
-    '''
-    Quantize the image, so that only 255 evenly spaced values possible
-    '''
-    max_val = np.max(image)
-    vals = 2**bits - 1
-    bins = np.linspace(0, max_val, vals, endpoint=1)
-    quantized_image = np.digitize(image, bins)
-    return quantized_image
-
 
 #### Misc functions
 
