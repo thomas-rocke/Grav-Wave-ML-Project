@@ -346,7 +346,7 @@ class Laguerre(Superposition):
         self.modes = []
         for q in range(p + 1):
             for s in range(int((m)/2) + 1):
-                frac = ((np.math.factorial(2*(q-s) + m)*np.math.factorial(2*(p-q+s)))/(2**(2*p + m - 1) * np.math.factorial(p) * np.math.factorial(p+m) * (1 + choose(0, m))))**0.5
+                frac = ((fact(2*(q-s) + m)*fact(2*(p-q+s)))/(2**(2*p + m - 1) * fact(p) * fact(p+m) * (1 + choose(0, m))))**0.5
                 y = Hermite(2*(q - s) + m, 2*(p - q + s))
                 y.amplitude = choose(p, q) * choose(m, 2*s) * frac
                 y.add_phase((s+p)*np.pi)
@@ -411,8 +411,15 @@ class Laguerre(Superposition):
 ##########          FUNCTIONS           ##########
 ##########                              ##########
 ##################################################
+def fact(x):
+    res = 1
+    if x != 0:
+        for i in range(x):
+            res *= i + 1
+    return res
+
 def choose(n, r):
-    return np.math.factorial(n)/(np.math.factorial(r)*np.math.factorial(n-r))
+    return fact(n)/(fact(r)*fact(n-r))
 
 
 
