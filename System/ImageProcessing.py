@@ -199,26 +199,6 @@ class ModeProcessor(BaseProcessor):
         return resized_image
 
     # Error/Noise functions:
-    def randomise_amp_and_phase(self, mode):
-        '''
-        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
-        Returns new mode with randomised amp and phase.
-        '''
-        x = mode.copy()
-        x *= np.random.rand() # Change amp by random amount
-        x.add_phase(np.random.rand() * 2 * np.pi) # Add random amount of phase
-        return x
-
-    def vary_w_0(self, modes, w_0_variance):
-        '''
-        Varies w_0 param for all modes within a superposition
-        '''
-        new_w_0 = np.random.normal(modes[0].w_0, w_0_variance)
-        new_modes = [mode.copy() for mode in modes]
-        for m in new_modes:
-            m.w_0 = new_w_0
-        return new_modes
-
     def add_noise(self,image, noise_variance: float = 0.0):
         '''
         Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
@@ -251,23 +231,6 @@ class ModeProcessor(BaseProcessor):
         elif val < lower_bound:
             val = lower_bound
         return val
-
-    def shift_image(self, image, max_pixel_shift):
-        '''
-        Will translate target image in both x and y by integer resolution by random numbers in the range (-max_pixel_shift, max_pixel_shift)
-        '''
-        copy = np.zeros_like(image)
-        x_shift = np.random.randint(-max_pixel_shift, max_pixel_shift)
-        y_shift = np.random.randint(-max_pixel_shift, max_pixel_shift)
-        shape = np.shape(image)
-        for i in range(shape[0]):
-            for j in range(shape[1]):
-                new_coords = [i + x_shift, j + y_shift]
-                if new_coords[0] in range(shape[0]) and new_coords[1] in range(shape[1]): # New coordinates still within image bounds
-                    copy[i, j] = image[new_coords[0], new_coords[1]]
-                else:
-                    copy[i, j] = 0
-        return copy
     
     def quantize_image(self, image, bits):
         '''
