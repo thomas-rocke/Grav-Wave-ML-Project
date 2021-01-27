@@ -411,16 +411,6 @@ class Laguerre(Superposition):
 ##########          FUNCTIONS           ##########
 ##########                              ##########
 ##################################################
-
-def unpack_and_superpose(mode_list):
-    modes = []
-    for mode in mode_list:
-        if type(mode) in [Superposition, Laguerre]:
-            modes.extend(mode)
-        elif type(mode) == Hermite:
-            modes.append(mode)
-    return Superposition(*modes)
-        
 def fact(x):
     res = 1
     if x != 0:
