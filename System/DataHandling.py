@@ -269,11 +269,12 @@ class Dataset(keras.utils.Sequence):
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
 
         for b in range(self.batch_size):
-            s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+            raw_modes = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
             if self.mode_mask:
-                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                for mode in raw_modes[self.mode_mask:]: # Filter out modes above self.mode_mask
                     mode.amplitude = 0
                     mode.phase = 0
+            s = Superposition(*raw_modes)
             input_data[b, :, :] = self.mode_processor.getImage(s.superpose()) # Generate noise image
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
 
@@ -423,14 +424,12 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    fig, ax = plt.subplots(ncols=2)
+    fig, ax = plt.subplots(nrows=5)
     
     processor = ModeProcessor(camera_presets['ideal_camera'])
-    x = Dataset(processor, mode_mask=1)
-    img = x.load_batch()[0][0]
-    ax[0].imshow(img)
-
-    x.change_stage(new_mask=0, new_camera=camera_presets['poor_exposure'])
-    img = x.load_batch()[0][0]
-    ax[1].imshow(img)
+    x = Dataset(processor, mode_mask=3, batch_size = 5, max_order=2)
+    img, dat = x.load_batch()
+    for i in range(5):
+        ax[i].set_title(np.array([dat[i].contains(j).amplitude for j in x.hermite_modes] + [np.cos(dat[i].contains(j).phase) for j in x.hermite_modes]))
+        ax[i].imshow(img[i])
     plt.show()
