@@ -370,7 +370,7 @@ def randomise_amp_and_phase(mode):
     '''
     x = mode.copy()
 
-    x.amplitude = np.random.uniform(0, 1) # Change amp by random amount
+    x *= np.random.uniform(0, 1) # Change amp by random amount
     x.add_phase(np.random.uniform(0, 2*np.pi)) # Add random amount of phase
 
     return x
