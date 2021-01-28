@@ -193,7 +193,7 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, *modes, resolution=128):
+    def __init__(self, *modes):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
@@ -218,8 +218,8 @@ class Superposition(list):
             else: # Duplicate exists
                 self.add_modes(existing_mode[0], mode) # Merge duplicate
 
-        self.resolution = resolution
         super().__init__(self.modes)
+        self.resolution = self.modes[0].resolution
 
         amplitudes = [i.amplitude for i in self]
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes

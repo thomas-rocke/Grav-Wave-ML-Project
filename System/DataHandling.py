@@ -312,6 +312,9 @@ class Dataset(keras.utils.Sequence):
         output_data = s
 
         return input_data, output_data
+
+    def __len__(self):
+        return self.batches_per_epoch
     
     def on_epoch_end(self):
         '''
