@@ -279,7 +279,7 @@ camera_presets = {
     },
 
     'poor_noise' : {
-        'noise_variance' : 0.4,
+        'noise_variance' : 0.2,
         'exposure_limits' : (0, 1),
         'bit_depth' : 0,
         'blur_variance' : 0
@@ -303,7 +303,7 @@ camera_presets = {
         'noise_variance' : 0,
         'exposure_limits' : (0, 1),
         'bit_depth' : 0,
-        'blur_variance' : 0.5
+        'blur_variance' : 5
     },
 }
 
