@@ -91,7 +91,7 @@ class Hermite:
         '''
         Method for copying the Gaussian mode.
         '''
-        return Hermite(self.l, self.m, self.amplitude, self.phase, self.w_0, self.wavelength, self.n)
+        return Hermite(self.l, self.m, self.amplitude, self.phase, self.w_0, self.wavelength, self.n, self.resolution)
 
 #    def E(self, r, z):
 #        '''
@@ -330,7 +330,7 @@ class Laguerre(Superposition):
     Class representing a Laguerre mode generated as a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, p: int = 1, m: int = 1, amplitude: float = 1.0, phase: float = 0.0, resolution=128):
+    def __init__(self, p: int = 1, m: int = 1, amplitude: float = 1.0, phase: float = 0.0, resolution: int = 128):
         '''
         Initialise the class with the order (p, m) of the Laguerre mode.
         '''
@@ -382,7 +382,7 @@ class Laguerre(Superposition):
         '''
         Make a copy of the object.
         '''
-        return Laguerre(self.p, self.m, self.amplitude, self.phase)
+        return Laguerre(self.p, self.m, self.amplitude, self.phase, self.resolution)
 
     def add_phase(self, phase):
         '''
