@@ -1,78 +1,117 @@
-import numpy
+import numpy as np
+from itertools import combinations, chain, zip_longest, islice
+import matplotlib.pyplot as plt
+import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
+from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
-from keras.layers.convolutional import Conv2D, MaxPooling2D
-from keras.utils import np_utils
-from keras.datasets import cifar10
+from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
+from multiprocessing import cpu_count, Pool
 
-# fix random seed for reproducibility
-seed = 21
-numpy.random.seed(seed)
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-# load data
-(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+def grouper(iterable, n, fillvalue=None):
+    '''
+    Itertools grouper recipe.
+    '''
+    args = [iter(iterable)] * n
+    return zip_longest(*args, fillvalue=fillvalue)
 
-# normalize inputs from 0-255 to 0.0-1.0
-X_train = X_train.astype('float32')
-X_test = X_test.astype('float32')
-X_train = X_train / 255.0
-X_test = X_test / 255.0
+class SinData(keras.utils.Sequence):
+    def __init__(self, num_batches:int = 1000, batch_size:int = 128):
+        self.num_batches = num_batches
+        self.num_samples = num_batches * batch_size
+        self.batch_size = batch_size
 
-# one hot encode outputs
-y_train = np_utils.to_categorical(y_train)
-y_test = np_utils.to_categorical(y_test)
-num_classes = y_test.shape[1]
+        self.input_data = np.linspace(0, 2*np.pi, self.num_samples)
+        self.output_data = (np.sin(self.input_data) + 1)/2
 
-# Create the model
-model = Sequential()
+        self.shuffle_data()
+        self.batch_data()
 
-model.add(Conv2D(32, (3, 3), input_shape=X_train.shape[1:], padding='same'))
-model.add(Activation('relu'))
-model.add(Dropout(0.2))
-model.add(BatchNormalization())
+    def __len__(self):
+        return self.num_batches
 
-model.add(Conv2D(64, (3, 3), padding='same'))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.2))
-model.add(BatchNormalization())
+    def __getitem__(self, index):
+        '''
+        Gets batch data at index
+        '''
+        input_batch = np.array(self.input_batches[index])[..., np.newaxis]
+        output_batch = np.array(self.output_batches[index])[..., np.newaxis]
+        return input_batch, output_batch
+    
+    def shuffle_data(self):
+        '''
+        Shuffles dataset order, maintaining the correspondance between input and output data
+        '''
+        zipped_data = list(zip(self.input_data, self.output_data))
+        np.random.shuffle(zipped_data)
+        self.shuffled_inputs, self.shuffled_outputs = zip(*zipped_data)
+    
+    def batch_data(self):
+        '''
+        Sorts shuffled data into correct sized batches
+        '''
+        self.input_batches = list(grouper(self.shuffled_inputs, self.batch_size))
+        self.output_batches = list(grouper(self.shuffled_outputs, self.batch_size))
 
-model.add(Conv2D(64, (3, 3), padding='same'))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.2))
-model.add(BatchNormalization())
+    def on_epoch_end(self):
+        # Reshuffle and rebatch data every epoch
+        self.shuffle_data()
+        self.batch_data()
 
-model.add(Conv2D(128, (3, 3), padding='same'))
-model.add(Activation('relu'))
-model.add(Dropout(0.2))
-model.add(BatchNormalization())
 
-model.add(Flatten())
-model.add(Dropout(0.2))
 
-model.add(Dense(256, kernel_constraint=maxnorm(3)))
-model.add(Activation('relu'))
-model.add(Dropout(0.2))
-model.add(BatchNormalization())
-model.add(Dense(128, kernel_constraint=maxnorm(3)))
-model.add(Activation('relu'))
-model.add(Dropout(0.2))
-model.add(BatchNormalization())
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
+class SinModel():
+    def __init__(self, data_generator:SinData, optimizer:str = "Adamax", learning_rate:float = 0.002, max_epochs:int=10):
+        self.data_generator = data_generator
+        sample_inputs, sample_outputs = self.data_generator[0]
+        self.input_len = len(sample_inputs[0])
+        self.output_len = len(sample_outputs[0])
+        self.optimizer = optimizer
+        self.learning_rate = learning_rate
+        self.max_epochs = max_epochs
+    
 
-epochs = 25
-optimizer = 'Adam'
+    def make_model(self):
+        model = Sequential()
+        model.add(Dense(16, input_dim=self.input_len, activation="relu"))
+        model.add(Dense(16, activation="relu"))
+        model.add(Dense(units=self.output_len))
+        model.add(Activation('relu'))
 
-model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+        model.compile(loss="mse", optimizer=eval(self.optimizer + "(learning_rate=" + str(self.learning_rate) + ")"))
 
-print(model.summary())
+        return model
+        
+    def approx_sin(self):
+        '''
+        Use model predictions to approximate sin wave
+        '''
+        predictions = self.model.predict(np.array(self.data_generator.input_data)[..., np.newaxis], batch_size = self.data_generator.batch_size, workers=cpu_count(), use_multiprocessing=True)[:, 0]
+        return predictions
 
-model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=epochs, batch_size=64)
 
-# Final evaluation of the model
-
-scores = model.evaluate(X_test, y_test, verbose=0)
-print("Accuracy: %.2f%%" % (scores[1]*100))
+    def train(self):
+        self.model = self.make_model()
+        fig, ax = plt.subplots(nrows=self.max_epochs)
+        for n in range(self.max_epochs):
+            self.model.fit(self.data_generator, validation_data=self.data_generator, validation_steps=1,
+                            batch_size=self.data_generator.batch_size, use_multiprocessing=True, workers=cpu_count())
+            
+            ax[n].scatter(self.data_generator.input_data[::50], self.approx_sin()[::50], label='Epoch {}'.format(n))
+        return ax
+    
+if __name__ == '__main__':
+    fig, ax = plt.subplots(nrows=16)
+    dat = SinData(batch_size=20, num_batches=300)
+    sin_model = SinModel(dat, max_epochs=len(ax))
+    ax = sin_model.train()
+    x = np.linspace(0, 2*np.pi, 10000)
+    y = (1 + np.sin(x))/2
+    for i in range(len(ax)):
+        ax[i].plot(x, y, label="Goal function")
+    plt.legend()
+    plt.show()
