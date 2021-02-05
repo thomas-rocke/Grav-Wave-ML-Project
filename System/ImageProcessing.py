@@ -52,7 +52,7 @@ class BaseProcessor(list):
         x_end = int(min(x_start + SquareSide, image.shape[0]))
         y_end = int(min(y_start + SquareSide, image.shape[1]))
         mean_square = (image[x_start:x_end, y_start:y_end]**2).mean(axis=None)
-        return (mean_square - (SquareSide/max(image.shape)))
+        return (mean_square - 100*(SquareSide/max(image.shape)))
 
     def makeSquare(self, image, SquareSide=0, SquareX=0, SquareY=0):
         '''
@@ -108,8 +108,8 @@ class BaseProcessor(list):
 
 class VideoProcessor(BaseProcessor):
 
-    def __init__(self, video_file, target_resolution:tuple = (128, 128), frames_per_reset=10):
-        super().__init__(target_resolution, frames_per_reset)
+    def __init__(self, video_file, target_resolution:tuple = (128, 128)):
+        super().__init__(target_resolution)
         self.cap = cv2.VideoCapture(video_file)
         self.frameCount = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
         self.framerate = int(self.cap.get(cv2.CAP_PROP_FPS))
@@ -128,48 +128,66 @@ class VideoProcessor(BaseProcessor):
             raise IndexError('End of video file reached')
 
 class ModeProcessor(BaseProcessor):
-    def __init__(self, camera_params:dict = {}, target_resolution:tuple=(128, 128)):
-        camera_keys = camera_params.keys()
+    def __init__(self, camera:dict = {}, target_resolution:tuple=(128, 128)):
+        self.change_camera(camera)
+
+        super().__init__(target_resolution)
+
+        raw_bins = np.zeros((2**self.bit_depth - 1, 2**self.bit_depth - 1, 2**self.bit_depth - 1)) # (R, G, B) matrix quantised to self.bit_depth
+        shape = raw_bins.shape
+        for i in range(shape[0]):
+            for j in range(shape[1]):
+                for k in range(shape[2]):
+                    raw_bins[i, j, k] = 0.2989 * i + 0.5870 * j + 0.1140 * k # Convert quantisation to greyscale
+        self.raw_bins = np.sort(raw_bins.flatten()) # Array of all greyscale intensity values possibly with bit_depth quantization
+
+    def change_camera(self, camera:dict):
+        camera_keys = camera.keys()
 
         # Set up camera properties
         # Assume ideal camera if property not defined
         if 'noise_variance' in camera_keys:
-            self.noise_variance = camera_params['noise_variance']
+            self.noise_variance = camera['noise_variance']
         else:
             self.noise_variance = 0
         
         if 'exposure_limits' in camera_keys:
-            self.exposure_limits = camera_params['exposure_limits']
+            self.exposure_limits = camera['exposure_limits']
         else:
             self.exposure_limits = (0, 1)
         
         if 'bit_depth' in camera_keys:
-            self.bit_depth = camera_params['bit_depth']
+            self.bit_depth = camera['bit_depth']
         else:
             self.bit_depth = 0
         
         if 'blur_variance' in camera_keys:
-            self.blur_variance = camera_params['blur_variance']
+            self.blur_variance = camera['blur_variance']
         else:
             self.blur_variance = 0
-
-        super().__init__(target_resolution)
-        self.expose = np.vectorize(self._exposure_comparison) # Create function to handle exposure
+        
+        if 'rotational_variance' in camera_keys:
+            self.rotational_variance = camera['rotational_variance']
+        else:
+            self.rotational_variance = 0
+        
+        if 'stretch_variance' in camera_keys:
+            self.stretch_variance = camera['stretch_variance']
+        else:
+            self.stretch_variance = 0
 
     def errorEffects(self, raw_image):
         '''
         Performs all image processing for noise effects on target image, using params from class init
         '''
         #shifted_image = shift_image(image,) # Shift the image in x and y coords
-        noisy_image = self.add_noise(raw_image, self.noise_variance) # Add Gaussian Noise to the image
-        blurred_image = self.blur_image(noisy_image, self.blur_variance)
+        rotated_image = self.add_rotational_error(raw_image, self.rotational_variance) # Perform rotation
+        stretched_image = self.add_random_stretch(rotated_image, self.stretch_variance) # Add rstretch warping in random direction
+        noisy_image = self.add_noise(stretched_image, self.noise_variance) # Add Gaussian Noise to the image
+        blurred_image = self.blur_image(noisy_image, self.blur_variance) # Add gaussian blur
         exposed_image = self.add_exposure(blurred_image, self.exposure_limits) # Add exposure
-
-        if self.bit_depth: # Bits > 0 therefore quantize
-            quantized_image = self.quantize_image(exposed_image, self.bit_depth)
-            return quantized_image
-        else:
-            return exposed_image
+        quantized_image = self.quantize_image(exposed_image, self.bit_depth) # Quantize
+        return quantized_image
 
     def getImage(self, raw_image):
         '''
@@ -181,26 +199,6 @@ class ModeProcessor(BaseProcessor):
         return resized_image
 
     # Error/Noise functions:
-    def randomise_amp_and_phase(self, mode):
-        '''
-        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
-        Returns new mode with randomised amp and phase.
-        '''
-        x = mode.copy()
-        x *= np.random.rand() # Change amp by random amount
-        x.add_phase(np.random.rand() * 2 * np.pi) # Add random amount of phase
-        return x
-
-    def vary_w_0(self, modes, w_0_variance):
-        '''
-        Varies w_0 param for all modes within a superposition
-        '''
-        new_w_0 = np.random.normal(modes[0].w_0, w_0_variance)
-        new_modes = [mode.copy() for mode in modes]
-        for m in new_modes:
-            m.w_0 = new_w_0
-        return new_modes
-
     def add_noise(self,image, noise_variance: float = 0.0):
         '''
         Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
@@ -223,46 +221,54 @@ class ModeProcessor(BaseProcessor):
         max_val = np.max(image)
         lower_bound = max_val * exposure[0]
         upper_bound = max_val * exposure[1]
-        image = self.expose(image, upper_bound, lower_bound)
+        image = np.clip(image, lower_bound, upper_bound)
+        image -= lower_bound
         return image
-
-    def _exposure_comparison(self, val, upper_bound, lower_bound):
-        if val > upper_bound:
-            val = upper_bound
-        elif val < lower_bound:
-            val = lower_bound
-        return val
-
-    def shift_image(self, image, max_pixel_shift):
-        '''
-        Will translate target image in both x and y by integer resolution by random numbers in the range (-max_pixel_shift, max_pixel_shift)
-        '''
-        copy = np.zeros_like(image)
-        x_shift = np.random.randint(-max_pixel_shift, max_pixel_shift)
-        y_shift = np.random.randint(-max_pixel_shift, max_pixel_shift)
-        shape = np.shape(image)
-        for i in range(shape[0]):
-            for j in range(shape[1]):
-                new_coords = [i + x_shift, j + y_shift]
-                if new_coords[0] in range(shape[0]) and new_coords[1] in range(shape[1]): # New coordinates still within image bounds
-                    copy[i, j] = image[new_coords[0], new_coords[1]]
-                else:
-                    copy[i, j] = 0
-        return copy
     
     def quantize_image(self, image, bits):
         '''
-        Quantize the image, so that only 255 evenly spaced values possible
+        Quantize the image, so that only 2**bits - 1 evenly spaced values possible
         '''
-        max_val = np.max(image)
-        vals = 2**bits - 1
-        bins = np.linspace(0, max_val, vals, endpoint=1)
-        quantized_image = np.digitize(image, bins)
-        return quantized_image
+        if bits:
+            bins = self.raw_bins * np.max(image)
+            quantized_image = np.digitize(image, bins)
+            return quantized_image
+        else:
+            return image
     
     def blur_image(self, image, blur_variance:float=0):
         blur_amount = np.random.normal(0, self.blur_variance)**2
         return gaussian(image, blur_amount)
+    
+    def rotate_image(self, image, angle):
+        '''
+        Rotate image by [angle] radians
+        '''
+        rows, cols = image.shape
+
+        M = cv2.getRotationMatrix2D((cols/2,rows/2), 360*(angle/(2*np.pi)), 1)
+        rotated_img = cv2.warpAffine(image, M, (cols,rows))
+        return rotated_img
+    
+    def add_rotational_error(self, image, rotational_variance):
+        '''
+        Rotate the image by a random amount according to rotational_variance
+        '''
+        angle = np.random.normal(0, rotational_variance)
+        rotated_image = self.rotate_image(image, angle)
+        return rotated_image
+    
+    def add_random_stretch(self, image, stretch_variance):
+        '''
+        Stretch the image randomly in a random direction, according to stretch_variance
+        '''
+        stretch_factor = np.abs(np.random.normal(1, stretch_variance))
+        angle = np.random.uniform(0, 2*np.pi)
+        rotated_im = self.rotate_image(image, angle)
+        stretched_dims = (rotated_im.shape[0], int(rotated_im.shape[1]*stretch_factor))
+        stretched_im = cv2.resize(rotated_im, stretched_dims, interpolation=cv2.INTER_CUBIC)
+        restored_im = self.rotate_image(stretched_im, -angle)
+        return restored_im
 
 camera_presets = {
     'ideal_camera' : {
@@ -273,7 +279,7 @@ camera_presets = {
     },
 
     'poor_noise' : {
-        'noise_variance' : 0.4,
+        'noise_variance' : 0.2,
         'exposure_limits' : (0, 1),
         'bit_depth' : 0,
         'blur_variance' : 0
@@ -281,7 +287,7 @@ camera_presets = {
 
     'poor_exposure' : {
         'noise_variance' : 0,
-        'exposure_limits' : (0.3, 0.7),
+        'exposure_limits' : (0.2, 0.7),
         'bit_depth' : 0,
         'blur_variance' : 0
     },
@@ -297,19 +303,17 @@ camera_presets = {
         'noise_variance' : 0,
         'exposure_limits' : (0, 1),
         'bit_depth' : 0,
-        'blur_variance' : 0.5
+        'blur_variance' : 0.4
     },
 }
 
 if __name__ == "__main__":
-    camera = camera_presets['poor_noise']
+    camera = camera_presets['poor_exposure']
     mode_processor = ModeProcessor(camera)
     s = Superposition(Hermite(1, 1), Laguerre(3, 3), resolution=480)
     img = s.superpose()
-    processed_img = mode_processor.getImage(img)
-    fig, ax = plt.subplots(ncols=3)
-    ax[0].imshow(img)
-    ax[1].imshow(processed_img)
-    ax[2].imshow(mode_processor.changeResolution(img) - processed_img)
+    minimum = np.min(img)
+    maximum = np.max(img)
+    plt.imshow(mode_processor.getImage(img))
     plt.show()
     

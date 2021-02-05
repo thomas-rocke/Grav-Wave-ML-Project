@@ -14,6 +14,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 from Utils import meanError
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 import keras
+from ImageProcessing import ModeProcessor, camera_presets
 
 
 
@@ -203,17 +204,13 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, max_order: int = 3, image_params: list = [0, 0, (0, 1), 0], sup_params: list = [0], resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
+    def __init__(self, camera_model:dict={}, mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
         '''
         Initialise the class with the required complexity.
-
-        'max_order': Max order of Guassian modes in superpositions (x > 0).
-        'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits].
-        'sup_params': sets superposition params [w_0_variance].
         '''
+        self.mode_mask = mode_mask
+        self.mode_processor = ModeProcessor(camera_model, (resolution, resolution))
         self.max_order = max_order
-        self.image_params = image_params
-        self.sup_params = sup_params
         self.resolution = resolution
         self.batch_size = batch_size
         self.steps = batches_per_repeat
@@ -228,10 +225,7 @@ class Dataset(keras.utils.Sequence):
         self.seed = self.get_seed(self.stage, self.epoch)
 
         if self.info: print("\n_____| Dataset |_____\n")
-        if self.info: print(f"Max order of mode: {self.max_order}\n"
-                            f"Variation in noise: {self.image_params[0]}\n"
-                            f"Variation in exposure: {self.image_params[2]}\n"
-                            f"Max coordinate shift: {self.image_params[1]}\n")
+        if self.info: print(f"Max order of mode: {self.max_order}\n")
 
         self.hermite_modes = [Hermite(l=i, m=j, resolution=self.resolution) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, resolution=self.resolution) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
@@ -247,7 +241,8 @@ class Dataset(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.resolution}, {self.batch_size}, {self.steps_per_epoch}, {self.info})"
+        #TODO: Fix repr
+        #return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.resolution}, {self.batch_size}, {self.steps_per_epoch}, {self.info})"
 
     def __len__(self):
         '''
@@ -274,8 +269,13 @@ class Dataset(keras.utils.Sequence):
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
 
         for b in range(self.batch_size):
-            s = superpose_effects(self.gauss_modes, self.sup_params)
-            input_data[b, :, :] = image_processing(s.superpose(), self.image_params) # Generate noise image
+            raw_modes = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
+            if self.mode_mask:
+                for mode in raw_modes[self.mode_mask:]: # Filter out modes above self.mode_mask
+                    mode.amplitude = 0
+                    mode.phase = 0
+            s = Superposition(*raw_modes)
+            input_data[b, :, :] = self.mode_processor.getImage(s.superpose()) # Generate noise image
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
 
         input_data = np.array(input_data)[..., np.newaxis]
@@ -303,9 +303,12 @@ class Dataset(keras.utils.Sequence):
         return input_data, output_data
 
     def batch_load_process(self, n):
-        s = superpose_effects(self.gauss_modes, self.sup_params)
-
-        input_data = image_processing(s.superpose(), self.image_params) # Generate noise image
+        s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+        if self.mode_mask:
+                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                    mode.amplitude = 0
+                    mode.phase = 0
+        input_data = self.mode_processor.getImage(s.superpose()) # Generate noise image
         output_data = s
 
         return input_data, output_data
@@ -329,6 +332,31 @@ class Dataset(keras.utils.Sequence):
         base = stage**2 + stage + 41
         seed = base ** epoch
         return seed
+    
+    def change_stage(self, new_camera:dict = None, new_mask:int = None, new_stage:int = None):
+        if new_camera is not None:
+            self.mode_processor.change_camera(new_camera)
+        
+        if new_mask is not None:
+            self.mode_mask = new_mask
+        
+        if new_stage is not None:
+            self.stage = new_stage
+        else:
+            self.stage += 1
+        
+    def reconstruct_superposition(self, amps_and_phases:list):
+        '''
+        Reconstruct a superposition from the ML prediction output
+        '''
+        half_index = len(amps_and_phases)//2
+        amps = amps_and_phases[:half_index]
+        phases = amps_and_phases[half_index:]
+        s = Superposition(*self.hermite_modes)
+        for i, mode in enumerate(s):
+            mode.amplitude = amps[i]
+            mode.phase = phases[i]
+        return s
 
 
 
@@ -339,22 +367,6 @@ class Dataset(keras.utils.Sequence):
 ##################################################
 
 #### Functions affecting Superpositions, Hermites, Laguerres
-
-def superpose_effects(modes, sup_params):
-    '''
-    Permorms all randomisation processes on a list of modes to turn them into a superposition for ML
-    'sup_params': sets all params affecting superpositions [w_0_variance]
-    '''
-
-    ## Processes before Superposition
-    randomised_modes = [randomise_amp_and_phase(m) for m in modes]
-    w_0_variance = sup_params[0]
-    varied_w_0_modes = vary_w_0(randomised_modes, w_0_variance)
-    s = Superposition(*varied_w_0_modes)
-    ## Processes after superposition
-
-    return s
-
 def randomise_amp_and_phase(mode):
     '''
     Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
@@ -362,8 +374,8 @@ def randomise_amp_and_phase(mode):
     '''
     x = mode.copy()
 
-    x *= random.random() # Change amp by random amount
-    x.add_phase(random.random() * 2 * np.pi) # Add random amount of phase
+    x *= np.random.uniform(0, 1) # Change amp by random amount
+    x.add_phase(np.random.uniform(0, 2*np.pi)) # Add random amount of phase
 
     return x
 
@@ -379,60 +391,6 @@ def vary_w_0(modes, w_0_variance):
 
 
 ##### Functions affecting image matrices
-
-def image_processing(image, image_params):
-    '''
-    Performs all image processing on target image
-    'image_params': sets image noise params [noise_variance, max_pixel_shift, (exposure_minimum, exposure_maximum), image_bits]
-    '''
-    noise_variance = image_params[0]
-    max_pixel_shift = image_params[1]
-    exposure_lims = image_params[2]
-    bits = image_params[3]
-
-    shifted_image = shift_image(image, max_pixel_shift) # Shift the image in x and y coords
-    noisy_image = add_noise(shifted_image, noise_variance) # Add Gaussian Noise to the image
-    exposed_image = add_exposure(noisy_image, exposure_lims) # Add exposure
-
-    if bits: # Bits > 0 therefore quantize
-        quantized_image = quantize_image(exposed_image, bits)
-        return quantized_image
-    else:
-        return exposed_image
-
-def add_noise(image, noise_variance: float = 0.0):
-    '''
-    Adds random noise to a copy of the image according to a normal distribution of variance 'noise_variance'.
-    Noise Variance defined as a %age of maximal intensity
-    '''
-
-    actual_variance = np.abs(np.random.normal(0, noise_variance)) 
-    # Noise Variance parameter gives maximum noise level for whole dataset
-    # Actual Noise is the gaussian noise variance used for a specific add_noise call
-
-    max_val = np.max(image)
-    return np.random.normal(loc=image, scale=actual_variance*max_val) # Variance then scaled as fraction of brightest intensity
-
-def add_exposure(image, exposure:tuple = (0.0, 1.0)):
-    '''
-    Adds in exposure limits to the image, using percentile limits defined by exposure.
-    exposure[0] is the x% lower limit of detection, exposure[1] is the upper.
-    Percents calculated as a function of the maximum image intensity.
-    '''
-    max_val = np.max(image)
-    lower_bound = max_val * exposure[0]
-    upper_bound = max_val * exposure[1]
-    exp = np.vectorize(exposure_comparison)
-    image = exp(image, upper_bound, lower_bound)
-    return image
-
-def exposure_comparison(val, upper_bound, lower_bound):
-    if val > upper_bound:
-        val = upper_bound
-    elif val < lower_bound:
-        val = lower_bound
-    return val
-
 def shift_image(image, max_pixel_shift):
     '''
     Will translate target image in both x and y by integer resolution by random numbers in the range (-max_pixel_shift, max_pixel_shift)
@@ -449,17 +407,6 @@ def shift_image(image, max_pixel_shift):
             else:
                 copy[i, j] = 0
     return copy
-
-def quantize_image(image, bits):
-    '''
-    Quantize the image, so that only 255 evenly spaced values possible
-    '''
-    max_val = np.max(image)
-    vals = 2**bits - 1
-    bins = np.linspace(0, max_val, vals, endpoint=1)
-    quantized_image = np.digitize(image, bins)
-    return quantized_image
-
 
 #### Misc functions
 
@@ -479,7 +426,12 @@ def grouper(iterable, n, fillvalue=None):
 ##########                              ##########
 ##################################################
 
+if __name__=='__main__':
+    fig, ax = plt.subplots(nrows=5)
 
-if __name__ == "__main__": 
-    x = Dataset(5, [0.2, 10, (0.0, 1.0), 0], batch_size=5)
-    print(len(x.hermite_modes))
+    x = Dataset(camera_model=camera_presets['ideal_camera'], mode_mask=3, batch_size = 5, max_order=2)
+    img, dat = x.load_batch()
+    for i in range(5):
+        ax[i].set_title(np.array([dat[i].contains(j).amplitude for j in x.hermite_modes] + [np.cos(dat[i].contains(j).phase) for j in x.hermite_modes]))
+        ax[i].imshow(img[i])
+    plt.show()
