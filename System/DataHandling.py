@@ -204,12 +204,12 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, mode_processor:ModeProcessor, mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
+    def __init__(self, camera_model:dict={}, mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
         self.mode_mask = mode_mask
-        self.mode_processor = mode_processor
+        self.mode_processor = ModeProcessor(camera_model, (resolution, resolution))
         self.max_order = max_order
         self.resolution = resolution
         self.batch_size = batch_size
@@ -428,9 +428,8 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__=='__main__':
     fig, ax = plt.subplots(nrows=5)
-    
-    processor = ModeProcessor(camera_presets['ideal_camera'])
-    x = Dataset(processor, mode_mask=3, batch_size = 5, max_order=2)
+
+    x = Dataset(camera_model=camera_presets['ideal_camera'], mode_mask=3, batch_size = 5, max_order=2)
     img, dat = x.load_batch()
     for i in range(5):
         ax[i].set_title(np.array([dat[i].contains(j).amplitude for j in x.hermite_modes] + [np.cos(dat[i].contains(j).phase) for j in x.hermite_modes]))
