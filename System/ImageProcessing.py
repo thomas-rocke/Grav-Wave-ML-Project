@@ -52,7 +52,7 @@ class BaseProcessor(list):
         x_end = int(min(x_start + SquareSide, image.shape[0]))
         y_end = int(min(y_start + SquareSide, image.shape[1]))
         mean_square = (image[x_start:x_end, y_start:y_end]**2).mean(axis=None)
-        return (mean_square - (SquareSide/max(image.shape)))
+        return (mean_square - 100*(SquareSide/max(image.shape)))
 
     def makeSquare(self, image, SquareSide=0, SquareX=0, SquareY=0):
         '''
@@ -279,7 +279,7 @@ camera_presets = {
     },
 
     'poor_noise' : {
-        'noise_variance' : 0.4,
+        'noise_variance' : 0.2,
         'exposure_limits' : (0, 1),
         'bit_depth' : 0,
         'blur_variance' : 0
@@ -287,7 +287,7 @@ camera_presets = {
 
     'poor_exposure' : {
         'noise_variance' : 0,
-        'exposure_limits' : (0.2, 0.9),
+        'exposure_limits' : (0.2, 0.7),
         'bit_depth' : 0,
         'blur_variance' : 0
     },
@@ -303,7 +303,7 @@ camera_presets = {
         'noise_variance' : 0,
         'exposure_limits' : (0, 1),
         'bit_depth' : 0,
-        'blur_variance' : 0.5
+        'blur_variance' : 0.4
     },
 }
 

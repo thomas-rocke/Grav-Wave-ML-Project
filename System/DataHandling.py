@@ -204,12 +204,12 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, mode_processor:ModeProcessor, mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
+    def __init__(self, camera_model:dict={}, mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
         self.mode_mask = mode_mask
-        self.mode_processor = mode_processor
+        self.mode_processor = ModeProcessor(camera_model, (resolution, resolution))
         self.max_order = max_order
         self.resolution = resolution
         self.batch_size = batch_size
@@ -269,11 +269,12 @@ class Dataset(keras.utils.Sequence):
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
 
         for b in range(self.batch_size):
-            s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+            raw_modes = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
             if self.mode_mask:
-                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                for mode in raw_modes[self.mode_mask:]: # Filter out modes above self.mode_mask
                     mode.amplitude = 0
                     mode.phase = 0
+            s = Superposition(*raw_modes)
             input_data[b, :, :] = self.mode_processor.getImage(s.superpose()) # Generate noise image
             output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
 
@@ -373,7 +374,7 @@ def randomise_amp_and_phase(mode):
     '''
     x = mode.copy()
 
-    x.amplitude = np.random.uniform(0, 1) # Change amp by random amount
+    x *= np.random.uniform(0, 1) # Change amp by random amount
     x.add_phase(np.random.uniform(0, 2*np.pi)) # Add random amount of phase
 
     return x
@@ -426,14 +427,11 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    fig, ax = plt.subplots(ncols=2)
-    
-    processor = ModeProcessor(camera_presets['ideal_camera'])
-    x = Dataset(processor, mode_mask=1)
-    img = x.load_batch()[0][0]
-    ax[0].imshow(img)
+    fig, ax = plt.subplots(nrows=5)
 
-    x.change_stage(new_mask=0, new_camera=camera_presets['poor_exposure'])
-    img = x.load_batch()[0][0]
-    ax[1].imshow(img)
+    x = Dataset(camera_model=camera_presets['ideal_camera'], mode_mask=3, batch_size = 5, max_order=2)
+    img, dat = x.load_batch()
+    for i in range(5):
+        ax[i].set_title(np.array([dat[i].contains(j).amplitude for j in x.hermite_modes] + [np.cos(dat[i].contains(j).phase) for j in x.hermite_modes]))
+        ax[i].imshow(img[i])
     plt.show()
