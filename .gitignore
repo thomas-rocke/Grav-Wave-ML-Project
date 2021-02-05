@@ -135,4 +135,6 @@ dmypy.json
 *.h5
 
 # Dataset files
-*.txt
+# *.txt
+
+workspace.code-workspace
