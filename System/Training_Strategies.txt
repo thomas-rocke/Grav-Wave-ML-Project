@@ -1,0 +1,8 @@
+{
+    "default" : {
+        "1" : {
+            "mode_mask" : 0,
+            "camera" : "ideal_camera"
+        }
+    }
+}
