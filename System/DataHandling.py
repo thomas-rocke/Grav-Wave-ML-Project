@@ -593,5 +593,7 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__=='__main__':
     x = Dataset("stage_change_test")
-    while x.new_stage():
-        print(x.stage)
+    x.mode_processor.change_camera(get_cams("medium_errors"))
+    imgs = x.load_batch()[0]
+    plt.imshow(imgs[0])
+    plt.show()

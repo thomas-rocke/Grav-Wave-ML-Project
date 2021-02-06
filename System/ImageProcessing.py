@@ -45,7 +45,7 @@ class BaseProcessor(list):
         '''
         SquareX, SquareY = self._getCenterOfMass(image)
         max_sidelength = np.min(image.shape) # Get the length of the shortest image side
-        test_sides = np.arange(0, max_sidelength)
+        test_sides = np.arange(5, max_sidelength)
         least_square_vals = [self._widthModel(side_length, SquareX, SquareY, image) for side_length in test_sides]
         SquareSide = test_sides[np.argmax(least_square_vals)]
         return SquareSide, SquareX, SquareY
@@ -141,6 +141,7 @@ class ModeProcessor(BaseProcessor):
         self.change_camera(camera)
         super().__init__(target_resolution)
 
+    def _reset_bins(self):
         raw_bins = np.zeros((2**self.bit_depth - 1, 2**self.bit_depth - 1, 2**self.bit_depth - 1)) # (R, G, B) matrix quantised to self.bit_depth
         shape = raw_bins.shape
         for i in range(shape[0]):
@@ -178,6 +179,7 @@ class ModeProcessor(BaseProcessor):
             msg = "New 'bit_depth' is {}".format(camera['bit_depth'])
             LOG.debug(msg)
             self.bit_depth = camera['bit_depth']
+            self._reset_bins()
         else:
             msg = "'bit_depth' not explicitly defined by new camera, defaulting to 0"
             LOG.warning(msg)
