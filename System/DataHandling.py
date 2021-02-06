@@ -200,6 +200,151 @@ class GenerateData(list):
 
 
 
+class BasicGenerator(keras.utils.Sequence):
+    '''
+    The class 'BasicGenerator' that generates data for Keras in training in real-time.
+    '''
+
+    def __init__(self,
+                 max_order: int = 3,
+                 number_of_modes: int = 3,
+                 amplitude_variation: float = 0.2,
+                 phase_variation: float = 0.2,
+                 noise_variation: float = 0.0,
+                 exposure: tuple = (0.0, 1.0),
+                 repeats: int = 50,
+                 batch_size: int = 64):
+        '''
+        Initialise the class with the required complexity.
+
+        'max_order': Max order of Guassian modes in superpositions (x > 0).
+        'number_of_modes': How many modes you want to superimpose together (x > 0).
+        'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
+        '''
+        LOG.info("Initialising generator.")
+
+        self.max_order = max_order
+        self.max_number_of_modes = number_of_modes
+        self.amplitude_variation = amplitude_variation
+        self.phase_variation = phase_variation
+        self.noise_variation = noise_variation
+        self.exposure = exposure
+        self.repeats = repeats
+        self.batch_size = batch_size
+
+        LOG.debug(f"Locals: {locals()}")
+
+        self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
+        self.gauss_modes = self.hermite_modes + self.laguerre_modes
+        self.number_of_modes = 1
+
+        LOG.info("Generator initialised!")
+
+    def __str__(self):
+        '''
+        Magic method for the str() function.
+        '''
+        return repr(self)
+
+    def __repr__(self):
+        '''
+        Magic method for the repr() function.
+        '''
+        return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size})"
+
+    def __len__(self):
+        '''
+        Denotes the number of batches per epoch.
+        For us this is the (total number of combinations * repeats) / batch size.
+        '''
+        return int(len(self.combs) / self.batch_size)
+
+    def __getitem__(self, index):
+        '''
+        Generates and returns one batch of data.
+        '''
+        # LOG.debug(f"Getting item {index}.")
+
+        combs = [self.combs[i] for i in range(index * self.batch_size, (index + 1) * self.batch_size)] # Take combs in order
+        # combs = [self.combs[np.random.randint(len(self.combs))] for i in range(self.batch_size)] # Take random combs from self.combs
+        sups = [self.generate_superposition(comb) for comb in combs]
+
+        X = np.array(self.get_inputs(*sups))[..., np.newaxis]
+        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) for j in self.hermite_modes] for i in sups])
+
+        return X, Y
+
+    def new_stage(self):
+        '''
+        Sets the stage of training for this generator.
+        This generates all the combinations for that specified stage.
+        '''
+        LOG.debug(f"Incrementing dataset to stage {self.number_of_modes}.")
+
+        self.number_of_modes += 1
+        if self.number_of_modes > self.max_number_of_modes: return False
+
+        self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
+        self.combs = [i[j] for i in self.combs for j in range(len(i))] * self.repeats
+        random.shuffle(self.combs) # Shuffle the combinations list
+
+        return True
+
+    def generate_superposition(self, comb):
+        '''
+        Generates the superposition with randomised amplitudes, phase, noise and exposure for a given combination.
+        '''
+        return Superposition(*[self.randomise_amp_and_phase(i) for i in comb])
+
+    def get_inputs(self, *sups):
+        '''
+        Get inputs from list of superpositions.
+        '''
+        inputs = []
+        for sup in sups:
+            sup.noise_variation = self.noise_variation
+            sup.exposure = self.exposure
+
+            inputs.append(sup.superpose())
+
+        return inputs
+
+    def get_classes(self):
+        '''
+        Get the num_classes result required for model creation.
+        '''
+        LOG.debug("Getting classes.")
+
+        return np.array(self.hermite_modes * 2, dtype=object)
+
+    def randomise_amp_and_phase(self, mode):
+        '''
+        Randomise the amplitude and phase of mode according to normal distributions of self.amplitude_variation and self.phase_variation width.
+        Returns new mode with randomised amp and phase.
+        '''
+        x = mode.copy()
+
+        x *= np.abs(np.random.normal(scale=self.amplitude_variation) + 1)
+        x.add_phase(np.random.normal(scale=self.phase_variation))
+
+        return x
+
+    def get_random(self):
+        '''
+        Returns a random superposition from the dataset.
+        '''
+        LOG.debug("Getting a random superposition from generator.")
+
+        comb = self.combs[np.random.randint(len(self.combs))]
+        sup = self.generate_superposition(comb)
+
+        return sup
+
+
+
+
+
 class Dataset(keras.utils.Sequence):
     '''
     Class to load/generate dataset for Machine Learning
