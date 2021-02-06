@@ -3,6 +3,9 @@ import numpy as np
 from skimage.measure import regionprops
 from skimage.filters import threshold_otsu
 import matplotlib.pyplot as plt
+import json
+import os
+import glob
 
 def getImageFourier (img_data):
     #Takes the fourier transform of each colour of the image indepentantly
@@ -31,3 +34,17 @@ def find_cm(image):
     properties = regionprops(labeled_foreground, image)
     center_of_mass = properties[0].centroid
     return center_of_mass[1], center_of_mass[0]
+
+def get_cams(camera_name:str = "ideal_camera"):
+    '''
+    Open Cameras.txt and pick out camera to use
+    '''
+    fname = 'Cameras.txt' # Name of file containing camera properties
+    cwd = os.getcwd()
+    filepath = glob.glob("".join([cwd, os.sep, "**", os.sep, fname]), recursive = True)[0] # Find file in all subdirectories of cwd
+    cams = json.loads(open(filepath).read()) # Read file and convert to dict
+
+    if camera_name in cams.keys():
+        return cams[camera_name]
+    else:
+        return cams['ideal_camera']
