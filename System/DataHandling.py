@@ -352,19 +352,20 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, camera_name:str='ideal_camera', mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
+    def __init__(self, training_strategy_name:str='default', max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
-        self.mode_mask = mode_mask
-        self.mode_processor = ModeProcessor(get_cams(camera_name), (resolution, resolution))
+        self.mode_mask = 0
+        self.mode_processor = ModeProcessor(target_resolution = (resolution, resolution))
+        self.strategy = get_strategy(training_strategy_name)
         self.max_order = max_order
         self.resolution = resolution
         self.batch_size = batch_size
         self.steps = batches_per_repeat
         self.repeats = repeats_per_epoch
         self.steps_per_epoch = self.steps * self.repeats
-        self.stage = training_stage
+        self.stage = 0
         self.info = info
 
         self.epoch = 1
@@ -372,8 +373,8 @@ class Dataset(keras.utils.Sequence):
         self.current_repeat = -1
         self.seed = self.get_seed(self.stage, self.epoch)
 
-        if self.info: print(LOG.info("\n_____| Dataset |_____\n"))
-        if self.info: print(LOG.info(f"Max order of mode: {self.max_order}\n"))
+        if self.info: LOG.info("\n_____| Dataset |_____\n")
+        if self.info: LOG.info(f"Max order of mode: {self.max_order}\n")
 
         self.hermite_modes = [Hermite(l=i, m=j, resolution=self.resolution) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, resolution=self.resolution) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
@@ -481,22 +482,22 @@ class Dataset(keras.utils.Sequence):
         seed = base ** epoch
         return seed
     
-    def change_stage(self, new_camera:str = None, new_mask:int = None, new_stage:int = None):
-        LOG.info("Changing stage")
-        if new_camera is not None:
-            LOG.info("Changing to use camera '{}'".format(new_camera))
-            self.mode_processor.change_camera(get_cams(new_camera))
+    def change_stage(self, **kwargs):
+        if 'camera' in kwargs.keys():
+            cam = kwargs['camera']
+            cam_props = get_cams(cam)
+            LOG.info("Changing to use camera '{}' with properties {}".format(cam, cam_props))
+            self.mode_processor.change_camera(cam_props)
+        else:
+            LOG.info("No New Camera defined this stage, camera will not be changed")
+
         
-        if new_mask is not None:
+        if 'mode_mask' in kwargs.keys():
+            new_mask = kwargs['mode_mask']
             LOG.info("Changing mode_mask to {}".format(new_mask))
             self.mode_mask = new_mask
-        
-        if new_stage is not None:
-            LOG.info("Changing to stage {}".format(new_stage))
-            self.stage = new_stage
         else:
-            self.stage += 1
-            LOG.info("Changing to stage {}".format(self.stage))
+            LOG.info("No new mode_mask defined this stage, mode_mask will not be changed")
         
     def reconstruct_superposition(self, amps_and_phases:list):
         '''
@@ -510,6 +511,17 @@ class Dataset(keras.utils.Sequence):
             mode.amplitude = amps[i]
             mode.phase = phases[i]
         return s
+    
+    def new_stage(self):
+        self.stage += 1
+        if str(self.stage) in self.strategy: # Stage defined in training strategy
+            LOG.info("Changing to stage {}".format(self.stage))
+            self.change_stage(**self.strategy[str(self.stage)]) # Change params between stages
+            return True # Success in changing to new stage
+        else:
+            LOG.info("Stage {} not found, aborting training".format(self.stage))
+            return False # Abort training
+
 
 
 
@@ -580,11 +592,6 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    fig, ax = plt.subplots(nrows=5)
-
-    x = Dataset(camera_name='ideal_camera', mode_mask=3, batch_size = 5, max_order=2)
-    img, dat = x.load_batch()
-    for i in range(5):
-        ax[i].set_title(np.array([dat[i].contains(j).amplitude for j in x.hermite_modes] + [np.cos(dat[i].contains(j).phase) for j in x.hermite_modes]))
-        ax[i].imshow(img[i])
-    plt.show()
+    x = Dataset("stage_change_test")
+    while x.new_stage():
+        print(x.stage)
