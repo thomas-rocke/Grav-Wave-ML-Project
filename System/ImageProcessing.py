@@ -6,7 +6,12 @@ from Gaussian_Beam import Superposition, Hermite, Laguerre
 from multiprocessing import cpu_count, Pool
 import matplotlib.pyplot as plt
 import time
-from Utils import meanError
+from Utils import meanError, get_cams
+
+import Logger
+
+LOG = Logger.get_logger(__name__)
+
 
 class BaseProcessor(list):
     def __init__(self, target_resolution:tuple = (128, 128)):
@@ -100,6 +105,8 @@ class BaseProcessor(list):
         '''
         Perform all operations to generate an image usable by Neural Net, and return a batch of batch_size images
         '''
+        msg = "Generating {} images".format(batch_size)
+        LOG.info(msg)
         images = [self[self.frames_processed + i] for i in range(batch_size)]
         SquareSide, SquareX, SquareY = self._resetSquare(self.toGreyscale(images[0])) # Resets the size of the bounding box based on the first image of the batch
         processed_images = [self.processImage(image, SquareSide, SquareX, SquareY) for image in images]
@@ -110,6 +117,8 @@ class VideoProcessor(BaseProcessor):
 
     def __init__(self, video_file, target_resolution:tuple = (128, 128)):
         super().__init__(target_resolution)
+        msg = "Opening video file '{}'".format(video_file)
+        LOG.info(msg)
         self.cap = cv2.VideoCapture(video_file)
         self.frameCount = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
         self.framerate = int(self.cap.get(cv2.CAP_PROP_FPS))
@@ -130,7 +139,6 @@ class VideoProcessor(BaseProcessor):
 class ModeProcessor(BaseProcessor):
     def __init__(self, camera:dict = {}, target_resolution:tuple=(128, 128)):
         self.change_camera(camera)
-
         super().__init__(target_resolution)
 
         raw_bins = np.zeros((2**self.bit_depth - 1, 2**self.bit_depth - 1, 2**self.bit_depth - 1)) # (R, G, B) matrix quantised to self.bit_depth
@@ -142,38 +150,64 @@ class ModeProcessor(BaseProcessor):
         self.raw_bins = np.sort(raw_bins.flatten()) # Array of all greyscale intensity values possibly with bit_depth quantization
 
     def change_camera(self, camera:dict):
+        msg = "Changing camera"
+        LOG.info(msg)
         camera_keys = camera.keys()
 
         # Set up camera properties
         # Assume ideal camera if property not defined
         if 'noise_variance' in camera_keys:
+            msg = "New 'noise_variance' is {}".format(camera['noise_variance'])
+            LOG.debug(msg)
             self.noise_variance = camera['noise_variance']
         else:
+            msg = "'noise_variance' not explicitly defined by new camera, defaulting to 0"
+            LOG.warning(msg)
             self.noise_variance = 0
         
         if 'exposure_limits' in camera_keys:
+            msg = "New 'exposure_limits' is {}".format(camera['exposure_limits'])
+            LOG.debug(msg)
             self.exposure_limits = camera['exposure_limits']
         else:
+            msg = "'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)"
+            LOG.warning(msg)
             self.exposure_limits = (0, 1)
         
         if 'bit_depth' in camera_keys:
+            msg = "New 'bit_depth' is {}".format(camera['bit_depth'])
+            LOG.debug(msg)
             self.bit_depth = camera['bit_depth']
         else:
+            msg = "'bit_depth' not explicitly defined by new camera, defaulting to 0"
+            LOG.warning(msg)
             self.bit_depth = 0
         
         if 'blur_variance' in camera_keys:
+            msg = "New 'blur_variance' is {}".format(camera['blur_variance'])
+            LOG.debug(msg)
             self.blur_variance = camera['blur_variance']
         else:
+            msg = "'blur_variance' not explicitly defined by new camera, defaulting to 0"
+            LOG.warning(msg)
             self.blur_variance = 0
         
         if 'rotational_variance' in camera_keys:
+            msg = "New 'rotational_variance' is {}".format(camera['rotational_variance'])
+            LOG.debug(msg)
             self.rotational_variance = camera['rotational_variance']
         else:
+            msg = "'rotational_variance' not explicitly defined by new camera, defaulting to 0"
+            LOG.warning(msg)
             self.rotational_variance = 0
         
         if 'stretch_variance' in camera_keys:
+            msg = "New 'stretch_variance' is {}".format(camera['stretch_variance'])
+            LOG.debug(msg)
             self.stretch_variance = camera['stretch_variance']
         else:
+            msg = "'stretch_variance' not explicitly defined by new camera, defaulting to 0"
+            LOG.warning(msg)
             self.stretch_variance = 0
 
     def errorEffects(self, raw_image):
@@ -270,47 +304,10 @@ class ModeProcessor(BaseProcessor):
         restored_im = self.rotate_image(stretched_im, -angle)
         return restored_im
 
-camera_presets = {
-    'ideal_camera' : {
-        'noise_variance' : 0,
-        'exposure_limits' : (0, 1),
-        'bit_depth' : 0,
-        'blur_variance' : 0
-    },
-
-    'poor_noise' : {
-        'noise_variance' : 0.2,
-        'exposure_limits' : (0, 1),
-        'bit_depth' : 0,
-        'blur_variance' : 0
-    },
-
-    'poor_exposure' : {
-        'noise_variance' : 0,
-        'exposure_limits' : (0.2, 0.7),
-        'bit_depth' : 0,
-        'blur_variance' : 0
-    },
-
-    'poor_bit_depth' : {
-        'noise_variance' : 0,
-        'exposure_limits' : (0, 1),
-        'bit_depth' : 8,
-        'blur_variance' : 0
-    },
-
-    'poor_blur' : {
-        'noise_variance' : 0,
-        'exposure_limits' : (0, 1),
-        'bit_depth' : 0,
-        'blur_variance' : 0.4
-    },
-}
-
 if __name__ == "__main__":
-    camera = camera_presets['poor_exposure']
+    camera = get_cams('poor_exposure')
     mode_processor = ModeProcessor(camera)
-    s = Superposition(Hermite(1, 1), Laguerre(3, 3), resolution=480)
+    s = Superposition(Hermite(1, 1), Laguerre(3, 3))
     img = s.superpose()
     minimum = np.min(img)
     maximum = np.max(img)

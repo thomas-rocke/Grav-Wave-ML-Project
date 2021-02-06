@@ -12,11 +12,11 @@ import random
 import sys
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
-from Utils import meanError
+from Utils import meanError, get_cams, get_strategy
 from Gaussian_Beam import Hermite, Superposition, Laguerre
 import Logger
 import keras
-from ImageProcessing import ModeProcessor, camera_presets
+from ImageProcessing import ModeProcessor
 
 LOG = Logger.get_logger(__name__)
 
@@ -50,9 +50,9 @@ class GenerateData(list):
         self.info = info
 
         if info: print("_____| Generating Data |_____\n")
-        if info: print("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: "
-                        + str(phase_variation) + "\nVariation in saturation noise: " + str(noise_variation) + "\nVariation in saturation exposure: " + str(exposure) + "\nRepeats of combinations: " + str(repeats) + "\n")
-        if info: print("Generating Gaussian modes...")
+        if info: print(LOG.info("Max order of mode: " + str(max_order) + "\nNumber of modes in superposition: " + str(number_of_modes) + "\nVariation in mode amplitude: " + str(amplitude_variation) + "\nVariation in mode phase: "
+                        + str(phase_variation) + "\nVariation in saturation noise: " + str(noise_variation) + "\nVariation in saturation exposure: " + str(exposure) + "\nRepeats of combinations: " + str(repeats) + "\n"))
+        if info: print(LOG.info("Generating Gaussian modes..."))
 
         self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
         # self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
@@ -62,6 +62,7 @@ class GenerateData(list):
 
         self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
+        LOG.debug(self.combs)
 
         super().__init__()
         # self.extend(self.combs)
@@ -69,7 +70,7 @@ class GenerateData(list):
         p = Pool(cpu_count())
         self.extend(p.map(self.generate_process, self.combs * repeats))
 
-        if info: print("Done! Found " + str(len(self)) + " combinations.\n")
+        if info: print(LOG.info("Done! Found " + str(len(self)) + " combinations.\n"))
 
     def __str__(self):
         '''
@@ -102,7 +103,7 @@ class GenerateData(list):
         Plot and show / save all superpositions generated.
         '''
         if save:
-            print("Saving dataset...")
+            print(LOG.info("Saving dataset..."))
 
             p = Pool(cpu_count())
             p.map(self.save_process, self)
@@ -351,12 +352,12 @@ class Dataset(keras.utils.Sequence):
     '''
 
 
-    def __init__(self, camera_model:dict={}, mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
+    def __init__(self, camera_name:str='ideal_camera', mode_mask:int = 0,  max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, training_stage: int = 0, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
         self.mode_mask = mode_mask
-        self.mode_processor = ModeProcessor(camera_model, (resolution, resolution))
+        self.mode_processor = ModeProcessor(get_cams(camera_name), (resolution, resolution))
         self.max_order = max_order
         self.resolution = resolution
         self.batch_size = batch_size
@@ -371,12 +372,13 @@ class Dataset(keras.utils.Sequence):
         self.current_repeat = -1
         self.seed = self.get_seed(self.stage, self.epoch)
 
-        if self.info: print("\n_____| Dataset |_____\n")
-        if self.info: print(f"Max order of mode: {self.max_order}\n")
+        if self.info: print(LOG.info("\n_____| Dataset |_____\n"))
+        if self.info: print(LOG.info(f"Max order of mode: {self.max_order}\n"))
 
         self.hermite_modes = [Hermite(l=i, m=j, resolution=self.resolution) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, resolution=self.resolution) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
+        LOG.debug(self.gauss_modes)
 
     def __str__(self):
         '''
@@ -459,16 +461,15 @@ class Dataset(keras.utils.Sequence):
         output_data = s
 
         return input_data, output_data
-
-    def __len__(self):
-        return self.batches_per_epoch
     
     def on_epoch_end(self):
         '''
         Defines steps taken at the end of each epoch - changing the seed for np.random and iterating the self.epoch
         '''
         self.epoch += 1
+        LOG.info("Changing to Epoch :{}".format(self.epoch))
         self.seed = self.get_seed(self.stage, self.epoch)
+        LOG.debug("Epoch seed is {}".format(self.seed))
     
     def get_seed(self, stage, epoch):
         '''
@@ -480,17 +481,22 @@ class Dataset(keras.utils.Sequence):
         seed = base ** epoch
         return seed
     
-    def change_stage(self, new_camera:dict = None, new_mask:int = None, new_stage:int = None):
+    def change_stage(self, new_camera:str = None, new_mask:int = None, new_stage:int = None):
+        LOG.info("Changing stage")
         if new_camera is not None:
-            self.mode_processor.change_camera(new_camera)
+            LOG.info("Changing to use camera '{}'".format(new_camera))
+            self.mode_processor.change_camera(get_cams(new_camera))
         
         if new_mask is not None:
+            LOG.info("Changing mode_mask to {}".format(new_mask))
             self.mode_mask = new_mask
         
         if new_stage is not None:
+            LOG.info("Changing to stage {}".format(new_stage))
             self.stage = new_stage
         else:
             self.stage += 1
+            LOG.info("Changing to stage {}".format(self.stage))
         
     def reconstruct_superposition(self, amps_and_phases:list):
         '''
@@ -576,7 +582,7 @@ def grouper(iterable, n, fillvalue=None):
 if __name__=='__main__':
     fig, ax = plt.subplots(nrows=5)
 
-    x = Dataset(camera_model=camera_presets['ideal_camera'], mode_mask=3, batch_size = 5, max_order=2)
+    x = Dataset(camera_name='ideal_camera', mode_mask=3, batch_size = 5, max_order=2)
     img, dat = x.load_batch()
     for i in range(5):
         ax[i].set_title(np.array([dat[i].contains(j).amplitude for j in x.hermite_modes] + [np.cos(dat[i].contains(j).phase) for j in x.hermite_modes]))

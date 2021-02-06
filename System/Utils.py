@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import json
 import os
 import glob
+import Logger
+
+LOG = Logger.get_logger(__name__)
 
 def getImageFourier (img_data):
     #Takes the fourier transform of each colour of the image indepentantly
@@ -45,8 +48,12 @@ def get_cams(camera_name:str = "ideal_camera"):
     cams = json.loads(open(filepath).read()) # Read file and convert to dict
 
     if camera_name in cams.keys():
+        msg = "Loading camera '{}'".format(camera_name)
+        LOG.info(msg)
         return cams[camera_name]
     else:
+        msg = "Camera '{}' not found, defaulting to 'ideal_camera'".format(camera_name)
+        print(LOG.error(msg))
         return cams['ideal_camera']
 
 
@@ -60,6 +67,10 @@ def get_strategy(training_strategy_name:str = "default"):
     strats = json.loads(open(filepath).read()) # Read file and convert to dict
 
     if training_strategy_name in strats.keys():
+        msg = "Loading strategy '{}'".format(training_strategy_name)
+        LOG.info(msg)
         return strats[training_strategy_name]
     else:
+        msg = "Strategy '{}' not found, defaulting to 'default'".format(training_strategy_name)
+        print(LOG.error(msg))
         return strats["default"]
