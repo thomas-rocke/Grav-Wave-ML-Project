@@ -4,5 +4,20 @@
             "mode_mask" : 0,
             "camera" : "ideal_camera"
         }
+    },
+
+    "stage_change_test" : {
+        "1" : {
+            "mode_mask" : 2,
+            "camera" : "ideal_camera"
+        },
+
+        "2" : {
+            "mode_mask" : 4
+        },
+
+        "3" : {
+            "mode_mask" : 6
+        }
     }
 }
