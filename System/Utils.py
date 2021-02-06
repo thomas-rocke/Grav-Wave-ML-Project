@@ -39,7 +39,7 @@ def get_cams(camera_name:str = "ideal_camera"):
     '''
     Open Cameras.txt and pick out camera to use
     '''
-    fname = 'Cameras.txt' # Name of file containing camera properties
+    fname = "Cameras.txt" # Name of file containing camera properties
     cwd = os.getcwd()
     filepath = glob.glob("".join([cwd, os.sep, "**", os.sep, fname]), recursive = True)[0] # Find file in all subdirectories of cwd
     cams = json.loads(open(filepath).read()) # Read file and convert to dict
@@ -48,3 +48,18 @@ def get_cams(camera_name:str = "ideal_camera"):
         return cams[camera_name]
     else:
         return cams['ideal_camera']
+
+
+def get_strategy(training_strategy_name:str = "default"):
+    '''
+    Open Training_Strategies.txt and pick out strategy to use
+    '''
+    fname = "Training_Strategies.txt" # Name of file containing strategy properties
+    cwd = os.getcwd()
+    filepath = glob.glob("".join([cwd, os.sep, "**", os.sep, fname]), recursive = True)[0] # Find file in all subdirectories of cwd
+    strats = json.loads(open(filepath).read()) # Read file and convert to dict
+
+    if training_strategy_name in strats.keys():
+        return strats[training_strategy_name]
+    else:
+        return strats["default"]
