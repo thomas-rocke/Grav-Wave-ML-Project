@@ -1,0 +1,25 @@
+{
+"ideal_camera": {
+    "noise_variance": 0,
+    "exposure_limits": [0, 1],
+    "bit_depth": 0,
+    "blur_variance": 0
+    },
+    
+"noise_test": {
+    "noise_variance": 0.2
+    },
+
+"exposure_test": {
+
+    "exposure_limits": [0.2, 0.7]
+    }, 
+
+"bit_depth_test": {
+    "bit_depth": 8
+    },
+
+"blur_test": {
+    "blur_variance": 0.4
+    }
+}
