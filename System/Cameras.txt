@@ -3,7 +3,9 @@
     "noise_variance": 0,
     "exposure_limits": [0, 1],
     "bit_depth": 0,
-    "blur_variance": 0
+    "blur_variance": 0,
+    "stretch_variance" : 0,
+    "rotational_variance" : 0
     },
     
 "noise_test": {
