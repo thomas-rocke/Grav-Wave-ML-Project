@@ -6,6 +6,7 @@ import matplotlib.animation as animation
 from tqdm import tqdm
 from itertools import combinations, chain, zip_longest, islice
 from multiprocessing import Pool, cpu_count
+import logging
 import time
 import random
 import sys
@@ -13,10 +14,11 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 from Utils import meanError
 from Gaussian_Beam import Hermite, Superposition, Laguerre
+import Logger
 import keras
 from ImageProcessing import ModeProcessor, camera_presets
 
-
+LOG = Logger.get_logger(__name__)
 
 
 ##################################################
