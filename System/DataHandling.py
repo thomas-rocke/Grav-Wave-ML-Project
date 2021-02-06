@@ -6,6 +6,7 @@ import matplotlib.animation as animation
 from tqdm import tqdm
 from itertools import combinations, chain, zip_longest, islice
 from multiprocessing import Pool, cpu_count
+import logging
 import time
 import random
 import sys
@@ -13,10 +14,11 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 from Utils import meanError
 from Gaussian_Beam import Hermite, Superposition, Laguerre
+import Logger
 import keras
 from ImageProcessing import ModeProcessor, camera_presets
 
-
+LOG = Logger.get_logger(__name__)
 
 
 ##################################################
@@ -53,10 +55,10 @@ class GenerateData(list):
         if info: print("Generating Gaussian modes...")
 
         self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
-        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
-        self.gauss_modes = self.hermite_modes + self.laguerre_modes
+        # self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
+        self.gauss_modes = self.hermite_modes# + self.laguerre_modes
 
-        if info: print("Done! Found " + str(len(self.hermite_modes)) + " hermite modes and " + str(len(self.laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
+        # if info: print("Done! Found " + str(len(self.hermite_modes)) + " hermite modes and " + str(len(self.laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
 
         self.combs = [list(combinations(self.gauss_modes, i)) for i in range(1, number_of_modes + 1)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))]
