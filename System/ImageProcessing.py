@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 from skimage.measure import regionprops
-from skimage.filters import threshold_otsu, gaussian
+from skimage.filters import threshold_otsu, gaussian, laplace
 from Gaussian_Beam import Superposition, Hermite, Laguerre
 from multiprocessing import cpu_count, Pool
 import matplotlib.pyplot as plt
@@ -57,7 +57,7 @@ class BaseProcessor(list):
         x_end = int(min(x_start + SquareSide, image.shape[0]))
         y_end = int(min(y_start + SquareSide, image.shape[1]))
         mean_square = (image[x_start:x_end, y_start:y_end]**2).mean(axis=None)
-        return (mean_square - 100*(SquareSide/max(image.shape)))
+        return (mean_square - (SquareSide/max(image.shape))**2)
 
     def makeSquare(self, image, SquareSide=0, SquareX=0, SquareY=0):
         '''
@@ -241,7 +241,7 @@ class ModeProcessor(BaseProcessor):
         Noise Variance defined as a %age of maximal intensity
         '''
 
-        actual_variance = np.abs(np.random.normal(0, noise_variance)) 
+        actual_variance = np.random.uniform(0, noise_variance)
         # Noise Variance parameter gives maximum noise level for whole dataset
         # Actual Noise is the gaussian noise variance used for a specific add_noise call
 
@@ -273,7 +273,7 @@ class ModeProcessor(BaseProcessor):
             return image
     
     def blur_image(self, image, blur_variance:float=0):
-        blur_amount = np.random.normal(0, self.blur_variance)**2
+        blur_amount = np.random.uniform(0, self.blur_variance)
         return gaussian(image, blur_amount)
     
     def rotate_image(self, image, angle):
@@ -307,12 +307,10 @@ class ModeProcessor(BaseProcessor):
         return restored_im
 
 if __name__ == "__main__":
-    camera = get_cams('poor_exposure')
-    mode_processor = ModeProcessor(camera)
-    s = Superposition(Hermite(1, 1), Laguerre(3, 3))
-    img = s.superpose()
-    minimum = np.min(img)
-    maximum = np.max(img)
-    plt.imshow(mode_processor.getImage(img))
+    s = Superposition(Hermite(1, 2), Laguerre(3, 3))
+    raw_img = s.superpose()
+    img = np.random.normal(raw_img, np.max(raw_img)*0.01)
+    fig, ax = plt.subplots(nrows=2)
+    ax[0].imshow(img)
+    ax[1].imshow(laplace(img))
     plt.show()
-    
