@@ -371,7 +371,7 @@ class ML:
                                      verbose=int(info))
 
         LOG.debug(f"Loss: {scores[0]} - Accuracy: {scores[1]}")
-        print("Loss: %0.4f - Accuracy: %0.4f " % (scores[0], scores[1]))
+        print("Loss: %0.4f - Accuracy: %0.2f%" % (scores[0], scores[1] * 100))
 
         # Training complete
 
@@ -862,8 +862,8 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
     '''
     Loading / training multiple models and plotting comparison graphs of their performances.
     '''
-    LOG.info(f"Optimizing parameter '{param_name}' across range '{param_range}'.")
-    print(log(f"[INFO] Optimizing parameter '{param_name}' across range '{param_range}'.\n"))
+    LOG.info(f"Optimising parameter '{param_name}' across range '{param_range}'.")
+    print(log(f"[INFO] Optimising parameter '{param_name}' across range '{param_range}'.\n"))
 
     models = []
     for test in param_range:
@@ -887,11 +887,11 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
 
             if save:
                 LOG.debug(f"Saving to 'Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches='tight', pad_inches=0) # Save image
+                plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches='tight', pad_inches=0) # Save image
             else:
                 plt.show()
 
-    LOG.info("Optimisation complete.")
+    LOG.info("Optimisation complete.\n")
 
 
 
