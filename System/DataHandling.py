@@ -592,8 +592,10 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    x = Dataset("stage_change_test")
+    x = Dataset("stage_change_test", batch_size=5)
     x.mode_processor.change_camera(get_cams("medium_errors"))
     imgs = x.load_batch()[0]
-    plt.imshow(imgs[0])
+    fig, ax = plt.subplots(nrows=5)
+    for i in range(5):
+        ax[i].imshow(imgs[i])
     plt.show()

@@ -2,6 +2,8 @@ import numpy as np
 import cv2
 from skimage.measure import regionprops
 from skimage.filters import threshold_otsu, gaussian, laplace
+from skimage.feature import blob_log as blob
+from scipy.ndimage import gaussian_laplace
 from Gaussian_Beam import Superposition, Hermite, Laguerre
 from multiprocessing import cpu_count, Pool
 import matplotlib.pyplot as plt
@@ -43,12 +45,24 @@ class BaseProcessor(list):
         '''
         Resets the Square bounding box size
         '''
-        SquareX, SquareY = self._getCenterOfMass(image)
-        max_sidelength = np.min(image.shape) # Get the length of the shortest image side
-        test_sides = np.arange(5, max_sidelength)
-        least_square_vals = [self._widthModel(side_length, SquareX, SquareY, image) for side_length in test_sides]
-        SquareSide = test_sides[np.argmax(least_square_vals)]
+        #SquareX, SquareY = self._getCenterOfMass(image)
+        #max_sidelength = np.min(image.shape) # Get the length of the shortest image side
+        #test_sides = np.arange(5, max_sidelength)
+        #least_square_vals = [self._widthModel(side_length, SquareX, SquareY, image) for side_length in test_sides]
+        #SquareSide = test_sides[np.argmax(least_square_vals)]
+        SquareX, SquareY, SquareSide = self.get_bounding_box(image)
         return SquareSide, SquareX, SquareY
+
+    def get_bounding_box(self, img):
+        img /= np.linalg.norm(img)
+        img /= np.max(img)
+        
+        blobs = blob(img, threshold=0.008)
+        center_x = int(np.sum([b[0]*b[2] for b in blobs])/np.sum([b[2] for b in blobs]))
+        center_y = int(np.sum([b[1]*b[2] for b in blobs])/np.sum([b[2] for b in blobs]))
+        scale = int((3*np.max([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.max([b[2] for b in blobs])))
+
+        return center_x, center_y, scale
     
     def _widthModel(self, SquareSide, SquareX, SquareY, image):
         # Model used in maximisation problem to find bounding box
@@ -306,11 +320,29 @@ class ModeProcessor(BaseProcessor):
         restored_im = self.rotate_image(stretched_im, -angle)
         return restored_im
 
+
+def get_bounding_box(img):
+    img /= np.max(img)
+    
+    blobs = blob(img)
+    center_x = int(np.mean([b[0] for b in blobs]))
+    center_y = int(np.mean([b[1] for b in blobs]))
+    scale = int((4*np.mean([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.mean([b[2] for b in blobs]))/np.sqrt(2))
+
+    return center_x, center_y, scale
+
+
+
 if __name__ == "__main__":
-    s = Superposition(Hermite(1, 2), Laguerre(3, 3))
-    raw_img = s.superpose()
-    img = np.random.normal(raw_img, np.max(raw_img)*0.01)
-    fig, ax = plt.subplots(nrows=2)
-    ax[0].imshow(img)
-    ax[1].imshow(laplace(img))
+    fig, ax = plt.subplots(nrows=5, ncols=5)
+    for i in range(5):
+        for j in range(5):
+            s = Superposition(Hermite(i, j, w_0 = 0.1))
+            s.resolution = 480
+            img = s.superpose()
+            img /= np.linalg.norm(img)
+            center_x, center_y, scale = get_bounding_box(img)
+            ax[i, j].imshow(img[int(center_x - scale/2):int(center_x + scale/2), int(center_y - scale/2):int(center_y + scale/2)])
+            
+
     plt.show()
