@@ -312,7 +312,7 @@ class ModeProcessor(BaseProcessor):
         '''
         Stretch the image randomly in a random direction, according to stretch_variance
         '''
-        stretch_factor = np.abs(np.random.normal(1, stretch_variance))
+        stretch_factor = np.abs(np.random.uniform(1 - stretch_variance, 1 + stretch_variance))
         angle = np.random.uniform(0, 2*np.pi)
         rotated_im = self.rotate_image(image, angle)
         stretched_dims = (rotated_im.shape[0], int(rotated_im.shape[1]*stretch_factor))
@@ -334,15 +334,20 @@ def get_bounding_box(img):
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(nrows=5, ncols=5)
-    for i in range(5):
-        for j in range(5):
-            s = Superposition(Hermite(i, j, w_0 = 0.1))
-            s.resolution = 480
-            img = s.superpose()
-            img /= np.linalg.norm(img)
-            center_x, center_y, scale = get_bounding_box(img)
-            ax[i, j].imshow(img[int(center_x - scale/2):int(center_x + scale/2), int(center_y - scale/2):int(center_y + scale/2)])
-            
+    proc = BaseProcessor()
 
+    img = np.zeros((480, 480))
+    x = Superposition(Hermite(3, 1, resolution=256))
+    sup_img = x.superpose()
+    for i in range(sup_img.shape[0]):
+        for j in range(sup_img.shape[1]):
+            img[i, j] = sup_img[i, j]
+    
+    img /= np.max(img)
+    blobs = blob(img)
+    fig, ax = plt.subplots()
+    ax.imshow(img)
+    for b in blobs:
+        c = plt.Circle((b[1], b[0]), b[2], fill=False)
+        ax.add_patch(c)
     plt.show()

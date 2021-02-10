@@ -44,11 +44,11 @@
     },
 
 "large_errors" : {
-    "noise_variance" : 0.02,
+    "noise_variance" : 0.1,
     "exposure_limits" : [0.4, 1],
     "bit_depth" : 0,
     "blur_variance" : 0.3,
-    "stretch_variance" : 0.3,
-    "rotational_variance" : 0.3
+    "stretch_variance" : 0.02,
+    "rotational_variance" : 0.02
     }
 }
