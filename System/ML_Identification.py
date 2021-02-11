@@ -949,7 +949,7 @@ if __name__ == '__main__':
     optimize("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
     optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
     optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
-    optimize("learning_rate", [0.0001 * n for n in range(1, 9)], plot=True, save=True)
+    optimize("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=True, save=True)
 
     # print(tf.config.list_physical_devices())
     # with tf.device("gpu:0"):
