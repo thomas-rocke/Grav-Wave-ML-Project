@@ -358,7 +358,7 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, training_strategy_name : str= "default", max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 32, info: bool = True):
+    def __init__(self, training_strategy_name : str= "default", max_order: int = 3, resolution: int = 128, batch_size: int = 128, steps: int = 100, repeats: int = 32, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
@@ -377,8 +377,8 @@ class Dataset(keras.utils.Sequence):
         while str(stage_num) in self.strategy.keys():
             self.max_stage = stage_num
             stage_num += 1
-        self.steps = batches_per_repeat
-        self.repeats = repeats_per_epoch
+        self.steps = steps
+        self.repeats = repeats
         self.steps_per_epoch = self.steps * self.repeats
         self.stage = 0
 
