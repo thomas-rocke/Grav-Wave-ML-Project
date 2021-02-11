@@ -495,11 +495,8 @@ class Dataset(keras.utils.Sequence):
     def get_seed(self, stage, epoch):
         '''
         Function which gets a unique seed per epoch, per training stage.
-        The function n**2 + n + 41 produces a unique prime number for 0 <= n < 40
-        p**m will always be unique for a unique combination of prime p and non-zero integer m
         '''
-        base = stage**2 + stage + 41
-        seed = base ** epoch
+        seed = 200*stage + epoch
         return seed
 
     def change_stage(self, **kwargs):
@@ -613,4 +610,3 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__=='__main__':
     x = Dataset()
-    print(x.max_stage)
