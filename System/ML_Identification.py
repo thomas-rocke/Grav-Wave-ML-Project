@@ -73,10 +73,10 @@ class ML:
                  max_order: int = 3,
                  number_of_modes: int = 3,
                  amplitude_variation: float = 0.2,
-                 phase_variation: float = 0.2,
-                 noise_variation: float = 0.0,
+                 phase_variation: float = 0.4,
+                 noise_variation: float = 0.1,
                  exposure: tuple = (0.0, 1.0),
-                 repeats: int = 50,
+                 repeats: int = 32,
                  batch_size: int = 64,
                  optimiser: str = "Adamax",
                  learning_rate: float = 0.0001):
@@ -99,7 +99,7 @@ class ML:
         LOG.debug(f"Locals: {locals()}")
 
         self.max_epochs = 100 # Max epochs before training is terminated
-        self.success_loss = 0.003 # Loss at which the training is considered successful
+        self.success_loss = 0.001 # Loss at which the training is considered successful
         self.stagnation = 5 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
@@ -285,7 +285,7 @@ class ML:
 
                     history_callback = self.model.fit(dataset,
                                                       validation_data=dataset,
-                                                      validation_steps=1,
+                                                      validation_steps=cpu_count(),
                                                       batch_size=self.batch_size,
                                                       use_multiprocessing=False,
                                                       workers=cpu_count(),
@@ -371,7 +371,7 @@ class ML:
                                      verbose=int(info))
 
         LOG.debug(f"Loss: {scores[0]} - Accuracy: {scores[1]}")
-        print("Loss: %0.4f - Accuracy: %0.2f%" % (scores[0], scores[1] * 100))
+        print(f"Loss: {scores[0] :.4f} - Accuracy: {scores[1] * 100 :.2f}%")
 
         # Training complete
 
@@ -424,7 +424,7 @@ class ML:
 
         if info: print(log("[PLOT] Plotting history..."))
 
-        if elapsed_time: t = self.history["time"]
+        if elapsed_time: t = np.array(self.history["time"]) / 60
         else: t = np.arange(1, len(self.history["loss"]) + 1)
 
         if axes == None:
@@ -462,11 +462,11 @@ class ML:
         ax2.set_ylim(0)
 
         ax1.set_ylabel("Loss")
-        ax2.set_xlabel(f"{'Elapsed Time (s)' if elapsed_time else 'Epoch'}")
+        ax2.set_xlabel(f"{'Elapsed Time (mins)' if elapsed_time else 'Epoch'}")
         ax2.set_ylabel(f"{'Accuracy' if axes == None else 'Validation Loss'}")
 
-        ax1.legend()
-        ax2.legend()
+        ax1.legend(loc="upper right")
+        ax2.legend(loc="upper right")
 
         if info:
             plt.show()
@@ -875,7 +875,7 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
         LOG.debug("Plotting optimisation graphs.")
 
         for time in (True, False):
-            fig, (ax1, ax2) = plt.subplots(2, figsize=(8, 6), sharex=True, gridspec_kw={'hspace': 0})
+            fig, (ax1, ax2) = plt.subplots(2, figsize=(10, 8), sharex=True, gridspec_kw={'hspace': 0})
             fig.suptitle(f"Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}")
             ax1.grid()
             ax2.grid()
@@ -934,9 +934,9 @@ if __name__ == '__main__':
 
     # Loading saved model
 
-    # data = GenerateData(3, 3, 0.2, 0.2)
-    # data.new_stage()
-    # data.new_stage()
+    data = BasicGenerator(3, 3, 0.2, 0.2, 0.0)
+    data.new_stage()
+    data.new_stage()
 
     # for i in tqdm(data): model.compare(i, info=False, save=True)
 
@@ -944,11 +944,12 @@ if __name__ == '__main__':
     #     sup = data.get_random()
     #     m.compare(sup)
 
-    optimize("repeats", [2**n for n in range(1, 9)], plot=True, save=True)
+    optimize("repeats", [2**n for n in range(1, 11)], plot=True, save=True)
     optimize("batch_size", [2**n for n in range(9)], plot=True, save=True)
     optimize("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
     optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
     optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
+    optimize("learning_rate", [0.0001 * n for n in range(1, 9)], plot=True, save=True)
 
     # print(tf.config.list_physical_devices())
     # with tf.device("gpu:0"):
