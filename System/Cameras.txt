@@ -7,7 +7,7 @@
     "stretch_variance" : 0,
     "rotational_variance" : 0
     },
-    
+
 "noise_test": {
     "noise_variance": 0.1
     },
