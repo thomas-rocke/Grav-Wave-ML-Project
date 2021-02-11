@@ -304,7 +304,7 @@ class ModeProcessor(BaseProcessor):
         '''
         Rotate the image by a random amount according to rotational_variance
         '''
-        angle = np.random.normal(0, rotational_variance)
+        angle = np.random.uniform(-rotational_variance, rotational_variance)
         rotated_image = self.rotate_image(image, angle)
         return rotated_image
     
