@@ -272,7 +272,7 @@ class ML:
 
                     history_callback = self.model.fit(self.data_generator,
                                                       validation_data=self.data_generator,
-                                                      validation_steps=cpu_count(),
+                                                      validation_steps=2,
                                                       batch_size=self.data_generator.batch_size,
                                                       use_multiprocessing=False,
                                                       workers=cpu_count(),
