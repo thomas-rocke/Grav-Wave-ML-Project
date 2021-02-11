@@ -213,8 +213,8 @@ class BasicGenerator(keras.utils.Sequence):
                  phase_variation: float = 0.2,
                  noise_variation: float = 0.0,
                  exposure: tuple = (0.0, 1.0),
-                 repeats: int = 50,
-                 batch_size: int = 64):
+                 repeats: int = 32,
+                 batch_size: int = 32):
         '''
         Initialise the class with the required complexity.
 
@@ -235,11 +235,13 @@ class BasicGenerator(keras.utils.Sequence):
 
         LOG.debug(f"Locals: {locals()}")
 
+        self.number_of_modes = 1
+        self.stage = 0
+        self.max_stage = self.max_number_of_modes - 1
+
         self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
-        self.number_of_modes = 1
-        self.stage = 0
 
         LOG.info("Generator initialised!")
 
