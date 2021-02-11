@@ -239,6 +239,7 @@ class BasicGenerator(keras.utils.Sequence):
         self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
         self.number_of_modes = 1
+        self.stage = 0
 
         LOG.info("Generator initialised!")
 
@@ -281,9 +282,10 @@ class BasicGenerator(keras.utils.Sequence):
         Sets the stage of training for this generator.
         This generates all the combinations for that specified stage.
         '''
-        LOG.debug(f"Incrementing dataset to stage {self.number_of_modes}.")
+        LOG.debug(f"Incrementing dataset to stage {self.stage + 1}.")
 
         self.number_of_modes += 1
+        self.stage += 1
         if self.number_of_modes > self.max_number_of_modes: return False
 
         self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
@@ -345,40 +347,43 @@ class BasicGenerator(keras.utils.Sequence):
 
 
 
-
 class Dataset(keras.utils.Sequence):
     '''
     Class to load/generate dataset for Machine Learning
     '''
 
-
-    def __init__(self, training_strategy_name:str='default', max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, info: bool = True):
+    def __init__(self, training_strategy_name : str= "default", max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
-        self.mode_mask = 0
-        self.mode_processor = ModeProcessor(target_resolution = (resolution, resolution))
-        self.strategy = get_strategy(training_strategy_name)
+        self.training_strategy_name = training_strategy_name
         self.max_order = max_order
         self.resolution = resolution
         self.batch_size = batch_size
+        self.batches_per_repeat = batches_per_repeat
+        self.repeats_per_epoch = repeats_per_epoch
+        self.info = info
+
+        self.mode_mask = 0
+        self.mode_processor = ModeProcessor(target_resolution = (resolution, resolution))
+        self.strategy = get_strategy(training_strategy_name)
         self.steps = batches_per_repeat
         self.repeats = repeats_per_epoch
         self.steps_per_epoch = self.steps * self.repeats
         self.stage = 0
-        self.info = info
 
         self.epoch = 1
         self.current_step = 0
         self.current_repeat = -1
         self.seed = self.get_seed(self.stage, self.epoch)
 
-        if self.info: LOG.info("\n_____| Dataset |_____\n")
-        if self.info: LOG.info(f"Max order of mode: {self.max_order}\n")
+        if self.info: LOG.info("Dataset initialised!")
+        if self.info: LOG.info(f"Max order of mode: {self.max_order}")
 
         self.hermite_modes = [Hermite(l=i, m=j, resolution=self.resolution) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, resolution=self.resolution) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
+
         LOG.debug(self.gauss_modes)
 
     def __str__(self):
@@ -391,8 +396,7 @@ class Dataset(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        #TODO: Fix repr
-        #return self.__class__.__name__ + f"({self.max_order}, {self.image_params}, {self.sup_params}, {self.resolution}, {self.batch_size}, {self.steps_per_epoch}, {self.info})"
+        return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.batches_per_repeat}, {self.repeats_per_epoch}, {self.info})"
 
     def __len__(self):
         '''
@@ -434,6 +438,14 @@ class Dataset(keras.utils.Sequence):
         self.current_step += 1
         return input_data, output_data
 
+    def get_classes(self):
+        '''
+        Get the num_classes result required for model creation.
+        '''
+        LOG.debug("Getting classes.")
+
+        return np.array(self.hermite_modes * 2, dtype=object)
+
     def load_batch(self):
         '''
         Generates a single batch of data for use in non-keras applications
@@ -462,7 +474,7 @@ class Dataset(keras.utils.Sequence):
         output_data = s
 
         return input_data, output_data
-    
+
     def on_epoch_end(self):
         '''
         Defines steps taken at the end of each epoch - changing the seed for np.random and iterating the self.epoch
@@ -471,7 +483,7 @@ class Dataset(keras.utils.Sequence):
         LOG.info("Changing to Epoch :{}".format(self.epoch))
         self.seed = self.get_seed(self.stage, self.epoch)
         LOG.debug("Epoch seed is {}".format(self.seed))
-    
+
     def get_seed(self, stage, epoch):
         '''
         Function which gets a unique seed per epoch, per training stage.
@@ -481,7 +493,7 @@ class Dataset(keras.utils.Sequence):
         base = stage**2 + stage + 41
         seed = base ** epoch
         return seed
-    
+
     def change_stage(self, **kwargs):
         if 'camera' in kwargs.keys():
             cam = kwargs['camera']
@@ -498,7 +510,7 @@ class Dataset(keras.utils.Sequence):
             self.mode_mask = new_mask
         else:
             LOG.info("No new mode_mask defined this stage, mode_mask will not be changed")
-        
+
     def reconstruct_superposition(self, amps_and_phases:list):
         '''
         Reconstruct a superposition from the ML prediction output
@@ -511,7 +523,7 @@ class Dataset(keras.utils.Sequence):
             mode.amplitude = amps[i]
             mode.phase = phases[i]
         return s
-    
+
     def new_stage(self):
         self.stage += 1
         if str(self.stage) in self.strategy: # Stage defined in training strategy

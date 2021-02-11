@@ -70,14 +70,7 @@ class ML:
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
     def __init__(self,
-                 max_order: int = 3,
-                 number_of_modes: int = 3,
-                 amplitude_variation: float = 0.2,
-                 phase_variation: float = 0.2,
-                 noise_variation: float = 0.0,
-                 exposure: tuple = (0.0, 1.0),
-                 repeats: int = 50,
-                 batch_size: int = 64,
+                 data_generator: keras.utils.Sequence = BasicGenerator,
                  optimiser: str = "Adamax",
                  learning_rate: float = 0.0001):
         '''
@@ -85,21 +78,14 @@ class ML:
         '''
         LOG.info("Initialising ML model.")
 
-        self.max_order = max_order
-        self.number_of_modes = number_of_modes
-        self.amplitude_variation = amplitude_variation
-        self.phase_variation = phase_variation
-        self.noise_variation = noise_variation
-        self.exposure = exposure
-        self.repeats = repeats
-        self.batch_size = batch_size
+        self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
 
         LOG.debug(f"Locals: {locals()}")
 
         self.max_epochs = 100 # Max epochs before training is terminated
-        self.success_loss = 0.003 # Loss at which the training is considered successful
+        self.success_loss = 0.001 # Loss at which the training is considered successful
         self.stagnation = 5 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
@@ -118,7 +104,7 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size}, '{self.optimiser}', {self.learning_rate})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate})"
 
     def exists(self):
         '''
@@ -239,8 +225,7 @@ class ML:
         LOG.debug("Creating the data generator object for the dataset.")
         print(log("[INIT] Initialising dataset... "), end='')
 
-        dataset = BasicGenerator(self.max_order, self.number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size)
-        self.classes = dataset.get_classes()
+        self.classes = self.data_generator.get_classes()
         self.input_shape = (self.classes[0].resolution, self.classes[0].resolution, 1)
 
         print("Done!")
@@ -264,14 +249,14 @@ class ML:
 
         # For every stage / complexity of data in the dataset
 
-        while dataset.new_stage():
-            LOG.info(f"Stage {dataset.number_of_modes - 1} / {dataset.max_number_of_modes - 1} of training.")
-            print(log("[TRAIN] |-> Stage               : " + str(dataset.number_of_modes - 1) + " / " + str(dataset.max_number_of_modes - 1) + "."))
-            print(log("[TRAIN] |-> Dataset             : " + str(dataset) + "."))
-            print(log("[TRAIN] |-> Size                : " + str(len(dataset)) + "."))
-            print(log("[TRAIN] |-> Success Condition   : A loss of " + str(self.success_loss) + "."))
-            print(log("[TRAIN] |-> Terminate Condition : Reaching epoch " + str(len(self.history["loss"]) + self.max_epochs) + " or " + str(self.stagnation) + " consecutive epochs of stagnation."))
-            print(log("[TRAIN] |"))
+        while self.data_generator.new_stage():
+            LOG.info(f"Stage {self.data_generator.stage} of training.")
+            print(log(f"[TRAIN] |-> Stage               : {self.data_generator.stage}."))
+            print(log(f"[TRAIN] |-> Dataset             : {self.data_generator}."))
+            print(log(f"[TRAIN] |-> Size                : {len(self.data_generator)}."))
+            print(log(f"[TRAIN] |-> Success Condition   : A loss of {self.success_loss}."))
+            print(log(f"[TRAIN] |-> Terminate Condition : Reaching epoch {len(self.history['loss']) + self.max_epochs} or {self.stagnation} consecutive epochs of stagnation."))
+            print(log(f"[TRAIN] |"))
 
             # For every epoch of training on that stage
 
@@ -283,10 +268,10 @@ class ML:
 
                     # Fit the model to the stage of the data generator
 
-                    history_callback = self.model.fit(dataset,
-                                                      validation_data=dataset,
-                                                      validation_steps=1,
-                                                      batch_size=self.batch_size,
+                    history_callback = self.model.fit(self.data_generator,
+                                                      validation_data=self.data_generator,
+                                                      validation_steps=cpu_count(),
+                                                      batch_size=self.data_generator.batch_size,
                                                       use_multiprocessing=False,
                                                       workers=cpu_count(),
                                                       verbose=int(info))
@@ -301,7 +286,7 @@ class ML:
 
                     # Compute the stagnation of the training run
 
-                    stagnates = len(np.where(np.round(self.history["loss"][-1], 4) >= np.round(self.history["loss"][-min(n + 1, self.stagnation + 1):-1], 4))[0])
+                    stagnates = len(np.where(np.round(self.history['loss'][-1], 4) >= np.round(self.history['loss'][-min(n + 1, self.stagnation + 1):-1], 4))[0])
                     if stagnates == 0: indicator = Colour.OKGREEN + '++' + Colour.ENDC
                     else: indicator = (Colour.WARNING if stagnates < self.stagnation - 1 else Colour.FAIL) + '-' + str(stagnates) + Colour.ENDC
 
@@ -309,25 +294,25 @@ class ML:
 
                     # Update the loading bar description with the current losses
 
-                    iterator.set_description(log("[TRAIN] |-> " + indicator + " Loss: %0.4f - Val Loss: %0.4f " % (self.history["loss"][-1], self.history["val_loss"][-1])))
+                    iterator.set_description(log(f"[TRAIN] |-> {indicator} Loss: {self.history['loss'][-1] :.4f} - Val Loss: {self.history['val_loss'][-1] :.4f}"))
 
                     # Check if gradient descent has diverged so training has failed
 
-                    if isnan(self.history["loss"][-1]): # Loss is nan so training has failed
+                    if isnan(self.history['loss'][-1]): # Loss is nan so training has failed
                         LOG.critical("Loss is 'nan' so training has diverged and failed.")
                         print(log("\n[TRAIN] V "))
-                        print(log("[FATAL] Training failed! Gradient descent diverged at epoch " + str(len(self.history["loss"])) + ".\n"))
+                        print(log("[FATAL] Training failed! Gradient descent diverged at epoch " + str(len(self.history['loss'])) + ".\n"))
 
                         sys.exit()
 
                     # Check if loss has reached an acceptable level
 
-                    elif self.history["loss"][-1] < self.success_loss: # Loss has reached success level
+                    elif self.history['loss'][-1] < self.success_loss: # Loss has reached success level
                         LOG.debug("Loss has reached success level. Will break from training stage.")
                         iterator.close()
 
                         print(log("[TRAIN] |"))
-                        print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history["loss"])) + "."))
+                        print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history['loss'])) + "."))
 
                         break
 
@@ -338,7 +323,7 @@ class ML:
                         iterator.close()
 
                         print(log("[TRAIN] |"))
-                        print(log("[WARN]  |-> Learning stagnated at epoch " + str(len(self.history["loss"])) + "."))
+                        print(log("[WARN]  |-> Learning stagnated at epoch " + str(len(self.history['loss'])) + "."))
 
                         break
 
@@ -347,7 +332,7 @@ class ML:
             except KeyboardInterrupt:
                 LOG.warning("Keyboard interrupt detected. Will abort the training stage.")
                 print(log("[TRAIN] |"))
-                print(log("[WARN]  |-> Aborted at epoch " + str(len(self.history["loss"]) + 1) + "!"))
+                print(log("[WARN]  |-> Aborted at epoch " + str(len(self.history['loss']) + 1) + "!"))
 
             # Check if stage has reached the max epoch
 
@@ -355,7 +340,7 @@ class ML:
                 LOG.warning(f"Reached max epoch of {len(self.history['loss'])}.")
 
                 print(log("[TRAIN] |"))
-                print(log("[WARN]  |-> Reached max epoch of " + str(len(self.history["loss"])) + "!"))
+                print(log("[WARN]  |-> Reached max epoch of " + str(len(self.history['loss'])) + "!"))
 
             print(log("[TRAIN] |"))
 
@@ -364,14 +349,14 @@ class ML:
         LOG.debug("Evaluating the training performance.")
         print(log("[TRAIN] |-> Evaluating : "), end='')
 
-        scores = self.model.evaluate(dataset,
-                                     batch_size=self.batch_size, 
+        scores = self.model.evaluate(self.data_generator,
+                                     batch_size=self.data_generator.batch_size, 
                                      use_multiprocessing=False,
                                      workers=cpu_count(),
                                      verbose=int(info))
 
         LOG.debug(f"Loss: {scores[0]} - Accuracy: {scores[1]}")
-        print("Loss: %0.4f - Accuracy: %0.4f " % (scores[0], scores[1]))
+        print(f"Loss: {scores[0] :.4f} - Accuracy: {scores[1] * 100 :.2f}%")
 
         # Training complete
 
@@ -380,40 +365,40 @@ class ML:
         print(log("[TRAIN] Done!\n"))
         print(log(f"[INFO] Training complete after {int((perf_counter() - start_time) // 60)} minutes and {int((perf_counter() - start_time) % 60)} seconds.\n"))
 
-    def load_data(self, number_of_modes: int = 1):
-        '''
-        Load training and testing data.
-        '''
-        LOG.info(f"Loading training and validation data for {number_of_modes} modes.")
+    # def load_data(self, number_of_modes: int = 1):
+    #     '''
+    #     Load training and testing data.
+    #     '''
+    #     LOG.info(f"Loading training and validation data for {number_of_modes} modes.")
 
-        try:
-            LOG.debug("Generating training dataset.")
-            print(log("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
-            print(log("[DATA] |"))
+    #     try:
+    #         LOG.debug("Generating training dataset.")
+    #         print(log("[DATA] Generating data for superpositions of " + str(number_of_modes) + " different modes..."))
+    #         print(log("[DATA] |"))
 
-            train_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
-            train_inputs = train_data.get_inputs(log("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
-            train_outputs = train_data.get_outputs()
+    #         train_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, info=False)
+    #         train_inputs = train_data.get_inputs(log("[DATA] |-> " + str(self.repeats) + " datasets of training data"))
+    #         train_outputs = train_data.get_outputs()
 
-            LOG.debug("Generating validation dataset.")
-            print(log("[DATA] |"))
+    #         LOG.debug("Generating validation dataset.")
+    #         print(log("[DATA] |"))
 
-            val_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
-            val_inputs = val_data.get_inputs(log("[DATA] |-> 1 dataset of validation data"))
-            val_outputs = val_data.get_outputs()
+    #         val_data = GenerateData(self.max_order, number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, 1, info=False)
+    #         val_inputs = val_data.get_inputs(log("[DATA] |-> 1 dataset of validation data"))
+    #         val_outputs = val_data.get_outputs()
 
-            LOG.info("Successfully generated training and validation data!")
-            print(log("[DATA] V "))
-            print(log("[DATA] Done! Training size: " + str(len(train_inputs)) + ", validation size: " + str(len(val_inputs)) + ".\n"))
+    #         LOG.info("Successfully generated training and validation data!")
+    #         print(log("[DATA] V "))
+    #         print(log("[DATA] Done! Training size: " + str(len(train_inputs)) + ", validation size: " + str(len(val_inputs)) + ".\n"))
 
-        except MemoryError:
-            LOG.critical("Memory overflow.")
-            print(log("[DATA] V "))
-            print(log("[FATAL] Memory overflow!\n"))
+    #     except MemoryError:
+    #         LOG.critical("Memory overflow.")
+    #         print(log("[DATA] V "))
+    #         print(log("[FATAL] Memory overflow!\n"))
 
-            sys.exit()
+    #         sys.exit()
 
-        return (train_inputs, train_outputs), (val_inputs, val_outputs)
+    #     return (train_inputs, train_outputs), (val_inputs, val_outputs)
 
     def plot(self, info: bool = True, axes: tuple = None, label: str = False, elapsed_time: bool = False):
         '''
@@ -424,8 +409,8 @@ class ML:
 
         if info: print(log("[PLOT] Plotting history..."))
 
-        if elapsed_time: t = self.history["time"]
-        else: t = np.arange(1, len(self.history["loss"]) + 1)
+        if elapsed_time: t = np.array(self.history["time"]) / 60
+        else: t = np.arange(1, len(self.history['loss']) + 1)
 
         if axes == None:
             LOG.debug("Generating axes as none were given.")
@@ -435,10 +420,10 @@ class ML:
             ax1.grid()
             ax2.grid()
 
-            ax1.plot(t, self.history["loss"], label="Training Loss")[0]
-            ax2.plot(t, self.history["accuracy"], label="Training Accuracy")[0]
-            ax1.plot(t, self.history["val_loss"], label="Validation Loss")[0]
-            ax2.plot(t, self.history["val_accuracy"], label="Validation Accuracy")[0]
+            ax1.plot(t, self.history['loss'], label="Training Loss")[0]
+            ax2.plot(t, self.history['accuracy'], label="Training Accuracy")[0]
+            ax1.plot(t, self.history['val_loss'], label="Validation Loss")[0]
+            ax2.plot(t, self.history['val_accuracy'], label="Validation Accuracy")[0]
 
             ax2.set_ylim(0, 1)
 
@@ -448,25 +433,25 @@ class ML:
             ax1, ax2 = axes
             if not label: label = str(self)
 
-            ax1.plot(t, self.history["loss"], label=label)[0]
-            ax2.plot(t, self.history["val_loss"], label=label)[0]
+            ax1.plot(t, self.history['loss'], label=label)[0]
+            ax2.plot(t, self.history['val_loss'], label=label)[0]
 
-            if np.max(self.history["val_loss"]) > ax2.get_ylim()[1]: ax2.set_ylim(0, np.max(self.history["val_loss"]))
+            if np.max(self.history['val_loss']) > ax2.get_ylim()[1]: ax2.set_ylim(0, np.max(self.history['val_loss']))
 
         LOG.debug("Formatting plot.")
 
         if t[-1] > ax1.get_xlim()[1]: plt.xlim(0, t[-1])
-        if np.max(self.history["loss"]) > ax1.get_ylim()[1]: ax1.set_ylim(0, np.max(self.history["loss"]))
+        if np.max(self.history['loss']) > ax1.get_ylim()[1]: ax1.set_ylim(0, np.max(self.history['loss']))
 
         ax1.set_ylim(0)
         ax2.set_ylim(0)
 
         ax1.set_ylabel("Loss")
-        ax2.set_xlabel(f"{'Elapsed Time (s)' if elapsed_time else 'Epoch'}")
+        ax2.set_xlabel(f"{'Elapsed Time (mins)' if elapsed_time else 'Epoch'}")
         ax2.set_ylabel(f"{'Accuracy' if axes == None else 'Validation Loss'}")
 
-        ax1.legend()
-        ax2.legend()
+        ax1.legend(loc="upper right")
+        ax2.legend(loc="upper right")
 
         if info:
             plt.show()
@@ -862,8 +847,8 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
     '''
     Loading / training multiple models and plotting comparison graphs of their performances.
     '''
-    LOG.info(f"Optimizing parameter '{param_name}' across range '{param_range}'.")
-    print(log(f"[INFO] Optimizing parameter '{param_name}' across range '{param_range}'.\n"))
+    LOG.info(f"Optimising parameter '{param_name}' across range '{param_range}'.")
+    print(log(f"[INFO] Optimising parameter '{param_name}' across range '{param_range}'.\n"))
 
     models = []
     for test in param_range:
@@ -875,7 +860,7 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
         LOG.debug("Plotting optimisation graphs.")
 
         for time in (True, False):
-            fig, (ax1, ax2) = plt.subplots(2, figsize=(8, 6), sharex=True, gridspec_kw={'hspace': 0})
+            fig, (ax1, ax2) = plt.subplots(2, figsize=(10, 8), sharex=True, gridspec_kw={'hspace': 0})
             fig.suptitle(f"Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}")
             ax1.grid()
             ax2.grid()
@@ -887,11 +872,11 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
 
             if save:
                 LOG.debug(f"Saving to 'Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches='tight', pad_inches=0) # Save image
+                plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches='tight', pad_inches=0) # Save image
             else:
                 plt.show()
 
-    LOG.info("Optimisation complete.")
+    LOG.info("Optimisation complete.\n")
 
 
 
@@ -928,15 +913,15 @@ if __name__ == '__main__':
 
     # Training and saving
 
-    m = ML()
-    m.train()
+    m = ML(data_generator=BasicGenerator())
+    m.train(info=True)
     m.save()
 
     # Loading saved model
 
-    # data = GenerateData(3, 3, 0.2, 0.2)
-    # data.new_stage()
-    # data.new_stage()
+    data = Dataset()
+    data.new_stage()
+    data.new_stage()
 
     # for i in tqdm(data): model.compare(i, info=False, save=True)
 
@@ -944,11 +929,12 @@ if __name__ == '__main__':
     #     sup = data.get_random()
     #     m.compare(sup)
 
-    optimize("repeats", [2**n for n in range(1, 9)], plot=True, save=True)
-    optimize("batch_size", [2**n for n in range(9)], plot=True, save=True)
+    optimize("repeats", [BasicGenerator(repeats=2**n) for n in range(1, 11)], plot=True, save=True)
+    optimize("batch_size", [BasicGenerator(batch_size=2**n) for n in range(9)], plot=True, save=True)
     optimize("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
     optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
     optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
+    optimize("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=True, save=True)
 
     # print(tf.config.list_physical_devices())
     # with tf.device("gpu:0"):
