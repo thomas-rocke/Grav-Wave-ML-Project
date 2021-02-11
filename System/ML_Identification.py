@@ -112,7 +112,7 @@ class ML:
         '''
         LOG.debug("Checking if ML object exists in the file system.")
 
-        return os.path.exists("Models/" + str(self))
+        return os.path.exists(f"Models/{self}")
 
     def trained(self):
         '''
@@ -120,7 +120,7 @@ class ML:
         '''
         LOG.debug("Checking if ML model has been trained before.")
 
-        return os.path.exists("Models/" + str(self) + "/" + str(self) + ".h5")
+        return os.path.exists(f"Models/{self}/model.h5")
 
     def accuracy(self, y_true, y_pred):
         '''
@@ -250,10 +250,11 @@ class ML:
         # For every stage / complexity of data in the dataset
 
         while self.data_generator.new_stage():
-            LOG.info(f"Stage {self.data_generator.stage} of training.")
-            print(log(f"[TRAIN] |-> Stage               : {self.data_generator.stage}."))
+            LOG.info(f"Stage {self.data_generator.stage} / {self.data_generator.max_stage} of training.")
+            print(log(f"[TRAIN] |-> Stage               : {self.data_generator.stage} / {self.data_generator.max_stage}."))
             print(log(f"[TRAIN] |-> Dataset             : {self.data_generator}."))
             print(log(f"[TRAIN] |-> Size                : {len(self.data_generator)}."))
+            print(log(f"[TRAIN] |-> Classes             : {' '.join([str(i).replace(' ', '') for i in self.classes])}."))
             print(log(f"[TRAIN] |-> Success Condition   : A loss of {self.success_loss}."))
             print(log(f"[TRAIN] |-> Terminate Condition : Reaching epoch {len(self.history['loss']) + self.max_epochs} or {self.stagnation} consecutive epochs of stagnation."))
             print(log(f"[TRAIN] |"))
@@ -471,8 +472,8 @@ class ML:
         os.makedirs(f"Models/{str(self)}", exist_ok=True) # Create directory for model
 
         if save_trained:
-            LOG.debug(f"Saving Keras model to 'Models/{str(self)}/{str(self)}.h5'.")
-            self.model.save(f"Models/{str(self)}/{str(self)}.h5")
+            LOG.debug(f"Saving Keras model to 'Models/{str(self)}/model.h5'.")
+            self.model.save(f"Models/{str(self)}/model.h5")
 
         for i in self.history:
             LOG.debug(f"Saving performance history to 'Models/{str(self)}/{i}.txt'.")
@@ -516,8 +517,8 @@ class ML:
         LOG.debug("Loading ML object from files.")
 
         if self.trained():
-            LOG.debug(f"Loading Keras model from 'Models/{str(self)}/{str(self)}.h5'.")
-            self.model = keras.models.load_model(f"Models/{str(self)}/{str(self)}.h5", custom_objects={"metrics": [self.accuracy]})
+            LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
+            self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"metrics": [self.accuracy]})
 
         for i in self.history:
             LOG.debug(f"Loading performance history from 'Models/{str(self)}/{i}.txt'.")
@@ -654,10 +655,10 @@ class ML:
         ax6.set_ylim(-np.pi, np.pi)
         ax6.legend()
 
-        # auto_label(rects1, ax3)
-        # auto_label(rects2, ax3)
-        # auto_label(rects3, ax6)
-        # auto_label(rects4, ax6)
+        auto_label(rects1, ax3)
+        auto_label(rects2, ax3)
+        auto_label(rects3, ax6)
+        auto_label(rects4, ax6)
 
         # fig.tight_layout()
         if save:
@@ -807,8 +808,8 @@ def auto_label(rects, ax):
         height = rect.get_height()
         ax.annotate('{}'.format(round(height, 2)),
                     xy=(rect.get_x() + rect.get_width() / 2, height),
-                    xylog=(0, 3 if height > 0 else -15),  # 3 points vertical offset
-                    logcoords="offset points",
+                    xytext=(0, 3 if height > 0 else -15),  # 3 points vertical offset
+                    textcoords="offset points",
                     ha="center", va="bottom")
 
 def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Superposition=None):
@@ -921,18 +922,18 @@ if __name__ == '__main__':
 
     # Loading saved model
 
-    data = Dataset()
-    data.new_stage()
-    data.new_stage()
+    data = BasicGenerator()
+    data.new_stage() # Init stage 1
+    data.new_stage() # Init stage 2
 
-    # for i in tqdm(data): model.compare(i, info=False, save=True)
+    for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
     # for i in range(10):
     #     sup = data.get_random()
     #     m.compare(sup)
 
-    optimize("repeats", [BasicGenerator(repeats=2**n) for n in range(1, 11)], plot=True, save=True)
-    optimize("batch_size", [BasicGenerator(batch_size=2**n) for n in range(9)], plot=True, save=True)
+    optimize("data_generator", [BasicGenerator(repeats=2**n) for n in range(1, 11)], plot=True, save=True)
+    optimize("data_generator", [BasicGenerator(batch_size=2**n) for n in range(9)], plot=True, save=True)
     optimize("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
     optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
     optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
