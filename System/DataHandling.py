@@ -366,8 +366,6 @@ class Dataset(keras.utils.Sequence):
         self.max_order = max_order
         self.resolution = resolution
         self.batch_size = batch_size
-        self.batches_per_repeat = batches_per_repeat
-        self.repeats_per_epoch = repeats_per_epoch
         self.info = info
 
         self.mode_mask = 0
@@ -406,7 +404,7 @@ class Dataset(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.batches_per_repeat}, {self.repeats_per_epoch}, {self.info})"
+        return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.steps}, {self.repeats}, {self.info})"
 
     def __len__(self):
         '''
