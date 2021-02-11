@@ -181,9 +181,9 @@ class Hermite:
         self.phase += phase # Adding extra phase
 
         if self.phase < -np.pi: # Ensuring phase stays within -π -> π
-            self.phase = self.phase % np.pi
+            self.phase += 2*np.pi
         elif self.phase > np.pi:
-            self.phase = self.phase % -np.pi
+            self.phase -= 2*np.pi
 
 
 
@@ -193,13 +193,13 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, *modes):
+    def __init__(self, *modes, resolution:int=128):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
-        self.noise_variation = 0.0
-        self.exposure = (0.0, 1.0)
-
+        #self.noise_variation = 0.0
+        #self.exposure = (0.0, 1.0)
+        '''
         # Merge Laguerre modes into the Hermite basis set
         mode_list = []
         for mode in modes:
@@ -225,6 +225,30 @@ class Superposition(list):
         normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
 
         for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
+        '''
+        self.resolution = resolution
+        super().__init__()
+        for mode in modes:
+            if isinstance(mode, Hermite): # mode is of type Hermite
+                self.append(mode)
+            elif isinstance(mode, Superposition): # mode is a Superposition or Laguerre
+                self.extend(mode)
+        self.renormalize()
+    
+    def append(self, mode):
+        found = 0
+        for i in self:
+            if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
+                self.add_modes(i, mode) # Combine modes
+                found = 1
+                break
+        if not found:
+            super().append(mode) # Add mode to self if mode not found
+        
+    def extend(self, modes):
+        for mode in modes:
+            self.append(mode)
+        
 
     def __str__(self):
         '''
@@ -321,6 +345,22 @@ class Superposition(list):
         mode.add_phase(np.arctan((r1 * np.sin(phi1) + r2 * np.sin(phi2)) / (r1 * np.cos(phi1) + r2 * np.cos(phi2))) - mode.phase)
 
         return mode
+    
+    def renormalize(self):
+        amplitudes = [mode.amplitude for mode in self]
+        normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
+
+        for i, mode in enumerate(self): mode.amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
+
+        sorted_modes = sorted(self, key=lambda x: (x.sort_items[0], x.sort_items[1], x.sort_items[2])) # Sort modes
+        
+        phase_change = -1 * sorted_modes[0].phase
+        [mode.add_phase(phase_change) for mode in self] # Define a consistent zero for phase to reduce degeneracy in machine learning
+
+
+
+
+
 
 
 
@@ -432,9 +472,9 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-     x = Superposition(Hermite(0,1,0.2,0), Hermite(1,2,0.6,np.pi/2), Hermite(2,1,0.4,0))
-     print(x)
-     x.plot()
+    x = Superposition(Hermite(0, 1, phase=0.5*np.pi), Hermite(0, 2, phase=np.pi), Laguerre(3, 3), resolution=480)
+    print([str(mode) for mode in x])
+    print([mode.phase for mode in x])
 
 
 
