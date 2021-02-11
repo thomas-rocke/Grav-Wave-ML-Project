@@ -1,7 +1,9 @@
 import numpy as np
 import cv2
 from skimage.measure import regionprops
-from skimage.filters import threshold_otsu, gaussian
+from skimage.filters import threshold_otsu, gaussian, laplace
+from skimage.feature import blob_log as blob
+from scipy.ndimage import gaussian_laplace
 from Gaussian_Beam import Superposition, Hermite, Laguerre
 from multiprocessing import cpu_count, Pool
 import matplotlib.pyplot as plt
@@ -43,12 +45,24 @@ class BaseProcessor(list):
         '''
         Resets the Square bounding box size
         '''
-        SquareX, SquareY = self._getCenterOfMass(image)
-        max_sidelength = np.min(image.shape) # Get the length of the shortest image side
-        test_sides = np.arange(0, max_sidelength)
-        least_square_vals = [self._widthModel(side_length, SquareX, SquareY, image) for side_length in test_sides]
-        SquareSide = test_sides[np.argmax(least_square_vals)]
+        #SquareX, SquareY = self._getCenterOfMass(image)
+        #max_sidelength = np.min(image.shape) # Get the length of the shortest image side
+        #test_sides = np.arange(5, max_sidelength)
+        #least_square_vals = [self._widthModel(side_length, SquareX, SquareY, image) for side_length in test_sides]
+        #SquareSide = test_sides[np.argmax(least_square_vals)]
+        SquareX, SquareY, SquareSide = self.get_bounding_box(image)
         return SquareSide, SquareX, SquareY
+
+    def get_bounding_box(self, img):
+        img /= np.linalg.norm(img)
+        img /= np.max(img)
+        
+        blobs = blob(img, threshold=0.008)
+        center_x = int(np.sum([b[0]*b[2] for b in blobs])/np.sum([b[2] for b in blobs]))
+        center_y = int(np.sum([b[1]*b[2] for b in blobs])/np.sum([b[2] for b in blobs]))
+        scale = int((3*np.max([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.max([b[2] for b in blobs])))
+
+        return center_x, center_y, scale
     
     def _widthModel(self, SquareSide, SquareX, SquareY, image):
         # Model used in maximisation problem to find bounding box
@@ -57,7 +71,7 @@ class BaseProcessor(list):
         x_end = int(min(x_start + SquareSide, image.shape[0]))
         y_end = int(min(y_start + SquareSide, image.shape[1]))
         mean_square = (image[x_start:x_end, y_start:y_end]**2).mean(axis=None)
-        return (mean_square - 100*(SquareSide/max(image.shape)))
+        return (mean_square - (SquareSide/max(image.shape))**2)
 
     def makeSquare(self, image, SquareSide=0, SquareX=0, SquareY=0):
         '''
@@ -141,6 +155,7 @@ class ModeProcessor(BaseProcessor):
         self.change_camera(camera)
         super().__init__(target_resolution)
 
+    def _reset_bins(self):
         raw_bins = np.zeros((2**self.bit_depth - 1, 2**self.bit_depth - 1, 2**self.bit_depth - 1)) # (R, G, B) matrix quantised to self.bit_depth
         shape = raw_bins.shape
         for i in range(shape[0]):
@@ -178,6 +193,7 @@ class ModeProcessor(BaseProcessor):
             msg = "New 'bit_depth' is {}".format(camera['bit_depth'])
             LOG.debug(msg)
             self.bit_depth = camera['bit_depth']
+            self._reset_bins()
         else:
             msg = "'bit_depth' not explicitly defined by new camera, defaulting to 0"
             LOG.warning(msg)
@@ -239,7 +255,7 @@ class ModeProcessor(BaseProcessor):
         Noise Variance defined as a %age of maximal intensity
         '''
 
-        actual_variance = np.abs(np.random.normal(0, noise_variance)) 
+        actual_variance = np.random.uniform(0, noise_variance)
         # Noise Variance parameter gives maximum noise level for whole dataset
         # Actual Noise is the gaussian noise variance used for a specific add_noise call
 
@@ -271,7 +287,7 @@ class ModeProcessor(BaseProcessor):
             return image
     
     def blur_image(self, image, blur_variance:float=0):
-        blur_amount = np.random.normal(0, self.blur_variance)**2
+        blur_amount = np.random.uniform(0, self.blur_variance)
         return gaussian(image, blur_amount)
     
     def rotate_image(self, image, angle):
@@ -296,7 +312,7 @@ class ModeProcessor(BaseProcessor):
         '''
         Stretch the image randomly in a random direction, according to stretch_variance
         '''
-        stretch_factor = np.abs(np.random.normal(1, stretch_variance))
+        stretch_factor = np.abs(np.random.uniform(1 - stretch_variance, 1 + stretch_variance))
         angle = np.random.uniform(0, 2*np.pi)
         rotated_im = self.rotate_image(image, angle)
         stretched_dims = (rotated_im.shape[0], int(rotated_im.shape[1]*stretch_factor))
@@ -304,13 +320,34 @@ class ModeProcessor(BaseProcessor):
         restored_im = self.rotate_image(stretched_im, -angle)
         return restored_im
 
-if __name__ == "__main__":
-    camera = get_cams('poor_exposure')
-    mode_processor = ModeProcessor(camera)
-    s = Superposition(Hermite(1, 1), Laguerre(3, 3))
-    img = s.superpose()
-    minimum = np.min(img)
-    maximum = np.max(img)
-    plt.imshow(mode_processor.getImage(img))
-    plt.show()
+
+def get_bounding_box(img):
+    img /= np.max(img)
     
+    blobs = blob(img)
+    center_x = int(np.mean([b[0] for b in blobs]))
+    center_y = int(np.mean([b[1] for b in blobs]))
+    scale = int((4*np.mean([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.mean([b[2] for b in blobs]))/np.sqrt(2))
+
+    return center_x, center_y, scale
+
+
+
+if __name__ == "__main__":
+    proc = BaseProcessor()
+
+    img = np.zeros((480, 480))
+    x = Superposition(Hermite(3, 1, resolution=256))
+    sup_img = x.superpose()
+    for i in range(sup_img.shape[0]):
+        for j in range(sup_img.shape[1]):
+            img[i, j] = sup_img[i, j]
+    
+    img /= np.max(img)
+    blobs = blob(img)
+    fig, ax = plt.subplots()
+    ax.imshow(img)
+    for b in blobs:
+        c = plt.Circle((b[1], b[0]), b[2], fill=False)
+        ax.add_patch(c)
+    plt.show()

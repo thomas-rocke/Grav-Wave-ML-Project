@@ -233,6 +233,12 @@ class BasicGenerator(keras.utils.Sequence):
         self.repeats = repeats
         self.batch_size = batch_size
 
+        cam = {"noise_variance":self.noise_variation,
+                "exposure_limits":self.exposure
+              }
+
+        self.mode_processor = ModeProcessor(camera=cam)
+
         LOG.debug(f"Locals: {locals()}")
 
         self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
@@ -306,10 +312,10 @@ class BasicGenerator(keras.utils.Sequence):
         '''
         inputs = []
         for sup in sups:
-            sup.noise_variation = self.noise_variation
-            sup.exposure = self.exposure
+            #sup.noise_variation = self.noise_variation
+            #sup.exposure = self.exposure
 
-            inputs.append(sup.superpose())
+            inputs.append(self.mode_processor.errorEffects(sup.superpose()))
 
         return inputs
 
@@ -352,7 +358,7 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, training_strategy_name : str= "default", max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 100, info: bool = True):
+    def __init__(self, training_strategy_name : str= "default", max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 32, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
@@ -367,6 +373,10 @@ class Dataset(keras.utils.Sequence):
         self.mode_mask = 0
         self.mode_processor = ModeProcessor(target_resolution = (resolution, resolution))
         self.strategy = get_strategy(training_strategy_name)
+        stage_num = 1
+        while str(stage_num) in self.strategy.keys():
+            self.max_stage = stage_num
+            stage_num += 1
         self.steps = batches_per_repeat
         self.repeats = repeats_per_epoch
         self.steps_per_epoch = self.steps * self.repeats
@@ -604,6 +614,5 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    x = Dataset("stage_change_test")
-    while x.new_stage():
-        print(x.stage)
+    x = Dataset()
+    print(x.max_stage)
