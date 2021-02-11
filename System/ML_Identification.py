@@ -600,7 +600,9 @@ class ML:
         LOG.info(f"Comparing test superposition: {repr(sup)}")
 
         if info: print(log("[PRED] Actual: " + str(sup)))
-        pred = self.predict(sup.superpose(), info=info)
+        raw_image = sup.superpose()
+        noisy_image = self.data_generator.mode_processor.errorEffects(raw_image)
+        pred = self.predict(noisy_image, info=info)
 
         labels = [str(i) for i in sup]
         sup_amps = [i.amplitude for i in sup]
@@ -621,7 +623,7 @@ class ML:
         ax3.set_title(r"$\bf{Mode}$ $\bf{Amplitudes}$")
         ax6.set_title(r"$\bf{Mode}$ $\bf{Phases}$")
 
-        ax1.imshow(sup.superpose(), cmap='jet')
+        ax1.imshow(noisy_image, cmap='jet')
         ax2.imshow(pred.superpose(), cmap='jet')
         ax4.imshow(sup.phase_map(), cmap='jet')
         ax5.imshow(pred.phase_map(), cmap='jet')
