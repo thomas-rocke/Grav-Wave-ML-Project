@@ -360,7 +360,7 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, training_strategy_name : str= "default", max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 32, info: bool = True):
+    def __init__(self, training_strategy_name: str = "default", max_order: int = 3, resolution: int = 128, batch_size: int = 128, batches_per_repeat: int = 100, repeats_per_epoch: int = 32, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''

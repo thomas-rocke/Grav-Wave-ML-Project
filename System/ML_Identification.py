@@ -70,7 +70,7 @@ class ML:
     The class 'ML' that represents a Keras model using datasets from Gaussian modes.
     '''
     def __init__(self,
-                 data_generator: keras.utils.Sequence = BasicGenerator,
+                 data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
                  learning_rate: float = 0.0001):
         '''
@@ -916,13 +916,13 @@ if __name__ == '__main__':
 
     # Training and saving
 
-    m = ML(data_generator=BasicGenerator())
+    m = ML(data_generator=Dataset(training_strategy_name="stage_change_test"))
     m.train(info=True)
     m.save()
 
     # Loading saved model
 
-    data = BasicGenerator()
+    data = Dataset(training_strategy_name="stage_change_test")()
     data.new_stage() # Init stage 1
     data.new_stage() # Init stage 2
 
