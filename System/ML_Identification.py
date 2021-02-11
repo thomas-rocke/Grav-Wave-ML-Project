@@ -38,6 +38,7 @@ from keras.constraints import maxnorm
 from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
+from ImageProcessing import ModeProcessor
 
 # logging.getLogger('tensorflow').setLevel(logging.FATAL)
 logging.getLogger('matplotlib.font_manager').disabled = True
@@ -593,15 +594,20 @@ class ML:
 
         return answer
 
-    def compare(self, sup: Superposition, info: bool = True, save: bool = False):
+    def compare(self, sup: Superposition, camera: dict = None, info: bool = True, save: bool = False):
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
         LOG.info(f"Comparing test superposition: {repr(sup)}")
 
+        if camera is not None:
+            processor = ModeProcessor(camera)
+        else:
+            processor = self.data_generator.mode_processor
+
         if info: print(log("[PRED] Actual: " + str(sup)))
         raw_image = sup.superpose()
-        noisy_image = self.data_generator.mode_processor.errorEffects(raw_image)
+        noisy_image = processor.errorEffects(raw_image)
         pred = self.predict(noisy_image, info=info)
 
         labels = [str(i) for i in sup]
