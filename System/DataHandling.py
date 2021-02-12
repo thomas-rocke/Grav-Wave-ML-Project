@@ -209,9 +209,9 @@ class BasicGenerator(keras.utils.Sequence):
     def __init__(self,
                  max_order: int = 3,
                  number_of_modes: int = 3,
-                 amplitude_variation: float = 0.2,
-                 phase_variation: float = 0.2,
-                 noise_variation: float = 0.0,
+                 amplitude_variation: float = 0.5,
+                 phase_variation: float = 1.0,
+                 noise_variation: float = 0.1,
                  exposure: tuple = (0.0, 1.0),
                  repeats: int = 32,
                  batch_size: int = 32):
@@ -360,8 +360,7 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-
-    def __init__(self, training_strategy_name : str= "default", max_order: int = 3, resolution: int = 128, batch_size: int = 128, steps: int = 100, repeats: int = 32, info: bool = True):
+    def __init__(self, training_strategy_name : str = "default", max_order: int = 3, resolution: int = 128, batch_size: int = 32, steps: int = 50, repeats: int = 1, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
