@@ -427,9 +427,9 @@ class Dataset(keras.utils.Sequence):
             np.random.seed(self.seed) # Reset randomness between repeats
             self.current_repeat += 1
 
-        input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
-        output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
-
+        #input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
+        #output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
+        '''
         for b in range(self.batch_size):
             raw_modes = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
             if self.mode_mask:
@@ -442,8 +442,24 @@ class Dataset(keras.utils.Sequence):
 
         input_data = np.array(input_data)[..., np.newaxis]
         output_data = np.array(output_data) # Convert to arrays of correct shape
+        '''
+        p = Pool(cpu_count())
+        input_data, output_data = zip(*p.map(self._getitem_process, range(self.batch_size)))
+        input_data = np.array(input_data)
+        output_data = np.array(output_data)
 
         self.current_step += 1
+        return input_data, output_data
+
+    def _getitem_process(self, i):
+        s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+        if self.mode_mask:
+                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                    mode.amplitude = 0
+                    mode.phase = 0
+        input_data = self.mode_processor.getImage(s.superpose())[..., np.newaxis] # Generate noise image
+        output_data = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
+
         return input_data, output_data
 
     def get_classes(self):
@@ -491,6 +507,7 @@ class Dataset(keras.utils.Sequence):
         LOG.info("Changing to Epoch :{}".format(self.epoch))
         self.seed = self.get_seed(self.stage, self.epoch)
         LOG.debug("Epoch seed is {}".format(self.seed))
+        self.current_step = 0
 
     def get_seed(self, stage, epoch):
         '''
@@ -609,4 +626,7 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    x = Dataset()
+    x = Dataset(batch_size=64)
+    t = time.time()
+    inp, otp = x[0]
+    print(time.time() - t)
