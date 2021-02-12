@@ -920,19 +920,33 @@ if __name__ == '__main__':
     # exposure = (0.0, 1.0)
     # repeats = 32
 
-    # Training and saving
-
-    m = ML(data_generator=Dataset(training_strategy_name="stage_change_test"))
-    m.train(info=True)
-    m.save()
-
     # Loading saved model
 
-    data = Dataset(training_strategy_name="stage_change_test")()
+    # Training and saving
+
+    m = ML(data_generator=BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)) # Dataset(training_strategy_name="stage_change_test")
+    m.train()
+    m.save()
+
+    data = BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)
     data.new_stage() # Init stage 1
     data.new_stage() # Init stage 2
 
     for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
+
+    m = ML(data_generator=BasicGenerator(amplitude_variation=0.5, phase_variation=1.0))
+    m.train()
+    m.save()
+
+    data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
+    data.new_stage() # Init stage 1
+    data.new_stage() # Init stage 2
+
+    for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
+
+    # datas = [data.get_random() for i in tqdm(range(1000))]
+    # p = Pool(cpu_count())
+    # p.map(m.compare, sup=tqdm(datas))
 
     # for i in range(10):
     #     sup = data.get_random()
