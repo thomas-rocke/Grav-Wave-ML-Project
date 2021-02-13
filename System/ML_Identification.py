@@ -952,12 +952,12 @@ if __name__ == '__main__':
     #     sup = data.get_random()
     #     m.compare(sup)
 
-    optimize("data_generator", [BasicGenerator(repeats=2**n) for n in range(1, 11)], plot=True, save=True)
-    optimize("data_generator", [BasicGenerator(batch_size=2**n) for n in range(9)], plot=True, save=True)
-    optimize("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
-    optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
-    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
-    optimize("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=True, save=True)
+    optimize("data_generator", [BasicGenerator(repeats=2**n) for n in range(1, 10)], plot=False, save=False)
+    optimize("data_generator", [BasicGenerator(batch_size=2**n) for n in range(9)], plot=False, save=False)
+    optimize("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=False, save=False)
+    optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=False, save=False)
+    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=False, save=False)
+    optimize("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=False, save=False)
 
     # print(tf.config.list_physical_devices())
     # with tf.device("gpu:0"):
