@@ -255,6 +255,7 @@ class ML:
             print(log(f"[TRAIN] |-> Stage               : {self.data_generator.stage} / {self.data_generator.max_stage}."))
             print(log(f"[TRAIN] |-> Dataset             : {self.data_generator}."))
             print(log(f"[TRAIN] |-> Size                : {len(self.data_generator)}."))
+            print(log(f"[TRAIN] |-> Cores               : {cpu_count()}."))
             print(log(f"[TRAIN] |-> Classes             : {' '.join([str(i).replace(' ', '') for i in self.classes])}."))
             print(log(f"[TRAIN] |-> Success Condition   : A loss of {self.success_loss}."))
             print(log(f"[TRAIN] |-> Terminate Condition : Reaching epoch {len(self.history['loss']) + self.max_epochs} or {self.stagnation} consecutive epochs of stagnation."))
@@ -270,13 +271,13 @@ class ML:
 
                     # Fit the model to the stage of the data generator
 
-                    history_callback = self.model.fit(self.data_generator,
-                                                      validation_data=self.data_generator,
-                                                      validation_steps=2,
-                                                      batch_size=self.data_generator.batch_size,
-                                                      use_multiprocessing=False,
-                                                      workers=cpu_count(),
-                                                      verbose=int(info))
+                    history_callback = self.model.fit_generator(self.data_generator,
+                                                                validation_data=self.data_generator,
+                                                                validation_steps=2,
+                                                                steps_per_epoch=len(self.data_generator),
+                                                                use_multiprocessing=True,
+                                                                workers=cpu_count(),
+                                                                verbose=int(info))
 
                     # Save the performance of this epoch
 
@@ -351,11 +352,11 @@ class ML:
         LOG.debug("Evaluating the training performance.")
         print(log("[TRAIN] |-> Evaluating : "), end='')
 
-        scores = self.model.evaluate(self.data_generator,
-                                     batch_size=self.data_generator.batch_size, 
-                                     use_multiprocessing=False,
-                                     workers=cpu_count(),
-                                     verbose=int(info))
+        scores = self.model.evaluate_generator(self.data_generator,
+                                               steps=len(self.data_generator),
+                                               use_multiprocessing=True,
+                                               workers=cpu_count(),
+                                               verbose=int(info))
 
         LOG.debug(f"Loss: {scores[0]} - Accuracy: {scores[1]}")
         print(f"Loss: {scores[0] :.4f} - Accuracy: {scores[1] * 100 :.2f}%")
