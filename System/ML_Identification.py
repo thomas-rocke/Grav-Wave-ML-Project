@@ -932,6 +932,8 @@ if __name__ == '__main__':
     data = BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)
     data.new_stage() # Init stage 1
     data.new_stage() # Init stage 2
+    data.new_stage() # Init stage 3
+    data.new_stage() # Init stage 4
 
     for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
@@ -942,6 +944,8 @@ if __name__ == '__main__':
     data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
     data.new_stage() # Init stage 1
     data.new_stage() # Init stage 2
+    data.new_stage() # Init stage 3
+    data.new_stage() # Init stage 4
 
     for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
