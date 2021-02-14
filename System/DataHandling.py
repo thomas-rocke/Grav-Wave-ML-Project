@@ -214,7 +214,7 @@ class BasicGenerator(keras.utils.Sequence):
                  noise_variation: float = 0.1,
                  exposure: tuple = (0.0, 1.0),
                  repeats: int = 5,
-                 batch_size: int = 64):
+                 batch_size: int = 256):
         '''
         Initialise the class with the required complexity.
 
