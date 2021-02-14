@@ -234,7 +234,7 @@ class Superposition(list):
             elif isinstance(mode, Superposition): # mode is a Superposition or Laguerre
                 self.extend(mode)
         self.renormalize()
-    
+
     def append(self, mode):
         found = 0
         for i in self:
@@ -244,11 +244,10 @@ class Superposition(list):
                 break
         if not found:
             super().append(mode) # Add mode to self if mode not found
-        
+
     def extend(self, modes):
         for mode in modes:
             self.append(mode)
-        
 
     def __str__(self):
         '''

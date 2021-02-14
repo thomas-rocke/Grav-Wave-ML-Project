@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from ImageProcessing import VideoProcessor
 from ML_Identification import ML
-from DataHandling import Dataset
+from DataHandling import Dataset, BasicGenerator
 import Logger
 LOG = Logger.get_logger(__name__)
 
@@ -28,8 +28,8 @@ def visualise_video_predictions(video_file: str, model:ML):
 
 
 fname = r"C:\Users\Tom\Documents\EditedBeamModes.mp4"
-ds = Dataset()
+ds = BasicGenerator(batch_size=64, amplitude_variation=0.2, phase_variation=0.2)
 model = ML(data_generator=ds)
-model.create_model()
+model.load()
 
 dat = visualise_video_predictions(fname, model)
