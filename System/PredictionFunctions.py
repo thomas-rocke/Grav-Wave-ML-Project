@@ -12,7 +12,7 @@ def visualise_video_predictions(video_file: str, model:ML):
     ax[0].set_title("Processed input image")
     ax[1].set_title("Image reconstruction of predictions")
     processor = VideoProcessor(video_file)
-    predictions = np.zeros((resolution[0], resolution[1], processor.frameCount))
+    predictions = np.zeros((resolution[1], resolution[2], processor.frameCount))
     for i in range(processor.frameCount):
         try:
             processed_frame = processor[i] # Get and process next frame
@@ -33,3 +33,4 @@ model = ML(data_generator=ds)
 model.load()
 
 dat = visualise_video_predictions(fname, model)
+plt.show()

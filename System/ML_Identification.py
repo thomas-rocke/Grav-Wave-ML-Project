@@ -13,6 +13,7 @@ import sys
 import os
 import gc
 import logging
+import argparse
 
 # os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
 # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
@@ -40,7 +41,7 @@ from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 from ImageProcessing import ModeProcessor
 
-# logging.getLogger('tensorflow').setLevel(logging.FATAL)
+logging.getLogger('tensorflow').setLevel(logging.ERROR)
 logging.getLogger('matplotlib.font_manager').disabled = True
 LOG = Logger.get_logger(__name__)
 
@@ -495,7 +496,7 @@ class ML:
         LOG.info("ML object saved successfully!")
         print("Done!\n")
 
-    def load(self, save_trained: bool = True):
+    def load(self, save_trained: bool = True, info: bool = False):
         '''
         Load a saved model.
         '''
@@ -505,7 +506,7 @@ class ML:
             LOG.warning("Model does not exist! Will now train and save.")
             print(log("[WARN] Model does not exist! Will now train and save.\n"))
 
-            self.train()
+            self.train(info=info)
             self.save(save_trained)
             if not save_trained: self.free()
 
@@ -905,8 +906,6 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
 
 if __name__ == '__main__':
     os.system('cls' if os.name == 'nt' else 'clear')
-    LOG.info("End of program.\n\n\n")
-    LOG.info("Start of program.")
 
     print("█████▀█████████████████████████████████████████████████████████████████████████████\n"
           "█─▄▄▄▄██▀▄─██▄─██─▄█─▄▄▄▄█─▄▄▄▄█▄─▄██▀▄─██▄─▀█▄─▄███▄─▀█▀─▄█─▄▄─█▄─▄▄▀█▄─▄▄─█─▄▄▄▄█\n"
