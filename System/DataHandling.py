@@ -207,8 +207,8 @@ class BasicGenerator(keras.utils.Sequence):
     '''
 
     def __init__(self,
-                 max_order: int = 3,
-                 number_of_modes: int = 3,
+                 max_order: int = 5,
+                 number_of_modes: int = 5,
                  amplitude_variation: float = 0.5,
                  phase_variation: float = 1.0,
                  noise_variation: float = 0.1,
