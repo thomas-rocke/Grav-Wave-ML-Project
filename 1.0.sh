@@ -38,5 +38,5 @@ source ${VENV_PATH}/bin/activate
 
 # Execute your Python scripts
 cd System/
-python3 ML_Identification.py -i "ML(BasicGenerator(3, 3, 1.0, 2.0))" -t -s
-python3 ML_Identification.py -i "ML(BasicGenerator(5, 5, 1.0, 2.0))" -t -s
+python3 Main.py -i "ML(BasicGenerator(3, 3, 1.0, 2.0))" -t -s
+python3 Main.py -i "ML(BasicGenerator(5, 5, 1.0, 2.0))" -t -s
