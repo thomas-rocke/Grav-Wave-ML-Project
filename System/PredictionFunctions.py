@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from ImageProcessing import VideoProcessor
 from ML_Identification import ML
-from DataHandling import Dataset
+from DataHandling import Dataset, BasicGenerator
 import Logger
 LOG = Logger.get_logger(__name__)
 
@@ -12,7 +12,7 @@ def visualise_video_predictions(video_file: str, model:ML):
     ax[0].set_title("Processed input image")
     ax[1].set_title("Image reconstruction of predictions")
     processor = VideoProcessor(video_file)
-    predictions = np.zeros((resolution[0], resolution[1], processor.frameCount))
+    predictions = np.zeros((resolution[1], resolution[2], processor.frameCount))
     for i in range(processor.frameCount):
         try:
             processed_frame = processor[i] # Get and process next frame
@@ -28,8 +28,9 @@ def visualise_video_predictions(video_file: str, model:ML):
 
 
 fname = r"C:\Users\Tom\Documents\EditedBeamModes.mp4"
-ds = Dataset()
+ds = BasicGenerator(batch_size=64, amplitude_variation=0.2, phase_variation=0.2)
 model = ML(data_generator=ds)
-model.create_model()
+model.load()
 
 dat = visualise_video_predictions(fname, model)
+plt.show()
