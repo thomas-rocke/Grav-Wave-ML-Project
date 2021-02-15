@@ -1,10 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ImageProcessing",
-    "\\Simulation\\Cavity Simulation",
     "\\System"
   ],
-  "SelectedNode": "\\ImageProcessing\\ImageProcessing.csproj",
   "PreviewInSolutionExplorer": false
 }

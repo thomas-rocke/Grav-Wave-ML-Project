@@ -108,6 +108,12 @@ class ML:
         '''
         return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate})"
 
+    def copy(self):
+        '''
+        Copy the model object.
+        '''
+        return ML(self.data_generator, self.optimiser, self.learning_rate)
+
     def exists(self):
         '''
         Check if the model exits in the file system.
@@ -276,6 +282,7 @@ class ML:
                                                                 validation_data=self.data_generator,
                                                                 validation_steps=2,
                                                                 steps_per_epoch=len(self.data_generator),
+                                                                max_queue_size=cpu_count(),
                                                                 use_multiprocessing=True,
                                                                 workers=cpu_count(),
                                                                 verbose=int(info))
@@ -355,6 +362,7 @@ class ML:
 
         scores = self.model.evaluate_generator(self.data_generator,
                                                steps=len(self.data_generator),
+                                               max_queue_size=cpu_count(),
                                                use_multiprocessing=True,
                                                workers=cpu_count(),
                                                verbose=int(info))
@@ -487,11 +495,11 @@ class ML:
 
         LOG.debug("Generating history plot for epochs.")
         self.plot(info=False, elapsed_time=False)
-        plt.savefig("Models/" + str(self) + "/history_epoch.png", bbox_inches='tight', pad_inches=0)
+        plt.savefig("Models/" + str(self) + "/history_epoch.png", bbox_inches="tight", pad_inches=0)
 
         LOG.debug("Generating history plot for elapsed time.")
         self.plot(info=False, elapsed_time=True)
-        plt.savefig("Models/" + str(self) + "/history_elapsed_time.png", bbox_inches='tight', pad_inches=0)
+        plt.savefig("Models/" + str(self) + "/history_elapsed_time.png", bbox_inches="tight", pad_inches=0)
 
         LOG.info("ML object saved successfully!")
         print("Done!\n")
@@ -673,7 +681,7 @@ class ML:
             LOG.debug(f"Saving to 'Comparisons/{str(self)}/{str(sup)}.png'.")
 
             os.makedirs(f"Comparisons/{str(self)}", exist_ok=True) # Create directory for image
-            plt.savefig(f"Comparisons/{str(self)}/{str(sup)}.png", bbox_inches='tight', pad_inches=0) # Save image
+            plt.savefig(f"Comparisons/{str(self)}/{str(sup)}.png", bbox_inches="tight", pad_inches=0) # Save image
 
         else:
             plt.show()
@@ -705,6 +713,61 @@ class ML:
 
         LOG.debug(f"GPU memory deleted. Collected: {collected}.")
         print(f"Done! Collected: {collected}.\n")
+
+    def optimise(self, param_name: str, param_range: str, plot: bool = True, save: bool = False) -> None:
+        '''
+        Loading / training multiple models and plotting comparison graphs of their performances.
+        '''
+        LOG.info(f"Optimising parameter '{param_name}' across range '{param_range}'.")
+        print(log(f"[INFO] Optimising parameter '{param_name}' across range '{param_range}'.\n"))
+
+        models = []
+        for test in param_range:
+
+            m = self.copy()
+
+            if param_name in dir(m):
+                setattr(m, param_name, test)
+
+                LOG.debug(f"New model: {m}")
+                print(log(f"[INFO] New model: {m}\n"))
+
+            elif param_name in dir(m.data_generator):
+                setattr(m.data_generator, param_name, test)
+
+                LOG.debug(f"New model: {m}")
+                print(log(f"[INFO] New data generator: {m.data_generator}\n"))
+
+            else:
+                LOG.critical(f"Parameter {param_name} does not exist!")
+                print(log(f"[FATAL] Parameter {param_name} does not exist!"))
+
+                sys.exit()
+
+            m.load(save_trained=False) # Load the model, and if the model does not exist then train and save it
+            models.append(m) # Add the model to the list 
+
+        if plot:
+            LOG.debug("Plotting optimisation graphs.")
+
+            for time in (True, False):
+                fig, (ax1, ax2) = plt.subplots(2, figsize=(10, 8), sharex=True, gridspec_kw={'hspace': 0})
+                fig.suptitle(f"Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}")
+                ax1.grid()
+                ax2.grid()
+
+                plt.xlim(0, 1E-9)
+                plt.ylim(0, 1E-9)
+
+                for m in models: m.plot(info=False, axes=(ax1, ax2), label=param_name.replace('_', ' ').title() + ": " + str(getattr(m, param_name)), elapsed_time=time)
+
+                if save:
+                    LOG.debug(f"Saving to 'Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                else:
+                    plt.show()
+
+        LOG.info("Optimisation complete.\n")
 
 
 
@@ -854,7 +917,7 @@ def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Sup
 
     return amp_err, phase_err, img_err
 
-def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = False) -> None:
+def optimise(param_name: str, param_range: str, plot: bool = True, save: bool = False) -> None:
     '''
     Loading / training multiple models and plotting comparison graphs of their performances.
     '''
@@ -863,7 +926,26 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
 
     models = []
     for test in param_range:
-        m = ML(**{param_name: test})
+        m = ML()
+
+        if param_name in dir(m):
+            setattr(m, param_name, test)
+
+            LOG.debug(f"New model: {m}")
+            print(log(f"[INFO] New model: {m}\n"))
+
+        elif param_name in dir(m.data_generator):
+            setattr(m.data_generator, param_name, test)
+
+            LOG.debug(f"New model: {m}")
+            print(log(f"[INFO] New data generator: {m.data_generator}\n"))
+
+        else:
+            LOG.critical(f"Parameter {param_name} does not exist!")
+            print(log(f"[FATAL] Parameter {param_name} does not exist!"))
+
+            sys.exit()
+
         m.load(save_trained=False) # Load the model, and if the model does not exist then train and save it
         models.append(m) # Add the model to the list 
 
@@ -883,7 +965,7 @@ def optimize(param_name: str, param_range: str, plot: bool = True, save: bool = 
 
             if save:
                 LOG.debug(f"Saving to 'Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches='tight', pad_inches=0) # Save image
+                plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
             else:
                 plt.show()
 
@@ -956,12 +1038,12 @@ if __name__ == '__main__':
     #     sup = data.get_random()
     #     m.compare(sup)
 
-    optimize("data_generator", [BasicGenerator(repeats=2**n) for n in range(1, 10)], plot=False, save=False)
-    optimize("data_generator", [BasicGenerator(batch_size=2**n) for n in range(9)], plot=False, save=False)
-    optimize("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=False, save=False)
-    optimize("learning_rate", [round(0.1**n, n) for n in range(8)], plot=False, save=False)
-    optimize("learning_rate", [0.001 * n for n in range(1, 9)], plot=False, save=False)
-    optimize("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=False, save=False)
+    optimise("repeats", [2**n for n in range(1, 10)], plot=True, save=True)
+    optimise("batch_size", [2**n for n in range(9)], plot=True, save=True)
+    optimise("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
+    optimise("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
+    optimise("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
+    optimise("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=True, save=True)
 
     # print(tf.config.list_physical_devices())
     # with tf.device("gpu:0"):
