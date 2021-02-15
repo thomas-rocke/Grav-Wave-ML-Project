@@ -1,0 +1,88 @@
+2021-02-12 09:49:27,042 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-12 09:49:27,042 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:27,042 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-12 09:49:27,043 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:27,043 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:27,048 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:27,048 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:27,088 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-12 09:49:27,088 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-12 09:49:27,088 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-12 09:49:27,089 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-12 09:49:38,743 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-12 09:49:38,743 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:38,744 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-12 09:49:38,744 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:38,744 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:38,744 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:38,744 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 09:49:38,781 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-12 09:49:38,781 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-12 09:49:38,782 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-12 09:49:38,782 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-12 11:04:39,128 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-12 11:04:39,128 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:04:39,128 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-12 11:04:39,128 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:04:39,129 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:04:39,129 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:04:39,129 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:04:39,165 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-12 11:04:39,165 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-12 11:04:39,165 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-12 11:04:39,165 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-12 11:05:09,589 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-12 11:05:09,589 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:09,589 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-12 11:05:09,589 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:09,590 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:09,590 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:09,590 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:09,626 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-12 11:05:09,626 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-12 11:05:09,626 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-12 11:05:09,627 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-12 11:05:45,043 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-12 11:05:45,043 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:45,043 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-12 11:05:45,043 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:45,043 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:45,043 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:45,043 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:05:45,079 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-12 11:05:45,079 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-12 11:05:45,079 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-12 11:05:45,079 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-12 11:07:36,301 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-12 11:07:36,301 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:07:36,301 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-12 11:07:36,301 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:07:36,302 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:07:36,302 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:07:36,302 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:07:36,338 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-12 11:07:36,338 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-12 11:07:36,338 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-12 11:07:36,338 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-12 11:09:38,768 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-12 11:09:38,768 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:09:38,768 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-12 11:09:38,768 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:09:38,768 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:09:38,768 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:09:38,768 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 11:09:38,806 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-12 11:09:38,806 - DataHandling - INFO - __init__:390 - Dataset initialised!
+2021-02-12 11:09:38,806 - DataHandling - INFO - __init__:391 - Max order of mode: 3
+2021-02-12 11:09:38,806 - DataHandling - DEBUG - __init__:397 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-12 13:29:51,030 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-12 13:29:51,030 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 13:29:51,030 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-12 13:29:51,030 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-12 13:29:51,030 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 13:29:51,030 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 13:29:51,030 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-12 13:29:51,068 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-12 13:29:51,068 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-12 13:29:51,068 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-12 13:29:51,068 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]

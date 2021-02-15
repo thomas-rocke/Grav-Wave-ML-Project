@@ -1,0 +1,68 @@
+2021-02-13 16:45:17,299 - ML_Identification - INFO - __init__:80 - Initialising ML model.
+2021-02-13 16:45:17,299 - ML_Identification - DEBUG - __init__:86 - Locals: {'self': ML(<class 'DataHandling.BasicGenerator'>, 'Adamax', 0.0001), 'data_generator': <class 'DataHandling.BasicGenerator'>, 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-13 16:45:17,300 - ML_Identification - INFO - __init__:96 - ML model initialised!
+2021-02-13 16:45:17,300 - ML_Identification - DEBUG - create_model:136 - Creating the architecture of the Keras model.
+2021-02-13 16:47:09,067 - ML_Identification - INFO - __init__:80 - Initialising ML model.
+2021-02-13 16:47:09,073 - ML_Identification - DEBUG - __init__:86 - Locals: {'self': ML(<class 'DataHandling.BasicGenerator'>, 'Adamax', 0.0001), 'data_generator': <class 'DataHandling.BasicGenerator'>, 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-13 16:47:09,074 - ML_Identification - INFO - __init__:96 - ML model initialised!
+2021-02-13 16:47:09,074 - ML_Identification - DEBUG - create_model:136 - Creating the architecture of the Keras model.
+2021-02-13 16:51:04,001 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-13 16:51:04,001 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:04,001 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-13 16:51:04,001 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:04,001 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:04,001 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:04,001 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:04,042 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-13 16:51:04,042 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-13 16:51:04,042 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-13 16:51:04,042 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-13 16:51:04,042 - ML_Identification - INFO - __init__:80 - Initialising ML model.
+2021-02-13 16:51:04,042 - ML_Identification - DEBUG - __init__:86 - Locals: {'self': ML(Dataset('default', 3, 128, 128, 100, 32, True), 'Adamax', 0.0001), 'data_generator': Dataset('default', 3, 128, 128, 100, 32, True), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-13 16:51:04,043 - ML_Identification - INFO - __init__:96 - ML model initialised!
+2021-02-13 16:51:04,043 - ML_Identification - DEBUG - create_model:136 - Creating the architecture of the Keras model.
+2021-02-13 16:51:15,365 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-13 16:51:15,365 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:15,365 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-13 16:51:15,365 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:15,365 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:15,365 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:15,365 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:15,400 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-13 16:51:15,400 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-13 16:51:15,401 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-13 16:51:15,401 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-13 16:51:15,401 - ML_Identification - INFO - __init__:80 - Initialising ML model.
+2021-02-13 16:51:15,401 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(Dataset('default', 3, 128, 128, 100, 32, True), 'Adamax', 0.0001), 'data_generator': Dataset('default', 3, 128, 128, 100, 32, True), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-13 16:51:15,402 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-13 16:51:15,402 - ML_Identification - DEBUG - create_model:137 - Creating the architecture of the Keras model.
+2021-02-13 16:51:18,106 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-13 16:51:18,106 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:18,106 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-13 16:51:18,106 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:18,106 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:18,106 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:18,106 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:18,143 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-13 16:51:18,143 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-13 16:51:18,143 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-13 16:51:18,143 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-13 16:51:18,143 - ML_Identification - INFO - __init__:80 - Initialising ML model.
+2021-02-13 16:51:18,143 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(Dataset('default', 3, 128, 128, 100, 32, True), 'Adamax', 0.0001), 'data_generator': Dataset('default', 3, 128, 128, 100, 32, True), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-13 16:51:18,144 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-13 16:51:18,144 - ML_Identification - DEBUG - create_model:137 - Creating the architecture of the Keras model.
+2021-02-13 16:51:54,592 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-13 16:51:54,592 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:54,593 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-13 16:51:54,593 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:54,593 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:54,593 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:54,593 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-13 16:51:54,629 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-13 16:51:54,629 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-13 16:51:54,629 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-13 16:51:54,629 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-13 16:51:54,629 - ML_Identification - INFO - __init__:80 - Initialising ML model.
+2021-02-13 16:51:54,629 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(Dataset('default', 3, 128, 128, 100, 32, True), 'Adamax', 0.0001), 'data_generator': Dataset('default', 3, 128, 128, 100, 32, True), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-13 16:51:54,630 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-13 16:51:54,630 - ML_Identification - DEBUG - create_model:137 - Creating the architecture of the Keras model.

@@ -1,0 +1,264 @@
+2021-02-11 14:36:31,432 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-11 14:36:31,433 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:36:31,433 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.0
+2021-02-11 14:36:31,433 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-11 14:36:31,433 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:36:31,433 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:36:31,433 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:36:31,433 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:36:31,433 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(3, 3, 0.2, 0.2, 0.0, (0.0, 1.0), 50, 5), 'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.2, 'noise_variation': 0.0, 'exposure': (0.0, 1.0), 'repeats': 50, 'batch_size': 5, 'cam': {'noise_variance': 0.0, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-11 14:36:31,433 - DataHandling - INFO - __init__:250 - Generator initialised!
+2021-02-11 14:36:31,470 - Utils - INFO - get_cams:52 - Loading camera 'medium_errors'
+2021-02-11 14:36:31,470 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:36:31,470 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.01
+2021-02-11 14:36:31,470 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is [0.3, 1]
+2021-02-11 14:36:31,470 - ImageProcessing - DEBUG - change_camera:194 - New 'bit_depth' is 0
+2021-02-11 14:36:31,470 - ImageProcessing - DEBUG - change_camera:204 - New 'blur_variance' is 0.2
+2021-02-11 14:36:31,470 - ImageProcessing - DEBUG - change_camera:213 - New 'rotational_variance' is 0.2
+2021-02-11 14:36:31,470 - ImageProcessing - DEBUG - change_camera:222 - New 'stretch_variance' is 0.2
+2021-02-11 14:36:48,295 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-11 14:36:48,295 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:36:48,295 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.0
+2021-02-11 14:36:48,295 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-11 14:36:48,295 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:36:48,295 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:36:48,295 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:36:48,295 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:36:48,295 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(3, 3, 0.2, 0.2, 0.0, (0.0, 1.0), 50, 5), 'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.2, 'noise_variation': 0.0, 'exposure': (0.0, 1.0), 'repeats': 50, 'batch_size': 5, 'cam': {'noise_variance': 0.0, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-11 14:36:48,295 - DataHandling - INFO - __init__:250 - Generator initialised!
+2021-02-11 14:36:48,333 - Utils - INFO - get_cams:52 - Loading camera 'medium_errors'
+2021-02-11 14:36:48,333 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:36:48,333 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.01
+2021-02-11 14:36:48,333 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is [0.3, 1]
+2021-02-11 14:36:48,333 - ImageProcessing - DEBUG - change_camera:194 - New 'bit_depth' is 0
+2021-02-11 14:36:48,333 - ImageProcessing - DEBUG - change_camera:204 - New 'blur_variance' is 0.2
+2021-02-11 14:36:48,333 - ImageProcessing - DEBUG - change_camera:213 - New 'rotational_variance' is 0.2
+2021-02-11 14:36:48,334 - ImageProcessing - DEBUG - change_camera:222 - New 'stretch_variance' is 0.2
+2021-02-11 14:38:00,276 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-11 14:38:00,276 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:38:00,276 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.0
+2021-02-11 14:38:00,276 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-11 14:38:00,276 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:00,276 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:00,276 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:00,276 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:00,276 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(3, 3, 0.2, 0.2, 0.0, (0.0, 1.0), 50, 5), 'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.2, 'noise_variation': 0.0, 'exposure': (0.0, 1.0), 'repeats': 50, 'batch_size': 5, 'cam': {'noise_variance': 0.0, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-11 14:38:00,276 - DataHandling - INFO - __init__:250 - Generator initialised!
+2021-02-11 14:38:00,276 - DataHandling - DEBUG - new_stage:291 - Incrementing dataset to stage 1.
+2021-02-11 14:38:28,619 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-11 14:38:28,619 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:38:28,619 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.0
+2021-02-11 14:38:28,619 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-11 14:38:28,619 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:28,619 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:28,620 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:28,620 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:28,620 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(3, 3, 0.2, 0.2, 0.0, (0.0, 1.0), 50, 5), 'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.2, 'noise_variation': 0.0, 'exposure': (0.0, 1.0), 'repeats': 50, 'batch_size': 5, 'cam': {'noise_variance': 0.0, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-11 14:38:28,620 - DataHandling - INFO - __init__:250 - Generator initialised!
+2021-02-11 14:38:28,620 - DataHandling - DEBUG - new_stage:291 - Incrementing dataset to stage 1.
+2021-02-11 14:38:40,397 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-11 14:38:40,397 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:38:40,397 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.0
+2021-02-11 14:38:40,397 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-11 14:38:40,397 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:40,397 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:40,397 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:40,397 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:38:40,397 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(3, 3, 0.2, 0.2, 0.0, (0.0, 1.0), 50, 5), 'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.2, 'noise_variation': 0.0, 'exposure': (0.0, 1.0), 'repeats': 50, 'batch_size': 5, 'cam': {'noise_variance': 0.0, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-11 14:38:40,397 - DataHandling - INFO - __init__:250 - Generator initialised!
+2021-02-11 14:38:40,397 - DataHandling - DEBUG - new_stage:291 - Incrementing dataset to stage 1.
+2021-02-11 14:39:12,740 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-11 14:39:12,741 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:39:12,741 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.2
+2021-02-11 14:39:12,741 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-11 14:39:12,741 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:39:12,741 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:39:12,741 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:39:12,741 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:39:12,741 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(3, 3, 0.2, 0.2, 0.2, (0.0, 1.0), 50, 5), 'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.2, 'noise_variation': 0.2, 'exposure': (0.0, 1.0), 'repeats': 50, 'batch_size': 5, 'cam': {'noise_variance': 0.2, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-11 14:39:12,741 - DataHandling - INFO - __init__:250 - Generator initialised!
+2021-02-11 14:39:12,741 - DataHandling - DEBUG - new_stage:291 - Incrementing dataset to stage 1.
+2021-02-11 14:40:09,689 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-11 14:40:09,689 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:40:09,689 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.2
+2021-02-11 14:40:09,689 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-11 14:40:09,689 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:40:09,689 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:40:09,689 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:40:09,689 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:40:09,689 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(3, 3, 0.2, 0.2, 0.2, (0.0, 1.0), 50, 5), 'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.2, 'noise_variation': 0.2, 'exposure': (0.0, 1.0), 'repeats': 50, 'batch_size': 5, 'cam': {'noise_variance': 0.2, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-11 14:40:09,689 - DataHandling - INFO - __init__:250 - Generator initialised!
+2021-02-11 14:40:09,689 - DataHandling - DEBUG - new_stage:291 - Incrementing dataset to stage 1.
+2021-02-11 14:41:40,982 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:41:40,982 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:41:40,982 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 14:41:40,983 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:41:40,983 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:41:40,983 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:41:40,983 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:41:41,019 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 14:41:41,019 - DataHandling - INFO - __init__:387 - Dataset initialised!
+2021-02-11 14:41:41,019 - DataHandling - INFO - __init__:388 - Max order of mode: 3
+2021-02-11 14:41:41,020 - DataHandling - DEBUG - __init__:394 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 14:41:41,020 - DataHandling - INFO - new_stage:537 - Changing to stage 1
+2021-02-11 14:41:41,056 - Utils - INFO - get_cams:52 - Loading camera 'ideal_camera'
+2021-02-11 14:41:41,056 - DataHandling - INFO - change_stage:508 - Changing to use camera 'ideal_camera' with properties {'noise_variance': 0, 'exposure_limits': [0, 1], 'bit_depth': 0, 'blur_variance': 0, 'stretch_variance': 0, 'rotational_variance': 0}
+2021-02-11 14:41:41,056 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:41:41,056 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0
+2021-02-11 14:41:41,056 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is [0, 1]
+2021-02-11 14:41:41,056 - ImageProcessing - DEBUG - change_camera:194 - New 'bit_depth' is 0
+2021-02-11 14:41:41,056 - ImageProcessing - DEBUG - change_camera:204 - New 'blur_variance' is 0
+2021-02-11 14:41:41,056 - ImageProcessing - DEBUG - change_camera:213 - New 'rotational_variance' is 0
+2021-02-11 14:41:41,056 - ImageProcessing - DEBUG - change_camera:222 - New 'stretch_variance' is 0
+2021-02-11 14:41:41,056 - DataHandling - INFO - change_stage:516 - Changing mode_mask to 0
+2021-02-11 14:42:00,992 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:42:00,992 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:42:00,992 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 14:42:00,992 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:42:00,992 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:42:00,992 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:42:00,992 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:42:01,028 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 14:42:01,028 - DataHandling - INFO - __init__:387 - Dataset initialised!
+2021-02-11 14:42:01,028 - DataHandling - INFO - __init__:388 - Max order of mode: 3
+2021-02-11 14:42:01,029 - DataHandling - DEBUG - __init__:394 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 14:44:48,148 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:44:48,148 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:48,148 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 14:44:48,148 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:48,148 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:48,148 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:48,148 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:48,184 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 14:44:59,185 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 14:44:59,186 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:59,186 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 14:44:59,186 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:59,186 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:59,186 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:59,186 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 14:44:59,223 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 14:44:59,223 - DataHandling - INFO - __init__:390 - Dataset initialised!
+2021-02-11 14:44:59,223 - DataHandling - INFO - __init__:391 - Max order of mode: 3
+2021-02-11 14:44:59,223 - DataHandling - DEBUG - __init__:397 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:05:33,561 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:05:33,561 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:33,561 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:05:33,561 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:33,561 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:33,561 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:33,561 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:33,598 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:05:33,598 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:05:33,598 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:05:33,598 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:05:36,285 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:05:36,285 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:36,285 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:05:36,285 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:36,285 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:36,285 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:36,285 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:36,320 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:05:36,320 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:05:36,320 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:05:36,320 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:05:54,064 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:05:54,064 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:54,064 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:05:54,064 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:54,064 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:54,064 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:54,064 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:05:54,099 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:05:54,099 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:05:54,099 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:05:54,099 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:06:23,175 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:06:23,175 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:06:23,175 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:06:23,175 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:06:23,175 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:06:23,175 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:06:23,175 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:06:23,211 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:06:23,211 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:06:23,211 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:06:23,211 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:07:11,613 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:07:11,613 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:11,613 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:07:11,613 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:11,613 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:11,613 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:11,613 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:11,650 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:07:11,650 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:07:11,650 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:07:11,650 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:07:28,709 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:07:28,710 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:28,710 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:07:28,710 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:28,710 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:28,710 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:28,710 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:07:28,746 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:07:28,746 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:07:28,746 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:07:28,747 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:17:59,987 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:17:59,988 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:17:59,988 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:17:59,988 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:17:59,988 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:17:59,988 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:17:59,988 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:00,024 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:18:00,025 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:18:00,025 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:18:00,025 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:18:02,721 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:18:02,721 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:02,721 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:18:02,721 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:02,721 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:02,722 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:02,722 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:02,760 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:18:02,761 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:18:02,761 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:18:02,761 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:18:12,319 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:18:12,320 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:12,320 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:18:12,320 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:12,320 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:12,320 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:12,320 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:12,355 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:18:12,355 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:18:12,355 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:18:12,355 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:18:25,808 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:18:25,808 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:25,808 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:18:25,808 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:25,808 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:25,808 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:25,808 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:25,844 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:18:25,844 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:18:25,844 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:18:25,845 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-11 17:18:55,875 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-11 17:18:55,875 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:55,875 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-11 17:18:55,875 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:55,875 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:55,875 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:55,875 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-11 17:18:55,912 - Utils - INFO - get_strategy:71 - Loading strategy 'default'
+2021-02-11 17:18:55,912 - DataHandling - INFO - __init__:388 - Dataset initialised!
+2021-02-11 17:18:55,912 - DataHandling - INFO - __init__:389 - Max order of mode: 3
+2021-02-11 17:18:55,912 - DataHandling - DEBUG - __init__:395 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
