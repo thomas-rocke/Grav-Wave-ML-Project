@@ -21,6 +21,7 @@ from ImageProcessing import ModeProcessor
 LOG = Logger.get_logger(__name__)
 
 
+
 ##################################################
 ##########                              ##########
 ##########           CLASSES            ##########
@@ -426,10 +427,13 @@ class Dataset(keras.utils.Sequence):
         if self.current_step % self.steps == 0: # Processed a full repeat
             np.random.seed(self.seed) # Reset randomness between repeats
             self.current_repeat += 1
+        
+        return self.get_batch_single_thread(index)
+        #return self.get_batch_multiprocessed(index)
 
-        #input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
-        #output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
-        '''
+    def get_batch_single_thread(self, index):
+        input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
+        output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
         for b in range(self.batch_size):
             raw_modes = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
             if self.mode_mask:
@@ -442,7 +446,9 @@ class Dataset(keras.utils.Sequence):
 
         input_data = np.array(input_data)[..., np.newaxis]
         output_data = np.array(output_data) # Convert to arrays of correct shape
-        '''
+        return input_data, output_data
+        
+    def get_batch_multiprocessed(self, index):
         p = Pool(cpu_count())
         input_data, output_data = zip(*p.map(self._getitem_process, range(self.batch_size)))
         input_data = np.array(input_data)
