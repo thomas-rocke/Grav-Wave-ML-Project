@@ -213,8 +213,8 @@ class BasicGenerator(keras.utils.Sequence):
                  phase_variation: float = 1.0,
                  noise_variation: float = 0.1,
                  exposure: tuple = (0.0, 1.0),
-                 repeats: int = 5,
-                 batch_size: int = 256):
+                 repeats: int = 20,
+                 batch_size: int = 128):
         '''
         Initialise the class with the required complexity.
 
