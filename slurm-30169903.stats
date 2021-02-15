@@ -1,0 +1,10 @@
++--------------------------------------------------------------------------+
+| Job on the BlueBEAR cluster:
+| Starting at Sun Feb 14 19:49:02 2021 for jxw1025(596795)
+| Identity jobid 30169903 jobname 0.5.sh
+| Running against project martynod-optical-modes and in partition power9-gpuv100-shared
+| Requested cpu=36,mem=244800M,node=1,billing=36,gres/gpu=1 - 7-00:00:00 walltime
+| Assigned to nodes bear-pg0305u05a
+| Command /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/0.5.sh
+| WorkDir /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project
++--------------------------------------------------------------------------+
