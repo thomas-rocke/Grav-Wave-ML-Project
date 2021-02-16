@@ -709,7 +709,7 @@ class ML:
             return
 
         while self.data_generator.new_stage(): pass # Move to the last stage of training
-        for i in tqdm(range(1000), log("[EVAL] Evaluating ")): self.compare(data.get_random(), info=False, save=True) # Generate comparison plots
+        for i in tqdm(range(1000), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
 
         LOG.info("Evaluation complete!")
 

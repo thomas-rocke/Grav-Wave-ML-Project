@@ -259,7 +259,7 @@ class Superposition(list):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.modes)[1:-1] + ")"
+        return self.__class__.__name__ + "(" + str(self)[1:-1] + ")"
 
     def __mul__(self, value):
         '''

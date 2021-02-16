@@ -262,3 +262,64 @@
 2021-02-16 14:37:35,795 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
 2021-02-16 14:37:35,795 - ML_Identification - DEBUG - load:542 - Loading ML object from files.
 2021-02-16 14:37:35,795 - ML_Identification - DEBUG - load:545 - Loading Keras model from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/model.h5'.
+2021-02-16 14:37:37,093 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/time.txt'.
+2021-02-16 14:37:37,093 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/loss.txt'.
+2021-02-16 14:37:37,094 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-16 14:37:37,095 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-16 14:37:37,095 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-16 14:37:37,096 - ML_Identification - DEBUG - load:552 - Loading classes from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/classes.txt'.
+2021-02-16 14:37:37,097 - ML_Identification - INFO - load:556 - ML object loaded successfully!
+2021-02-16 14:37:37,097 - ML_Identification - INFO - evaluate:703 - Evaluating model using 1000 randomly generated superpositions.
+2021-02-16 14:37:37,097 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:37:37,097 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:37:37,097 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 1.
+2021-02-16 14:37:37,097 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 2.
+2021-02-16 14:37:37,098 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 3.
+2021-02-16 14:38:06,094 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-16 14:38:06,094 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-16 14:38:06,094 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-16 14:38:06,094 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-16 14:38:06,094 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:38:06,094 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:38:06,094 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:38:06,094 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:38:06,094 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-16 14:38:06,094 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-16 14:38:06,095 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-16 14:38:06,095 - Main - INFO - <module>:11 - Start of program.
+2021-02-16 14:38:06,096 - Main - DEBUG - <module>:26 - Args: Namespace(ML="ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)", evaluate='5', load=True, parameter=None, save=False, train=False, verbose=False)
+2021-02-16 14:38:06,096 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-16 14:38:06,096 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-16 14:38:06,096 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-16 14:38:06,096 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-16 14:38:06,096 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:38:06,096 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:38:06,096 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:38:06,096 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:38:06,096 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'number_of_modes': 3, 'amplitude_variation': 1.0, 'phase_variation': 2.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 5, 'batch_size': 256, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-16 14:38:06,096 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-16 14:38:06,096 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-16 14:38:06,096 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-16 14:38:06,097 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-16 14:38:06,097 - ML_Identification - INFO - load:538 - Loading ML object.
+2021-02-16 14:38:06,097 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:38:06,097 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:38:06,097 - ML_Identification - DEBUG - load:542 - Loading ML object from files.
+2021-02-16 14:38:06,097 - ML_Identification - DEBUG - load:545 - Loading Keras model from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/model.h5'.
+2021-02-16 14:38:07,381 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/time.txt'.
+2021-02-16 14:38:07,382 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/loss.txt'.
+2021-02-16 14:38:07,383 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-16 14:38:07,383 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-16 14:38:07,384 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-16 14:38:07,385 - ML_Identification - DEBUG - load:552 - Loading classes from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/classes.txt'.
+2021-02-16 14:38:07,385 - ML_Identification - INFO - load:556 - ML object loaded successfully!
+2021-02-16 14:38:07,385 - ML_Identification - INFO - evaluate:703 - Evaluating model using 1000 randomly generated superpositions.
+2021-02-16 14:38:07,386 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:38:07,386 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:38:07,386 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 1.
+2021-02-16 14:38:07,386 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 2.
+2021-02-16 14:38:07,386 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 3.
+2021-02-16 14:38:07,388 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
