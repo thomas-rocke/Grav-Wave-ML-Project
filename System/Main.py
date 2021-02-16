@@ -31,5 +31,5 @@ if __name__ == '__main__':
         if args.train: model.train(info=args.verbose)
         if args.save: model.save()
         if args.load: model.load(info=args.verbose)
-        if args.evaluate != None: model.evaluate(info=args.evaluate)
+        if args.evaluate != None: model.evaluate(N=args.evaluate)
         if args.parameter != None: model.optimise(args.parameter[0], eval(args.parameter[1]))

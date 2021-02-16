@@ -2048,3 +2048,1730 @@
 2021-02-16 14:39:53,542 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.419 ***
 2021-02-16 14:39:53,542 - ML_Identification - INFO - predict:609 - Prediction complete! Took 31.692 milliseconds.
 2021-02-16 14:39:53,542 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:39:53,687 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 0), HG(1, 1), HG(2, 1)).png'.
+2021-02-16 14:39:54,488 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:39:54,489 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:39:54,489 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 2), HG(2, 1), HG(2, 2))
+2021-02-16 14:39:54,497 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:39:54,498 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00073718, 0.00079778, 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       [0.01356277, 0.        , 0.        , ..., 0.00687565, 0.00306573,
+        0.        ],
+       [0.00318329, 0.        , 0.00051771, ..., 0.00246221, 0.        ,
+        0.        ],
+       ...,
+       [0.        , 0.        , 0.00049764, ..., 0.        , 0.        ,
+        0.00258939],
+       [0.        , 0.        , 0.00057384, ..., 0.00225498, 0.00272606,
+        0.00211423],
+       [0.00534515, 0.        , 0.00374786, ..., 0.0048709 , 0.        ,
+        0.00667859]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:39:54,498 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:39:54,498 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:39:54,499 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:39:54,499 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7479335, 0.45214245, 0.45064932, 0.5118256, 0.36603358, 0.34440693, 0.6370947, 0.50679404, 0.46685556, 0.54524684, 0.47719857, 0.7449713, 0.38800424, 0.6142242, 0.60776746, 0.44283345, 0.6796092, 0.3717345]
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.748 ***
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.452 ***
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.451 ***
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.512 ***
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.366 ***
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.344 ***
+2021-02-16 14:39:54,530 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.637 ***
+2021-02-16 14:39:54,531 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.507 ***
+2021-02-16 14:39:54,531 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.467 ***
+2021-02-16 14:39:54,531 - ML_Identification - INFO - predict:609 - Prediction complete! Took 32.3 milliseconds.
+2021-02-16 14:39:54,531 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:39:54,661 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 2), HG(2, 1), HG(2, 2)).png'.
+2021-02-16 14:39:55,758 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:39:55,759 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:39:55,759 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0),)
+2021-02-16 14:39:55,763 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:39:55,763 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[1.34607095e-03, 0.00000000e+00, 5.00046232e-03, ...,
+        2.29967306e-03, 0.00000000e+00, 0.00000000e+00],
+       [5.05059746e-03, 2.95622741e-03, 0.00000000e+00, ...,
+        5.41416171e-03, 0.00000000e+00, 1.34175738e-03],
+       [4.15596850e-03, 3.63736139e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 5.37669613e-03, ...,
+        7.66274899e-05, 4.62643899e-03, 0.00000000e+00],
+       [5.82927849e-03, 3.36524039e-03, 0.00000000e+00, ...,
+        4.67793118e-03, 9.09922439e-03, 1.48905062e-03],
+       [1.26747828e-03, 0.00000000e+00, 0.00000000e+00, ...,
+        2.01017775e-03, 0.00000000e+00, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:39:55,763 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:39:55,764 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:39:55,764 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:39:55,764 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:39:55,797 - ML_Identification - DEBUG - predict:583 - Prediction: [0.77473676, 0.47829068, 0.44649687, 0.5162248, 0.35605878, 0.34353814, 0.61486435, 0.48354644, 0.40808108, 0.5408066, 0.4470959, 0.7581613, 0.37496307, 0.62423235, 0.6323831, 0.4618847, 0.6763828, 0.42634735]
+2021-02-16 14:39:55,797 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:39:55,797 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.775 ***
+2021-02-16 14:39:55,798 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.478 ***
+2021-02-16 14:39:55,798 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.446 ***
+2021-02-16 14:39:55,798 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.516 ***
+2021-02-16 14:39:55,798 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.356 ***
+2021-02-16 14:39:55,798 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.344 ***
+2021-02-16 14:39:55,798 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.615 ***
+2021-02-16 14:39:55,798 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.484 ***
+2021-02-16 14:39:55,798 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.408 ***
+2021-02-16 14:39:55,798 - ML_Identification - INFO - predict:609 - Prediction complete! Took 34.57 milliseconds.
+2021-02-16 14:39:55,798 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:39:55,950 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0),).png'.
+2021-02-16 14:39:56,703 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:39:56,703 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:39:56,704 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(2, 1), HG(0, 0))
+2021-02-16 14:39:56,709 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:39:56,710 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.        , 0.00255651, ..., 0.00057546, 0.00184742,
+        0.        ],
+       [0.00127007, 0.00461662, 0.        , ..., 0.        , 0.        ,
+        0.0015381 ],
+       [0.00174466, 0.00262622, 0.00101278, ..., 0.        , 0.        ,
+        0.00399858],
+       ...,
+       [0.00218568, 0.0015117 , 0.00129362, ..., 0.00307739, 0.00120784,
+        0.        ],
+       [0.00153802, 0.        , 0.00443313, ..., 0.        , 0.        ,
+        0.        ],
+       [0.00278085, 0.        , 0.        , ..., 0.00201298, 0.        ,
+        0.00169456]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:39:56,710 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:39:56,710 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:39:56,710 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:39:56,710 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:39:56,740 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7707114, 0.47902262, 0.44440922, 0.5141159, 0.3560319, 0.3419277, 0.617035, 0.48923612, 0.405765, 0.5434869, 0.45019197, 0.75678426, 0.37367535, 0.62151855, 0.6351143, 0.45368114, 0.6670456, 0.43108034]
+2021-02-16 14:39:56,740 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:39:56,740 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.771 ***
+2021-02-16 14:39:56,740 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.479 ***
+2021-02-16 14:39:56,740 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.444 ***
+2021-02-16 14:39:56,741 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.514 ***
+2021-02-16 14:39:56,741 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.356 ***
+2021-02-16 14:39:56,741 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.342 ***
+2021-02-16 14:39:56,741 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.617 ***
+2021-02-16 14:39:56,741 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.489 ***
+2021-02-16 14:39:56,741 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.406 ***
+2021-02-16 14:39:56,741 - ML_Identification - INFO - predict:609 - Prediction complete! Took 30.763 milliseconds.
+2021-02-16 14:39:56,741 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:39:56,881 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(2, 1), HG(0, 0)).png'.
+2021-02-16 14:40:14,073 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-16 14:40:14,073 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-16 14:40:14,073 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-16 14:40:14,073 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-16 14:40:14,073 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:40:14,073 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:40:14,073 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:40:14,073 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:40:14,073 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-16 14:40:14,073 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-16 14:40:14,074 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-16 14:40:14,074 - Main - INFO - <module>:11 - Start of program.
+2021-02-16 14:40:14,075 - Main - DEBUG - <module>:26 - Args: Namespace(ML="ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)", evaluate='5', load=True, parameter=None, save=False, train=False, verbose=False)
+2021-02-16 14:40:14,075 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-16 14:40:14,075 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-16 14:40:14,075 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-16 14:40:14,075 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-16 14:40:14,075 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:40:14,075 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:40:14,075 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:40:14,075 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-16 14:40:14,075 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'number_of_modes': 3, 'amplitude_variation': 1.0, 'phase_variation': 2.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 5, 'batch_size': 256, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-16 14:40:14,075 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-16 14:40:14,075 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-16 14:40:14,075 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-16 14:40:14,076 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-16 14:40:14,076 - ML_Identification - INFO - load:538 - Loading ML object.
+2021-02-16 14:40:14,076 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:14,076 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:14,076 - ML_Identification - DEBUG - load:542 - Loading ML object from files.
+2021-02-16 14:40:14,076 - ML_Identification - DEBUG - load:545 - Loading Keras model from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/model.h5'.
+2021-02-16 14:40:15,381 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/time.txt'.
+2021-02-16 14:40:15,382 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/loss.txt'.
+2021-02-16 14:40:15,383 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-16 14:40:15,384 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-16 14:40:15,385 - ML_Identification - DEBUG - load:549 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-16 14:40:15,386 - ML_Identification - DEBUG - load:552 - Loading classes from 'Models/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/classes.txt'.
+2021-02-16 14:40:15,386 - ML_Identification - INFO - load:556 - ML object loaded successfully!
+2021-02-16 14:40:15,387 - ML_Identification - INFO - evaluate:703 - Evaluating model using 1000 randomly generated superpositions.
+2021-02-16 14:40:15,387 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:15,387 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:15,387 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 1.
+2021-02-16 14:40:15,387 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 2.
+2021-02-16 14:40:15,388 - DataHandling - DEBUG - new_stage:294 - Incrementing dataset to stage 3.
+2021-02-16 14:40:15,390 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:15,390 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(0, 1))
+2021-02-16 14:40:15,399 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:15,399 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00141935, 0.        , 0.00392304, ..., 0.00284886, 0.        ,
+        0.00441583],
+       [0.        , 0.        , 0.        , ..., 0.00152591, 0.        ,
+        0.00740122],
+       [0.        , 0.        , 0.00242649, ..., 0.        , 0.        ,
+        0.00292387],
+       ...,
+       [0.01065821, 0.00901678, 0.        , ..., 0.0054458 , 0.        ,
+        0.        ],
+       [0.00635725, 0.        , 0.        , ..., 0.00236769, 0.        ,
+        0.00311213],
+       [0.00456388, 0.        , 0.        , ..., 0.        , 0.        ,
+        0.00735564]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:15,400 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:15,400 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:15,400 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:15,400 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7612064, 0.498051, 0.45263702, 0.5144431, 0.35906792, 0.3399758, 0.61446214, 0.48583254, 0.41393572, 0.53910404, 0.4513392, 0.76047415, 0.36825478, 0.6237726, 0.62212104, 0.45898134, 0.68127537, 0.42352358]
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.761 ***
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.498 ***
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.453 ***
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.514 ***
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.359 ***
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.340 ***
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.614 ***
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.486 ***
+2021-02-16 14:40:16,658 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.414 ***
+2021-02-16 14:40:16,659 - ML_Identification - INFO - predict:609 - Prediction complete! Took 1258.666 milliseconds.
+2021-02-16 14:40:16,659 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:16,810 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(0, 1)).png'.
+2021-02-16 14:40:17,829 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:17,829 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:17,829 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(1, 1), HG(2, 2))
+2021-02-16 14:40:17,838 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:17,838 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[2.67111239e-03, 2.42787533e-03, 1.36554390e-03, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       [1.65978292e-03, 4.06305716e-03, 2.63108224e-03, ...,
+        5.61022921e-04, 2.79702467e-03, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 1.42624570e-04, ...,
+        0.00000000e+00, 1.66393100e-03, 1.14052606e-03],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 5.77177667e-05, ...,
+        0.00000000e+00, 5.05845795e-03, 1.89752678e-03],
+       [0.00000000e+00, 0.00000000e+00, 1.13246863e-03, ...,
+        0.00000000e+00, 3.92812339e-04, 2.07111873e-03],
+       [2.84752531e-03, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:17,838 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:17,838 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:17,839 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:17,839 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:17,862 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7553118, 0.48434225, 0.4464349, 0.5279869, 0.35970572, 0.33747852, 0.6250137, 0.4826923, 0.4464818, 0.54197663, 0.45243102, 0.7500357, 0.3610901, 0.61826086, 0.63010186, 0.45394415, 0.68434805, 0.3935547]
+2021-02-16 14:40:17,862 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:17,862 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.755 ***
+2021-02-16 14:40:17,863 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.484 ***
+2021-02-16 14:40:17,863 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.446 ***
+2021-02-16 14:40:17,863 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.528 ***
+2021-02-16 14:40:17,863 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.360 ***
+2021-02-16 14:40:17,863 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.337 ***
+2021-02-16 14:40:17,863 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.625 ***
+2021-02-16 14:40:17,863 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.483 ***
+2021-02-16 14:40:17,863 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.446 ***
+2021-02-16 14:40:17,863 - ML_Identification - INFO - predict:609 - Prediction complete! Took 24.634 milliseconds.
+2021-02-16 14:40:17,863 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:18,007 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(1, 1), HG(2, 2)).png'.
+2021-02-16 14:40:18,792 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:18,793 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:18,793 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(2, 0), HG(2, 1))
+2021-02-16 14:40:18,799 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:18,799 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00108837, 0.00623615, 0.        , ..., 0.00099261, 0.        ,
+        0.        ],
+       [0.        , 0.        , 0.        , ..., 0.00054443, 0.00531139,
+        0.00088882],
+       [0.0029107 , 0.        , 0.0024664 , ..., 0.00450912, 0.00488675,
+        0.00150417],
+       ...,
+       [0.00106315, 0.        , 0.        , ..., 0.00440157, 0.        ,
+        0.        ],
+       [0.00287919, 0.00068399, 0.        , ..., 0.        , 0.00100561,
+        0.00134366],
+       [0.        , 0.00416729, 0.00115868, ..., 0.        , 0.00249227,
+        0.00075343]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:18,799 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:18,800 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:18,800 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:18,800 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:18,824 - ML_Identification - DEBUG - predict:583 - Prediction: [0.741033, 0.45641083, 0.43502992, 0.51101875, 0.36445233, 0.34471467, 0.63991797, 0.55604875, 0.40271923, 0.55207986, 0.48915344, 0.75883335, 0.3988382, 0.612298, 0.62487894, 0.43202582, 0.63446563, 0.43506497]
+2021-02-16 14:40:18,824 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:18,824 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.741 ***
+2021-02-16 14:40:18,824 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.456 ***
+2021-02-16 14:40:18,824 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.435 ***
+2021-02-16 14:40:18,825 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.511 ***
+2021-02-16 14:40:18,825 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.364 ***
+2021-02-16 14:40:18,825 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.345 ***
+2021-02-16 14:40:18,825 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.640 ***
+2021-02-16 14:40:18,825 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.556 ***
+2021-02-16 14:40:18,825 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.403 ***
+2021-02-16 14:40:18,825 - ML_Identification - INFO - predict:609 - Prediction complete! Took 25.329 milliseconds.
+2021-02-16 14:40:18,825 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:18,950 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(2, 0), HG(2, 1)).png'.
+2021-02-16 14:40:19,799 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:19,800 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:19,800 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(0, 0))
+2021-02-16 14:40:19,806 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:19,807 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.00132602, 0.00724865, ..., 0.        , 0.00536151,
+        0.00203995],
+       [0.        , 0.        , 0.00095936, ..., 0.        , 0.00162897,
+        0.        ],
+       [0.00359445, 0.00344023, 0.00047949, ..., 0.        , 0.        ,
+        0.        ],
+       ...,
+       [0.        , 0.        , 0.        , ..., 0.        , 0.        ,
+        0.00315845],
+       [0.00878806, 0.        , 0.        , ..., 0.00446226, 0.00131322,
+        0.00815748],
+       [0.00365149, 0.        , 0.00778049, ..., 0.0003943 , 0.        ,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:19,807 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:19,807 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:19,807 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:19,807 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:19,832 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7573762, 0.49621418, 0.45110434, 0.51310706, 0.35829768, 0.34116587, 0.6208247, 0.48578402, 0.41350684, 0.5380195, 0.4536585, 0.7601975, 0.36864245, 0.6219129, 0.62534434, 0.45125625, 0.678422, 0.4256606]
+2021-02-16 14:40:19,832 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:19,832 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.757 ***
+2021-02-16 14:40:19,832 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.496 ***
+2021-02-16 14:40:19,832 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.451 ***
+2021-02-16 14:40:19,832 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.513 ***
+2021-02-16 14:40:19,832 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.358 ***
+2021-02-16 14:40:19,832 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.341 ***
+2021-02-16 14:40:19,833 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.621 ***
+2021-02-16 14:40:19,833 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.486 ***
+2021-02-16 14:40:19,833 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.414 ***
+2021-02-16 14:40:19,833 - ML_Identification - INFO - predict:609 - Prediction complete! Took 26.098 milliseconds.
+2021-02-16 14:40:19,833 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:19,961 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(0, 0)).png'.
+2021-02-16 14:40:20,701 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:20,703 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:20,703 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(1, 1))
+2021-02-16 14:40:20,709 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:20,709 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[1.41591401e-06, 1.00718804e-04, 1.43266843e-04, ...,
+        4.45156925e-04, 7.50329958e-05, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        1.83027445e-04, 0.00000000e+00, 1.94787685e-05],
+       [8.48955698e-04, 2.77985133e-04, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 1.22478913e-04],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        3.57273216e-04, 0.00000000e+00, 0.00000000e+00],
+       [1.63716250e-04, 0.00000000e+00, 3.55701571e-04, ...,
+        0.00000000e+00, 4.57925261e-04, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 3.03157574e-04, ...,
+        7.26895135e-04, 1.11423013e-04, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:20,709 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:20,710 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:20,710 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:20,710 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7579754, 0.52391696, 0.443907, 0.5214139, 0.3571213, 0.34253576, 0.6166576, 0.47614974, 0.41316453, 0.5376501, 0.4250857, 0.7646853, 0.35824427, 0.620585, 0.63702756, 0.4519809, 0.68740743, 0.426559]
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.758 ***
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.524 ***
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.444 ***
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.521 ***
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.357 ***
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.343 ***
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.617 ***
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.476 ***
+2021-02-16 14:40:20,736 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.413 ***
+2021-02-16 14:40:20,736 - ML_Identification - INFO - predict:609 - Prediction complete! Took 26.734 milliseconds.
+2021-02-16 14:40:20,736 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:20,876 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(1, 1)).png'.
+2021-02-16 14:40:21,627 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:21,628 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:21,628 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(1, 1), HG(2, 2))
+2021-02-16 14:40:21,637 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:21,637 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00174861, 0.00631486, 0.        , ..., 0.        , 0.001171  ,
+        0.        ],
+       [0.00176696, 0.00518945, 0.00142357, ..., 0.0021322 , 0.00296579,
+        0.00927773],
+       [0.00254089, 0.00155058, 0.00661917, ..., 0.00349693, 0.00234666,
+        0.00469716],
+       ...,
+       [0.        , 0.        , 0.        , ..., 0.        , 0.00042671,
+        0.        ],
+       [0.00069896, 0.0015433 , 0.        , ..., 0.00034116, 0.00154675,
+        0.0045999 ],
+       [0.        , 0.        , 0.00092379, ..., 0.00054761, 0.00404495,
+        0.00059583]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:21,637 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:21,637 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:21,637 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:21,637 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:21,660 - ML_Identification - DEBUG - predict:583 - Prediction: [0.75520295, 0.5179467, 0.44882682, 0.52701247, 0.36157873, 0.34113955, 0.6182667, 0.47880188, 0.42662224, 0.5403285, 0.43076473, 0.7616371, 0.35690132, 0.6208673, 0.6321682, 0.45492786, 0.6911661, 0.41746166]
+2021-02-16 14:40:21,660 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:21,660 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.755 ***
+2021-02-16 14:40:21,661 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.518 ***
+2021-02-16 14:40:21,661 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.449 ***
+2021-02-16 14:40:21,661 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.527 ***
+2021-02-16 14:40:21,661 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.362 ***
+2021-02-16 14:40:21,661 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.341 ***
+2021-02-16 14:40:21,661 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.618 ***
+2021-02-16 14:40:21,661 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.479 ***
+2021-02-16 14:40:21,661 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.427 ***
+2021-02-16 14:40:21,661 - ML_Identification - INFO - predict:609 - Prediction complete! Took 23.835 milliseconds.
+2021-02-16 14:40:21,661 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:21,800 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(1, 1), HG(2, 2)).png'.
+2021-02-16 14:40:22,686 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:22,687 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:22,687 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 1), HG(2, 0))
+2021-02-16 14:40:22,693 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:22,693 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 2.86095646e-04, 1.70115694e-03, ...,
+        5.82427699e-04, 6.32165439e-04, 2.42081729e-03],
+       [2.51617803e-04, 0.00000000e+00, 1.79808815e-03, ...,
+        1.85076473e-03, 1.42417162e-03, 0.00000000e+00],
+       [5.36023875e-05, 0.00000000e+00, 1.02565647e-03, ...,
+        0.00000000e+00, 1.76877986e-03, 0.00000000e+00],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 4.05819780e-03, ...,
+        3.29433922e-03, 8.92302463e-04, 0.00000000e+00],
+       [2.45095297e-04, 0.00000000e+00, 0.00000000e+00, ...,
+        1.25465224e-03, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 8.71448362e-04, ...,
+        8.01172954e-04, 2.55166913e-03, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:22,693 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:22,694 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:22,694 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:22,694 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7401036, 0.47017887, 0.4451693, 0.51926833, 0.3691579, 0.3400832, 0.65610695, 0.49460548, 0.41242784, 0.54673046, 0.46324688, 0.75772876, 0.38828427, 0.6119702, 0.6322305, 0.42422953, 0.66844696, 0.42798182]
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.740 ***
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.470 ***
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.445 ***
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.519 ***
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.369 ***
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.340 ***
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.656 ***
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.495 ***
+2021-02-16 14:40:22,718 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.412 ***
+2021-02-16 14:40:22,719 - ML_Identification - INFO - predict:609 - Prediction complete! Took 24.989 milliseconds.
+2021-02-16 14:40:22,719 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:22,849 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 1), HG(2, 0)).png'.
+2021-02-16 14:40:23,609 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:23,610 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:23,610 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(0, 2), HG(2, 1))
+2021-02-16 14:40:23,618 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:23,618 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[2.53055380e-03, 1.42979426e-03, 8.61442296e-05, ...,
+        1.96966480e-04, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 2.39306129e-03, 0.00000000e+00],
+       [1.39413963e-03, 0.00000000e+00, 1.74129302e-03, ...,
+        2.18388898e-03, 0.00000000e+00, 2.04024068e-03],
+       ...,
+       [1.09725601e-04, 0.00000000e+00, 6.19603800e-04, ...,
+        1.23507866e-03, 0.00000000e+00, 1.01842394e-04],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        2.35373701e-03, 1.81009729e-03, 0.00000000e+00],
+       [3.22309645e-04, 3.60980236e-03, 3.58467098e-03, ...,
+        4.11307567e-04, 1.27307902e-03, 4.14388209e-04]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:23,618 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:23,618 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:23,618 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:23,618 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7403137, 0.47979635, 0.5001677, 0.5028998, 0.3588517, 0.34693035, 0.62665886, 0.46876785, 0.41724694, 0.5381392, 0.46521014, 0.71628517, 0.38175526, 0.6200999, 0.6340366, 0.45509818, 0.6699782, 0.43945044]
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.740 ***
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.480 ***
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.500 ***
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.503 ***
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.359 ***
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.347 ***
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.627 ***
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.469 ***
+2021-02-16 14:40:23,643 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.417 ***
+2021-02-16 14:40:23,643 - ML_Identification - INFO - predict:609 - Prediction complete! Took 24.521 milliseconds.
+2021-02-16 14:40:23,644 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:23,792 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(0, 2), HG(2, 1)).png'.
+2021-02-16 14:40:24,585 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:24,586 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:24,586 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(1, 1), HG(2, 1))
+2021-02-16 14:40:24,594 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:24,594 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.        , 0.        , ..., 0.00051263, 0.00420234,
+        0.0001765 ],
+       [0.0075002 , 0.00442361, 0.00140976, ..., 0.        , 0.        ,
+        0.00171612],
+       [0.00510842, 0.        , 0.00131019, ..., 0.        , 0.        ,
+        0.        ],
+       ...,
+       [0.00376717, 0.00821365, 0.        , ..., 0.00395897, 0.        ,
+        0.00707926],
+       [0.00090332, 0.        , 0.        , ..., 0.00113401, 0.        ,
+        0.        ],
+       [0.00094799, 0.00208639, 0.00749183, ..., 0.00171723, 0.        ,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:24,594 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:24,595 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:24,595 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:24,595 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7522193, 0.48477888, 0.4356607, 0.5080288, 0.35273132, 0.3393776, 0.63523054, 0.545053, 0.40369695, 0.5470642, 0.46909657, 0.7658636, 0.38455018, 0.623062, 0.61982304, 0.4303637, 0.646146, 0.41982752]
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.752 ***
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.485 ***
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.436 ***
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.508 ***
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.353 ***
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.339 ***
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.635 ***
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.545 ***
+2021-02-16 14:40:24,616 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.404 ***
+2021-02-16 14:40:24,617 - ML_Identification - INFO - predict:609 - Prediction complete! Took 22.008 milliseconds.
+2021-02-16 14:40:24,617 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:24,755 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(1, 1), HG(2, 1)).png'.
+2021-02-16 14:40:25,526 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:25,527 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:25,528 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(0, 2), HG(1, 0))
+2021-02-16 14:40:25,536 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:25,537 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 0.00000000e+00, 9.36712490e-04, ...,
+        9.01642971e-04, 9.31887777e-05, 0.00000000e+00],
+       [4.14970553e-04, 2.03220358e-03, 1.37526724e-03, ...,
+        0.00000000e+00, 0.00000000e+00, 6.85516915e-04],
+       [0.00000000e+00, 6.02791375e-04, 4.57741732e-04, ...,
+        4.23543349e-04, 1.32633408e-06, 0.00000000e+00],
+       ...,
+       [1.35910491e-03, 0.00000000e+00, 8.80909511e-04, ...,
+        2.27926522e-04, 0.00000000e+00, 0.00000000e+00],
+       [9.14039412e-04, 8.23863105e-04, 0.00000000e+00, ...,
+        2.56859010e-03, 2.72569440e-03, 0.00000000e+00],
+       [0.00000000e+00, 1.83520387e-04, 3.49759578e-04, ...,
+        4.13919908e-04, 0.00000000e+00, 1.50386233e-04]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:25,537 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:25,537 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:25,537 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:25,537 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7379789, 0.48587525, 0.50217265, 0.5064442, 0.3580659, 0.34881607, 0.6231189, 0.4614247, 0.4174698, 0.5396354, 0.4598413, 0.71456057, 0.3798339, 0.62131286, 0.63687134, 0.45814392, 0.6759077, 0.4436909]
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.738 ***
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.486 ***
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.502 ***
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.506 ***
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.358 ***
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.349 ***
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.623 ***
+2021-02-16 14:40:25,559 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.461 ***
+2021-02-16 14:40:25,560 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.417 ***
+2021-02-16 14:40:25,560 - ML_Identification - INFO - predict:609 - Prediction complete! Took 22.729 milliseconds.
+2021-02-16 14:40:25,560 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:25,818 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(0, 2), HG(1, 0)).png'.
+2021-02-16 14:40:26,593 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:26,593 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:26,593 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(1, 1), HG(2, 2))
+2021-02-16 14:40:26,602 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:26,602 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 1.54960936e-04, 0.00000000e+00, ...,
+        0.00000000e+00, 8.61042758e-04, 6.57724601e-04],
+       [0.00000000e+00, 2.42793883e-07, 8.14307856e-04, ...,
+        0.00000000e+00, 1.90364703e-03, 1.18664661e-03],
+       [7.81337852e-05, 1.98567406e-03, 1.19368581e-03, ...,
+        4.70695666e-04, 7.02116696e-04, 0.00000000e+00],
+       ...,
+       [3.12740962e-03, 1.74593733e-03, 2.68288002e-03, ...,
+        8.13464949e-04, 0.00000000e+00, 1.34994668e-03],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 1.43636989e-03, 0.00000000e+00],
+       [0.00000000e+00, 8.15737016e-04, 4.02309266e-04, ...,
+        7.64440934e-04, 1.68237682e-03, 1.23505791e-03]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:26,602 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:26,602 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:26,602 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:26,602 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:26,629 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7441025, 0.4682534, 0.44776234, 0.5153286, 0.37310869, 0.34451008, 0.6343697, 0.4860298, 0.4774589, 0.5324501, 0.46262965, 0.7490852, 0.38806346, 0.61507714, 0.6288144, 0.4420672, 0.6992031, 0.37756753]
+2021-02-16 14:40:26,629 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:26,629 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.744 ***
+2021-02-16 14:40:26,629 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.468 ***
+2021-02-16 14:40:26,629 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.448 ***
+2021-02-16 14:40:26,629 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.515 ***
+2021-02-16 14:40:26,629 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.373 ***
+2021-02-16 14:40:26,629 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.345 ***
+2021-02-16 14:40:26,630 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.634 ***
+2021-02-16 14:40:26,630 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.486 ***
+2021-02-16 14:40:26,630 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.477 ***
+2021-02-16 14:40:26,630 - ML_Identification - INFO - predict:609 - Prediction complete! Took 27.393 milliseconds.
+2021-02-16 14:40:26,630 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:26,765 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(1, 1), HG(2, 2)).png'.
+2021-02-16 14:40:27,552 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:27,553 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:27,553 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(1, 1), HG(2, 2))
+2021-02-16 14:40:27,562 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:27,562 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00124804, 0.        , 0.        , ..., 0.00046124, 0.        ,
+        0.00201273],
+       [0.00028865, 0.        , 0.00455206, ..., 0.        , 0.00124669,
+        0.        ],
+       [0.00257388, 0.00464967, 0.        , ..., 0.00112827, 0.        ,
+        0.        ],
+       ...,
+       [0.        , 0.00150552, 0.00114334, ..., 0.        , 0.00033641,
+        0.00506148],
+       [0.00213414, 0.00023661, 0.        , ..., 0.00349114, 0.        ,
+        0.00144188],
+       [0.00138329, 0.00035646, 0.00450173, ..., 0.        , 0.00040235,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:27,562 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:27,562 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:27,562 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:27,562 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:583 - Prediction: [0.74140894, 0.47934324, 0.4569222, 0.5316383, 0.38348758, 0.3499781, 0.6189562, 0.48482102, 0.41793004, 0.54424006, 0.46148914, 0.7542189, 0.38606176, 0.605318, 0.63277286, 0.46236306, 0.6754992, 0.4480781]
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.741 ***
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.479 ***
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.457 ***
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.532 ***
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.383 ***
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.350 ***
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.619 ***
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.485 ***
+2021-02-16 14:40:27,587 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.418 ***
+2021-02-16 14:40:27,587 - ML_Identification - INFO - predict:609 - Prediction complete! Took 25.081 milliseconds.
+2021-02-16 14:40:27,587 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:27,735 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(1, 1), HG(2, 2)).png'.
+2021-02-16 14:40:28,521 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:28,522 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:28,522 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 2), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:28,532 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:28,532 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 5.39691545e-03, 3.63587666e-03, ...,
+        0.00000000e+00, 0.00000000e+00, 3.52126355e-04],
+       [0.00000000e+00, 5.28428538e-03, 6.58897992e-03, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       [1.80981053e-05, 8.49472379e-04, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 7.50581723e-03],
+       ...,
+       [4.50811468e-03, 6.95326064e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 8.81088242e-03, 0.00000000e+00],
+       [3.53260238e-03, 5.77147076e-03, 5.50499431e-04, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       [1.38449587e-03, 6.41301358e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:28,532 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:28,533 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:28,533 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:28,533 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:583 - Prediction: [0.74462384, 0.44561803, 0.45398876, 0.51013666, 0.36914074, 0.34470198, 0.6398687, 0.50097066, 0.46833035, 0.54084337, 0.4837943, 0.7400176, 0.39497396, 0.6108976, 0.619951, 0.44680306, 0.68060005, 0.37567505]
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.745 ***
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.446 ***
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.454 ***
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.510 ***
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.369 ***
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.345 ***
+2021-02-16 14:40:28,560 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.640 ***
+2021-02-16 14:40:28,561 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.501 ***
+2021-02-16 14:40:28,561 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.468 ***
+2021-02-16 14:40:28,561 - ML_Identification - INFO - predict:609 - Prediction complete! Took 28.154 milliseconds.
+2021-02-16 14:40:28,561 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:28,705 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 2), HG(2, 1), HG(2, 2)).png'.
+2021-02-16 14:40:29,620 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:29,621 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:29,621 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(1, 2), HG(2, 1))
+2021-02-16 14:40:29,629 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:29,629 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00011069, 0.        , 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       [0.        , 0.        , 0.00059832, ..., 0.00144029, 0.0003916 ,
+        0.        ],
+       [0.        , 0.        , 0.        , ..., 0.        , 0.00139826,
+        0.        ],
+       ...,
+       [0.00056259, 0.00081605, 0.        , ..., 0.        , 0.00091001,
+        0.00099429],
+       [0.00086354, 0.00047964, 0.        , ..., 0.        , 0.        ,
+        0.00205122],
+       [0.00127857, 0.        , 0.        , ..., 0.        , 0.        ,
+        0.00138336]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:29,629 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:29,629 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:29,630 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:29,630 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:29,655 - ML_Identification - DEBUG - predict:583 - Prediction: [0.75759137, 0.52523345, 0.44528717, 0.5215234, 0.3565382, 0.3428898, 0.61673284, 0.47656944, 0.41383582, 0.5383537, 0.42429125, 0.7634152, 0.3552771, 0.62023276, 0.63508284, 0.4521486, 0.6866114, 0.42639577]
+2021-02-16 14:40:29,655 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:29,655 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.758 ***
+2021-02-16 14:40:29,655 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.525 ***
+2021-02-16 14:40:29,656 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.445 ***
+2021-02-16 14:40:29,656 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.522 ***
+2021-02-16 14:40:29,656 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.357 ***
+2021-02-16 14:40:29,656 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.343 ***
+2021-02-16 14:40:29,656 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.617 ***
+2021-02-16 14:40:29,656 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.477 ***
+2021-02-16 14:40:29,656 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.414 ***
+2021-02-16 14:40:29,656 - ML_Identification - INFO - predict:609 - Prediction complete! Took 26.554 milliseconds.
+2021-02-16 14:40:29,656 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:29,801 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(1, 2), HG(2, 1)).png'.
+2021-02-16 14:40:30,614 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:30,615 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:30,615 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 2), HG(2, 2))
+2021-02-16 14:40:30,621 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:30,621 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 1.09363089e-03, 0.00000000e+00, ...,
+        1.05585200e-03, 1.63406892e-03, 4.97081404e-04],
+       [6.36810801e-04, 0.00000000e+00, 0.00000000e+00, ...,
+        1.20729027e-04, 5.92359843e-04, 2.72001271e-04],
+       [3.09159198e-05, 0.00000000e+00, 0.00000000e+00, ...,
+        9.44003283e-05, 4.22245089e-04, 0.00000000e+00],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 5.78700635e-04, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 4.54436058e-04, ...,
+        1.54687959e-03, 2.11093772e-04, 0.00000000e+00],
+       [0.00000000e+00, 6.23957312e-04, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 7.00273939e-04]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:30,621 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:30,621 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:30,621 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:30,621 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7381471, 0.48292854, 0.51101124, 0.5028696, 0.35934776, 0.33447272, 0.62824804, 0.4646057, 0.4208362, 0.53781873, 0.46060014, 0.70823634, 0.37425873, 0.6187298, 0.65027606, 0.4498026, 0.6764255, 0.4274253]
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.738 ***
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.483 ***
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.511 ***
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.503 ***
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.359 ***
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.334 ***
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.628 ***
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.465 ***
+2021-02-16 14:40:30,647 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.421 ***
+2021-02-16 14:40:30,648 - ML_Identification - INFO - predict:609 - Prediction complete! Took 26.176 milliseconds.
+2021-02-16 14:40:30,648 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:30,778 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 2), HG(2, 2)).png'.
+2021-02-16 14:40:31,511 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:31,512 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:31,512 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(2, 0), HG(2, 1))
+2021-02-16 14:40:31,520 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:31,521 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[1.96679607e-03, 7.78576471e-04, 0.00000000e+00, ...,
+        0.00000000e+00, 1.68125824e-03, 0.00000000e+00],
+       [0.00000000e+00, 1.79071239e-03, 2.90983690e-03, ...,
+        5.22258429e-03, 0.00000000e+00, 3.11663757e-03],
+       [0.00000000e+00, 1.44744300e-03, 3.72751868e-03, ...,
+        0.00000000e+00, 0.00000000e+00, 2.12112272e-03],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 1.73797099e-03, ...,
+        3.14723942e-03, 0.00000000e+00, 0.00000000e+00],
+       [7.72000408e-05, 1.75209268e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 1.47990541e-03],
+       [1.48819560e-03, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 2.34878606e-03]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:31,521 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:31,521 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:31,521 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:31,521 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:31,546 - ML_Identification - DEBUG - predict:583 - Prediction: [0.76481915, 0.46448424, 0.43689325, 0.48213395, 0.35416126, 0.33994997, 0.65409017, 0.5050753, 0.40269843, 0.5382838, 0.45323357, 0.7642773, 0.39393973, 0.6165584, 0.62624323, 0.4122061, 0.673032, 0.41613522]
+2021-02-16 14:40:31,546 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:31,546 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.765 ***
+2021-02-16 14:40:31,546 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.464 ***
+2021-02-16 14:40:31,546 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.437 ***
+2021-02-16 14:40:31,547 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.482 ***
+2021-02-16 14:40:31,547 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.354 ***
+2021-02-16 14:40:31,547 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.340 ***
+2021-02-16 14:40:31,547 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.654 ***
+2021-02-16 14:40:31,547 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.505 ***
+2021-02-16 14:40:31,547 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.403 ***
+2021-02-16 14:40:31,547 - ML_Identification - INFO - predict:609 - Prediction complete! Took 25.835 milliseconds.
+2021-02-16 14:40:31,547 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:31,689 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(2, 0), HG(2, 1)).png'.
+2021-02-16 14:40:32,474 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:32,475 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:32,475 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(1, 0), HG(2, 0))
+2021-02-16 14:40:32,483 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:32,483 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[5.84682839e-04, 0.00000000e+00, 1.51081190e-03, ...,
+        0.00000000e+00, 1.84828022e-03, 2.01614954e-04],
+       [0.00000000e+00, 4.23610305e-04, 2.21707630e-03, ...,
+        3.61909990e-03, 1.91522961e-03, 0.00000000e+00],
+       [0.00000000e+00, 2.65562366e-04, 0.00000000e+00, ...,
+        0.00000000e+00, 1.37505719e-03, 0.00000000e+00],
+       ...,
+       [0.00000000e+00, 2.08076538e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 2.16497262e-03, 0.00000000e+00],
+       [0.00000000e+00, 2.95745275e-04, 3.33180194e-03, ...,
+        1.92935629e-04, 0.00000000e+00, 4.29846281e-04],
+       [2.51528841e-03, 1.70852430e-04, 0.00000000e+00, ...,
+        0.00000000e+00, 9.49143714e-05, 5.19798536e-05]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:32,483 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:32,483 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:32,483 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:32,483 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7486815, 0.47503915, 0.44571525, 0.53581154, 0.36088976, 0.34506565, 0.63360864, 0.48092934, 0.41252705, 0.5495878, 0.46094128, 0.7520059, 0.39037412, 0.6171808, 0.6345053, 0.45227468, 0.66960716, 0.43464524]
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.749 ***
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.475 ***
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.446 ***
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.536 ***
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.361 ***
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.345 ***
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.634 ***
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.481 ***
+2021-02-16 14:40:32,510 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.413 ***
+2021-02-16 14:40:32,511 - ML_Identification - INFO - predict:609 - Prediction complete! Took 27.223 milliseconds.
+2021-02-16 14:40:32,511 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:32,671 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(1, 0), HG(2, 0)).png'.
+2021-02-16 14:40:33,554 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:33,556 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:33,556 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(1, 0), HG(0, 0))
+2021-02-16 14:40:33,565 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:33,566 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 1.45597217e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 1.99669398e-03, 5.62319333e-04],
+       [3.42748972e-03, 0.00000000e+00, 6.95754789e-04, ...,
+        8.67426894e-03, 0.00000000e+00, 0.00000000e+00],
+       [7.56638221e-04, 4.37429068e-04, 1.83015176e-03, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       ...,
+       [0.00000000e+00, 9.11178386e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       [4.40442367e-03, 0.00000000e+00, 1.49572913e-03, ...,
+        0.00000000e+00, 1.42699381e-03, 1.86189818e-03],
+       [0.00000000e+00, 2.29722206e-03, 0.00000000e+00, ...,
+        5.04536888e-03, 4.20612401e-05, 5.58665779e-06]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:33,566 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:33,566 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:33,567 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:33,567 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:33,604 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7472213, 0.49969888, 0.45048368, 0.5527895, 0.357941, 0.33936447, 0.62502575, 0.47442177, 0.4179306, 0.55211544, 0.4461569, 0.75355625, 0.34393254, 0.61326534, 0.63731533, 0.46274367, 0.6744827, 0.43003818]
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.747 ***
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.500 ***
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.450 ***
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.553 ***
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.358 ***
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.339 ***
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.625 ***
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.474 ***
+2021-02-16 14:40:33,605 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.418 ***
+2021-02-16 14:40:33,606 - ML_Identification - INFO - predict:609 - Prediction complete! Took 39.052 milliseconds.
+2021-02-16 14:40:33,606 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:33,967 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(1, 0), HG(0, 0)).png'.
+2021-02-16 14:40:34,896 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:34,897 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:34,897 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(2, 1), HG(0, 0))
+2021-02-16 14:40:34,908 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:34,908 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.00074017, 0.        , ..., 0.00037037, 0.00025642,
+        0.0014507 ],
+       [0.00068872, 0.00031432, 0.        , ..., 0.00050127, 0.        ,
+        0.00080567],
+       [0.        , 0.        , 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       ...,
+       [0.        , 0.        , 0.00072312, ..., 0.00102546, 0.        ,
+        0.00031607],
+       [0.        , 0.00175347, 0.00078036, ..., 0.        , 0.        ,
+        0.00173313],
+       [0.00083036, 0.0003182 , 0.00074053, ..., 0.        , 0.        ,
+        0.00015044]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:34,908 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:34,908 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:34,909 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:34,909 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:34,952 - ML_Identification - DEBUG - predict:583 - Prediction: [0.74398357, 0.4693939, 0.44602278, 0.52762693, 0.37595046, 0.34660983, 0.6235275, 0.50556487, 0.40868938, 0.553045, 0.4657955, 0.75464934, 0.38850904, 0.6063603, 0.6364914, 0.44837737, 0.6533041, 0.45037583]
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.744 ***
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.469 ***
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.446 ***
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.528 ***
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.376 ***
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.347 ***
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.624 ***
+2021-02-16 14:40:34,953 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.506 ***
+2021-02-16 14:40:34,954 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.409 ***
+2021-02-16 14:40:34,954 - ML_Identification - INFO - predict:609 - Prediction complete! Took 45.185 milliseconds.
+2021-02-16 14:40:34,954 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:35,141 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(2, 1), HG(0, 0)).png'.
+2021-02-16 14:40:36,415 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:36,417 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:36,417 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(1, 1))
+2021-02-16 14:40:36,427 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:36,428 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 0.00000000e+00, 5.98030351e-03, ...,
+        0.00000000e+00, 1.92619679e-03, 6.54659446e-03],
+       [1.93547333e-03, 4.39813739e-03, 6.87733064e-03, ...,
+        1.68818561e-03, 2.02018578e-03, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 7.30268195e-05],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        1.25838778e-03, 2.49279594e-03, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 1.49162738e-03, ...,
+        1.18059153e-03, 1.82978279e-03, 0.00000000e+00],
+       [1.91114215e-03, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 1.52363146e-03, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:36,428 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:36,428 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:36,428 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:36,428 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:36,473 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7448222, 0.48128837, 0.4544563, 0.5253813, 0.3756615, 0.35172507, 0.61821437, 0.48661083, 0.41348448, 0.5404376, 0.4581696, 0.75689584, 0.39934543, 0.6134369, 0.6365638, 0.4580035, 0.67736375, 0.44761354]
+2021-02-16 14:40:36,473 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:36,473 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.745 ***
+2021-02-16 14:40:36,474 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.481 ***
+2021-02-16 14:40:36,474 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.454 ***
+2021-02-16 14:40:36,474 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.525 ***
+2021-02-16 14:40:36,474 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.376 ***
+2021-02-16 14:40:36,474 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.352 ***
+2021-02-16 14:40:36,474 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.618 ***
+2021-02-16 14:40:36,474 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.487 ***
+2021-02-16 14:40:36,474 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.413 ***
+2021-02-16 14:40:36,474 - ML_Identification - INFO - predict:609 - Prediction complete! Took 46.144 milliseconds.
+2021-02-16 14:40:36,475 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:36,663 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(1, 1)).png'.
+2021-02-16 14:40:37,548 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:37,549 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:37,550 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(0, 2), HG(2, 2))
+2021-02-16 14:40:37,558 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:37,559 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[8.05514424e-04, 4.78440204e-04, 0.00000000e+00, ...,
+        7.17271471e-04, 0.00000000e+00, 1.11533647e-03],
+       [6.78557984e-04, 0.00000000e+00, 0.00000000e+00, ...,
+        1.35337550e-03, 9.47259891e-04, 1.63276113e-03],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        2.88895684e-04, 2.28786332e-04, 0.00000000e+00],
+       ...,
+       [5.58991237e-04, 1.82004622e-05, 1.62983384e-05, ...,
+        0.00000000e+00, 1.98223355e-04, 0.00000000e+00],
+       [8.18857031e-04, 0.00000000e+00, 4.52336102e-04, ...,
+        4.20828753e-04, 1.01265458e-03, 0.00000000e+00],
+       [1.48080329e-04, 2.82793547e-04, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:37,559 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:37,559 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:37,559 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:37,559 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:37,593 - ML_Identification - DEBUG - predict:583 - Prediction: [0.74814564, 0.4726625, 0.43818277, 0.5143013, 0.3660118, 0.37073204, 0.624535, 0.48254108, 0.44976488, 0.5317304, 0.46229297, 0.7654244, 0.3928619, 0.61884004, 0.5980124, 0.45539045, 0.6919429, 0.41009852]
+2021-02-16 14:40:37,593 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:37,593 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.748 ***
+2021-02-16 14:40:37,593 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.473 ***
+2021-02-16 14:40:37,594 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.438 ***
+2021-02-16 14:40:37,594 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.514 ***
+2021-02-16 14:40:37,594 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.366 ***
+2021-02-16 14:40:37,594 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.371 ***
+2021-02-16 14:40:37,594 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.625 ***
+2021-02-16 14:40:37,594 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.483 ***
+2021-02-16 14:40:37,594 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.450 ***
+2021-02-16 14:40:37,594 - ML_Identification - INFO - predict:609 - Prediction complete! Took 34.385 milliseconds.
+2021-02-16 14:40:37,594 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:37,758 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(0, 2), HG(2, 2)).png'.
+2021-02-16 14:40:38,622 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:38,623 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:38,623 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 2), HG(2, 0), HG(2, 2))
+2021-02-16 14:40:38,631 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:38,631 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.00374426, 0.        , ..., 0.00055269, 0.00165235,
+        0.00247555],
+       [0.00076354, 0.        , 0.00087005, ..., 0.        , 0.        ,
+        0.        ],
+       [0.        , 0.00190213, 0.        , ..., 0.00069945, 0.00182484,
+        0.00174642],
+       ...,
+       [0.        , 0.        , 0.0045798 , ..., 0.        , 0.        ,
+        0.        ],
+       [0.        , 0.        , 0.00315126, ..., 0.00432954, 0.        ,
+        0.        ],
+       [0.00082002, 0.        , 0.00240216, ..., 0.00070277, 0.        ,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:38,632 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:38,632 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:38,632 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:38,632 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:583 - Prediction: [0.74192464, 0.46942413, 0.44867235, 0.51628256, 0.3577641, 0.36960953, 0.6432389, 0.4838318, 0.42183504, 0.54651237, 0.46222785, 0.75835764, 0.39739951, 0.61517566, 0.5956609, 0.4382595, 0.67179585, 0.42871705]
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.742 ***
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.469 ***
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.449 ***
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.516 ***
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.358 ***
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.370 ***
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.643 ***
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.484 ***
+2021-02-16 14:40:38,669 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.422 ***
+2021-02-16 14:40:38,669 - ML_Identification - INFO - predict:609 - Prediction complete! Took 36.67 milliseconds.
+2021-02-16 14:40:38,669 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:38,828 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 2), HG(2, 0), HG(2, 2)).png'.
+2021-02-16 14:40:39,692 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:39,693 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:39,693 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(2, 0), HG(0, 0))
+2021-02-16 14:40:39,699 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:39,700 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.00171856, 0.        , ..., 0.        , 0.00160516,
+        0.008919  ],
+       [0.        , 0.00611212, 0.        , ..., 0.00255274, 0.        ,
+        0.        ],
+       [0.00065035, 0.01430371, 0.        , ..., 0.00817504, 0.00201384,
+        0.00124979],
+       ...,
+       [0.        , 0.        , 0.        , ..., 0.        , 0.00437078,
+        0.00870882],
+       [0.        , 0.        , 0.        , ..., 0.        , 0.00103603,
+        0.00048713],
+       [0.        , 0.        , 0.00061132, ..., 0.00305067, 0.        ,
+        0.00539594]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:39,700 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:39,700 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:39,700 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:39,700 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7771342, 0.47205213, 0.44775033, 0.49300086, 0.35175917, 0.34049383, 0.63145864, 0.4942467, 0.4013532, 0.5394373, 0.44670418, 0.7625867, 0.38656121, 0.62512463, 0.6255678, 0.43985322, 0.67586905, 0.41794252]
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.777 ***
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.472 ***
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.448 ***
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.493 ***
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.352 ***
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.340 ***
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.631 ***
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.494 ***
+2021-02-16 14:40:39,739 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.401 ***
+2021-02-16 14:40:39,740 - ML_Identification - INFO - predict:609 - Prediction complete! Took 39.538 milliseconds.
+2021-02-16 14:40:39,740 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:40,092 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(2, 0), HG(0, 0)).png'.
+2021-02-16 14:40:40,953 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:40,954 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:40,954 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(1, 1), HG(2, 1))
+2021-02-16 14:40:40,963 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:40,963 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.        , 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       [0.        , 0.        , 0.00173488, ..., 0.        , 0.00457435,
+        0.00280501],
+       [0.        , 0.00160409, 0.        , ..., 0.        , 0.00248417,
+        0.00209984],
+       ...,
+       [0.        , 0.0013741 , 0.        , ..., 0.        , 0.        ,
+        0.00308925],
+       [0.00320234, 0.        , 0.        , ..., 0.00351035, 0.        ,
+        0.00154855],
+       [0.        , 0.        , 0.        , ..., 0.        , 0.00140649,
+        0.00349417]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:40,963 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:40,963 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:40,964 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:40,964 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:40,996 - ML_Identification - DEBUG - predict:583 - Prediction: [0.75116205, 0.48114118, 0.45443872, 0.5291786, 0.373852, 0.34746054, 0.6163629, 0.4866342, 0.41349787, 0.5462809, 0.4553729, 0.755665, 0.37812307, 0.6106237, 0.6299343, 0.4590235, 0.670192, 0.44447967]
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.751 ***
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.481 ***
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.454 ***
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.529 ***
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.374 ***
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.347 ***
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.616 ***
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.487 ***
+2021-02-16 14:40:40,997 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.413 ***
+2021-02-16 14:40:40,997 - ML_Identification - INFO - predict:609 - Prediction complete! Took 33.907 milliseconds.
+2021-02-16 14:40:40,997 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:41,154 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(1, 1), HG(2, 1)).png'.
+2021-02-16 14:40:42,041 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:42,042 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:42,042 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(0, 1))
+2021-02-16 14:40:42,048 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:42,049 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00408658, 0.        , 0.        , ..., 0.        , 0.00459743,
+        0.00026796],
+       [0.00108747, 0.        , 0.        , ..., 0.        , 0.00315186,
+        0.        ],
+       [0.        , 0.        , 0.        , ..., 0.        , 0.        ,
+        0.00195194],
+       ...,
+       [0.00345124, 0.        , 0.00740345, ..., 0.        , 0.        ,
+        0.        ],
+       [0.00257811, 0.00030063, 0.        , ..., 0.00361189, 0.        ,
+        0.00232061],
+       [0.        , 0.        , 0.00369081, ..., 0.00771153, 0.        ,
+        0.00574084]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:42,049 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:42,049 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:42,049 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:42,049 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:42,087 - ML_Identification - DEBUG - predict:583 - Prediction: [0.76973367, 0.47600794, 0.45197242, 0.5113644, 0.3565249, 0.3425493, 0.6172082, 0.4896298, 0.4107586, 0.53802705, 0.45851004, 0.7566832, 0.3764621, 0.6240761, 0.62609494, 0.46158177, 0.6749327, 0.42713255]
+2021-02-16 14:40:42,087 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:42,087 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.770 ***
+2021-02-16 14:40:42,087 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.476 ***
+2021-02-16 14:40:42,088 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.452 ***
+2021-02-16 14:40:42,088 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.511 ***
+2021-02-16 14:40:42,088 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.357 ***
+2021-02-16 14:40:42,088 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.343 ***
+2021-02-16 14:40:42,088 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.617 ***
+2021-02-16 14:40:42,088 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.490 ***
+2021-02-16 14:40:42,088 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.411 ***
+2021-02-16 14:40:42,088 - ML_Identification - INFO - predict:609 - Prediction complete! Took 38.707 milliseconds.
+2021-02-16 14:40:42,088 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:42,245 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(0, 1)).png'.
+2021-02-16 14:40:43,010 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:43,011 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:43,011 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 2), HG(1, 0), HG(2, 0))
+2021-02-16 14:40:43,019 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:43,019 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.        , 0.00974133, ..., 0.        , 0.        ,
+        0.00464738],
+       [0.        , 0.00443797, 0.00537242, ..., 0.        , 0.00153085,
+        0.00095752],
+       [0.00159279, 0.        , 0.00211192, ..., 0.        , 0.01192624,
+        0.00289338],
+       ...,
+       [0.        , 0.00313883, 0.00319977, ..., 0.        , 0.00266621,
+        0.00330533],
+       [0.        , 0.00573001, 0.01038765, ..., 0.        , 0.00776071,
+        0.        ],
+       [0.        , 0.00911813, 0.        , ..., 0.00321211, 0.00882022,
+        0.00562286]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:43,019 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:43,019 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:43,020 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:43,020 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7399779, 0.46644637, 0.45918548, 0.5284357, 0.35918394, 0.3388968, 0.64700025, 0.48409393, 0.41529596, 0.54551893, 0.4713333, 0.74725395, 0.380083, 0.6181692, 0.6423797, 0.43876997, 0.66675514, 0.4222757]
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.740 ***
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.466 ***
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.459 ***
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.528 ***
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.359 ***
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.339 ***
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.647 ***
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.484 ***
+2021-02-16 14:40:43,051 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.415 ***
+2021-02-16 14:40:43,052 - ML_Identification - INFO - predict:609 - Prediction complete! Took 31.982 milliseconds.
+2021-02-16 14:40:43,052 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:43,195 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 2), HG(1, 0), HG(2, 0)).png'.
+2021-02-16 14:40:43,987 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:43,987 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:43,988 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 2), HG(1, 2), HG(2, 2))
+2021-02-16 14:40:43,996 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:43,996 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00338555, 0.        , 0.        , ..., 0.00194696, 0.0043938 ,
+        0.00412627],
+       [0.00128451, 0.        , 0.        , ..., 0.        , 0.00020894,
+        0.00055655],
+       [0.        , 0.        , 0.00495259, ..., 0.00102347, 0.00466349,
+        0.        ],
+       ...,
+       [0.        , 0.        , 0.        , ..., 0.00168653, 0.0027415 ,
+        0.        ],
+       [0.        , 0.00854727, 0.00479077, ..., 0.        , 0.        ,
+        0.00231019],
+       [0.00041968, 0.        , 0.00130124, ..., 0.0003352 , 0.        ,
+        0.00417485]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:43,996 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:43,996 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:43,996 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:43,997 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:44,024 - ML_Identification - DEBUG - predict:583 - Prediction: [0.745486, 0.46564978, 0.4510725, 0.5139129, 0.3624933, 0.37315506, 0.6242006, 0.47903347, 0.4490866, 0.5378647, 0.46373326, 0.7530005, 0.3915054, 0.61864376, 0.5909005, 0.4507922, 0.6843084, 0.4109898]
+2021-02-16 14:40:44,024 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.745 ***
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.466 ***
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.451 ***
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.514 ***
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.362 ***
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.373 ***
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.624 ***
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.479 ***
+2021-02-16 14:40:44,025 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.449 ***
+2021-02-16 14:40:44,025 - ML_Identification - INFO - predict:609 - Prediction complete! Took 28.75 milliseconds.
+2021-02-16 14:40:44,025 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:44,168 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 2), HG(1, 2), HG(2, 2)).png'.
+2021-02-16 14:40:44,947 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:44,948 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:44,948 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 1), HG(1, 2), HG(0, 0))
+2021-02-16 14:40:44,957 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:44,957 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.        , 0.        , ..., 0.        , 0.00073615,
+        0.        ],
+       [0.        , 0.00223558, 0.        , ..., 0.        , 0.0019606 ,
+        0.00188845],
+       [0.00266288, 0.00018159, 0.00629976, ..., 0.        , 0.00173035,
+        0.        ],
+       ...,
+       [0.00025847, 0.00373847, 0.        , ..., 0.00580662, 0.        ,
+        0.00520833],
+       [0.00245295, 0.        , 0.0046329 , ..., 0.00480376, 0.00056842,
+        0.00114382],
+       [0.00123965, 0.        , 0.00089723, ..., 0.00060224, 0.00032713,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:44,957 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:44,958 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:44,958 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:44,958 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:44,989 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7669741, 0.48075762, 0.4510767, 0.5169613, 0.35720408, 0.35401016, 0.6144967, 0.47868466, 0.41278213, 0.541775, 0.4487349, 0.75371933, 0.38094842, 0.6221532, 0.6175258, 0.46507096, 0.6760632, 0.43670616]
+2021-02-16 14:40:44,989 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:44,989 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.767 ***
+2021-02-16 14:40:44,989 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.481 ***
+2021-02-16 14:40:44,989 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.451 ***
+2021-02-16 14:40:44,989 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.517 ***
+2021-02-16 14:40:44,990 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.357 ***
+2021-02-16 14:40:44,990 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.354 ***
+2021-02-16 14:40:44,990 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.614 ***
+2021-02-16 14:40:44,990 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.479 ***
+2021-02-16 14:40:44,990 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.413 ***
+2021-02-16 14:40:44,990 - ML_Identification - INFO - predict:609 - Prediction complete! Took 32.224 milliseconds.
+2021-02-16 14:40:44,990 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:45,117 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 1), HG(1, 2), HG(0, 0)).png'.
+2021-02-16 14:40:46,092 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:46,093 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:46,094 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(2, 0), HG(2, 1))
+2021-02-16 14:40:46,100 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:46,100 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 0.00000000e+00, 1.02188885e-03, ...,
+        3.32081867e-03, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 6.81933268e-04, ...,
+        1.37353568e-03, 1.23965195e-03, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        7.56816930e-04, 1.36862012e-03, 8.17688046e-04],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        2.01190683e-03, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 6.70968823e-04, ...,
+        3.45920432e-03, 8.02605380e-05, 0.00000000e+00],
+       [1.72177886e-04, 0.00000000e+00, 0.00000000e+00, ...,
+        1.07461806e-03, 0.00000000e+00, 3.69785953e-03]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:46,100 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:46,100 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:46,101 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:46,101 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7418504, 0.4659014, 0.43592447, 0.5144926, 0.36339414, 0.344307, 0.6421431, 0.5453403, 0.40264958, 0.5526309, 0.47915703, 0.7615047, 0.39451802, 0.6153223, 0.6303307, 0.42461795, 0.6335841, 0.4316194]
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.742 ***
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.466 ***
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.436 ***
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.514 ***
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.363 ***
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.344 ***
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.642 ***
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.545 ***
+2021-02-16 14:40:46,136 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.403 ***
+2021-02-16 14:40:46,136 - ML_Identification - INFO - predict:609 - Prediction complete! Took 35.47 milliseconds.
+2021-02-16 14:40:46,137 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:46,265 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(2, 0), HG(2, 1)).png'.
+2021-02-16 14:40:47,014 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:47,015 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:47,016 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 0), HG(2, 1), HG(0, 0))
+2021-02-16 14:40:47,024 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:47,024 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 1.91634833e-03, 2.90037862e-03, ...,
+        1.51617585e-03, 1.82474382e-03, 0.00000000e+00],
+       [4.90336502e-04, 1.11349760e-03, 4.64577634e-04, ...,
+        1.33838411e-03, 6.87677487e-03, 0.00000000e+00],
+       [0.00000000e+00, 3.59720752e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 9.45079345e-05],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 1.45434538e-03, 8.66379897e-04],
+       [4.05145485e-03, 4.32344730e-04, 0.00000000e+00, ...,
+        5.23735982e-04, 3.33420231e-03, 7.05566239e-04],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        4.55216481e-04, 2.04086335e-03, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:47,024 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:47,024 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:47,024 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:47,024 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:47,054 - ML_Identification - DEBUG - predict:583 - Prediction: [0.76712835, 0.47658375, 0.4466195, 0.5193169, 0.35697383, 0.34371394, 0.6164572, 0.48627797, 0.40953994, 0.54428905, 0.45209646, 0.75420904, 0.38611084, 0.6224648, 0.63207865, 0.45812136, 0.67008907, 0.43304858]
+2021-02-16 14:40:47,054 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:47,054 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.767 ***
+2021-02-16 14:40:47,054 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.477 ***
+2021-02-16 14:40:47,054 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.447 ***
+2021-02-16 14:40:47,054 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.519 ***
+2021-02-16 14:40:47,054 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.357 ***
+2021-02-16 14:40:47,055 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.344 ***
+2021-02-16 14:40:47,055 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.616 ***
+2021-02-16 14:40:47,055 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.486 ***
+2021-02-16 14:40:47,055 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.410 ***
+2021-02-16 14:40:47,055 - ML_Identification - INFO - predict:609 - Prediction complete! Took 30.606 milliseconds.
+2021-02-16 14:40:47,055 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:47,204 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 0), HG(2, 1), HG(0, 0)).png'.
+2021-02-16 14:40:47,986 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:47,987 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:47,987 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(1, 0), HG(2, 2))
+2021-02-16 14:40:47,995 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:47,995 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 3.87072117e-03],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 1.68293310e-03],
+       [1.44608274e-05, 3.58856905e-03, 1.01352967e-03, ...,
+        0.00000000e+00, 4.85480235e-05, 3.39328703e-03],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 1.04174017e-03, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        3.04494181e-03, 0.00000000e+00, 0.00000000e+00],
+       [1.08890011e-03, 5.80711136e-04, 0.00000000e+00, ...,
+        1.69002290e-04, 0.00000000e+00, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:47,995 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:47,995 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:47,995 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:47,996 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:48,026 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7423211, 0.4657779, 0.44585857, 0.52278525, 0.3659452, 0.33688018, 0.6416425, 0.48661318, 0.49409673, 0.53661734, 0.4703938, 0.74463034, 0.37068766, 0.6176035, 0.62132126, 0.43952385, 0.6960408, 0.35232082]
+2021-02-16 14:40:48,026 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:48,026 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.742 ***
+2021-02-16 14:40:48,026 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.466 ***
+2021-02-16 14:40:48,026 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.446 ***
+2021-02-16 14:40:48,027 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.523 ***
+2021-02-16 14:40:48,027 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.366 ***
+2021-02-16 14:40:48,027 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.337 ***
+2021-02-16 14:40:48,027 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.642 ***
+2021-02-16 14:40:48,027 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.487 ***
+2021-02-16 14:40:48,027 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.494 ***
+2021-02-16 14:40:48,027 - ML_Identification - INFO - predict:609 - Prediction complete! Took 31.632 milliseconds.
+2021-02-16 14:40:48,027 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:48,163 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(1, 0), HG(2, 2)).png'.
+2021-02-16 14:40:48,948 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:48,948 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:48,949 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:48,956 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:48,957 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[6.48151380e-04, 0.00000000e+00, 0.00000000e+00, ...,
+        7.76075171e-04, 0.00000000e+00, 3.92533281e-04],
+       [1.16861649e-03, 2.18829589e-04, 0.00000000e+00, ...,
+        2.51860217e-04, 3.25628545e-04, 1.01544712e-03],
+       [7.05680770e-06, 7.92254728e-05, 5.22362737e-04, ...,
+        1.73983856e-04, 5.89955515e-04, 0.00000000e+00],
+       ...,
+       [3.02305192e-04, 0.00000000e+00, 0.00000000e+00, ...,
+        9.56951414e-04, 0.00000000e+00, 6.00631880e-04],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       [2.93632233e-04, 8.73590815e-04, 4.73580157e-04, ...,
+        0.00000000e+00, 0.00000000e+00, 3.16036125e-04]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:48,957 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:48,957 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:48,957 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:48,957 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:48,988 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7394748, 0.4663258, 0.4360676, 0.5127319, 0.3623358, 0.34376386, 0.63717264, 0.54202175, 0.40774715, 0.5507501, 0.4822482, 0.7589231, 0.38844147, 0.6142894, 0.6268052, 0.43006706, 0.63656485, 0.43449244]
+2021-02-16 14:40:48,988 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:48,988 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.739 ***
+2021-02-16 14:40:48,988 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.466 ***
+2021-02-16 14:40:48,988 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.436 ***
+2021-02-16 14:40:48,988 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.513 ***
+2021-02-16 14:40:48,989 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.362 ***
+2021-02-16 14:40:48,989 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.344 ***
+2021-02-16 14:40:48,989 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.637 ***
+2021-02-16 14:40:48,989 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.542 ***
+2021-02-16 14:40:48,989 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.408 ***
+2021-02-16 14:40:48,989 - ML_Identification - INFO - predict:609 - Prediction complete! Took 31.689 milliseconds.
+2021-02-16 14:40:48,989 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:49,118 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(2, 1), HG(2, 2)).png'.
+2021-02-16 14:40:49,901 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:49,902 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:49,902 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(0, 2))
+2021-02-16 14:40:49,908 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:49,908 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.00252611, 0.        , ..., 0.        , 0.0031333 ,
+        0.        ],
+       [0.00274292, 0.        , 0.        , ..., 0.        , 0.        ,
+        0.00385003],
+       [0.        , 0.        , 0.        , ..., 0.00284615, 0.        ,
+        0.00712235],
+       ...,
+       [0.00202202, 0.00057628, 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       [0.        , 0.00123764, 0.00597399, ..., 0.00161213, 0.        ,
+        0.00943623],
+       [0.        , 0.        , 0.00329572, ..., 0.00102079, 0.        ,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:49,908 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:49,909 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:49,909 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:49,909 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:49,938 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7582736, 0.46116197, 0.49240226, 0.4996463, 0.35255378, 0.34584087, 0.619847, 0.47033453, 0.41435888, 0.5383706, 0.46620497, 0.7236482, 0.3911211, 0.62514853, 0.62715554, 0.4668899, 0.6732066, 0.43575156]
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.758 ***
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.461 ***
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.492 ***
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.500 ***
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.353 ***
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.346 ***
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.620 ***
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.470 ***
+2021-02-16 14:40:49,939 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.414 ***
+2021-02-16 14:40:49,939 - ML_Identification - INFO - predict:609 - Prediction complete! Took 30.695 milliseconds.
+2021-02-16 14:40:49,939 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:50,079 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(0, 2)).png'.
+2021-02-16 14:40:50,817 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:50,818 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:50,818 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 2), HG(1, 1), HG(0, 0))
+2021-02-16 14:40:50,826 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:50,826 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[1.03101273e-04, 0.00000000e+00, 1.46472531e-04, ...,
+        0.00000000e+00, 0.00000000e+00, 1.05916744e-04],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 9.11300881e-05],
+       [1.16801596e-04, 1.14862789e-04, 8.46144331e-05, ...,
+        0.00000000e+00, 2.64584223e-05, 0.00000000e+00],
+       ...,
+       [5.60255237e-05, 0.00000000e+00, 0.00000000e+00, ...,
+        2.10771869e-05, 0.00000000e+00, 6.07280029e-06],
+       [0.00000000e+00, 2.03747224e-05, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 1.39520384e-04],
+       [0.00000000e+00, 5.01200356e-05, 0.00000000e+00, ...,
+        2.39851937e-05, 1.63660404e-06, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:50,826 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:50,826 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:50,826 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:50,826 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7369453, 0.48376974, 0.4843608, 0.5184729, 0.3716598, 0.34903976, 0.6225409, 0.46764606, 0.419272, 0.54210925, 0.46234497, 0.728538, 0.37868807, 0.61234236, 0.6358672, 0.4576009, 0.67638683, 0.45087022]
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.737 ***
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.484 ***
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.484 ***
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.518 ***
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.372 ***
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.349 ***
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.623 ***
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.468 ***
+2021-02-16 14:40:50,858 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.419 ***
+2021-02-16 14:40:50,858 - ML_Identification - INFO - predict:609 - Prediction complete! Took 32.405 milliseconds.
+2021-02-16 14:40:50,858 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:50,992 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 2), HG(1, 1), HG(0, 0)).png'.
+2021-02-16 14:40:52,016 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:52,017 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:52,017 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 0), HG(1, 1))
+2021-02-16 14:40:52,023 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:52,024 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00373882, 0.00954697, 0.00073043, ..., 0.00138631, 0.00041342,
+        0.        ],
+       [0.00226917, 0.0032101 , 0.00417877, ..., 0.        , 0.        ,
+        0.        ],
+       [0.        , 0.00075836, 0.        , ..., 0.00436482, 0.00455859,
+        0.        ],
+       ...,
+       [0.        , 0.        , 0.00380694, ..., 0.        , 0.00693155,
+        0.        ],
+       [0.00543115, 0.0092217 , 0.        , ..., 0.        , 0.        ,
+        0.00413741],
+       [0.        , 0.00090546, 0.0013852 , ..., 0.00610077, 0.        ,
+        0.00841526]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:52,024 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:52,024 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:52,024 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:52,024 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:583 - Prediction: [0.74306095, 0.48283443, 0.45433378, 0.5363971, 0.37999642, 0.34806076, 0.61712176, 0.48182356, 0.41558498, 0.5493927, 0.45456412, 0.7566343, 0.3791208, 0.6045641, 0.6338312, 0.46085894, 0.6716829, 0.44688925]
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.743 ***
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.483 ***
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.454 ***
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.536 ***
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.380 ***
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.348 ***
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.617 ***
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.482 ***
+2021-02-16 14:40:52,057 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.416 ***
+2021-02-16 14:40:52,058 - ML_Identification - INFO - predict:609 - Prediction complete! Took 33.554 milliseconds.
+2021-02-16 14:40:52,058 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:52,193 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 0), HG(1, 1)).png'.
+2021-02-16 14:40:52,961 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:52,962 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:52,962 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(0, 1), HG(0, 2))
+2021-02-16 14:40:52,970 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:52,971 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 0.00000000e+00, 4.85121808e-04, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 1.58491560e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 4.46810302e-03],
+       [0.00000000e+00, 2.25961390e-05, 2.93604510e-03, ...,
+        1.65626051e-04, 1.35347869e-03, 0.00000000e+00],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        7.79549227e-05, 0.00000000e+00, 4.22713013e-03],
+       [0.00000000e+00, 1.89502184e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 9.38579877e-04, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:52,971 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:52,971 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:52,971 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:52,971 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:53,004 - ML_Identification - DEBUG - predict:583 - Prediction: [0.73598176, 0.4875066, 0.50443417, 0.5052297, 0.35901323, 0.34990522, 0.6241102, 0.46229047, 0.4194408, 0.5368588, 0.46190262, 0.7178792, 0.38008562, 0.62213975, 0.63250613, 0.45695385, 0.67712027, 0.4423644]
+2021-02-16 14:40:53,004 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:53,004 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.736 ***
+2021-02-16 14:40:53,004 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.488 ***
+2021-02-16 14:40:53,004 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.504 ***
+2021-02-16 14:40:53,004 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.505 ***
+2021-02-16 14:40:53,004 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.359 ***
+2021-02-16 14:40:53,005 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.350 ***
+2021-02-16 14:40:53,005 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.624 ***
+2021-02-16 14:40:53,005 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.462 ***
+2021-02-16 14:40:53,005 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.419 ***
+2021-02-16 14:40:53,005 - ML_Identification - INFO - predict:609 - Prediction complete! Took 33.648 milliseconds.
+2021-02-16 14:40:53,005 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:53,160 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(0, 1), HG(0, 2)).png'.
+2021-02-16 14:40:53,963 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:53,963 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:53,964 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(2, 2), HG(0, 0))
+2021-02-16 14:40:53,971 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:53,971 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.0025252 , 0.        , 0.00278987, ..., 0.00035655, 0.00511147,
+        0.        ],
+       [0.00221622, 0.00353733, 0.        , ..., 0.00396019, 0.00154042,
+        0.        ],
+       [0.        , 0.00176324, 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       ...,
+       [0.00413138, 0.0066083 , 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       [0.        , 0.        , 0.        , ..., 0.        , 0.00514359,
+        0.00175091],
+       [0.        , 0.00049873, 0.        , ..., 0.        , 0.0004561 ,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:53,971 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:53,971 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:53,972 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:53,972 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:54,006 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7693146, 0.48396623, 0.44462574, 0.5223137, 0.35552847, 0.3406278, 0.6178791, 0.48442236, 0.41623223, 0.54151446, 0.44711515, 0.7561347, 0.36877385, 0.6246624, 0.6340188, 0.46222386, 0.6778433, 0.41875613]
+2021-02-16 14:40:54,006 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.769 ***
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.484 ***
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.445 ***
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.522 ***
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.356 ***
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.341 ***
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.618 ***
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.484 ***
+2021-02-16 14:40:54,007 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.416 ***
+2021-02-16 14:40:54,007 - ML_Identification - INFO - predict:609 - Prediction complete! Took 35.757 milliseconds.
+2021-02-16 14:40:54,007 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:54,191 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(2, 2), HG(0, 0)).png'.
+2021-02-16 14:40:54,974 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:54,975 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:54,975 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(2, 0), HG(2, 1))
+2021-02-16 14:40:54,981 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:54,982 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00256788, 0.00256761, 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       [0.00050683, 0.00358658, 0.        , ..., 0.        , 0.        ,
+        0.00205696],
+       [0.00136925, 0.        , 0.        , ..., 0.00021853, 0.        ,
+        0.        ],
+       ...,
+       [0.00078546, 0.00161739, 0.        , ..., 0.00068664, 0.0024336 ,
+        0.        ],
+       [0.        , 0.        , 0.        , ..., 0.        , 0.00019142,
+        0.00049944],
+       [0.00064358, 0.00350192, 0.00236852, ..., 0.0006955 , 0.00088405,
+        0.00156386]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:54,982 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:54,982 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:54,982 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:54,982 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:55,010 - ML_Identification - DEBUG - predict:583 - Prediction: [0.74239063, 0.46972477, 0.43705326, 0.5150118, 0.36314777, 0.343963, 0.64441967, 0.5373048, 0.40180883, 0.5519705, 0.47388542, 0.7619614, 0.39211246, 0.6150119, 0.6331406, 0.42168206, 0.63604015, 0.43293995]
+2021-02-16 14:40:55,010 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:55,010 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.742 ***
+2021-02-16 14:40:55,010 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.470 ***
+2021-02-16 14:40:55,010 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.437 ***
+2021-02-16 14:40:55,011 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.515 ***
+2021-02-16 14:40:55,011 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.363 ***
+2021-02-16 14:40:55,011 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.344 ***
+2021-02-16 14:40:55,011 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.644 ***
+2021-02-16 14:40:55,011 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.537 ***
+2021-02-16 14:40:55,011 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.402 ***
+2021-02-16 14:40:55,011 - ML_Identification - INFO - predict:609 - Prediction complete! Took 29.427 milliseconds.
+2021-02-16 14:40:55,011 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:55,162 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(2, 0), HG(2, 1)).png'.
+2021-02-16 14:40:55,908 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:55,908 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:55,909 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 0), HG(2, 2))
+2021-02-16 14:40:55,914 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:55,915 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00129309, 0.        , 0.        , ..., 0.        , 0.00232447,
+        0.        ],
+       [0.        , 0.00333794, 0.00313935, ..., 0.        , 0.        ,
+        0.        ],
+       [0.00279802, 0.        , 0.        , ..., 0.        , 0.        ,
+        0.0050813 ],
+       ...,
+       [0.        , 0.        , 0.00239463, ..., 0.00245239, 0.        ,
+        0.        ],
+       [0.0023284 , 0.00233489, 0.0010374 , ..., 0.00120107, 0.00071574,
+        0.00380677],
+       [0.0048924 , 0.        , 0.00275531, ..., 0.00149493, 0.00475346,
+        0.00043134]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:55,915 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:55,915 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:55,915 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:55,915 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:55,945 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7414652, 0.465702, 0.44267184, 0.54360336, 0.36937538, 0.33986625, 0.63274044, 0.4849753, 0.44930813, 0.54429626, 0.47193718, 0.7464936, 0.37228087, 0.61584496, 0.636216, 0.45723185, 0.67993885, 0.40309972]
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.741 ***
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.466 ***
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.443 ***
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.544 ***
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.369 ***
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.340 ***
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.633 ***
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.485 ***
+2021-02-16 14:40:55,946 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.449 ***
+2021-02-16 14:40:55,946 - ML_Identification - INFO - predict:609 - Prediction complete! Took 31.102 milliseconds.
+2021-02-16 14:40:55,946 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:56,085 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 0), HG(2, 2)).png'.
+2021-02-16 14:40:56,835 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:56,836 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:56,836 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(2, 1), HG(2, 2), HG(0, 0))
+2021-02-16 14:40:56,844 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:56,845 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.        , 0.        , ..., 0.00167186, 0.        ,
+        0.00333427],
+       [0.00600023, 0.00679214, 0.        , ..., 0.00126189, 0.        ,
+        0.00235239],
+       [0.        , 0.        , 0.        , ..., 0.00145083, 0.        ,
+        0.        ],
+       ...,
+       [0.0051696 , 0.        , 0.00403693, ..., 0.        , 0.        ,
+        0.        ],
+       [0.00142672, 0.00194742, 0.        , ..., 0.00242365, 0.00402534,
+        0.00316399],
+       [0.0065894 , 0.00329595, 0.        , ..., 0.00095127, 0.        ,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:56,845 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:56,845 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:56,845 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:56,845 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:56,875 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7496292, 0.4685675, 0.43954852, 0.5225244, 0.36224404, 0.34266087, 0.63672554, 0.5274298, 0.41726995, 0.5480839, 0.4735049, 0.75573176, 0.38628235, 0.6169454, 0.6321824, 0.44722497, 0.65886974, 0.41357273]
+2021-02-16 14:40:56,875 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:56,875 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.750 ***
+2021-02-16 14:40:56,875 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.469 ***
+2021-02-16 14:40:56,875 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.440 ***
+2021-02-16 14:40:56,876 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.523 ***
+2021-02-16 14:40:56,876 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.362 ***
+2021-02-16 14:40:56,876 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.343 ***
+2021-02-16 14:40:56,876 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.637 ***
+2021-02-16 14:40:56,876 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.527 ***
+2021-02-16 14:40:56,876 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.417 ***
+2021-02-16 14:40:56,876 - ML_Identification - INFO - predict:609 - Prediction complete! Took 31.002 milliseconds.
+2021-02-16 14:40:56,876 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:57,029 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(2, 1), HG(2, 2), HG(0, 0)).png'.
+2021-02-16 14:40:57,818 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:57,818 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:57,819 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 0), HG(2, 2), HG(0, 0))
+2021-02-16 14:40:57,826 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:57,827 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 5.00659299e-04, 5.17439533e-04, ...,
+        0.00000000e+00, 1.64943121e-03, 3.62019202e-05],
+       [6.83304952e-04, 1.23894303e-03, 0.00000000e+00, ...,
+        0.00000000e+00, 7.89057238e-04, 5.57474531e-04],
+       [3.21988794e-04, 1.41175785e-04, 2.03029758e-03, ...,
+        0.00000000e+00, 0.00000000e+00, 6.07804998e-05],
+       ...,
+       [0.00000000e+00, 4.12091779e-04, 0.00000000e+00, ...,
+        2.87690706e-04, 0.00000000e+00, 3.73459027e-04],
+       [1.09331885e-03, 1.55654975e-04, 5.39525482e-04, ...,
+        0.00000000e+00, 0.00000000e+00, 6.86952825e-04],
+       [0.00000000e+00, 0.00000000e+00, 1.13358737e-04, ...,
+        0.00000000e+00, 0.00000000e+00, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:57,828 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:57,828 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:57,828 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:57,828 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:57,861 - ML_Identification - DEBUG - predict:583 - Prediction: [0.75455546, 0.4435038, 0.45032582, 0.5028188, 0.37331522, 0.3452021, 0.6350083, 0.49182215, 0.47993186, 0.5348484, 0.470708, 0.7424964, 0.38970438, 0.6099972, 0.6218316, 0.44130987, 0.6936503, 0.36820698]
+2021-02-16 14:40:57,861 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.755 ***
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.444 ***
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.450 ***
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.503 ***
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.373 ***
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.345 ***
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.635 ***
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.492 ***
+2021-02-16 14:40:57,862 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.480 ***
+2021-02-16 14:40:57,862 - ML_Identification - INFO - predict:609 - Prediction complete! Took 34.689 milliseconds.
+2021-02-16 14:40:57,862 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:57,998 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 0), HG(2, 2), HG(0, 0)).png'.
+2021-02-16 14:40:59,046 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:40:59,047 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:40:59,047 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(0, 0), HG(2, 0))
+2021-02-16 14:40:59,053 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:40:59,054 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.        , 0.00062385, 0.00259584, ..., 0.00246522, 0.00086687,
+        0.        ],
+       [0.        , 0.0013547 , 0.00365108, ..., 0.        , 0.00530213,
+        0.        ],
+       [0.0011352 , 0.        , 0.        , ..., 0.00035803, 0.00425299,
+        0.0016728 ],
+       ...,
+       [0.00125226, 0.        , 0.        , ..., 0.        , 0.00400055,
+        0.        ],
+       [0.00019311, 0.        , 0.00028983, ..., 0.        , 0.        ,
+        0.00335251],
+       [0.        , 0.00260514, 0.        , ..., 0.0009174 , 0.        ,
+        0.        ]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:40:59,054 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:40:59,054 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:40:59,054 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:40:59,054 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:40:59,084 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7710147, 0.48037413, 0.44714975, 0.5209021, 0.35789362, 0.34282073, 0.6154232, 0.4831015, 0.4092035, 0.5417855, 0.4494061, 0.7561562, 0.3741251, 0.6233859, 0.6353286, 0.4627204, 0.6742943, 0.42874497]
+2021-02-16 14:40:59,084 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:40:59,084 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.771 ***
+2021-02-16 14:40:59,084 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.480 ***
+2021-02-16 14:40:59,084 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.447 ***
+2021-02-16 14:40:59,085 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.521 ***
+2021-02-16 14:40:59,085 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.358 ***
+2021-02-16 14:40:59,085 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.343 ***
+2021-02-16 14:40:59,085 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.615 ***
+2021-02-16 14:40:59,085 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.483 ***
+2021-02-16 14:40:59,085 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.409 ***
+2021-02-16 14:40:59,085 - ML_Identification - INFO - predict:609 - Prediction complete! Took 31.187 milliseconds.
+2021-02-16 14:40:59,085 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:40:59,235 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(0, 0), HG(2, 0)).png'.
+2021-02-16 14:41:00,053 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:41:00,054 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:41:00,054 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(2, 0), HG(2, 1), HG(0, 0))
+2021-02-16 14:41:00,062 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:41:00,063 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        1.06949112e-03, 2.82142721e-03, 0.00000000e+00],
+       [4.23120338e-04, 0.00000000e+00, 0.00000000e+00, ...,
+        6.21956915e-04, 1.85724683e-03, 6.21959317e-04],
+       [0.00000000e+00, 0.00000000e+00, 4.96111967e-04, ...,
+        6.26805018e-05, 6.24250495e-04, 0.00000000e+00],
+       ...,
+       [4.05079521e-04, 1.71658612e-03, 0.00000000e+00, ...,
+        9.34170860e-04, 0.00000000e+00, 8.96307512e-04],
+       [1.03499294e-03, 0.00000000e+00, 0.00000000e+00, ...,
+        3.34519439e-04, 1.59810176e-03, 3.59392889e-04],
+       [2.54469597e-03, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 2.43678342e-04, 0.00000000e+00]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:41:00,063 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:41:00,063 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:41:00,063 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:41:00,063 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:41:00,093 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7408569, 0.47251964, 0.43626875, 0.51151484, 0.3597947, 0.3405383, 0.67346096, 0.50052863, 0.40786356, 0.5478866, 0.45773903, 0.76099783, 0.38730925, 0.61208147, 0.6331842, 0.39930108, 0.6592606, 0.4219799]
+2021-02-16 14:41:00,093 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.741 ***
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.473 ***
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.436 ***
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.512 ***
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.360 ***
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.341 ***
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.673 ***
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.501 ***
+2021-02-16 14:41:00,094 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.408 ***
+2021-02-16 14:41:00,094 - ML_Identification - INFO - predict:609 - Prediction complete! Took 31.131 milliseconds.
+2021-02-16 14:41:00,094 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:41:00,257 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(2, 0), HG(2, 1), HG(0, 0)).png'.
+2021-02-16 14:41:01,053 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:41:01,054 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:41:01,054 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 2), HG(2, 1), HG(0, 0))
+2021-02-16 14:41:01,063 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:41:01,063 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00384486, 0.00580356, 0.        , ..., 0.        , 0.        ,
+        0.        ],
+       [0.00173721, 0.00198912, 0.00069122, ..., 0.        , 0.00363745,
+        0.00245994],
+       [0.00231868, 0.        , 0.        , ..., 0.        , 0.00503412,
+        0.        ],
+       ...,
+       [0.00470342, 0.0075793 , 0.00054387, ..., 0.        , 0.00349586,
+        0.        ],
+       [0.        , 0.00265844, 0.        , ..., 0.        , 0.00453055,
+        0.        ],
+       [0.        , 0.00404945, 0.        , ..., 0.00551932, 0.00033322,
+        0.00276241]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:41:01,064 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:41:01,064 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:41:01,064 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:41:01,064 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:41:01,098 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7696499, 0.47382098, 0.4484462, 0.51224303, 0.3564899, 0.3425486, 0.61609864, 0.49159968, 0.40691546, 0.5440631, 0.45564577, 0.755799, 0.3776571, 0.6229403, 0.6299307, 0.45698702, 0.6654242, 0.4298394]
+2021-02-16 14:41:01,098 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:41:01,098 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.770 ***
+2021-02-16 14:41:01,098 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.474 ***
+2021-02-16 14:41:01,098 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.448 ***
+2021-02-16 14:41:01,098 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.512 ***
+2021-02-16 14:41:01,098 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.356 ***
+2021-02-16 14:41:01,099 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.343 ***
+2021-02-16 14:41:01,099 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.616 ***
+2021-02-16 14:41:01,099 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.492 ***
+2021-02-16 14:41:01,099 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.407 ***
+2021-02-16 14:41:01,099 - ML_Identification - INFO - predict:609 - Prediction complete! Took 35.328 milliseconds.
+2021-02-16 14:41:01,099 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:41:01,248 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 2), HG(2, 1), HG(0, 0)).png'.
+2021-02-16 14:41:02,032 - ML_Identification - INFO - compare:697 - Comparison complete!
+2021-02-16 14:41:02,033 - DataHandling - DEBUG - get_random:349 - Getting a random superposition from generator.
+2021-02-16 14:41:02,033 - ML_Identification - INFO - compare:620 - Comparing test superposition: Superposition((HG(1, 1), HG(2, 0), HG(2, 1))
+2021-02-16 14:41:02,041 - ML_Identification - INFO - predict:563 - Using model to make a prediction.
+2021-02-16 14:41:02,041 - ML_Identification - DEBUG - predict:564 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data': array([[0.00000000e+00, 7.52614116e-06, 1.89824893e-05, ...,
+        0.00000000e+00, 3.35965014e-05, 9.85496167e-06],
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        9.50134936e-06, 0.00000000e+00, 0.00000000e+00],
+       [6.38121423e-06, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 3.37196432e-06, 0.00000000e+00],
+       ...,
+       [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, ...,
+        0.00000000e+00, 0.00000000e+00, 3.31232633e-06],
+       [2.12958508e-06, 9.48119432e-06, 0.00000000e+00, ...,
+        1.97040879e-05, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 2.21426372e-05, 3.25106303e-05, ...,
+        0.00000000e+00, 2.41918833e-05, 2.00290331e-05]]), 'threshold': 0.2, 'info': False}
+2021-02-16 14:41:02,042 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-16 14:41:02,042 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-16 14:41:02,042 - ML_Identification - DEBUG - predict:577 - Formatting data.
+2021-02-16 14:41:02,042 - ML_Identification - DEBUG - predict:580 - Making prediction.
+2021-02-16 14:41:02,070 - ML_Identification - DEBUG - predict:583 - Prediction: [0.7402163, 0.47705176, 0.4425059, 0.53202975, 0.37292978, 0.34503895, 0.633289, 0.51045674, 0.41328734, 0.55219007, 0.46716046, 0.7580286, 0.37142918, 0.60762, 0.6288985, 0.43813586, 0.6599374, 0.43730253]
+2021-02-16 14:41:02,070 - ML_Identification - DEBUG - predict:584 - Generating superposition of modes above threshold of 0.2 and asigning the respective amplitudes and phases.
+2021-02-16 14:41:02,070 - ML_Identification - DEBUG - predict:589 - HG(0, 0): 0.740 ***
+2021-02-16 14:41:02,070 - ML_Identification - DEBUG - predict:589 - HG(0, 1): 0.477 ***
+2021-02-16 14:41:02,070 - ML_Identification - DEBUG - predict:589 - HG(0, 2): 0.443 ***
+2021-02-16 14:41:02,070 - ML_Identification - DEBUG - predict:589 - HG(1, 0): 0.532 ***
+2021-02-16 14:41:02,070 - ML_Identification - DEBUG - predict:589 - HG(1, 1): 0.373 ***
+2021-02-16 14:41:02,070 - ML_Identification - DEBUG - predict:589 - HG(1, 2): 0.345 ***
+2021-02-16 14:41:02,071 - ML_Identification - DEBUG - predict:589 - HG(2, 0): 0.633 ***
+2021-02-16 14:41:02,071 - ML_Identification - DEBUG - predict:589 - HG(2, 1): 0.510 ***
+2021-02-16 14:41:02,071 - ML_Identification - DEBUG - predict:589 - HG(2, 2): 0.413 ***
+2021-02-16 14:41:02,071 - ML_Identification - INFO - predict:609 - Prediction complete! Took 29.092 milliseconds.
+2021-02-16 14:41:02,071 - ML_Identification - INFO - predict:610 - Reconstructed: Superposition((HG(0, 0), HG(0, 1), HG(0, 2), HG(1, 0), HG(1, 1), HG(1, 2), HG(2, 0), HG(2, 1), HG(2, 2))
+2021-02-16 14:41:02,213 - ML_Identification - DEBUG - compare:689 - Saving to 'Comparisons/ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/S(HG(1, 1), HG(2, 0), HG(2, 1)).png'.
