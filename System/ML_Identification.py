@@ -130,6 +130,27 @@ class ML:
 
         return os.path.exists(f"Models/{self}/model.h5")
 
+    def check_files(self, save_trained: bool = False, info: bool = False):
+        '''
+        Check if the model exists or has been trained before.
+        Returns True if model exists and is trained and False if model exists but has not been trained
+        '''
+        if not self.exists():
+            LOG.warning("Model does not exist! Will now train and save.")
+            print(log("[WARN] Model does not exist! Will now train and save.\n"))
+
+            self.train(info=info)
+            self.save(save_trained)
+            if not save_trained: self.free()
+
+        elif not self.trained():
+            LOG.warning("Model exists but has not been trained! Will only load history.")
+            print(log("[WARN] Model exists but has not been trained! Will only load history.\n"))
+
+            return False
+
+        return True
+
     def accuracy(self, y_true, y_pred):
         '''
         Custom metric to determine the accuracy of our regression problem using rounded accuracy.
@@ -419,6 +440,12 @@ class ML:
         LOG.info("Ploting model history.")
         LOG.debug(f"Locals: {locals()}")
 
+        if not self.check_files(info=info):
+            LOG.error("Model has not been trained!")
+            print(log("[WARN] Model has not been trained!\n"))
+
+            return
+
         if info: print(log("[PLOT] Plotting history..."))
 
         if elapsed_time: t = np.array(self.history["time"]) / 60
@@ -509,25 +536,12 @@ class ML:
         Load a saved model.
         '''
         LOG.info("Loading ML object.")
-
-        if not self.exists():
-            LOG.warning("Model does not exist! Will now train and save.")
-            print(log("[WARN] Model does not exist! Will now train and save.\n"))
-
-            self.train(info=info)
-            self.save(save_trained)
-            if not save_trained: self.free()
-
-            return
-
-        elif not self.trained():
-            LOG.warning("Model exists but has not been trained! Will only load history.")
-            print(log("[WARN] Model exists but has not been trained! Will only load history.\n"))
+        trained = self.check_files(save_trained=save_trained, info=info)
 
         print(log("[LOAD] Loading model... "), end='')
         LOG.debug("Loading ML object from files.")
 
-        if self.trained():
+        if trained:
             LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
             self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"metrics": [self.accuracy]})
 
@@ -549,13 +563,7 @@ class ML:
         LOG.info("Using model to make a prediction.")
         LOG.debug(f"Locals: {locals()}")
 
-        if not self.exists():
-            LOG.critical("Model does not exist!")
-            print(log("[FATAL] Model does not exist!\n"))
-
-            return
-
-        elif not self.trained():
+        if not self.check_files(info=info):
             LOG.error("Model has not been trained!")
             print(log("[WARN] Model has not been trained!\n"))
 
@@ -688,6 +696,23 @@ class ML:
         
         LOG.info("Comparison complete!")
 
+    def evaluate(self, N: int = 1000, info: bool = False):
+        '''
+        Evaluate the model by comparing against N randomly generated superpositions.
+        '''
+        LOG.info(f"Evaluating model using {N} randomly generated superpositions.")
+
+        if not self.check_files(info=info):
+            LOG.error("Model has not been trained!")
+            print(log("[WARN] Model has not been trained!\n"))
+
+            return
+
+        while self.data_generator.new_stage(): pass # Move to the last stage of training
+        for i in tqdm(range(1000), log("[EVAL] Evaluating ")): self.model.compare(data.get_random(), info=False, save=True) # Generate comparison plots
+
+        LOG.info("Evaluation complete!")
+
     def calculate_phase(self, data, superposition: Superposition):
         '''
         Calculate the phases for modes in the superposition that minimises the MSE to the original data.
@@ -814,6 +839,7 @@ def log(message):
     message = message.replace("[DATA]",     Colour.OKGREEN  + "[DATA]"  + Colour.ENDC)
     message = message.replace("[TRAIN]",    Colour.OKGREEN  + "[TRAIN]" + Colour.ENDC)
     message = message.replace("[PLOT]",     Colour.OKGREEN  + "[PLOT]"  + Colour.ENDC)
+    message = message.replace("[EVAL]",     Colour.OKGREEN  + "[EVAL]"  + Colour.ENDC)
     message = message.replace("[SAVE]",     Colour.OKGREEN  + "[SAVE]"  + Colour.ENDC)
     message = message.replace("[LOAD]",     Colour.OKGREEN  + "[LOAD]"  + Colour.ENDC)
     message = message.replace("[PRED]",     Colour.OKGREEN  + "[PRED]"  + Colour.ENDC)

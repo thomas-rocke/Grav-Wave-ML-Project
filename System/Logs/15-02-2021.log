@@ -370,3 +370,676 @@
 2021-02-15 01:35:08,470 - ML_Identification - INFO - train:254 - Starting the training process.
 2021-02-15 01:35:08,471 - DataHandling - DEBUG - new_stage:293 - Incrementing dataset to stage 1.
 2021-02-15 01:35:08,473 - ML_Identification - INFO - train:261 - Stage 1 / 4 of training.
+2021-02-15 15:19:01,582 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:01,582 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:01,582 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:01,582 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:01,582 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:01,583 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:01,583 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:01,583 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:01,583 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:01,586 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:01,586 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-15 15:19:01,586 - Main - INFO - <module>:11 - Start of program.
+2021-02-15 15:19:01,587 - Main - DEBUG - <module>:25 - Args: Namespace(ML="ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)", load=True, parameter=['learning_rate', '[0.0001,0.0002,0.0003]'], save=False, train=False, verbose=False)
+2021-02-15 15:19:01,587 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:01,587 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:01,588 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:01,588 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:01,588 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:01,588 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:01,588 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:01,588 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:01,588 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.4, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 5, 'batch_size': 256, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-15 15:19:01,589 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:01,589 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-15 15:19:01,589 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-15 15:19:01,589 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-15 15:19:01,590 - ML_Identification - INFO - load:511 - Loading ML object.
+2021-02-15 15:19:01,590 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-15 15:19:01,590 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-15 15:19:01,590 - ML_Identification - DEBUG - load:528 - Loading ML object from files.
+2021-02-15 15:19:01,590 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-15 15:19:01,590 - ML_Identification - DEBUG - load:531 - Loading Keras model from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/model.h5'.
+2021-02-15 15:19:05,229 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/time.txt'.
+2021-02-15 15:19:05,231 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/loss.txt'.
+2021-02-15 15:19:05,233 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-15 15:19:05,238 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-15 15:19:05,240 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-15 15:19:05,244 - ML_Identification - DEBUG - load:538 - Loading classes from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/classes.txt'.
+2021-02-15 15:19:05,244 - ML_Identification - INFO - load:542 - ML object loaded successfully!
+2021-02-15 15:19:05,244 - ML_Identification - INFO - optimise:721 - Optimising parameter 'learning_rate' across range '[0.0001, 0.0002, 0.0003]'.
+2021-02-15 15:19:05,245 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-15 15:19:05,245 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-15 15:19:05,245 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-15 15:19:05,245 - ML_Identification - DEBUG - optimise:732 - New model: ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)
+2021-02-15 15:19:05,245 - ML_Identification - INFO - load:511 - Loading ML object.
+2021-02-15 15:19:05,245 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-15 15:19:05,245 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-15 15:19:05,246 - ML_Identification - DEBUG - load:528 - Loading ML object from files.
+2021-02-15 15:19:05,246 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-15 15:19:05,246 - ML_Identification - DEBUG - load:531 - Loading Keras model from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/model.h5'.
+2021-02-15 15:19:05,932 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/time.txt'.
+2021-02-15 15:19:05,933 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/loss.txt'.
+2021-02-15 15:19:05,934 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-15 15:19:05,935 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-15 15:19:05,936 - ML_Identification - DEBUG - load:535 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-15 15:19:05,936 - ML_Identification - DEBUG - load:538 - Loading classes from 'Models/ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001)/classes.txt'.
+2021-02-15 15:19:05,937 - ML_Identification - INFO - load:542 - ML object loaded successfully!
+2021-02-15 15:19:05,937 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-15 15:19:05,937 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-15 15:19:05,938 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-15 15:19:05,938 - ML_Identification - DEBUG - optimise:732 - New model: ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 5, 256), 'Adamax', 0.0002)
+2021-02-15 15:19:05,938 - ML_Identification - INFO - load:511 - Loading ML object.
+2021-02-15 15:19:05,938 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-15 15:19:05,938 - ML_Identification - WARNING - load:514 - Model does not exist! Will now train and save.
+2021-02-15 15:19:05,938 - ML_Identification - INFO - train:216 - Initialising the training process for the model.
+2021-02-15 15:19:05,938 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-15 15:19:05,938 - ML_Identification - DEBUG - train:233 - Creating the data generator object for the dataset.
+2021-02-15 15:19:05,939 - DataHandling - DEBUG - get_classes:328 - Getting classes.
+2021-02-15 15:19:05,939 - ML_Identification - DEBUG - train:240 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0)]
+2021-02-15 15:19:05,939 - ML_Identification - DEBUG - train:241 - Input shape: (128, 128, 1)
+2021-02-15 15:19:05,939 - ML_Identification - DEBUG - train:245 - Creating the Keras model.
+2021-02-15 15:19:05,939 - ML_Identification - DEBUG - create_model:143 - Creating the architecture of the Keras model.
+2021-02-15 15:19:06,232 - ML_Identification - DEBUG - create_model:195 - Keras model layers created.
+2021-02-15 15:19:06,232 - ML_Identification - DEBUG - create_model:196 - Compiling the model.
+2021-02-15 15:19:06,236 - ML_Identification - DEBUG - create_model:201 - Model compiled. Optimiser: Adamax(learning_rate=0.0002).
+2021-02-15 15:19:06,237 - ML_Identification - DEBUG - create_model:209 - Keras model architecture created successfully!
+2021-02-15 15:19:06,237 - ML_Identification - INFO - train:254 - Starting the training process.
+2021-02-15 15:19:06,237 - DataHandling - DEBUG - new_stage:293 - Incrementing dataset to stage 1.
+2021-02-15 15:19:06,237 - ML_Identification - INFO - train:261 - Stage 1 / 2 of training.
+2021-02-15 15:19:12,918 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:12,918 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:12,918 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:12,918 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:12,918 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:12,918 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:12,918 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:12,918 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:12,918 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:12,919 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:12,924 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:12,924 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:12,924 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:12,924 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:12,924 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:12,924 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:12,924 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:12,924 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:12,924 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:12,925 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,028 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,028 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,028 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,028 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,028 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,028 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,028 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,028 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,028 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,029 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,074 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,074 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,074 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,074 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,074 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,074 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,074 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,074 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,074 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,075 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,174 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,174 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,174 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,174 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,174 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,174 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,174 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,174 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,174 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,175 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,233 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,233 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,233 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,233 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,233 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,233 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,233 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,233 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,233 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,234 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,301 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,301 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,301 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,301 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,301 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,301 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,301 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,301 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,302 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,302 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,331 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,331 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,331 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,331 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,331 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,331 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,331 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,331 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,331 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,332 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,416 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,417 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,417 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,417 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,417 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,417 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,417 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,417 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,417 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,417 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,419 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,420 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,420 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,420 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,420 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,420 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,420 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,420 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,420 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,420 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,508 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,508 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,508 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,508 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,508 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,508 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,508 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,508 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,508 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,509 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:13,539 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:13,539 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:13,539 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:13,539 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:13,539 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,539 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,539 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,539 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:13,539 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:13,540 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,260 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,260 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,260 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,260 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,261 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,261 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,261 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,261 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,261 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,261 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,514 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,514 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,514 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,515 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,515 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,515 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,515 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,515 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,515 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,516 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,530 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,530 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,530 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,530 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,530 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,530 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,530 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,530 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,530 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,531 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,672 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,672 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,672 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,672 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,672 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,673 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,673 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,673 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,673 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,673 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,742 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,743 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,743 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,743 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,743 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,743 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,743 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,743 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,743 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,743 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,771 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,771 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,771 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,771 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,771 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,771 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,771 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,771 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,771 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,772 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,808 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,808 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,808 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,808 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,808 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,808 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,808 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,808 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,808 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,809 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,942 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,942 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,942 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,943 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,943 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,943 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,943 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,943 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,943 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,943 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:19,959 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:19,959 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:19,960 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:19,960 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:19,960 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,960 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,960 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,960 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:19,960 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:19,960 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:20,078 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:20,078 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:20,078 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:20,078 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:20,078 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,078 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,078 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,078 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,079 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:20,079 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:20,084 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:20,084 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:20,084 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:20,084 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:20,084 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,084 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,084 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,084 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,084 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:20,085 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:20,166 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:20,166 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:20,166 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:20,166 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:20,167 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,167 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,167 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,167 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:20,167 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:20,167 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,347 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,347 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,347 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,347 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,347 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,347 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,347 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,347 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,348 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,348 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,368 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,368 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,368 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,369 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,369 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,369 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,369 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,369 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,369 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,369 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,437 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,438 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,438 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,438 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,438 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,438 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,438 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,438 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,438 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,439 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,644 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,644 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,644 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,644 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,644 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,644 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,644 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,644 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,644 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,645 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,672 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,672 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,672 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,672 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,672 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,672 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,672 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,672 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,673 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,673 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,731 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,731 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,731 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,731 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,731 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,731 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,731 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,731 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,732 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,732 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,759 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,759 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,759 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,759 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,759 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,759 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,759 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,759 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,759 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,760 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,817 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,817 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,817 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,817 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,817 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,817 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,817 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,817 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,817 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,818 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,894 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,895 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,895 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,895 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,895 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,895 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,895 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,895 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,895 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,895 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,899 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,900 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,900 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,900 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,900 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,900 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,900 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,900 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,900 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,900 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:24,983 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:24,983 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:24,983 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:24,983 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:24,983 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,983 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,983 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,983 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:24,983 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:24,984 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:25,056 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:25,056 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:25,057 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:25,057 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:25,057 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:25,057 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:25,057 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:25,057 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:25,057 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:25,057 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:29,950 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:29,950 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:29,950 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:29,950 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:29,950 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:29,950 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:29,950 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:29,951 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:29,951 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:29,951 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:30,649 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:30,649 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:30,649 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:30,649 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:30,649 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,649 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,650 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,650 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,650 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:30,650 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:30,658 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:30,658 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:30,658 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:30,658 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:30,658 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,659 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,659 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,659 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,659 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:30,659 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:30,789 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:30,789 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:30,789 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:30,789 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:30,790 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,790 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,790 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,790 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,790 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:30,790 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:30,803 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:30,803 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:30,803 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:30,803 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:30,803 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,803 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,804 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,804 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,804 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:30,804 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:30,882 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:30,882 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:30,882 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:30,882 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:30,882 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,882 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,882 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,882 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,882 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:30,883 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:30,925 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:30,925 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:30,925 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:30,925 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:30,925 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,925 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,925 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,925 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,925 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:30,926 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:30,973 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:30,973 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:30,973 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:30,973 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:30,973 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,973 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,973 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,973 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:30,973 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:30,974 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:31,094 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:31,094 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:31,094 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:31,094 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:31,094 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,094 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,094 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,094 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,094 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:31,095 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:31,113 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:31,113 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:31,113 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:31,114 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:31,114 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,114 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,114 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,114 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,114 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:31,114 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:31,114 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:31,114 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:31,114 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:31,115 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:31,115 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,115 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,115 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,115 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,115 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:31,115 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:31,200 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:31,200 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:31,200 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:31,200 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:31,200 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,200 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,200 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,200 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:31,200 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:31,201 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:33,513 - ML_Identification - DEBUG - train:304 - Epoch: 1 - Time: 27.57s - Loss: 0.2933 - Accuracy: 0.4954 - Val Loss: 0.2283 - Val Accuracy: 0.6190 - Stagnation: 0
+2021-02-15 15:19:38,543 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:38,543 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:38,543 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:38,543 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:38,544 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,544 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,544 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,544 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,544 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:38,544 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:38,567 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:38,567 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:38,567 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:38,567 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:38,568 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,568 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,568 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,568 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,568 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:38,568 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:38,694 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:38,694 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:38,694 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:38,695 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:38,695 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,695 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,695 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,695 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,695 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:38,695 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:38,697 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:38,697 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:38,697 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:38,697 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:38,697 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,697 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,697 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,697 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,698 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:38,698 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:38,816 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:38,816 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:38,817 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:38,817 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:38,817 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,817 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,817 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,817 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,817 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:38,817 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:38,893 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:38,894 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:38,894 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:38,894 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:38,894 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,894 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,894 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,894 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,894 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:38,895 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:38,930 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:38,930 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:38,930 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:38,930 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:38,930 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,930 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,930 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,930 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,931 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:38,931 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:38,962 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:38,962 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:38,962 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:38,963 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:38,963 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,963 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,963 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,963 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:38,963 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:38,963 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:39,637 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:39,637 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:39,637 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:39,637 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:39,637 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,637 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,637 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,637 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,637 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:39,638 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:39,701 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:39,701 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:39,701 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:39,701 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:39,701 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,701 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,701 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,701 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,701 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:39,702 - DataHandling - INFO - __init__:252 - Generator initialised!
+2021-02-15 15:19:39,835 - DataHandling - INFO - __init__:225 - Initialising generator.
+2021-02-15 15:19:39,835 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-15 15:19:39,835 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-15 15:19:39,835 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-15 15:19:39,835 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,835 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,835 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,835 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-15 15:19:39,835 - DataHandling - DEBUG - __init__:242 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 20, 128), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 20, 'batch_size': 128, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-15 15:19:39,836 - DataHandling - INFO - __init__:252 - Generator initialised!
