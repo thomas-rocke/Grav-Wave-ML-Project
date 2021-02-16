@@ -385,7 +385,6 @@ class ML:
                                                steps=len(self.data_generator),
                                                max_queue_size=cpu_count(),
                                                use_multiprocessing=True,
-                                               max_queue_size=cpu_count(),
                                                workers=cpu_count(),
                                                verbose=int(info))
 
