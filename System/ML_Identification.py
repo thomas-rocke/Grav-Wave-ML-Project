@@ -712,6 +712,7 @@ class ML:
         for i in tqdm(range(N), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
 
         LOG.info("Evaluation complete!")
+        print(log("[EVAL] Done!\n"))
 
     def calculate_phase(self, data, superposition: Superposition):
         '''
