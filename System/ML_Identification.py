@@ -299,16 +299,18 @@ class ML:
 
                     # Fit the model to the stage of the data generator
 
-                    history_callback = self.model.fit_generator(self.data_generator,
+                    history_callback = self.model.fit(self.data_generator,
                                                                 validation_data=self.data_generator,
-                                                                validation_steps=2,
+                                                                validation_steps=1,
                                                                 steps_per_epoch=len(self.data_generator),
                                                                 max_queue_size=cpu_count(),
-                                                                use_multiprocessing=True,
+                                                                use_multiprocessing=False,
                                                                 workers=cpu_count(),
                                                                 verbose=int(info))
 
                     # Save the performance of this epoch
+
+                    print(perf_counter() - start_time)
 
                     for i in self.history:
                         if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
@@ -384,7 +386,7 @@ class ML:
         scores = self.model.evaluate_generator(self.data_generator,
                                                steps=len(self.data_generator),
                                                max_queue_size=cpu_count(),
-                                               use_multiprocessing=True,
+                                               use_multiprocessing=False,
                                                workers=cpu_count(),
                                                verbose=int(info))
 
