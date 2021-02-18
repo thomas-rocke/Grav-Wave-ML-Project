@@ -112,7 +112,7 @@ class ML:
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator, self.optimiser, self.learning_rate)
+        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate)
 
     def exists(self):
         '''
@@ -280,10 +280,10 @@ class ML:
 
                     history_callback = self.model.fit_generator(self.data_generator,
                                                                 validation_data=self.data_generator,
-                                                                validation_steps=2,
+                                                                validation_steps=1,
                                                                 steps_per_epoch=len(self.data_generator),
                                                                 max_queue_size=cpu_count(),
-                                                                use_multiprocessing=True,
+                                                                use_multiprocessing=False,
                                                                 workers=cpu_count(),
                                                                 verbose=int(info))
 
@@ -363,8 +363,7 @@ class ML:
         scores = self.model.evaluate_generator(self.data_generator,
                                                steps=len(self.data_generator),
                                                max_queue_size=cpu_count(),
-                                               use_multiprocessing=True,
-                                               max_queue_size=cpu_count()
+                                               use_multiprocessing=False,
                                                workers=cpu_count(),
                                                verbose=int(info))
 
@@ -419,6 +418,12 @@ class ML:
         '''
         LOG.info("Ploting model history.")
         LOG.debug(f"Locals: {locals()}")
+
+        if not self.exists():
+            LOG.warning("Model does not exist!")
+            print(log("[WARN] Model does not exist!\n"))
+
+            return
 
         if info: print(log("[PLOT] Plotting history..."))
 
@@ -515,15 +520,8 @@ class ML:
             LOG.warning("Model does not exist! Will now train and save.")
             print(log("[WARN] Model does not exist! Will now train and save.\n"))
 
-            self.train(info=info)
+            self.train(info)
             self.save(save_trained)
-            if not save_trained: self.free()
-
-            return
-
-        elif not self.trained():
-            LOG.warning("Model exists but has not been trained! Will only load history.")
-            print(log("[WARN] Model exists but has not been trained! Will only load history.\n"))
 
         print(log("[LOAD] Loading model... "), end='')
         LOG.debug("Loading ML object from files.")
@@ -550,14 +548,8 @@ class ML:
         LOG.info("Using model to make a prediction.")
         LOG.debug(f"Locals: {locals()}")
 
-        if not self.exists():
-            LOG.critical("Model does not exist!")
-            print(log("[FATAL] Model does not exist!\n"))
-
-            return
-
-        elif not self.trained():
-            LOG.error("Model has not been trained!")
+        if not self.trained():
+            LOG.warning("Model has not been trained!")
             print(log("[WARN] Model has not been trained!\n"))
 
             return
@@ -585,7 +577,7 @@ class ML:
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                modes[-1].phase = np.arccos(prediction[i + (len(prediction) // 2)]) # Set the phase to the corresponding modes phase
+                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
 
         if info: print(log("[PRED] V "))
 
@@ -689,6 +681,24 @@ class ML:
         
         LOG.info("Comparison complete!")
 
+    def evaluate(self, N: int = 1000, info: bool = False):
+        '''
+        Evaluate the model by comparing against N randomly generated superpositions.
+        '''
+        LOG.info(f"Evaluating model using {N} randomly generated superpositions.")
+
+        if not self.trained():
+            LOG.warning("Model has not been trained!")
+            print(log("[WARN] Model has not been trained!\n"))
+
+            return
+
+        while self.data_generator.new_stage(): pass # Move to the last stage of training
+        for i in tqdm(range(N), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
+
+        LOG.info("Evaluation complete!")
+        print(log("[EVAL] Done!\n"))
+
     def calculate_phase(self, data, superposition: Superposition):
         '''
         Calculate the phases for modes in the superposition that minimises the MSE to the original data.
@@ -763,8 +773,8 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=param_name.replace('_', ' ').title() + ": " + str(getattr(m, param_name)), elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                    plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    plt.savefig(f"Optimisation/{self.data_generator.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
@@ -815,6 +825,7 @@ def log(message):
     message = message.replace("[DATA]",     Colour.OKGREEN  + "[DATA]"  + Colour.ENDC)
     message = message.replace("[TRAIN]",    Colour.OKGREEN  + "[TRAIN]" + Colour.ENDC)
     message = message.replace("[PLOT]",     Colour.OKGREEN  + "[PLOT]"  + Colour.ENDC)
+    message = message.replace("[EVAL]",     Colour.OKGREEN  + "[EVAL]"  + Colour.ENDC)
     message = message.replace("[SAVE]",     Colour.OKGREEN  + "[SAVE]"  + Colour.ENDC)
     message = message.replace("[LOAD]",     Colour.OKGREEN  + "[LOAD]"  + Colour.ENDC)
     message = message.replace("[PRED]",     Colour.OKGREEN  + "[PRED]"  + Colour.ENDC)
@@ -1007,29 +1018,29 @@ if __name__ == '__main__':
 
     # Training and saving
 
-    m = ML(data_generator=BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)) # Dataset(training_strategy_name="stage_change_test")
-    m.train()
-    m.save()
+    # m = ML(data_generator=BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)) # Dataset(training_strategy_name="stage_change_test")
+    # m.train()
+    # m.save()
 
-    data = BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)
-    data.new_stage() # Init stage 1
-    data.new_stage() # Init stage 2
-    data.new_stage() # Init stage 3
-    data.new_stage() # Init stage 4
+    # data = BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)
+    # data.new_stage() # Init stage 1
+    # data.new_stage() # Init stage 2
+    # data.new_stage() # Init stage 3
+    # data.new_stage() # Init stage 4
 
-    for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
+    # for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
-    m = ML(data_generator=BasicGenerator(amplitude_variation=0.5, phase_variation=1.0))
-    m.train()
-    m.save()
+    # m = ML(data_generator=BasicGenerator(amplitude_variation=0.5, phase_variation=1.0))
+    # m.train()
+    # m.save()
 
-    data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
-    data.new_stage() # Init stage 1
-    data.new_stage() # Init stage 2
-    data.new_stage() # Init stage 3
-    data.new_stage() # Init stage 4
+    # data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
+    # data.new_stage() # Init stage 1
+    # data.new_stage() # Init stage 2
+    # data.new_stage() # Init stage 3
+    # data.new_stage() # Init stage 4
 
-    for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
+    # for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
     # datas = [data.get_random() for i in tqdm(range(1000))]
     # p = Pool(cpu_count())

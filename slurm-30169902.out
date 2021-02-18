@@ -233,3 +233,4 @@ Loss: 0.0019 - Accuracy: 98.16%
 
 [92m[SAVE][0m Saving model... Done!
 
+slurmstepd: error: poll: Bad address

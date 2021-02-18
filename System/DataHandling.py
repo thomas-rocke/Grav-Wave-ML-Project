@@ -214,8 +214,8 @@ class BasicGenerator(keras.utils.Sequence):
                  phase_variation: float = 1.0,
                  noise_variation: float = 0.1,
                  exposure: tuple = (0.0, 1.0),
-                 repeats: int = 20,
-                 batch_size: int = 128):
+                 repeats: int = 32,
+                 batch_size: int = 64):
         '''
         Initialise the class with the required complexity.
 
@@ -264,6 +264,12 @@ class BasicGenerator(keras.utils.Sequence):
         '''
         return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size})"
 
+    def copy(self):
+        '''
+        Copy this data generator.
+        '''
+        return BasicGenerator(self.max_order, self.max_number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size)
+
     def __len__(self):
         '''
         Denotes the number of batches per epoch.
@@ -282,7 +288,7 @@ class BasicGenerator(keras.utils.Sequence):
         sups = [self.generate_superposition(comb) for comb in combs]
 
         X = np.array(self.get_inputs(*sups))[..., np.newaxis]
-        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) for j in self.hermite_modes] for i in sups])
+        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [i.contains(j).phase for j in self.hermite_modes] for i in sups])
 
         return X, Y
 
@@ -361,7 +367,7 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, training_strategy_name : str = "default", max_order: int = 3, resolution: int = 128, batch_size: int = 32, steps: int = 50, repeats: int = 1, info: bool = True):
+    def __init__(self, training_strategy_name: str = "default", max_order: int = 3, resolution: int = 128, batch_size: int = 32, steps: int = 50, repeats: int = 1, info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
@@ -409,6 +415,12 @@ class Dataset(keras.utils.Sequence):
         '''
         return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.steps}, {self.repeats}, {self.info})"
 
+    def copy(self):
+        '''
+        Copy this data generator.
+        '''
+        return Dataset(self.training_strategy_name, self.max_order, self.resolution, self.batch_size, self.steps, self.repeats, self.info)
+
     def __len__(self):
         '''
         Denotes the number of batches per epoch.
@@ -431,7 +443,7 @@ class Dataset(keras.utils.Sequence):
             self.current_repeat += 1
         
         return self.get_batch_single_thread(index)
-        #return self.get_batch_multiprocessed(index)
+        # return self.get_batch_multiprocessed(index)
 
     def get_batch_single_thread(self, index):
         input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
