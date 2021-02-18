@@ -8,3 +8,9 @@
 | Command /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/BlueBear/0.5.sh
 | WorkDir /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/BlueBear
 +--------------------------------------------------------------------------+
++--------------------------------------------------------------------------+
+| Finished at Thu Feb 18 21:11:44 2021 for jxw1025(596795) on the BlueBEAR Cluster
+| Required (08:24.642 cputime, 8744.50M memory used) - 00:04:08 walltime
+| JobState COMPLETING - Reason None
+| Exitcode 0:15
++--------------------------------------------------------------------------+
