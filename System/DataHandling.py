@@ -238,8 +238,8 @@ class BasicGenerator(keras.utils.Sequence):
         self.resolution = resolution
         self.cosine = cosine
 
-        cam = {"noise_variance":self.noise_variation,
-                "exposure_limits":self.exposure
+        cam = {"noise_variance": self.noise_variation,
+                "exposure_limits": self.exposure
               }
 
         self.mode_processor = ModeProcessor(camera=cam)
@@ -309,7 +309,6 @@ class BasicGenerator(keras.utils.Sequence):
 
         self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))] * self.repeats
-        random.shuffle(self.combs) # Shuffle the combinations list
 
         return True
 
