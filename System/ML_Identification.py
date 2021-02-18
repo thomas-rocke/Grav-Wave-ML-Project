@@ -74,8 +74,7 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
-                 learning_rate: float = 0.0001,
-                 custom_loss: bool = False):
+                 learning_rate: float = 0.0001):
         '''
         Initialise the class.
         '''
@@ -84,7 +83,6 @@ class ML:
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
-        self.custom_loss = custom_loss
 
         LOG.debug(f"Locals: {locals()}")
 
@@ -108,13 +106,13 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}, {self.custom_loss})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate})"
 
     def copy(self):
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate, self.custom_loss)
+        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate)
 
     def exists(self):
         '''
@@ -142,11 +140,8 @@ class ML:
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
-        if self.custom_loss:
-            mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
-            loss = K.square((y_pred * mask) - (y_true * mask))
-        else:
-            loss = K.square(y_pred - y_true)
+        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+        loss = K.square((y_pred * mask) - (y_true * mask))
 
         return K.mean(loss, axis=-1)
 
@@ -789,7 +784,9 @@ class ML:
 
                 if save:
                     LOG.debug(f"Saving to 'Optimisation/{self}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                    plt.savefig(f"Optimisation/{self}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+
+                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}", exist_ok=True) # Create directory for optimisations
+                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
