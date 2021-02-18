@@ -292,8 +292,7 @@ class BasicGenerator(keras.utils.Sequence):
         sups = [self.generate_superposition(comb) for comb in combs]
 
         X = np.array(self.get_inputs(*sups))[..., np.newaxis]
-        if self.cosine: Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) for j in self.hermite_modes] for i in sups]) # Use cos of phase
-        else: Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [(i.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes] for i in sups]) # Use normalised phase
+        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) if self.cosine else (i.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes] for i in sups])
 
         return X, Y
 
@@ -490,8 +489,6 @@ class Dataset(keras.utils.Sequence):
                     mode.amplitude = 0
                     mode.phase = 0
         input_data = self.mode_processor.getImage(s.superpose())[..., np.newaxis] # Generate noise image
-        amplitudes = [s.contains(j).amplitude for j in self.hermite_modes]
-        phases = [np.cos(s.contains(j).phase) for j in self.hermite_modes]
 
         for phase in phases:
             if phase != -1: # Phase not masked
@@ -499,13 +496,7 @@ class Dataset(keras.utils.Sequence):
                 phase += 1
         output_data = np.array(amplitudes + phases)
 
-        return input_data, output_data
-
-    def get_classes(self):
         '''
-        Get the num_classes result required for model creation.
-        '''
-        LOG.debug("Getting classes.")
 
         return np.array(self.hermite_modes * 2, dtype=object)
 

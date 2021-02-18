@@ -291,7 +291,7 @@ class Superposition(list):
             if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
                 return i
 
-        return Hermite(l=0, m=0, amplitude=0.0)
+        return Hermite(l=0, m=0, amplitude=0, phase=-10)
 
     def plot(self, save: bool = False, title: bool = True, constituents: bool = False):
         '''
