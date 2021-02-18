@@ -1,0 +1,125 @@
+GCCcore/8.3.0
+zlib/1.2.11-GCCcore-8.3.0
+binutils/2.32-GCCcore-8.3.0
+GCC/8.3.0
+CUDA/10.1.243-GCC-8.3.0
+gcccuda/2019b
+numactl/2.0.12-GCCcore-8.3.0
+XZ/5.2.4-GCCcore-8.3.0
+libxml2/2.9.9-GCCcore-8.3.0
+libpciaccess/0.14-GCCcore-8.3.0
+hwloc/1.11.12-GCCcore-8.3.0
+UCX/1.6.1-GCCcore-8.3.0
+OpenMPI/3.1.6-gcccuda-2019b
+OpenBLAS/0.3.7-GCC-8.3.0
+gompic/2019b
+FFTW/3.3.8-gompic-2019b
+ScaLAPACK/2.0.2-gompic-2019b
+fosscuda/2019b
+bzip2/1.0.8-GCCcore-8.3.0
+ncurses/6.1-GCCcore-8.3.0
+libreadline/8.0-GCCcore-8.3.0
+ncurses/6.1-GCCcore-8.3.0
+Tcl/8.6.9-GCCcore-8.3.0
+SQLite/3.29.0-GCCcore-8.3.0
+GMP/6.1.2-GCCcore-8.3.0
+libffi/3.2.1-GCCcore-8.3.0
+Python/3.7.4-GCCcore-8.3.0
+SciPy-bundle/2019.10-fosscuda-2019b-Python-3.7.4
+zlib/1.2.11-GCCcore-8.3.0
+NASM/2.14.02-GCCcore-8.3.0
+x264/20190925-GCCcore-8.3.0
+LAME/3.100-GCCcore-8.3.0
+x265/3.2-GCCcore-8.3.0
+expat/2.2.7-GCCcore-8.3.0
+libpng/1.6.37-GCCcore-8.3.0
+freetype/2.10.1-GCCcore-8.3.0
+util-linux/2.34-GCCcore-8.3.0
+fontconfig/2.13.1-GCCcore-8.3.0
+freetype/2.10.1-GCCcore-8.3.0
+X11/20190717-GCCcore-8.3.0
+freetype/2.10.1-GCCcore-8.3.0
+fontconfig/2.13.1-GCCcore-8.3.0
+FriBidi/1.0.5-GCCcore-8.3.0
+FFmpeg/4.2.1-GCCcore-8.3.0
+libjpeg-turbo/2.0.3-GCCcore-8.3.0
+libpng/1.6.37-GCCcore-8.3.0
+LibTIFF/4.0.10-GCCcore-8.3.0
+JasPer/2.0.14-GCCcore-8.3.0
+Java/11.0.6-ppc64le
+Java/11.0.6-ppc64le
+ant/1.10.7-Java-11
+gettext/0.20.1-GCCcore-8.3.0
+PCRE/8.43-GCCcore-8.3.0
+GLib/2.62.0-GCCcore-8.3.0
+ATK/2.34.1-GCCcore-8.3.0
+DBus/1.13.12-GCCcore-8.3.0
+at-spi2-core/2.34.0-GCCcore-8.3.0
+at-spi2-atk/2.34.1-GCCcore-8.3.0
+Gdk-Pixbuf/2.38.2-GCCcore-8.3.0
+pixman/0.38.4-GCCcore-8.3.0
+cairo/1.16.0-GCCcore-8.3.0
+ICU/64.2-GCCcore-8.3.0
+HarfBuzz/2.6.4-GCCcore-8.3.0
+Pango/1.44.7-GCCcore-8.3.0
+nettle/3.5.1-GCCcore-8.3.0
+libdrm/2.4.99-GCCcore-8.3.0
+LLVM/9.0.0-GCCcore-8.3.0
+libunwind/1.3.1-GCCcore-8.3.0
+Mesa/19.1.7-GCCcore-8.3.0
+libepoxy/1.5.4-GCCcore-8.3.0
+GTK+/3.24.13-GCCcore-8.3.0
+OpenCV/4.2.0-fosscuda-2019b-Python-3.7.4
+Szip/2.1.1-GCCcore-8.3.0
+HDF5/1.10.5-gompic-2019b
+h5py/2.10.0-fosscuda-2019b-Python-3.7.4
+cuDNN/7.6.4.38-gcccuda-2019b
+NCCL/2.4.8-gcccuda-2019b
+TensorFlow/2.0.0-fosscuda-2019b-Python-3.7.4
+libyaml/0.2.2-GCCcore-8.3.0
+PyYAML/5.1.2-GCCcore-8.3.0
+MPFR/4.0.2-GCCcore-8.3.0
+Pillow/6.2.1-GCCcore-8.3.0
+magma/2.5.4-fosscuda-2019b
+PyTorch/1.4.0-fosscuda-2019b-Python-3.7.4
+bokeh/1.4.0-fosscuda-2019b-Python-3.7.4
+dask/2.8.0-fosscuda-2019b-Python-3.7.4
+Tk/8.6.9-GCCcore-8.3.0
+Tkinter/3.7.4-GCCcore-8.3.0
+matplotlib/3.1.1-fosscuda-2019b-Python-3.7.4
+TinyDB/3.15.2-GCCcore-8.3.0
+libxslt/1.1.34-GCCcore-8.3.0
+lxml/4.4.2-GCCcore-8.3.0
+Pillow-SIMD/6.0.0-GCCcore-8.3.0
+torchvision/0.5.0-fosscuda-2019b-Python-3.7.4-PyTorch-1.4.0
+Mako/1.1.0-GCCcore-8.3.0
+libgpuarray/0.7.6-fosscuda-2019b-Python-3.7.4
+Theano/1.0.4-fosscuda-2019b-Python-3.7.4
+tensorflow_probability/0.8.0-fosscuda-2019b-Python-3.7.4
+scikit-image/0.16.2-fosscuda-2019b-Python-3.7.4
+tqdm/4.41.1-GCCcore-8.3.0
+SoftRas/f644279-fosscuda-2019b-Python-3.7.4-PyTorch-1.4.0
+imageio/2.6.1-fosscuda-2019b-Python-3.7.4
+OpenPGM/5.2.122-GCCcore-8.3.0
+libsodium/1.0.18-GCCcore-8.3.0
+ZeroMQ/4.3.2-GCCcore-8.3.0
+IPython/7.9.0-fosscuda-2019b-Python-3.7.4
+PyTorch3D/0.1.1-fosscuda-2019b-Python-3.7.4-PyTorch-1.4.0
+neural_renderer_pytorch/1.1.3-fosscuda-2019b-Python-3.7.4-PyTorch-1.4.0
+Keras/2.3.1-fosscuda-2019b-Python-3.7.4
+scikit-image/0.16.2-fosscuda-2019b-Python-3.7.4
+hdf5storage/0.1.15-fosscuda-2019b-Python-3.7.4
+detectron2/0.1.1-fosscuda-2019b-Python-3.7.4
+libgpuarray/0.7.6-fosscuda-2019b-Python-3.7.4
+imageio-ffmpeg/0.3.0-fosscuda-2019b-Python-3.7.4
+imageio/2.6.1-fosscuda-2019b-Python-3.7.4
+hypothesis/4.44.2-GCCcore-8.3.0-Python-3.7.4
+Mako/1.1.0-GCCcore-8.3.0
+Globus-CLI/1.11.0-GCCcore-8.3.0-Python-3.7.4
+numexpr/2.7.1-fosscuda-2019b-Python-3.7.4
+LZO/2.10-GCCcore-8.3.0
+Blosc/1.17.1-GCCcore-8.3.0
+PyTables/3.6.1-fosscuda-2019b-Python-3.7.4
+BEAR-Python-DataScience/2019b-fosscuda-2019b-Python-3.7.4-ppc64le
+Using TensorFlow backend.
+[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.1114 - Val Loss: 0.1082:   0%|          | 0/100 [00:38<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.1114 - Val Loss: 0.1082:   1%|          | 1/100 [00:38<1:03:38, 38.57s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0882 - Val Loss: 0.1075:   1%|          | 1/100 [00:52<1:03:38, 38.57s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0882 - Val Loss: 0.1075:   2%|▏         | 2/100 [00:52<51:00, 31.23s/it]  [92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0769 - Val Loss: 0.1074:   2%|▏         | 2/100 [01:02<51:00, 31.23s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0769 - Val Loss: 0.1074:   3%|▎         | 3/100 [01:02<40:03, 24.78s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0692 - Val Loss: 0.1111:   3%|▎         | 3/100 [01:11<40:03, 24.78s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0692 - Val Loss: 0.1111:   4%|▍         | 4/100 [01:11<32:20, 20.22s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0645 - Val Loss: 0.1084:   4%|▍         | 4/100 [01:21<32:20, 20.22s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0645 - Val Loss: 0.1084:   5%|▌         | 5/100 [01:21<27:00, 17.06s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0605 - Val Loss: 0.1064:   5%|▌         | 5/100 [01:31<27:00, 17.06s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0605 - Val Loss: 0.1064:   6%|▌         | 6/100 [01:31<23:22, 14.92s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0577 - Val Loss: 0.1037:   6%|▌         | 6/100 [01:41<23:22, 14.92s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0577 - Val Loss: 0.1037:   7%|▋         | 7/100 [01:41<20:38, 13.32s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0552 - Val Loss: 0.1028:   7%|▋         | 7/100 [01:50<20:38, 13.32s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0552 - Val Loss: 0.1028:   8%|▊         | 8/100 [01:50<18:42, 12.20s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0547 - Val Loss: 0.1002:   8%|▊         | 8/100 [02:00<18:42, 12.20s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0547 - Val Loss: 0.1002:   9%|▉         | 9/100 [02:00<17:24, 11.47s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0521 - Val Loss: 0.0989:   9%|▉         | 9/100 [02:10<17:24, 11.47s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0521 - Val Loss: 0.0989:  10%|█         | 10/100 [02:10<16:21, 10.90s/it]
