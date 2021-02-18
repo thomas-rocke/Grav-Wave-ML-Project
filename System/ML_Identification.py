@@ -134,7 +134,9 @@ class ML:
         '''
         Custom metric to determine the accuracy of our regression problem using rounded accuracy.
         '''
-        return K.mean(K.equal(K.round(y_true), K.round(y_pred)))
+        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+
+        return K.mean(K.equal(K.round(y_true * mask), K.round(y_pred * mask)))
 
     def loss(self, y_true, y_pred):
         '''
