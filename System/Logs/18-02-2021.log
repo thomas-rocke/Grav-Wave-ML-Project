@@ -18105,3 +18105,5 @@
 2021-02-18 13:10:58,996 - ML_Identification - DEBUG - train:306 - Epoch: 37 - Time: 370.48s - Loss: 0.1547 - Accuracy: 0.8065 - Val Loss: 0.2012 - Val Accuracy: 0.7960 - Stagnation: 1
 2021-02-18 13:11:07,956 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 379.43603410000003s
 2021-02-18 13:11:07,956 - ML_Identification - DEBUG - train:306 - Epoch: 38 - Time: 379.44s - Loss: 0.1537 - Accuracy: 0.8108 - Val Loss: 0.2029 - Val Accuracy: 0.7938 - Stagnation: 0
+2021-02-18 13:11:16,919 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 388.3989761s
+2021-02-18 13:11:16,919 - ML_Identification - DEBUG - train:306 - Epoch: 39 - Time: 388.40s - Loss: 0.1550 - Accuracy: 0.8072 - Val Loss: 0.1953 - Val Accuracy: 0.7969 - Stagnation: 3
