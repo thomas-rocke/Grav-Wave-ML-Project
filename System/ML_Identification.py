@@ -136,6 +136,14 @@ class ML:
         '''
         return K.mean(K.equal(K.round(y_true), K.round(y_pred)))
 
+    def loss(y_true, y_pred):
+        '''
+        Custom loss function to mask out modes that don't exist in the superposition.
+        '''
+        loss = K.square(y_pred - y_true)
+
+        return K.sum(loss, axis=1)
+
     def create_model(self, summary: bool = True):
         '''
         Create the Keras model in preparation for training.
@@ -577,7 +585,8 @@ class ML:
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                modes[-1].phase = np.arccos(prediction[i + (len(prediction) // 2)]) # Set the phase to the corresponding modes phase
+                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
+                modes[-1].phase = (modes[-1].phase * (2 * np.pi)) - np.pi
 
         if info: print(log("[PRED] V "))
 
@@ -770,11 +779,11 @@ class ML:
                 plt.xlim(0, 1E-9)
                 plt.ylim(0, 1E-9)
 
-                for m in models: m.plot(info=False, axes=(ax1, ax2), label=param_name.replace('_', ' ').title() + ": " + str(getattr(m, param_name)), elapsed_time=time)
+                for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                    plt.savefig(f"Optimisation/{self.data_generator.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 

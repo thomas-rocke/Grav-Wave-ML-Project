@@ -193,7 +193,7 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, *modes, resolution:int=128):
+    def __init__(self, *modes):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
@@ -226,7 +226,7 @@ class Superposition(list):
 
         for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
         '''
-        self.resolution = resolution
+        self.resolution = modes[0].resolution
         super().__init__()
         for mode in modes:
             if isinstance(mode, Hermite): # mode is of type Hermite
@@ -386,7 +386,7 @@ class Laguerre(Superposition):
         for q in range(p + 1):
             for s in range(int((m)/2) + 1):
                 frac = ((fact(2*(q-s) + m)*fact(2*(p-q+s)))/(2**(2*p + m - 1) * fact(p) * fact(p+m) * (1 + choose(0, m))))**0.5
-                y = Hermite(2*(q - s) + m, 2*(p - q + s))
+                y = Hermite(2*(q - s) + m, 2*(p - q + s), resolution=resolution)
                 y.amplitude = choose(p, q) * choose(m, 2*s) * frac
                 y.add_phase((s+p)*np.pi)
                 self.modes.append(y)
