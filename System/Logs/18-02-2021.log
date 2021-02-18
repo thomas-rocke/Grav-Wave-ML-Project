@@ -22574,3 +22574,5 @@
 2021-02-18 16:48:52,036 - ML_Identification - DEBUG - train:304 - Epoch: 50 - Time: 425.03s - Loss: 0.0336 - Accuracy: 0.7352 - Val Loss: 0.0234 - Val Accuracy: 0.7326 - Stagnation: 0
 2021-02-18 16:48:59,978 - ML_Identification - DEBUG - train:304 - Epoch: 51 - Time: 432.98s - Loss: 0.0324 - Accuracy: 0.7388 - Val Loss: 0.0225 - Val Accuracy: 0.7014 - Stagnation: 0
 2021-02-18 16:49:07,777 - ML_Identification - DEBUG - train:304 - Epoch: 52 - Time: 440.77s - Loss: 0.0325 - Accuracy: 0.7336 - Val Loss: 0.0213 - Val Accuracy: 0.7135 - Stagnation: 1
+2021-02-18 16:49:15,449 - ML_Identification - DEBUG - train:304 - Epoch: 53 - Time: 448.45s - Loss: 0.0317 - Accuracy: 0.7333 - Val Loss: 0.0209 - Val Accuracy: 0.7144 - Stagnation: 0
+2021-02-18 16:49:23,684 - ML_Identification - DEBUG - train:304 - Epoch: 54 - Time: 456.68s - Loss: 0.0318 - Accuracy: 0.7346 - Val Loss: 0.0216 - Val Accuracy: 0.7109 - Stagnation: 1
