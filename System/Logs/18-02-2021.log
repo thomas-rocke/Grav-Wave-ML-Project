@@ -32931,3 +32931,9 @@
 2021-02-18 21:11:16,032 - ML_Identification - DEBUG - train:315 - Epoch: 10 - Time: 128.82s - Loss: 0.0529 - Accuracy: 0.8982 - Val Loss: 0.0944 - Val Accuracy: 0.7977 - Stagnation: 0
 2021-02-18 21:11:18,162 - ML_Identification - DEBUG - train:315 - Epoch: 10 - Time: 132.70s - Loss: 0.0521 - Accuracy: 0.8997 - Val Loss: 0.0989 - Val Accuracy: 0.8030 - Stagnation: 0
 2021-02-18 21:11:22,510 - ML_Identification - DEBUG - train:315 - Epoch: 10 - Time: 135.30s - Loss: 0.0503 - Accuracy: 0.9036 - Val Loss: 0.1364 - Val Accuracy: 0.6007 - Stagnation: 0
+2021-02-18 21:11:27,858 - ML_Identification - DEBUG - train:315 - Epoch: 11 - Time: 142.39s - Loss: 0.0511 - Accuracy: 0.9005 - Val Loss: 0.0959 - Val Accuracy: 0.8012 - Stagnation: 0
+2021-02-18 21:11:30,522 - ML_Identification - DEBUG - train:315 - Epoch: 11 - Time: 143.31s - Loss: 0.0514 - Accuracy: 0.9000 - Val Loss: 0.0914 - Val Accuracy: 0.7977 - Stagnation: 0
+2021-02-18 21:11:32,026 - ML_Identification - DEBUG - train:315 - Epoch: 11 - Time: 144.82s - Loss: 0.0493 - Accuracy: 0.9048 - Val Loss: 0.1300 - Val Accuracy: 0.6727 - Stagnation: 0
+2021-02-18 21:11:37,397 - ML_Identification - DEBUG - train:315 - Epoch: 12 - Time: 151.93s - Loss: 0.0493 - Accuracy: 0.9026 - Val Loss: 0.0959 - Val Accuracy: 0.7995 - Stagnation: 0
+2021-02-18 21:11:39,953 - ML_Identification - DEBUG - train:315 - Epoch: 12 - Time: 152.74s - Loss: 0.0493 - Accuracy: 0.9043 - Val Loss: 0.0877 - Val Accuracy: 0.8003 - Stagnation: 0
+2021-02-18 21:11:41,668 - ML_Identification - DEBUG - train:315 - Epoch: 12 - Time: 154.46s - Loss: 0.0478 - Accuracy: 0.9111 - Val Loss: 0.1241 - Val Accuracy: 0.7422 - Stagnation: 0
