@@ -74,7 +74,8 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
-                 learning_rate: float = 0.0001):
+                 learning_rate: float = 0.0001,
+                 custom_loss: bool = False):
         '''
         Initialise the class.
         '''
@@ -83,6 +84,7 @@ class ML:
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
+        self.custom_loss = custom_loss
 
         LOG.debug(f"Locals: {locals()}")
 
@@ -106,13 +108,13 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}, {self.custom_loss})"
 
     def copy(self):
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate)
+        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate, self.custom_loss)
 
     def exists(self):
         '''
@@ -136,13 +138,17 @@ class ML:
         '''
         return K.mean(K.equal(K.round(y_true), K.round(y_pred)))
 
-    def loss(y_true, y_pred):
+    def loss(self, y_true, y_pred):
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
-        loss = K.square(y_pred - y_true)
+        if self.custom_loss:
+            mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+            loss = K.square((y_pred * mask) - (y_true * mask))
+        else:
+            loss = K.square(y_pred - y_true)
 
-        return K.sum(loss, axis=1)
+        return K.mean(loss, axis=-1)
 
     def create_model(self, summary: bool = True):
         '''
@@ -204,7 +210,7 @@ class ML:
         LOG.debug("Compiling the model.")
 
         # model = VGG16(self.input_shape, len(self.classes)) # Override model with VGG16 model
-        model.compile(loss="mse", optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
+        model.compile(loss=self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
 
         LOG.debug(f"Model compiled. Optimiser: {self.optimiser}(learning_rate={self.learning_rate}).")
 
@@ -536,7 +542,7 @@ class ML:
 
         if self.trained():
             LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
-            self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"metrics": [self.accuracy]})
+            self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
 
         for i in self.history:
             LOG.debug(f"Loading performance history from 'Models/{str(self)}/{i}.txt'.")
@@ -782,8 +788,8 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    LOG.debug(f"Saving to 'Optimisation/{self}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    plt.savefig(f"Optimisation/{self}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
