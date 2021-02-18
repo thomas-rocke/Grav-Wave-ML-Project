@@ -19,5 +19,101 @@
         "3" : {
             "mode_mask" : 6
         }
+    },
+
+    "slow_curve" : {
+        "1" : {
+            "mode_mask" : 2,
+            "camera" : "ideal_camera"
+        },
+
+        "2" : {
+            "mode_mask" : 4
+        },
+
+        "3" : {
+            "mode_mask" : 6
+        },
+
+        "4" : {
+            "mode_mask" : 8
+        },
+
+        "5" : {
+            "mode_mask" : 0
+        },
+
+        "6" : {
+            "camera" : "small_errors"
+        },
+
+        "7" : {
+            "camera" : "medium_errors"
+        },
+
+        "8" : {
+            "camera" : "large_errors"
+        }
+    },
+
+    "fast_curve" : {
+        "1" : {
+            "mode_mask" : 5,
+            "camera" : "ideal_camera"
+        },
+        
+        "2" : {
+            "mode_mask" : 0
+        },
+
+        "3" : {
+            "camera" : "small_errors"
+        },
+
+        "4" : {
+            "camera" : "large_errors"
+        }
+    },
+
+    "errors_throughout" : {
+        "1" : {
+            "mode_mask" : 2,
+            "camera" : "small_errors"
+        },
+
+        "2" : {
+            "mode_mask" : 4
+        },
+
+        "3" : {
+            "mode_mask" : 6
+        },
+
+        "4" : {
+            "mode_mask" : 8
+        }
+    },
+
+    "errors_at_end" : {
+        "1" : {
+            "mode_mask" : 2,
+            "camera" : "ideal_camera"
+        },
+
+        "2" : {
+            "mode_mask" : 4
+        },
+
+        "3" : {
+            "mode_mask" : 6
+        },
+
+        "4" : {
+            "mode_mask" : 8
+        },
+
+        "5" : {
+            "camera" : "small_errors"
+        }
     }
 }
