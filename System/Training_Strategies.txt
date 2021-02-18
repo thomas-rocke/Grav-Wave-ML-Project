@@ -20,4 +20,140 @@
             "mode_mask" : 6
         }
     }
+
+    "slow_curve" : {
+        "1" : {
+            "mode_mask" : 2,
+            "camera" : "ideal_camera"
+        },
+
+        "2" : {
+            "mode_mask" : 4
+        },
+
+        "3" : {
+            "mode_mask" : 6
+        },
+
+        "4" : {
+            "mode_mask" : 8
+        },
+
+        "5" : {
+            "mode_mask" : 10
+        },
+
+        "6" : {
+            "mode_mask" : 12
+        },
+
+        "7" : {
+            "mode_mask" : 14
+        },
+
+        "8" : {
+            "mode_mask" : 16
+        },
+
+        "9" : {
+            "mode_mask" : 18
+        },
+
+        "10" : {
+            "mode_mask" : 20
+        },
+
+        "11" : {
+            "mode_mask" : 22
+        },
+
+        "12" : {
+            "mode_mask" : 0
+        },
+
+        "13" : {
+            "camera" : "small_errors"
+        },
+
+        "14" : {
+            "camera" : "medium_errors"
+        },
+
+        "15" : {
+            "camera" : "large_errors"
+        }
+    },
+
+    "fast_curve" : {
+        "1" : {
+            "mode_mask" : 5,
+            "camera" : "ideal_camera"
+        },
+
+        "2" : {
+            "mode_mask" : 10
+        },
+
+        "3" : {
+            "mode_mask" : 15
+        },
+
+        "4" : {
+            "mode_mask" : 20 
+        },
+        
+        "5" : {
+            "mode_mask" : 0
+        },
+
+        "6" : {
+            "camera" : "small_errors"
+        },
+
+        "7" : {
+            "camera" : "large_errors"
+        }
+    },
+
+    "errors_throughout" : {
+        "1" : {
+            "mode_mask" : 2,
+            "camera" : "small_errors"
+        },
+
+        "2" : {
+            "mode_mask" : 4
+        },
+
+        "3" : {
+            "mode_mask" : 6
+        },
+
+        "4" : {
+            "mode_mask" : 8
+        }
+    },
+
+    "errors_at_end" : {
+        "1" : {
+            "mode_mask" : 2,
+            "camera" : "ideal_camera"
+        },
+
+        "2" : {
+            "mode_mask" : 4
+        },
+
+        "3" : {
+            "mode_mask" : 6
+        },
+
+        "4" : {
+            "mode_mask" : 8
+        },
+
+        "5" : {
+            "camera" : "small_errors"
+        }
+    }
 }

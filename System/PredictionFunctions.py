@@ -7,7 +7,7 @@ import Logger
 LOG = Logger.get_logger(__name__)
 
 def visualise_video_predictions(video_file: str, model:ML):
-    resolution = model.model.layers[0].input_shape # Get the shape of the neural network input
+    resolution = model.data_generator.mode_processor.resolution
     fig, ax = plt.subplots(ncols=2)
     ax[0].set_title("Processed input image")
     ax[1].set_title("Image reconstruction of predictions")

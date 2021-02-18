@@ -651,7 +651,5 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    x = Dataset(batch_size=6)
-    t = time.time()
-    inp, otp = x[0]
-    print(time.time() - t)
+    x = Dataset(batch_size=6, max_order=5)
+    print(len(x.hermite_modes))
