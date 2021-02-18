@@ -456,7 +456,14 @@ class Dataset(keras.utils.Sequence):
                     mode.phase = 0
             s = Superposition(*raw_modes)
             input_data[b, :, :] = self.mode_processor.getImage(s.superpose()) # Generate noise image
-            output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
+            amplitudes = [s.contains(j).amplitude for j in self.hermite_modes]
+            phases = [np.cos(s.contains(j).phase) for j in self.hermite_modes]
+
+            for phase in phases:
+                if phase != -1: # Phase not masked
+                    phase /= 2*np.pi
+                    phase += 1
+            output_data[b, :] = np.array(amplitudes + phases)
 
         input_data = np.array(input_data)[..., np.newaxis]
         output_data = np.array(output_data) # Convert to arrays of correct shape
@@ -478,7 +485,14 @@ class Dataset(keras.utils.Sequence):
                     mode.amplitude = 0
                     mode.phase = 0
         input_data = self.mode_processor.getImage(s.superpose())[..., np.newaxis] # Generate noise image
-        output_data = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
+        amplitudes = [s.contains(j).amplitude for j in self.hermite_modes]
+        phases = [np.cos(s.contains(j).phase) for j in self.hermite_modes]
+
+        for phase in phases:
+            if phase != -1: # Phase not masked
+                phase /= 2*np.pi
+                phase += 1
+        output_data = np.array(amplitudes + phases)
 
         return input_data, output_data
 
@@ -646,5 +660,5 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    x = Dataset(batch_size=6, max_order=5)
+    x = Dataset(batch_size=6, max_order=3)
     print(len(x.hermite_modes))

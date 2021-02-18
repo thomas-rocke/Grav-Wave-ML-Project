@@ -19,7 +19,7 @@
         "3" : {
             "mode_mask" : 6
         }
-    }
+    },
 
     "slow_curve" : {
         "1" : {
@@ -40,46 +40,18 @@
         },
 
         "5" : {
-            "mode_mask" : 10
-        },
-
-        "6" : {
-            "mode_mask" : 12
-        },
-
-        "7" : {
-            "mode_mask" : 14
-        },
-
-        "8" : {
-            "mode_mask" : 16
-        },
-
-        "9" : {
-            "mode_mask" : 18
-        },
-
-        "10" : {
-            "mode_mask" : 20
-        },
-
-        "11" : {
-            "mode_mask" : 22
-        },
-
-        "12" : {
             "mode_mask" : 0
         },
 
-        "13" : {
+        "6" : {
             "camera" : "small_errors"
         },
 
-        "14" : {
+        "7" : {
             "camera" : "medium_errors"
         },
 
-        "15" : {
+        "8" : {
             "camera" : "large_errors"
         }
     },
@@ -89,28 +61,16 @@
             "mode_mask" : 5,
             "camera" : "ideal_camera"
         },
-
-        "2" : {
-            "mode_mask" : 10
-        },
-
-        "3" : {
-            "mode_mask" : 15
-        },
-
-        "4" : {
-            "mode_mask" : 20 
-        },
         
-        "5" : {
+        "2" : {
             "mode_mask" : 0
         },
 
-        "6" : {
+        "3" : {
             "camera" : "small_errors"
         },
 
-        "7" : {
+        "4" : {
             "camera" : "large_errors"
         }
     },
