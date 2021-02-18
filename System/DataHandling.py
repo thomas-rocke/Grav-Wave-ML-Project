@@ -264,6 +264,12 @@ class BasicGenerator(keras.utils.Sequence):
         '''
         return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size})"
 
+    def copy(self):
+        '''
+        Copy this data generator.
+        '''
+        return BasicGenerator(self.max_order, self.max_number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size)
+
     def __len__(self):
         '''
         Denotes the number of batches per epoch.
@@ -408,6 +414,12 @@ class Dataset(keras.utils.Sequence):
         Magic method for the repr() function.
         '''
         return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.steps}, {self.repeats}, {self.info})"
+
+    def copy(self):
+        '''
+        Copy this data generator.
+        '''
+        return Dataset(self.training_strategy_name, self.max_order, self.resolution, self.batch_size, self.steps, self.repeats, self.info)
 
     def __len__(self):
         '''

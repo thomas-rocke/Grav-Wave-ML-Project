@@ -112,7 +112,7 @@ class ML:
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator, self.optimiser, self.learning_rate)
+        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate)
 
     def exists(self):
         '''
