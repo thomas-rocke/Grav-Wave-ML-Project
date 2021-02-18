@@ -136,6 +136,14 @@ class ML:
         '''
         return K.mean(K.equal(K.round(y_true), K.round(y_pred)))
 
+    def loss(y_true, y_pred):
+        '''
+        Custom loss function to mask out modes that don't exist in the superposition.
+        '''
+        loss = K.square(y_pred - y_true)
+
+        return K.sum(loss, axis=1)
+
     def create_model(self, summary: bool = True):
         '''
         Create the Keras model in preparation for training.
@@ -577,7 +585,8 @@ class ML:
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                modes[-1].phase = np.arccos(prediction[i + (len(prediction) // 2)]) # Set the phase to the corresponding modes phase
+                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
+                modes[-1].phase = (modes[-1].phase * (2 * np.pi)) - np.pi
 
         if info: print(log("[PRED] V "))
 
