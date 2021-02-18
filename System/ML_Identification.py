@@ -289,8 +289,6 @@ class ML:
 
                     # Save the performance of this epoch
 
-                    LOG.debug(f"Time taken to complete epoch: {perf_counter() - start_time}s")
-
                     for i in self.history:
                         if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
                         else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
@@ -579,7 +577,7 @@ class ML:
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                modes[-1].phase = np.arccos(prediction[i + (len(prediction) // 2)]) # Set the phase to the corresponding modes phase
+                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
 
         if info: print(log("[PRED] V "))
 

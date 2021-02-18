@@ -288,7 +288,7 @@ class BasicGenerator(keras.utils.Sequence):
         sups = [self.generate_superposition(comb) for comb in combs]
 
         X = np.array(self.get_inputs(*sups))[..., np.newaxis]
-        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) for j in self.hermite_modes] for i in sups])
+        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [i.contains(j).phase for j in self.hermite_modes] for i in sups])
 
         return X, Y
 

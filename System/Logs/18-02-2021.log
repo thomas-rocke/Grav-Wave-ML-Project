@@ -20089,3 +20089,351 @@
 =======
 >>>>>>> b1cfdf3ebaa549eb1346fd0d0d87e8c0efebe4ac
 >>>>>>> 6bfecfab78bbb49f1f30d7e55dc4f3fdefc51b00
+2021-02-18 13:12:30,985 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-18 13:12:30,985 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 13:12:30,986 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 13:12:30,986 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 13:12:30,986 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:30,986 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:30,986 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:30,986 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:30,986 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-18 13:12:30,986 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-18 13:12:30,986 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-18 13:12:30,986 - Main - INFO - <module>:11 - Start of program.
+2021-02-18 13:12:30,987 - Main - DEBUG - <module>:26 - Args: Namespace(ML='ML(BasicGenerator(3, 3)', evaluate=None, load=True, parameter=None, save=False, train=False, verbose=False)
+2021-02-18 13:12:37,896 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-18 13:12:37,896 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 13:12:37,896 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 13:12:37,896 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 13:12:37,896 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:37,896 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:37,896 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:37,896 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:37,896 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-18 13:12:37,896 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-18 13:12:37,897 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-18 13:12:37,897 - Main - INFO - <module>:11 - Start of program.
+2021-02-18 13:12:37,898 - Main - DEBUG - <module>:26 - Args: Namespace(ML='ML(BasicGenerator(3, 3))', evaluate=None, load=True, parameter=None, save=False, train=False, verbose=False)
+2021-02-18 13:12:37,898 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-18 13:12:37,898 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 13:12:37,898 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 13:12:37,898 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 13:12:37,898 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:37,898 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:37,898 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:37,898 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:12:37,898 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'number_of_modes': 3, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-18 13:12:37,899 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-18 13:12:37,899 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-18 13:12:37,899 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-18 13:12:37,899 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-18 13:12:37,899 - ML_Identification - INFO - load:519 - Loading ML object.
+2021-02-18 13:12:37,899 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 13:12:37,899 - ML_Identification - DEBUG - load:529 - Loading ML object from files.
+2021-02-18 13:12:37,899 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 13:12:37,899 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001)/time.txt'.
+2021-02-18 13:12:37,906 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001)/loss.txt'.
+2021-02-18 13:12:37,912 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-18 13:12:37,918 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-18 13:12:37,924 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-18 13:12:37,930 - ML_Identification - DEBUG - load:539 - Loading classes from 'Models/ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001)/classes.txt'.
+2021-02-18 13:12:37,932 - ML_Identification - INFO - load:543 - ML object loaded successfully!
+2021-02-18 13:16:11,476 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-18 13:16:11,476 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 13:16:11,476 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 13:16:11,476 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 13:16:11,476 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:11,476 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:11,476 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:11,476 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:11,477 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-18 13:16:11,477 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-18 13:16:11,477 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-18 13:16:11,477 - Main - INFO - <module>:11 - Start of program.
+2021-02-18 13:16:11,478 - Main - DEBUG - <module>:26 - Args: Namespace(ML='ML(BasicGenerator(3, 3))', evaluate=None, load=True, parameter=None, save=False, train=False, verbose=False)
+2021-02-18 13:16:11,478 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-18 13:16:11,478 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 13:16:11,478 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 13:16:11,478 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 13:16:11,478 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:11,478 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:11,478 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:11,478 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:11,478 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'number_of_modes': 3, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-18 13:16:11,479 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-18 13:16:11,479 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-18 13:16:11,479 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-18 13:16:11,479 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-18 13:16:11,479 - ML_Identification - INFO - load:519 - Loading ML object.
+2021-02-18 13:16:11,479 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 13:16:11,479 - ML_Identification - WARNING - load:522 - Model does not exist! Will now train and save.
+2021-02-18 13:16:11,480 - ML_Identification - INFO - train:216 - Initialising the training process for the model.
+2021-02-18 13:16:11,480 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 13:16:11,480 - ML_Identification - DEBUG - train:233 - Creating the data generator object for the dataset.
+2021-02-18 13:16:11,480 - DataHandling - DEBUG - get_classes:335 - Getting classes.
+2021-02-18 13:16:11,480 - ML_Identification - DEBUG - train:240 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0)]
+2021-02-18 13:16:11,480 - ML_Identification - DEBUG - train:241 - Input shape: (128, 128, 1)
+2021-02-18 13:16:11,480 - ML_Identification - DEBUG - train:245 - Creating the Keras model.
+2021-02-18 13:16:11,480 - ML_Identification - DEBUG - create_model:143 - Creating the architecture of the Keras model.
+2021-02-18 13:16:58,884 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-18 13:16:58,884 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 13:16:58,884 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 13:16:58,884 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 13:16:58,884 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:58,884 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:58,884 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:58,884 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:58,884 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5}
+2021-02-18 13:16:58,885 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-18 13:16:58,885 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-18 13:16:58,885 - Main - INFO - <module>:11 - Start of program.
+2021-02-18 13:16:58,886 - Main - DEBUG - <module>:26 - Args: Namespace(ML='ML(BasicGenerator(3, 3))', evaluate=None, load=True, parameter=None, save=False, train=False, verbose=False)
+2021-02-18 13:16:58,886 - DataHandling - INFO - __init__:226 - Initialising generator.
+2021-02-18 13:16:58,886 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 13:16:58,886 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 13:16:58,886 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 13:16:58,886 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:58,886 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:58,886 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:58,886 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 13:16:58,886 - DataHandling - DEBUG - __init__:243 - Locals: {'self': BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'number_of_modes': 3, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3}
+2021-02-18 13:16:58,886 - DataHandling - INFO - __init__:253 - Generator initialised!
+2021-02-18 13:16:58,886 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-18 13:16:58,886 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-18 13:16:58,887 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-18 13:16:58,887 - ML_Identification - INFO - load:519 - Loading ML object.
+2021-02-18 13:16:58,887 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 13:16:58,887 - ML_Identification - WARNING - load:522 - Model does not exist! Will now train and save.
+2021-02-18 13:16:58,887 - ML_Identification - INFO - train:216 - Initialising the training process for the model.
+2021-02-18 13:16:58,887 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 13:16:58,887 - ML_Identification - DEBUG - train:233 - Creating the data generator object for the dataset.
+2021-02-18 13:16:58,888 - DataHandling - DEBUG - get_classes:335 - Getting classes.
+2021-02-18 13:16:58,888 - ML_Identification - DEBUG - train:240 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0)]
+2021-02-18 13:16:58,888 - ML_Identification - DEBUG - train:241 - Input shape: (128, 128, 1)
+2021-02-18 13:16:58,888 - ML_Identification - DEBUG - train:245 - Creating the Keras model.
+2021-02-18 13:16:58,888 - ML_Identification - DEBUG - create_model:143 - Creating the architecture of the Keras model.
+2021-02-18 13:16:59,825 - ML_Identification - DEBUG - create_model:195 - Keras model layers created.
+2021-02-18 13:16:59,825 - ML_Identification - DEBUG - create_model:196 - Compiling the model.
+2021-02-18 13:16:59,831 - ML_Identification - DEBUG - create_model:201 - Model compiled. Optimiser: Adamax(learning_rate=0.0001).
+2021-02-18 13:16:59,831 - ML_Identification - DEBUG - create_model:209 - Keras model architecture created successfully!
+2021-02-18 13:16:59,831 - ML_Identification - INFO - train:254 - Starting the training process.
+2021-02-18 13:16:59,831 - DataHandling - DEBUG - new_stage:300 - Incrementing dataset to stage 1.
+2021-02-18 13:16:59,832 - ML_Identification - INFO - train:261 - Stage 1 / 2 of training.
+2021-02-18 13:17:10,353 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 11.465894599999999s
+2021-02-18 13:17:10,354 - ML_Identification - DEBUG - train:306 - Epoch: 1 - Time: 11.47s - Loss: 0.3422 - Accuracy: 0.5535 - Val Loss: 0.3070 - Val Accuracy: 0.5851 - Stagnation: 0
+2021-02-18 13:17:18,036 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 19.1483468s
+2021-02-18 13:17:18,036 - ML_Identification - DEBUG - train:306 - Epoch: 2 - Time: 19.15s - Loss: 0.3240 - Accuracy: 0.5959 - Val Loss: 0.3103 - Val Accuracy: 0.5425 - Stagnation: 0
+2021-02-18 13:17:26,094 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 27.2055379s
+2021-02-18 13:17:26,094 - ML_Identification - DEBUG - train:306 - Epoch: 3 - Time: 27.21s - Loss: 0.3088 - Accuracy: 0.6133 - Val Loss: 0.3557 - Val Accuracy: 0.4826 - Stagnation: 0
+2021-02-18 13:17:33,998 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 35.1104946s
+2021-02-18 13:17:33,998 - ML_Identification - DEBUG - train:306 - Epoch: 4 - Time: 35.11s - Loss: 0.3058 - Accuracy: 0.6319 - Val Loss: 0.3411 - Val Accuracy: 0.5278 - Stagnation: 0
+2021-02-18 13:17:41,786 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 42.8989102s
+2021-02-18 13:17:41,787 - ML_Identification - DEBUG - train:306 - Epoch: 5 - Time: 42.90s - Loss: 0.2948 - Accuracy: 0.6434 - Val Loss: 0.3596 - Val Accuracy: 0.5425 - Stagnation: 0
+2021-02-18 13:17:50,045 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 51.158209400000004s
+2021-02-18 13:17:50,046 - ML_Identification - DEBUG - train:306 - Epoch: 6 - Time: 51.16s - Loss: 0.2909 - Accuracy: 0.6533 - Val Loss: 0.3608 - Val Accuracy: 0.4896 - Stagnation: 0
+2021-02-18 13:17:57,976 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 59.088905100000005s
+2021-02-18 13:17:57,977 - ML_Identification - DEBUG - train:306 - Epoch: 7 - Time: 59.09s - Loss: 0.2827 - Accuracy: 0.6599 - Val Loss: 0.3326 - Val Accuracy: 0.4314 - Stagnation: 0
+2021-02-18 13:18:05,817 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 66.92969269999999s
+2021-02-18 13:18:05,817 - ML_Identification - DEBUG - train:306 - Epoch: 8 - Time: 66.93s - Loss: 0.2784 - Accuracy: 0.6726 - Val Loss: 0.3216 - Val Accuracy: 0.4332 - Stagnation: 0
+2021-02-18 13:18:13,870 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 74.98261269999999s
+2021-02-18 13:18:13,871 - ML_Identification - DEBUG - train:306 - Epoch: 9 - Time: 74.98s - Loss: 0.2833 - Accuracy: 0.6779 - Val Loss: 0.3042 - Val Accuracy: 0.4931 - Stagnation: 2
+2021-02-18 13:18:22,154 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 83.2665403s
+2021-02-18 13:18:22,154 - ML_Identification - DEBUG - train:306 - Epoch: 10 - Time: 83.27s - Loss: 0.2634 - Accuracy: 0.6885 - Val Loss: 0.3135 - Val Accuracy: 0.5894 - Stagnation: 0
+2021-02-18 13:18:30,035 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 91.1473924s
+2021-02-18 13:18:30,035 - ML_Identification - DEBUG - train:306 - Epoch: 11 - Time: 91.15s - Loss: 0.2664 - Accuracy: 0.6920 - Val Loss: 0.3323 - Val Accuracy: 0.6111 - Stagnation: 1
+2021-02-18 13:18:38,162 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 99.2738969s
+2021-02-18 13:18:38,162 - ML_Identification - DEBUG - train:306 - Epoch: 12 - Time: 99.27s - Loss: 0.2613 - Accuracy: 0.7004 - Val Loss: 0.2904 - Val Accuracy: 0.6250 - Stagnation: 0
+2021-02-18 13:18:46,187 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 107.2996039s
+2021-02-18 13:18:46,187 - ML_Identification - DEBUG - train:306 - Epoch: 13 - Time: 107.30s - Loss: 0.2668 - Accuracy: 0.7044 - Val Loss: 0.3066 - Val Accuracy: 0.6276 - Stagnation: 3
+2021-02-18 13:18:53,932 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 115.04426169999999s
+2021-02-18 13:18:53,932 - ML_Identification - DEBUG - train:306 - Epoch: 14 - Time: 115.04s - Loss: 0.2583 - Accuracy: 0.7104 - Val Loss: 0.2986 - Val Accuracy: 0.5790 - Stagnation: 0
+2021-02-18 13:19:02,050 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 123.1621021s
+2021-02-18 13:19:02,051 - ML_Identification - DEBUG - train:306 - Epoch: 15 - Time: 123.16s - Loss: 0.2559 - Accuracy: 0.7186 - Val Loss: 0.3146 - Val Accuracy: 0.6155 - Stagnation: 0
+2021-02-18 13:19:10,229 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 131.3414013s
+2021-02-18 13:19:10,230 - ML_Identification - DEBUG - train:306 - Epoch: 16 - Time: 131.34s - Loss: 0.2629 - Accuracy: 0.7239 - Val Loss: 0.3371 - Val Accuracy: 0.6606 - Stagnation: 3
+2021-02-18 13:19:18,090 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 139.2022306s
+2021-02-18 13:19:18,091 - ML_Identification - DEBUG - train:306 - Epoch: 17 - Time: 139.20s - Loss: 0.2507 - Accuracy: 0.7277 - Val Loss: 0.2856 - Val Accuracy: 0.6970 - Stagnation: 0
+2021-02-18 13:19:26,382 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 147.4944937s
+2021-02-18 13:19:26,382 - ML_Identification - DEBUG - train:306 - Epoch: 18 - Time: 147.49s - Loss: 0.2464 - Accuracy: 0.7314 - Val Loss: 0.2878 - Val Accuracy: 0.7031 - Stagnation: 0
+2021-02-18 13:19:34,749 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 155.8611349s
+2021-02-18 13:19:34,749 - ML_Identification - DEBUG - train:306 - Epoch: 19 - Time: 155.86s - Loss: 0.2412 - Accuracy: 0.7378 - Val Loss: 0.2945 - Val Accuracy: 0.7552 - Stagnation: 0
+2021-02-18 13:19:42,650 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 163.7623817s
+2021-02-18 13:19:42,650 - ML_Identification - DEBUG - train:306 - Epoch: 20 - Time: 163.76s - Loss: 0.2390 - Accuracy: 0.7452 - Val Loss: 0.2871 - Val Accuracy: 0.7700 - Stagnation: 0
+2021-02-18 13:19:50,926 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 172.0382836s
+2021-02-18 13:19:50,926 - ML_Identification - DEBUG - train:306 - Epoch: 21 - Time: 172.04s - Loss: 0.2424 - Accuracy: 0.7492 - Val Loss: 0.2709 - Val Accuracy: 0.7708 - Stagnation: 2
+2021-02-18 13:19:58,899 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 180.0115698s
+2021-02-18 13:19:58,900 - ML_Identification - DEBUG - train:306 - Epoch: 22 - Time: 180.01s - Loss: 0.2393 - Accuracy: 0.7506 - Val Loss: 0.2504 - Val Accuracy: 0.8099 - Stagnation: 1
+2021-02-18 13:20:06,988 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 188.1008669s
+2021-02-18 13:20:06,989 - ML_Identification - DEBUG - train:306 - Epoch: 23 - Time: 188.10s - Loss: 0.2432 - Accuracy: 0.7540 - Val Loss: 0.2686 - Val Accuracy: 0.8429 - Stagnation: 4
+2021-02-18 13:20:15,395 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 196.5075004s
+2021-02-18 13:20:15,395 - ML_Identification - DEBUG - train:306 - Epoch: 24 - Time: 196.51s - Loss: 0.2317 - Accuracy: 0.7604 - Val Loss: 0.2716 - Val Accuracy: 0.8403 - Stagnation: 0
+2021-02-18 13:20:23,378 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 204.4905022s
+2021-02-18 13:20:23,378 - ML_Identification - DEBUG - train:306 - Epoch: 25 - Time: 204.49s - Loss: 0.2314 - Accuracy: 0.7651 - Val Loss: 0.2254 - Val Accuracy: 0.8715 - Stagnation: 0
+2021-02-18 13:20:31,497 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 212.6098748s
+2021-02-18 13:20:31,497 - ML_Identification - DEBUG - train:306 - Epoch: 26 - Time: 212.61s - Loss: 0.2355 - Accuracy: 0.7715 - Val Loss: 0.2269 - Val Accuracy: 0.9002 - Stagnation: 2
+2021-02-18 13:20:39,685 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 220.7974136s
+2021-02-18 13:20:39,685 - ML_Identification - DEBUG - train:306 - Epoch: 27 - Time: 220.80s - Loss: 0.2265 - Accuracy: 0.7766 - Val Loss: 0.2551 - Val Accuracy: 0.8984 - Stagnation: 0
+2021-02-18 13:20:47,941 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 229.0529602s
+2021-02-18 13:20:47,941 - ML_Identification - DEBUG - train:306 - Epoch: 28 - Time: 229.05s - Loss: 0.2250 - Accuracy: 0.7780 - Val Loss: 0.2295 - Val Accuracy: 0.9097 - Stagnation: 0
+2021-02-18 13:20:55,920 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 237.0326173s
+2021-02-18 13:20:55,922 - ML_Identification - DEBUG - train:306 - Epoch: 29 - Time: 237.03s - Loss: 0.2206 - Accuracy: 0.7878 - Val Loss: 0.2239 - Val Accuracy: 0.9280 - Stagnation: 0
+2021-02-18 13:21:04,071 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 245.1831392s
+2021-02-18 13:21:04,071 - ML_Identification - DEBUG - train:306 - Epoch: 30 - Time: 245.18s - Loss: 0.2248 - Accuracy: 0.7927 - Val Loss: 0.2063 - Val Accuracy: 0.9427 - Stagnation: 1
+2021-02-18 13:21:12,080 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 253.1923027s
+2021-02-18 13:21:12,080 - ML_Identification - DEBUG - train:306 - Epoch: 31 - Time: 253.19s - Loss: 0.2133 - Accuracy: 0.7959 - Val Loss: 0.2122 - Val Accuracy: 0.9306 - Stagnation: 0
+2021-02-18 13:21:19,916 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 261.0281883s
+2021-02-18 13:21:19,917 - ML_Identification - DEBUG - train:306 - Epoch: 32 - Time: 261.03s - Loss: 0.2198 - Accuracy: 0.7987 - Val Loss: 0.2136 - Val Accuracy: 0.9288 - Stagnation: 1
+2021-02-18 13:21:28,200 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 269.31179840000004s
+2021-02-18 13:21:28,200 - ML_Identification - DEBUG - train:306 - Epoch: 33 - Time: 269.31s - Loss: 0.2142 - Accuracy: 0.8033 - Val Loss: 0.2492 - Val Accuracy: 0.9349 - Stagnation: 1
+2021-02-18 13:21:36,104 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 277.21668090000003s
+2021-02-18 13:21:36,105 - ML_Identification - DEBUG - train:306 - Epoch: 34 - Time: 277.22s - Loss: 0.2124 - Accuracy: 0.8104 - Val Loss: 0.1839 - Val Accuracy: 0.9470 - Stagnation: 0
+2021-02-18 13:21:43,867 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 284.9789266s
+2021-02-18 13:21:43,868 - ML_Identification - DEBUG - train:306 - Epoch: 35 - Time: 284.98s - Loss: 0.2129 - Accuracy: 0.8108 - Val Loss: 0.2534 - Val Accuracy: 0.9384 - Stagnation: 1
+2021-02-18 13:21:51,939 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 293.0522455s
+2021-02-18 13:21:51,940 - ML_Identification - DEBUG - train:306 - Epoch: 36 - Time: 293.05s - Loss: 0.2060 - Accuracy: 0.8186 - Val Loss: 0.1891 - Val Accuracy: 0.9470 - Stagnation: 0
+2021-02-18 13:21:59,880 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 300.99224000000004s
+2021-02-18 13:21:59,880 - ML_Identification - DEBUG - train:306 - Epoch: 37 - Time: 300.99s - Loss: 0.2019 - Accuracy: 0.8224 - Val Loss: 0.2063 - Val Accuracy: 0.9514 - Stagnation: 0
+2021-02-18 13:22:07,915 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 309.0276569s
+2021-02-18 13:22:07,916 - ML_Identification - DEBUG - train:306 - Epoch: 38 - Time: 309.03s - Loss: 0.2057 - Accuracy: 0.8293 - Val Loss: 0.1984 - Val Accuracy: 0.9488 - Stagnation: 1
+2021-02-18 13:22:16,016 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 317.12847120000004s
+2021-02-18 13:22:16,016 - ML_Identification - DEBUG - train:306 - Epoch: 39 - Time: 317.13s - Loss: 0.2065 - Accuracy: 0.8308 - Val Loss: 0.1728 - Val Accuracy: 0.9514 - Stagnation: 3
+2021-02-18 13:22:24,269 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 325.38117270000004s
+2021-02-18 13:22:24,269 - ML_Identification - DEBUG - train:306 - Epoch: 40 - Time: 325.38s - Loss: 0.1992 - Accuracy: 0.8352 - Val Loss: 0.1655 - Val Accuracy: 0.9514 - Stagnation: 0
+2021-02-18 13:22:32,101 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 333.21343060000004s
+2021-02-18 13:22:32,101 - ML_Identification - DEBUG - train:306 - Epoch: 41 - Time: 333.21s - Loss: 0.1980 - Accuracy: 0.8400 - Val Loss: 0.2175 - Val Accuracy: 0.9514 - Stagnation: 0
+2021-02-18 13:22:40,234 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 341.34655960000003s
+2021-02-18 13:22:40,235 - ML_Identification - DEBUG - train:306 - Epoch: 42 - Time: 341.35s - Loss: 0.1980 - Accuracy: 0.8393 - Val Loss: 0.1808 - Val Accuracy: 0.9592 - Stagnation: 1
+2021-02-18 13:22:48,255 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 349.3668427s
+2021-02-18 13:22:48,255 - ML_Identification - DEBUG - train:306 - Epoch: 43 - Time: 349.37s - Loss: 0.1941 - Accuracy: 0.8460 - Val Loss: 0.1930 - Val Accuracy: 0.9592 - Stagnation: 0
+2021-02-18 13:22:56,121 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 357.2330774s
+2021-02-18 13:22:56,121 - ML_Identification - DEBUG - train:306 - Epoch: 44 - Time: 357.23s - Loss: 0.1885 - Accuracy: 0.8549 - Val Loss: 0.1515 - Val Accuracy: 0.9601 - Stagnation: 0
+2021-02-18 13:23:04,365 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 365.4765717s
+2021-02-18 13:23:04,365 - ML_Identification - DEBUG - train:306 - Epoch: 45 - Time: 365.48s - Loss: 0.1931 - Accuracy: 0.8549 - Val Loss: 0.1602 - Val Accuracy: 0.9479 - Stagnation: 1
+2021-02-18 13:23:12,280 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 373.3929125s
+2021-02-18 13:23:12,280 - ML_Identification - DEBUG - train:306 - Epoch: 46 - Time: 373.39s - Loss: 0.1859 - Accuracy: 0.8561 - Val Loss: 0.1895 - Val Accuracy: 0.9479 - Stagnation: 0
+2021-02-18 13:23:20,263 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 381.3750312s
+2021-02-18 13:23:20,263 - ML_Identification - DEBUG - train:306 - Epoch: 47 - Time: 381.38s - Loss: 0.1865 - Accuracy: 0.8656 - Val Loss: 0.1519 - Val Accuracy: 0.9514 - Stagnation: 1
+2021-02-18 13:23:28,320 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 389.43324320000005s
+2021-02-18 13:23:28,321 - ML_Identification - DEBUG - train:306 - Epoch: 48 - Time: 389.43s - Loss: 0.1772 - Accuracy: 0.8671 - Val Loss: 0.1856 - Val Accuracy: 0.9470 - Stagnation: 0
+2021-02-18 13:23:36,315 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 397.42737680000005s
+2021-02-18 13:23:36,315 - ML_Identification - DEBUG - train:306 - Epoch: 49 - Time: 397.43s - Loss: 0.1834 - Accuracy: 0.8702 - Val Loss: 0.1624 - Val Accuracy: 0.9497 - Stagnation: 1
+2021-02-18 13:23:44,226 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 405.33820660000003s
+2021-02-18 13:23:44,226 - ML_Identification - DEBUG - train:306 - Epoch: 50 - Time: 405.34s - Loss: 0.1789 - Accuracy: 0.8741 - Val Loss: 0.1715 - Val Accuracy: 0.9549 - Stagnation: 1
+2021-02-18 13:23:52,362 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 413.47484380000003s
+2021-02-18 13:23:52,362 - ML_Identification - DEBUG - train:306 - Epoch: 51 - Time: 413.48s - Loss: 0.1834 - Accuracy: 0.8780 - Val Loss: 0.1825 - Val Accuracy: 0.9523 - Stagnation: 3
+2021-02-18 13:24:00,424 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 421.5365918s
+2021-02-18 13:24:00,425 - ML_Identification - DEBUG - train:306 - Epoch: 52 - Time: 421.54s - Loss: 0.1741 - Accuracy: 0.8809 - Val Loss: 0.1589 - Val Accuracy: 0.9583 - Stagnation: 0
+2021-02-18 13:24:08,288 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 429.4006312s
+2021-02-18 13:24:08,288 - ML_Identification - DEBUG - train:306 - Epoch: 53 - Time: 429.40s - Loss: 0.1717 - Accuracy: 0.8845 - Val Loss: 0.1961 - Val Accuracy: 0.9488 - Stagnation: 0
+2021-02-18 13:24:16,459 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 437.57176250000003s
+2021-02-18 13:24:16,460 - ML_Identification - DEBUG - train:306 - Epoch: 54 - Time: 437.57s - Loss: 0.1707 - Accuracy: 0.8863 - Val Loss: 0.1322 - Val Accuracy: 0.9575 - Stagnation: 0
+2021-02-18 13:24:24,603 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 445.71534s
+2021-02-18 13:24:24,603 - ML_Identification - DEBUG - train:306 - Epoch: 55 - Time: 445.72s - Loss: 0.1678 - Accuracy: 0.8916 - Val Loss: 0.1540 - Val Accuracy: 0.9566 - Stagnation: 0
+2021-02-18 13:24:32,868 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 453.9812264s
+2021-02-18 13:24:32,869 - ML_Identification - DEBUG - train:306 - Epoch: 56 - Time: 453.98s - Loss: 0.1691 - Accuracy: 0.8952 - Val Loss: 0.1597 - Val Accuracy: 0.9479 - Stagnation: 1
+2021-02-18 13:24:41,068 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 462.1807307s
+2021-02-18 13:24:41,068 - ML_Identification - DEBUG - train:306 - Epoch: 57 - Time: 462.18s - Loss: 0.1599 - Accuracy: 0.9005 - Val Loss: 0.1464 - Val Accuracy: 0.9531 - Stagnation: 0
+2021-02-18 13:24:49,269 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 470.3812022s
+2021-02-18 13:24:49,269 - ML_Identification - DEBUG - train:306 - Epoch: 58 - Time: 470.38s - Loss: 0.1621 - Accuracy: 0.9021 - Val Loss: 0.1758 - Val Accuracy: 0.9557 - Stagnation: 1
+2021-02-18 13:24:57,130 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 478.24236690000004s
+2021-02-18 13:24:57,130 - ML_Identification - DEBUG - train:306 - Epoch: 59 - Time: 478.24s - Loss: 0.1689 - Accuracy: 0.9026 - Val Loss: 0.1429 - Val Accuracy: 0.9470 - Stagnation: 3
+2021-02-18 13:25:05,472 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 486.5844068s
+2021-02-18 13:25:05,472 - ML_Identification - DEBUG - train:306 - Epoch: 60 - Time: 486.58s - Loss: 0.1596 - Accuracy: 0.9073 - Val Loss: 0.1529 - Val Accuracy: 0.9531 - Stagnation: 0
+2021-02-18 13:25:13,430 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 494.5426411s
+2021-02-18 13:25:13,430 - ML_Identification - DEBUG - train:306 - Epoch: 61 - Time: 494.54s - Loss: 0.1559 - Accuracy: 0.9099 - Val Loss: 0.1425 - Val Accuracy: 0.9497 - Stagnation: 0
+2021-02-18 13:25:21,315 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 502.4276156s
+2021-02-18 13:25:21,315 - ML_Identification - DEBUG - train:306 - Epoch: 62 - Time: 502.43s - Loss: 0.1538 - Accuracy: 0.9103 - Val Loss: 0.1658 - Val Accuracy: 0.9488 - Stagnation: 0
+2021-02-18 13:25:29,475 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 510.5871648s
+2021-02-18 13:25:29,475 - ML_Identification - DEBUG - train:306 - Epoch: 63 - Time: 510.59s - Loss: 0.1553 - Accuracy: 0.9101 - Val Loss: 0.1494 - Val Accuracy: 0.9549 - Stagnation: 1
+2021-02-18 13:25:37,421 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 518.5336555s
+2021-02-18 13:25:37,422 - ML_Identification - DEBUG - train:306 - Epoch: 64 - Time: 518.53s - Loss: 0.1548 - Accuracy: 0.9177 - Val Loss: 0.1456 - Val Accuracy: 0.9540 - Stagnation: 1
+2021-02-18 13:25:45,216 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 526.3293793s
+2021-02-18 13:25:45,217 - ML_Identification - DEBUG - train:306 - Epoch: 65 - Time: 526.33s - Loss: 0.1530 - Accuracy: 0.9153 - Val Loss: 0.1338 - Val Accuracy: 0.9497 - Stagnation: 0
+2021-02-18 13:25:53,276 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 534.3886057s
+2021-02-18 13:25:53,277 - ML_Identification - DEBUG - train:306 - Epoch: 66 - Time: 534.39s - Loss: 0.1510 - Accuracy: 0.9218 - Val Loss: 0.1791 - Val Accuracy: 0.9470 - Stagnation: 0
+2021-02-18 13:26:01,234 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 542.3469690000001s
+2021-02-18 13:26:01,235 - ML_Identification - DEBUG - train:306 - Epoch: 67 - Time: 542.35s - Loss: 0.1507 - Accuracy: 0.9217 - Val Loss: 0.1276 - Val Accuracy: 0.9557 - Stagnation: 0
+2021-02-18 13:26:09,054 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 550.1666888s
+2021-02-18 13:26:09,055 - ML_Identification - DEBUG - train:306 - Epoch: 68 - Time: 550.17s - Loss: 0.1458 - Accuracy: 0.9238 - Val Loss: 0.1755 - Val Accuracy: 0.9505 - Stagnation: 0
+2021-02-18 13:26:17,119 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 558.2309806000001s
+2021-02-18 13:26:17,119 - ML_Identification - DEBUG - train:306 - Epoch: 69 - Time: 558.23s - Loss: 0.1403 - Accuracy: 0.9268 - Val Loss: 0.1213 - Val Accuracy: 0.9583 - Stagnation: 0
+2021-02-18 13:26:25,057 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 566.1700636s
+2021-02-18 13:26:25,057 - ML_Identification - DEBUG - train:306 - Epoch: 70 - Time: 566.17s - Loss: 0.1396 - Accuracy: 0.9288 - Val Loss: 0.1669 - Val Accuracy: 0.9470 - Stagnation: 0
+2021-02-18 13:26:32,814 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 573.926864s
+2021-02-18 13:26:32,814 - ML_Identification - DEBUG - train:306 - Epoch: 71 - Time: 573.93s - Loss: 0.1405 - Accuracy: 0.9285 - Val Loss: 0.1267 - Val Accuracy: 0.9549 - Stagnation: 2
+2021-02-18 13:26:40,965 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 582.0772104s
+2021-02-18 13:26:40,965 - ML_Identification - DEBUG - train:306 - Epoch: 72 - Time: 582.08s - Loss: 0.1452 - Accuracy: 0.9309 - Val Loss: 0.1399 - Val Accuracy: 0.9549 - Stagnation: 3
+2021-02-18 13:26:48,886 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 589.9978862s
+2021-02-18 13:26:48,886 - ML_Identification - DEBUG - train:306 - Epoch: 73 - Time: 590.00s - Loss: 0.1359 - Accuracy: 0.9342 - Val Loss: 0.1264 - Val Accuracy: 0.9514 - Stagnation: 0
+2021-02-18 13:26:56,695 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 597.807138s
+2021-02-18 13:26:56,695 - ML_Identification - DEBUG - train:306 - Epoch: 74 - Time: 597.81s - Loss: 0.1363 - Accuracy: 0.9327 - Val Loss: 0.1545 - Val Accuracy: 0.9488 - Stagnation: 1
+2021-02-18 13:27:04,820 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 605.9322475s
+2021-02-18 13:27:04,820 - ML_Identification - DEBUG - train:306 - Epoch: 75 - Time: 605.93s - Loss: 0.1329 - Accuracy: 0.9367 - Val Loss: 0.0973 - Val Accuracy: 0.9601 - Stagnation: 0
+2021-02-18 13:27:12,812 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 613.9246056000001s
+2021-02-18 13:27:12,813 - ML_Identification - DEBUG - train:306 - Epoch: 76 - Time: 613.92s - Loss: 0.1365 - Accuracy: 0.9378 - Val Loss: 0.1070 - Val Accuracy: 0.9523 - Stagnation: 3
+2021-02-18 13:27:20,549 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 621.6618065s
+2021-02-18 13:27:20,549 - ML_Identification - DEBUG - train:306 - Epoch: 77 - Time: 621.66s - Loss: 0.1296 - Accuracy: 0.9378 - Val Loss: 0.1499 - Val Accuracy: 0.9505 - Stagnation: 0
+2021-02-18 13:27:28,901 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 630.0131749s
+2021-02-18 13:27:28,901 - ML_Identification - DEBUG - train:306 - Epoch: 78 - Time: 630.01s - Loss: 0.1307 - Accuracy: 0.9361 - Val Loss: 0.1235 - Val Accuracy: 0.9540 - Stagnation: 1
+2021-02-18 13:27:37,006 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 638.1184189s
+2021-02-18 13:27:37,006 - ML_Identification - DEBUG - train:306 - Epoch: 79 - Time: 638.12s - Loss: 0.1243 - Accuracy: 0.9409 - Val Loss: 0.1293 - Val Accuracy: 0.9523 - Stagnation: 0
+2021-02-18 13:27:44,795 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 645.9069244s
+2021-02-18 13:27:44,795 - ML_Identification - DEBUG - train:306 - Epoch: 80 - Time: 645.91s - Loss: 0.1291 - Accuracy: 0.9405 - Val Loss: 0.1172 - Val Accuracy: 0.9444 - Stagnation: 1
+2021-02-18 13:27:52,755 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 653.8677194s
+2021-02-18 13:27:52,756 - ML_Identification - DEBUG - train:306 - Epoch: 81 - Time: 653.87s - Loss: 0.1262 - Accuracy: 0.9414 - Val Loss: 0.1237 - Val Accuracy: 0.9436 - Stagnation: 1
+2021-02-18 13:28:00,857 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 661.9702484000001s
+2021-02-18 13:28:00,858 - ML_Identification - DEBUG - train:306 - Epoch: 82 - Time: 661.97s - Loss: 0.1184 - Accuracy: 0.9428 - Val Loss: 0.1099 - Val Accuracy: 0.9453 - Stagnation: 0
+2021-02-18 13:28:08,656 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 669.7680892000001s
+2021-02-18 13:28:08,656 - ML_Identification - DEBUG - train:306 - Epoch: 83 - Time: 669.77s - Loss: 0.1200 - Accuracy: 0.9442 - Val Loss: 0.1027 - Val Accuracy: 0.9575 - Stagnation: 1
+2021-02-18 13:28:16,775 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 677.8878672000001s
+2021-02-18 13:28:16,775 - ML_Identification - DEBUG - train:306 - Epoch: 84 - Time: 677.89s - Loss: 0.1267 - Accuracy: 0.9417 - Val Loss: 0.1227 - Val Accuracy: 0.9488 - Stagnation: 4
+2021-02-18 13:28:24,697 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 685.8085530000001s
+2021-02-18 13:28:24,697 - ML_Identification - DEBUG - train:306 - Epoch: 85 - Time: 685.81s - Loss: 0.1171 - Accuracy: 0.9444 - Val Loss: 0.1263 - Val Accuracy: 0.9488 - Stagnation: 0
+2021-02-18 13:28:32,646 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 693.7581217000001s
+2021-02-18 13:28:32,646 - ML_Identification - DEBUG - train:306 - Epoch: 86 - Time: 693.76s - Loss: 0.1176 - Accuracy: 0.9467 - Val Loss: 0.1282 - Val Accuracy: 0.9523 - Stagnation: 1
+2021-02-18 13:28:40,720 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 701.8325052s
+2021-02-18 13:28:40,720 - ML_Identification - DEBUG - train:306 - Epoch: 87 - Time: 701.83s - Loss: 0.1237 - Accuracy: 0.9455 - Val Loss: 0.1403 - Val Accuracy: 0.9453 - Stagnation: 4
+2021-02-18 13:28:48,672 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 709.7846343s
+2021-02-18 13:28:48,672 - ML_Identification - DEBUG - train:306 - Epoch: 88 - Time: 709.78s - Loss: 0.1223 - Accuracy: 0.9444 - Val Loss: 0.1053 - Val Accuracy: 0.9549 - Stagnation: 3
+2021-02-18 13:28:56,412 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 717.5240756000001s
+2021-02-18 13:28:56,412 - ML_Identification - DEBUG - train:306 - Epoch: 89 - Time: 717.52s - Loss: 0.1181 - Accuracy: 0.9482 - Val Loss: 0.1267 - Val Accuracy: 0.9488 - Stagnation: 2
+2021-02-18 13:29:04,692 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 725.8047945000001s
+2021-02-18 13:29:04,692 - ML_Identification - DEBUG - train:306 - Epoch: 90 - Time: 725.80s - Loss: 0.1173 - Accuracy: 0.9485 - Val Loss: 0.1169 - Val Accuracy: 0.9427 - Stagnation: 1
+2021-02-18 13:29:12,660 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 733.7725409s
+2021-02-18 13:29:12,660 - ML_Identification - DEBUG - train:306 - Epoch: 91 - Time: 733.77s - Loss: 0.1177 - Accuracy: 0.9482 - Val Loss: 0.1171 - Val Accuracy: 0.9514 - Stagnation: 2
+2021-02-18 13:29:20,454 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 741.5669307000001s
+2021-02-18 13:29:20,455 - ML_Identification - DEBUG - train:306 - Epoch: 92 - Time: 741.57s - Loss: 0.1111 - Accuracy: 0.9519 - Val Loss: 0.1260 - Val Accuracy: 0.9444 - Stagnation: 0
+2021-02-18 13:29:28,464 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 749.5759447s
+2021-02-18 13:29:28,464 - ML_Identification - DEBUG - train:306 - Epoch: 93 - Time: 749.58s - Loss: 0.1144 - Accuracy: 0.9488 - Val Loss: 0.1092 - Val Accuracy: 0.9505 - Stagnation: 1
+2021-02-18 13:29:36,435 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 757.5481296s
+2021-02-18 13:29:36,436 - ML_Identification - DEBUG - train:306 - Epoch: 94 - Time: 757.55s - Loss: 0.1089 - Accuracy: 0.9493 - Val Loss: 0.1027 - Val Accuracy: 0.9540 - Stagnation: 0
+2021-02-18 13:29:44,169 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 765.2815739s
+2021-02-18 13:29:44,169 - ML_Identification - DEBUG - train:306 - Epoch: 95 - Time: 765.28s - Loss: 0.1132 - Accuracy: 0.9494 - Val Loss: 0.0965 - Val Accuracy: 0.9505 - Stagnation: 2
+2021-02-18 13:29:52,288 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 773.4007195s
+2021-02-18 13:29:52,288 - ML_Identification - DEBUG - train:306 - Epoch: 96 - Time: 773.40s - Loss: 0.1130 - Accuracy: 0.9487 - Val Loss: 0.0849 - Val Accuracy: 0.9523 - Stagnation: 2
+2021-02-18 13:30:00,177 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 781.2899996s
+2021-02-18 13:30:00,177 - ML_Identification - DEBUG - train:306 - Epoch: 97 - Time: 781.29s - Loss: 0.1027 - Accuracy: 0.9527 - Val Loss: 0.1110 - Val Accuracy: 0.9523 - Stagnation: 0
+2021-02-18 13:30:07,976 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 789.0892996s
+2021-02-18 13:30:07,977 - ML_Identification - DEBUG - train:306 - Epoch: 98 - Time: 789.09s - Loss: 0.1118 - Accuracy: 0.9500 - Val Loss: 0.1227 - Val Accuracy: 0.9410 - Stagnation: 2
+2021-02-18 13:30:15,884 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 796.9966098s
+2021-02-18 13:30:15,884 - ML_Identification - DEBUG - train:306 - Epoch: 99 - Time: 797.00s - Loss: 0.1052 - Accuracy: 0.9503 - Val Loss: 0.1223 - Val Accuracy: 0.9401 - Stagnation: 1
+2021-02-18 13:30:23,856 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 804.968656s
+2021-02-18 13:30:23,857 - ML_Identification - DEBUG - train:306 - Epoch: 100 - Time: 804.97s - Loss: 0.1050 - Accuracy: 0.9511 - Val Loss: 0.1034 - Val Accuracy: 0.9436 - Stagnation: 1
+2021-02-18 13:30:23,859 - ML_Identification - WARNING - train:353 - Reached max epoch of 100.
+2021-02-18 13:30:23,860 - DataHandling - DEBUG - new_stage:300 - Incrementing dataset to stage 2.
+2021-02-18 13:30:23,863 - ML_Identification - INFO - train:261 - Stage 2 / 2 of training.
+2021-02-18 13:30:43,959 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 825.0716203000001s
+2021-02-18 13:30:43,959 - ML_Identification - DEBUG - train:306 - Epoch: 1 - Time: 825.07s - Loss: 0.1855 - Accuracy: 0.9097 - Val Loss: 0.1707 - Val Accuracy: 0.8950 - Stagnation: 0
