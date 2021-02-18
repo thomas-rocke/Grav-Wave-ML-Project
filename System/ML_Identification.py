@@ -136,6 +136,14 @@ class ML:
         '''
         return K.mean(K.equal(K.round(y_true), K.round(y_pred)))
 
+    def loss(y_true, y_pred):
+        '''
+        Custom loss function to mask out modes that don't exist in the superposition.
+        '''
+        loss = K.square(y_pred - y_true)
+
+        return K.sum(loss, axis=1)
+
     def create_model(self, summary: bool = True):
         '''
         Create the Keras model in preparation for training.

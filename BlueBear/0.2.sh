@@ -37,14 +37,6 @@ source ${VENV_PATH}/bin/activate
 #pip3 install tqdm matplotlib scikit-image opencv-python-headless
 
 # Execute your Python scripts
-cd System/
-
-python3 Main.py -i "ML(BasicGenerator(3, 3))" -o "batch_size" "[2**n for n in range(9)]"
-python3 Main.py -i "ML(BasicGenerator(3, 3))" -o "optimiser" "['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl']"
-python3 Main.py -i "ML(BasicGenerator(3, 3))" -o "learning_rate" "[round(0.1**n, n) for n in range(8)]"
-python3 Main.py -i "ML(BasicGenerator(3, 3))" -o "learning_rate" "[round(0.0001 * n, 4) for n in range(1, 9)]"
-
-python3 Main.py -i "ML(BasicGenerator(5, 5))" -o "batch_size" "[2**n for n in range(9)]"
-python3 Main.py -i "ML(BasicGenerator(5, 5))" -o "optimiser" "['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl']"
-python3 Main.py -i "ML(BasicGenerator(5, 5))" -o "learning_rate" "[round(0.1**n, n) for n in range(8)]"
-python3 Main.py -i "ML(BasicGenerator(5, 5))" -o "learning_rate" "[round(0.0001 * n, 4) for n in range(1, 9)]"
+cd ../System/
+python3 Main.py -i "ML(Dataset('stage_change_test', 3))" -t -s
+python3 Main.py -i "ML(BasicGenerator(5, 5, 0.2, 0.4))" -t -s

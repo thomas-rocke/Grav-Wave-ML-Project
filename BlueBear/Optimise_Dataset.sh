@@ -37,7 +37,7 @@ source ${VENV_PATH}/bin/activate
 #pip3 install tqdm matplotlib scikit-image opencv-python-headless
 
 # Execute your Python scripts
-cd System/
+cd ../System/
 
 python3 Main.py -i "ML(Dataset('stage_change_test', 3))" -o "batch_size" "[2**n for n in range(9)]"
 python3 Main.py -i "ML(Dataset('stage_change_test', 3))" -o "optimiser" "['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl']"
