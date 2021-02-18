@@ -577,7 +577,7 @@ class ML:
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
+                modes[-1].phase = np.arccos(prediction[i + (len(prediction) // 2)]) # Set the phase to the corresponding modes phase
 
         if info: print(log("[PRED] V "))
 
