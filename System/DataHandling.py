@@ -292,8 +292,7 @@ class BasicGenerator(keras.utils.Sequence):
         sups = [self.generate_superposition(comb) for comb in combs]
 
         X = np.array(self.get_inputs(*sups))[..., np.newaxis]
-        if self.cosine: Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) for j in self.hermite_modes] for i in sups]) # Use cos of phase
-        else: Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [(i.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes] for i in sups]) # Use normalised phase
+        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) if self.cosine else (i.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes] for i in sups]) # Use cos of phase
 
         return X, Y
 
