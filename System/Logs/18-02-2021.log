@@ -18109,3 +18109,7 @@
 2021-02-18 13:11:16,919 - ML_Identification - DEBUG - train:306 - Epoch: 39 - Time: 388.40s - Loss: 0.1550 - Accuracy: 0.8072 - Val Loss: 0.1953 - Val Accuracy: 0.7969 - Stagnation: 3
 2021-02-18 13:11:25,831 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 397.3118954s
 2021-02-18 13:11:25,831 - ML_Identification - DEBUG - train:306 - Epoch: 40 - Time: 397.31s - Loss: 0.1526 - Accuracy: 0.8098 - Val Loss: 0.2008 - Val Accuracy: 0.7964 - Stagnation: 0
+2021-02-18 13:11:34,853 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 406.333464s
+2021-02-18 13:11:34,854 - ML_Identification - DEBUG - train:306 - Epoch: 41 - Time: 406.33s - Loss: 0.1509 - Accuracy: 0.8157 - Val Loss: 0.1959 - Val Accuracy: 0.8008 - Stagnation: 0
+2021-02-18 13:11:43,808 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 415.2882903s
+2021-02-18 13:11:43,808 - ML_Identification - DEBUG - train:306 - Epoch: 42 - Time: 415.29s - Loss: 0.1508 - Accuracy: 0.8170 - Val Loss: 0.1990 - Val Accuracy: 0.8003 - Stagnation: 0
