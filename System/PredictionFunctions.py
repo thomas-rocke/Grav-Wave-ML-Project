@@ -4,10 +4,11 @@ from ImageProcessing import VideoProcessor
 from ML_Identification import ML
 from DataHandling import Dataset, BasicGenerator
 import Logger
+import os
 LOG = Logger.get_logger(__name__)
 
 def visualise_video_predictions(video_file: str, model:ML):
-    resolution = model.data_generator.mode_processor.resolution
+    resolution = model.data_generator.mode_processor.target_resolution
     fig, ax = plt.subplots(ncols=2)
     ax[0].set_title("Processed input image")
     ax[1].set_title("Image reconstruction of predictions")
@@ -28,8 +29,10 @@ def visualise_video_predictions(video_file: str, model:ML):
 
 
 fname = r"C:\Users\Tom\Documents\EditedBeamModes.mp4"
-ds = BasicGenerator(batch_size=64, amplitude_variation=0.2, phase_variation=0.2)
-model = ML(data_generator=ds)
+model = ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False), 'Adamax', 0.0001)
+print(os.path.exists("System/Models"))
+print(os.path.exists(f"System/Models/{str(model)}"))
+print(str(model))
 model.load()
 
 dat = visualise_video_predictions(fname, model)
