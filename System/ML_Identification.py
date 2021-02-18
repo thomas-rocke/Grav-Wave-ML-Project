@@ -143,7 +143,7 @@ class ML:
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
         if self.custom_loss:
-            mask = K.cast(K.not_equal(y_true, -1), K.floatx())
+            mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
             loss = K.square((y_pred * mask) - (y_true * mask))
         else:
             loss = K.square(y_pred - y_true)
