@@ -1,0 +1,16 @@
++--------------------------------------------------------------------------+
+| Job on the BlueBEAR cluster:
+| Starting at Thu Feb 18 21:07:38 2021 for jxw1025(596795)
+| Identity jobid 30365697 jobname 0.2.sh
+| Running against project martynod-optical-modes and in partition power9-gpuv100-shared
+| Requested cpu=36,mem=244800M,node=1,billing=36,gres/gpu=1 - 7-00:00:00 walltime
+| Assigned to nodes bear-pg0305u03a
+| Command /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/BlueBear/0.2.sh
+| WorkDir /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/BlueBear
++--------------------------------------------------------------------------+
++--------------------------------------------------------------------------+
+| Finished at Thu Feb 18 21:11:42 2021 for jxw1025(596795) on the BlueBEAR Cluster
+| Required (08:26.595 cputime, 8322112K memory used) - 00:04:06 walltime
+| JobState COMPLETING - Reason None
+| Exitcode 0:15
++--------------------------------------------------------------------------+
