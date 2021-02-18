@@ -293,9 +293,9 @@ class ML:
                                                                 validation_data=self.data_generator,
                                                                 validation_steps=1,
                                                                 steps_per_epoch=len(self.data_generator),
-                                                                max_queue_size=min(cpu_count(), 36),
+                                                                max_queue_size=cpu_count(),
                                                                 use_multiprocessing=False,
-                                                                workers=min(cpu_count(), 36),
+                                                                workers=cpu_count(),
                                                                 verbose=int(info))
 
                     # Save the performance of this epoch
@@ -373,9 +373,9 @@ class ML:
 
         scores = self.model.evaluate_generator(self.data_generator,
                                                steps=len(self.data_generator),
-                                               max_queue_size=min(cpu_count(), 36),
+                                               max_queue_size=cpu_count(),
                                                use_multiprocessing=False,
-                                               workers=min(cpu_count(), 36),
+                                               workers=cpu_count(),
                                                verbose=int(info))
 
         LOG.debug(f"Loss: {scores[0]} - Accuracy: {scores[1]}")
