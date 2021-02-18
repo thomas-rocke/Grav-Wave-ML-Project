@@ -215,7 +215,8 @@ class BasicGenerator(keras.utils.Sequence):
                  noise_variation: float = 0.1,
                  exposure: tuple = (0.0, 1.0),
                  repeats: int = 32,
-                 batch_size: int = 64):
+                 batch_size: int = 64,
+                 resolution: int = 128):
         '''
         Initialise the class with the required complexity.
 
@@ -233,6 +234,7 @@ class BasicGenerator(keras.utils.Sequence):
         self.exposure = exposure
         self.repeats = repeats
         self.batch_size = batch_size
+        self.resolution = resolution
 
         cam = {"noise_variance":self.noise_variation,
                 "exposure_limits":self.exposure
@@ -246,8 +248,8 @@ class BasicGenerator(keras.utils.Sequence):
         self.stage = 0
         self.max_stage = self.max_number_of_modes - 1
 
-        self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
-        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
+        self.hermite_modes = [Hermite(l=i, m=j, resolution=self.resolution) for i in range(max_order) for j in range(max_order)]
+        self.laguerre_modes = [Laguerre(p=i, m=j, resolution=self.resolution) for i in range(max_order // 2) for j in range(max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
         LOG.info("Generator initialised!")
@@ -262,13 +264,13 @@ class BasicGenerator(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size})"
+        return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size}, {self.resolution})"
 
     def copy(self):
         '''
         Copy this data generator.
         '''
-        return BasicGenerator(self.max_order, self.max_number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size)
+        return BasicGenerator(self.max_order, self.max_number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size, self.resolution)
 
     def __len__(self):
         '''
