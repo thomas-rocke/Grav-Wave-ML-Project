@@ -32866,7 +32866,178 @@
 2021-02-18 21:10:31,257 - ML_Identification - DEBUG - train:315 - Epoch: 53 - Time: 431.27s - Loss: 0.0258 - Accuracy: 0.9340 - Val Loss: 0.0174 - Val Accuracy: 0.9575 - Stagnation: 0
 =======
 >>>>>>> 177182a90e3e3595c14a926774be39df18d78ec9
+<<<<<<< HEAD
+2021-02-18 21:09:05,429 - DataHandling - INFO - __init__:228 - Initialising generator.
+2021-02-18 21:09:05,444 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 21:09:05,444 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 21:09:05,445 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 21:09:05,445 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:05,445 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:05,446 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:05,446 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:05,446 - DataHandling - DEBUG - __init__:247 - Locals: {'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'resolution': 128, 'cosine': False, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5, 'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False)}
+2021-02-18 21:09:05,447 - DataHandling - INFO - __init__:257 - Generator initialised!
+2021-02-18 21:09:05,447 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-18 21:09:05,447 - Main - INFO - <module>:11 - Start of program.
+2021-02-18 21:09:05,449 - Main - DEBUG - <module>:26 - Args: Namespace(ML='ML(BasicGenerator(3, 3, 0.5, 1.0))', evaluate=None, load=False, parameter=None, save=True, train=True, verbose=False)
+2021-02-18 21:09:05,449 - DataHandling - INFO - __init__:228 - Initialising generator.
+2021-02-18 21:09:05,449 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 21:09:05,449 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 21:09:05,449 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 21:09:05,449 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:05,449 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:05,450 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:05,450 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:05,450 - DataHandling - DEBUG - __init__:247 - Locals: {'number_of_modes': 3, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'resolution': 128, 'cosine': False, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3, 'self': BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False)}
+2021-02-18 21:09:05,450 - DataHandling - INFO - __init__:257 - Generator initialised!
+2021-02-18 21:09:05,450 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-18 21:09:05,450 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-18 21:09:05,450 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-18 21:09:05,450 - ML_Identification - INFO - train:227 - Initialising the training process for the model.
+2021-02-18 21:09:05,450 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 21:09:05,465 - ML_Identification - DEBUG - train:244 - Creating the data generator object for the dataset.
+2021-02-18 21:09:05,465 - DataHandling - DEBUG - get_classes:339 - Getting classes.
+2021-02-18 21:09:05,465 - ML_Identification - DEBUG - train:251 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0)]
+2021-02-18 21:09:05,522 - ML_Identification - DEBUG - train:252 - Input shape: (128, 128, 1)
+2021-02-18 21:09:05,522 - ML_Identification - DEBUG - train:256 - Creating the Keras model.
+2021-02-18 21:09:05,522 - ML_Identification - DEBUG - create_model:154 - Creating the architecture of the Keras model.
+2021-02-18 21:09:07,185 - DataHandling - INFO - __init__:228 - Initialising generator.
+2021-02-18 21:09:07,185 - DataHandling - INFO - __init__:228 - Initialising generator.
+2021-02-18 21:09:07,201 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 21:09:07,201 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 21:09:07,201 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 21:09:07,201 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 21:09:07,201 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 21:09:07,201 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 21:09:07,201 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,201 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,201 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,201 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,201 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,201 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,201 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,201 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,201 - DataHandling - DEBUG - __init__:247 - Locals: {'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'resolution': 128, 'cosine': False, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5, 'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False)}
+2021-02-18 21:09:07,201 - DataHandling - DEBUG - __init__:247 - Locals: {'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'resolution': 128, 'cosine': False, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5, 'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False)}
+2021-02-18 21:09:07,202 - DataHandling - INFO - __init__:257 - Generator initialised!
+2021-02-18 21:09:07,202 - DataHandling - INFO - __init__:257 - Generator initialised!
+2021-02-18 21:09:07,202 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-18 21:09:07,202 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-18 21:09:07,202 - Main - INFO - <module>:11 - Start of program.
+2021-02-18 21:09:07,202 - Main - INFO - <module>:11 - Start of program.
+2021-02-18 21:09:07,204 - Main - DEBUG - <module>:26 - Args: Namespace(ML='ML(BasicGenerator(3, 3, 0.2, 0.4))', evaluate=None, load=False, parameter=None, save=True, train=True, verbose=False)
+2021-02-18 21:09:07,204 - Main - DEBUG - <module>:26 - Args: Namespace(ML='ML(BasicGenerator(3, 3, 1.0, 2.0))', evaluate=None, load=False, parameter=None, save=True, train=True, verbose=False)
+2021-02-18 21:09:07,204 - DataHandling - INFO - __init__:228 - Initialising generator.
+2021-02-18 21:09:07,204 - DataHandling - INFO - __init__:228 - Initialising generator.
+2021-02-18 21:09:07,204 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 21:09:07,205 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 21:09:07,205 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 21:09:07,205 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
+2021-02-18 21:09:07,205 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 21:09:07,205 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-18 21:09:07,205 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,205 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,205 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,205 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,205 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,205 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,205 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,205 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 21:09:07,205 - DataHandling - DEBUG - __init__:247 - Locals: {'number_of_modes': 3, 'amplitude_variation': 0.2, 'phase_variation': 0.4, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'resolution': 128, 'cosine': False, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3, 'self': BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 32, 64, 128, False)}
+2021-02-18 21:09:07,205 - DataHandling - DEBUG - __init__:247 - Locals: {'number_of_modes': 3, 'amplitude_variation': 1.0, 'phase_variation': 2.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'resolution': 128, 'cosine': False, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 3, 'self': BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 32, 64, 128, False)}
+2021-02-18 21:09:07,206 - DataHandling - INFO - __init__:257 - Generator initialised!
+2021-02-18 21:09:07,206 - DataHandling - INFO - __init__:257 - Generator initialised!
+2021-02-18 21:09:07,206 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-18 21:09:07,206 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-18 21:09:07,206 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 32, 64, 128, False), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 32, 64, 128, False), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-18 21:09:07,206 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 32, 64, 128, False), 'Adamax', 0.0001), 'data_generator': BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 32, 64, 128, False), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-18 21:09:07,206 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-18 21:09:07,206 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-18 21:09:07,206 - ML_Identification - INFO - train:227 - Initialising the training process for the model.
+2021-02-18 21:09:07,206 - ML_Identification - INFO - train:227 - Initialising the training process for the model.
+2021-02-18 21:09:07,206 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 21:09:07,206 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - train:244 - Creating the data generator object for the dataset.
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - train:244 - Creating the data generator object for the dataset.
+2021-02-18 21:09:07,210 - DataHandling - DEBUG - get_classes:339 - Getting classes.
+2021-02-18 21:09:07,210 - DataHandling - DEBUG - get_classes:339 - Getting classes.
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - train:251 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0)]
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - train:251 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0)]
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - train:252 - Input shape: (128, 128, 1)
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - train:252 - Input shape: (128, 128, 1)
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - train:256 - Creating the Keras model.
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - train:256 - Creating the Keras model.
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - create_model:154 - Creating the architecture of the Keras model.
+2021-02-18 21:09:07,210 - ML_Identification - DEBUG - create_model:154 - Creating the architecture of the Keras model.
+2021-02-18 21:09:07,865 - ML_Identification - DEBUG - create_model:206 - Keras model layers created.
+2021-02-18 21:09:07,907 - ML_Identification - DEBUG - create_model:207 - Compiling the model.
+2021-02-18 21:09:07,981 - ML_Identification - DEBUG - create_model:212 - Model compiled. Optimiser: Adamax(learning_rate=0.0001).
+2021-02-18 21:09:07,981 - ML_Identification - DEBUG - create_model:220 - Keras model architecture created successfully!
+2021-02-18 21:09:07,981 - ML_Identification - INFO - train:265 - Starting the training process.
+2021-02-18 21:09:07,982 - DataHandling - DEBUG - new_stage:304 - Incrementing dataset to stage 1.
+2021-02-18 21:09:07,984 - ML_Identification - INFO - train:272 - Stage 1 / 2 of training.
+2021-02-18 21:09:09,738 - ML_Identification - DEBUG - create_model:206 - Keras model layers created.
+2021-02-18 21:09:09,777 - ML_Identification - DEBUG - create_model:207 - Compiling the model.
+2021-02-18 21:09:09,742 - ML_Identification - DEBUG - create_model:206 - Keras model layers created.
+2021-02-18 21:09:09,779 - ML_Identification - DEBUG - create_model:207 - Compiling the model.
+2021-02-18 21:09:09,846 - ML_Identification - DEBUG - create_model:212 - Model compiled. Optimiser: Adamax(learning_rate=0.0001).
+2021-02-18 21:09:09,846 - ML_Identification - DEBUG - create_model:220 - Keras model architecture created successfully!
+2021-02-18 21:09:09,846 - ML_Identification - INFO - train:265 - Starting the training process.
+2021-02-18 21:09:09,846 - DataHandling - DEBUG - new_stage:304 - Incrementing dataset to stage 1.
+2021-02-18 21:09:09,849 - ML_Identification - INFO - train:272 - Stage 1 / 2 of training.
+2021-02-18 21:09:09,850 - ML_Identification - DEBUG - create_model:212 - Model compiled. Optimiser: Adamax(learning_rate=0.0001).
+2021-02-18 21:09:09,850 - ML_Identification - DEBUG - create_model:220 - Keras model architecture created successfully!
+2021-02-18 21:09:09,850 - ML_Identification - INFO - train:265 - Starting the training process.
+2021-02-18 21:09:09,853 - DataHandling - DEBUG - new_stage:304 - Incrementing dataset to stage 1.
+2021-02-18 21:09:09,856 - ML_Identification - INFO - train:272 - Stage 1 / 2 of training.
+2021-02-18 21:09:46,624 - ML_Identification - DEBUG - train:315 - Epoch: 1 - Time: 39.41s - Loss: 0.1120 - Accuracy: 0.7821 - Val Loss: 0.1117 - Val Accuracy: 0.7266 - Stagnation: 0
+2021-02-18 21:09:46,623 - ML_Identification - DEBUG - train:315 - Epoch: 1 - Time: 41.16s - Loss: 0.1114 - Accuracy: 0.7763 - Val Loss: 0.1082 - Val Accuracy: 0.7682 - Stagnation: 0
+2021-02-18 21:09:47,676 - ML_Identification - DEBUG - train:315 - Epoch: 1 - Time: 40.47s - Loss: 0.1117 - Accuracy: 0.7804 - Val Loss: 0.1093 - Val Accuracy: 0.6910 - Stagnation: 0
+2021-02-18 21:10:00,736 - ML_Identification - DEBUG - train:315 - Epoch: 2 - Time: 55.27s - Loss: 0.0882 - Accuracy: 0.8260 - Val Loss: 0.1075 - Val Accuracy: 0.7674 - Stagnation: 0
+2021-02-18 21:10:00,798 - ML_Identification - DEBUG - train:315 - Epoch: 2 - Time: 53.59s - Loss: 0.0879 - Accuracy: 0.8286 - Val Loss: 0.1101 - Val Accuracy: 0.7023 - Stagnation: 0
+2021-02-18 21:10:01,767 - ML_Identification - DEBUG - train:315 - Epoch: 2 - Time: 54.56s - Loss: 0.0901 - Accuracy: 0.8294 - Val Loss: 0.1138 - Val Accuracy: 0.6910 - Stagnation: 0
+2021-02-18 21:10:10,265 - ML_Identification - DEBUG - train:315 - Epoch: 3 - Time: 63.05s - Loss: 0.0754 - Accuracy: 0.8514 - Val Loss: 0.1080 - Val Accuracy: 0.7326 - Stagnation: 0
+2021-02-18 21:10:10,465 - ML_Identification - DEBUG - train:315 - Epoch: 3 - Time: 65.00s - Loss: 0.0769 - Accuracy: 0.8461 - Val Loss: 0.1074 - Val Accuracy: 0.7370 - Stagnation: 0
+2021-02-18 21:10:11,403 - ML_Identification - DEBUG - train:315 - Epoch: 3 - Time: 64.19s - Loss: 0.0792 - Accuracy: 0.8463 - Val Loss: 0.1226 - Val Accuracy: 0.6432 - Stagnation: 0
+2021-02-18 21:10:19,513 - ML_Identification - DEBUG - train:315 - Epoch: 4 - Time: 72.30s - Loss: 0.0686 - Accuracy: 0.8655 - Val Loss: 0.1106 - Val Accuracy: 0.7127 - Stagnation: 0
+2021-02-18 21:10:20,034 - ML_Identification - DEBUG - train:315 - Epoch: 4 - Time: 74.57s - Loss: 0.0692 - Accuracy: 0.8594 - Val Loss: 0.1111 - Val Accuracy: 0.7769 - Stagnation: 0
+2021-02-18 21:10:20,095 - ML_Identification - DEBUG - train:315 - Epoch: 4 - Time: 72.89s - Loss: 0.0713 - Accuracy: 0.8621 - Val Loss: 0.1303 - Val Accuracy: 0.6120 - Stagnation: 0
+2021-02-18 21:10:29,309 - ML_Identification - DEBUG - train:315 - Epoch: 5 - Time: 82.10s - Loss: 0.0641 - Accuracy: 0.8736 - Val Loss: 0.1064 - Val Accuracy: 0.7179 - Stagnation: 0
+2021-02-18 21:10:29,717 - ML_Identification - DEBUG - train:315 - Epoch: 5 - Time: 84.25s - Loss: 0.0645 - Accuracy: 0.8698 - Val Loss: 0.1084 - Val Accuracy: 0.8056 - Stagnation: 0
+2021-02-18 21:10:29,780 - ML_Identification - DEBUG - train:315 - Epoch: 5 - Time: 82.57s - Loss: 0.0651 - Accuracy: 0.8760 - Val Loss: 0.1322 - Val Accuracy: 0.5729 - Stagnation: 0
+2021-02-18 21:10:38,925 - ML_Identification - DEBUG - train:315 - Epoch: 6 - Time: 91.72s - Loss: 0.0607 - Accuracy: 0.8806 - Val Loss: 0.1064 - Val Accuracy: 0.7543 - Stagnation: 0
+2021-02-18 21:10:39,661 - ML_Identification - DEBUG - train:315 - Epoch: 6 - Time: 94.20s - Loss: 0.0605 - Accuracy: 0.8813 - Val Loss: 0.1064 - Val Accuracy: 0.7951 - Stagnation: 0
+2021-02-18 21:10:43,763 - ML_Identification - DEBUG - train:315 - Epoch: 6 - Time: 96.55s - Loss: 0.0607 - Accuracy: 0.8821 - Val Loss: 0.1345 - Val Accuracy: 0.6406 - Stagnation: 0
+2021-02-18 21:10:48,446 - ML_Identification - DEBUG - train:315 - Epoch: 7 - Time: 101.24s - Loss: 0.0581 - Accuracy: 0.8879 - Val Loss: 0.1036 - Val Accuracy: 0.7535 - Stagnation: 0
+2021-02-18 21:10:49,237 - ML_Identification - DEBUG - train:315 - Epoch: 7 - Time: 103.77s - Loss: 0.0577 - Accuracy: 0.8882 - Val Loss: 0.1037 - Val Accuracy: 0.7925 - Stagnation: 0
+2021-02-18 21:10:53,687 - ML_Identification - DEBUG - train:315 - Epoch: 7 - Time: 106.48s - Loss: 0.0572 - Accuracy: 0.8914 - Val Loss: 0.1356 - Val Accuracy: 0.6467 - Stagnation: 0
+2021-02-18 21:10:57,789 - ML_Identification - DEBUG - train:315 - Epoch: 8 - Time: 110.58s - Loss: 0.0572 - Accuracy: 0.8899 - Val Loss: 0.0961 - Val Accuracy: 0.8125 - Stagnation: 0
+2021-02-18 21:10:58,820 - ML_Identification - DEBUG - train:315 - Epoch: 8 - Time: 113.35s - Loss: 0.0552 - Accuracy: 0.8906 - Val Loss: 0.1028 - Val Accuracy: 0.7865 - Stagnation: 0
+2021-02-18 21:11:03,274 - ML_Identification - DEBUG - train:315 - Epoch: 8 - Time: 116.06s - Loss: 0.0546 - Accuracy: 0.8966 - Val Loss: 0.1382 - Val Accuracy: 0.5686 - Stagnation: 0
+2021-02-18 21:11:07,331 - ML_Identification - DEBUG - train:315 - Epoch: 9 - Time: 120.12s - Loss: 0.0539 - Accuracy: 0.8971 - Val Loss: 0.0952 - Val Accuracy: 0.8212 - Stagnation: 0
+2021-02-18 21:11:08,600 - ML_Identification - DEBUG - train:315 - Epoch: 9 - Time: 123.13s - Loss: 0.0547 - Accuracy: 0.8926 - Val Loss: 0.1002 - Val Accuracy: 0.8038 - Stagnation: 0
+2021-02-18 21:11:12,915 - ML_Identification - DEBUG - train:315 - Epoch: 9 - Time: 125.70s - Loss: 0.0527 - Accuracy: 0.9009 - Val Loss: 0.1374 - Val Accuracy: 0.6059 - Stagnation: 0
+2021-02-18 21:11:16,032 - ML_Identification - DEBUG - train:315 - Epoch: 10 - Time: 128.82s - Loss: 0.0529 - Accuracy: 0.8982 - Val Loss: 0.0944 - Val Accuracy: 0.7977 - Stagnation: 0
+2021-02-18 21:11:18,162 - ML_Identification - DEBUG - train:315 - Epoch: 10 - Time: 132.70s - Loss: 0.0521 - Accuracy: 0.8997 - Val Loss: 0.0989 - Val Accuracy: 0.8030 - Stagnation: 0
+2021-02-18 21:11:22,510 - ML_Identification - DEBUG - train:315 - Epoch: 10 - Time: 135.30s - Loss: 0.0503 - Accuracy: 0.9036 - Val Loss: 0.1364 - Val Accuracy: 0.6007 - Stagnation: 0
+2021-02-18 21:11:27,858 - ML_Identification - DEBUG - train:315 - Epoch: 11 - Time: 142.39s - Loss: 0.0511 - Accuracy: 0.9005 - Val Loss: 0.0959 - Val Accuracy: 0.8012 - Stagnation: 0
+2021-02-18 21:11:30,522 - ML_Identification - DEBUG - train:315 - Epoch: 11 - Time: 143.31s - Loss: 0.0514 - Accuracy: 0.9000 - Val Loss: 0.0914 - Val Accuracy: 0.7977 - Stagnation: 0
+2021-02-18 21:11:32,026 - ML_Identification - DEBUG - train:315 - Epoch: 11 - Time: 144.82s - Loss: 0.0493 - Accuracy: 0.9048 - Val Loss: 0.1300 - Val Accuracy: 0.6727 - Stagnation: 0
+2021-02-18 21:11:37,397 - ML_Identification - DEBUG - train:315 - Epoch: 12 - Time: 151.93s - Loss: 0.0493 - Accuracy: 0.9026 - Val Loss: 0.0959 - Val Accuracy: 0.7995 - Stagnation: 0
+2021-02-18 21:11:39,953 - ML_Identification - DEBUG - train:315 - Epoch: 12 - Time: 152.74s - Loss: 0.0493 - Accuracy: 0.9043 - Val Loss: 0.0877 - Val Accuracy: 0.8003 - Stagnation: 0
+2021-02-18 21:11:41,668 - ML_Identification - DEBUG - train:315 - Epoch: 12 - Time: 154.46s - Loss: 0.0478 - Accuracy: 0.9111 - Val Loss: 0.1241 - Val Accuracy: 0.7422 - Stagnation: 0
+=======
 >>>>>>> 2d8c01f527a7abbdeb58b5b37b6967b00e103af2
+<<<<<<< HEAD
 2021-02-18 21:11:05,826 - DataHandling - INFO - __init__:228 - Initialising generator.
 2021-02-18 21:11:05,826 - ImageProcessing - INFO - change_camera:169 - Changing camera
 2021-02-18 21:11:05,826 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0.1
@@ -32932,3 +33103,6 @@
 2021-02-18 21:13:42,110 - ML_Identification - DEBUG - train:315 - Epoch: 19 - Time: 156.28s - Loss: 0.0413 - Accuracy: 0.9142 - Val Loss: 0.0580 - Val Accuracy: 0.9019 - Stagnation: 0
 2021-02-18 21:13:50,021 - ML_Identification - DEBUG - train:315 - Epoch: 20 - Time: 164.19s - Loss: 0.0415 - Accuracy: 0.9142 - Val Loss: 0.0544 - Val Accuracy: 0.9010 - Stagnation: 1
 2021-02-18 21:13:58,108 - ML_Identification - DEBUG - train:315 - Epoch: 21 - Time: 172.28s - Loss: 0.0405 - Accuracy: 0.9138 - Val Loss: 0.0498 - Val Accuracy: 0.9210 - Stagnation: 0
+=======
+>>>>>>> 04648fb0c2460f2b4069e158877610e18376271f
+>>>>>>> 984cdb9c112d8568335421810cd7b65caf71d192
