@@ -217,7 +217,7 @@ class BasicGenerator(keras.utils.Sequence):
                  repeats: int = 32,
                  batch_size: int = 64,
                  resolution: int = 128,
-                 cosine: bool = True):
+                 cosine: bool = False):
         '''
         Initialise the class with the required complexity.
 
