@@ -450,20 +450,15 @@ class Dataset(keras.utils.Sequence):
         # return self.get_batch_multiprocessed(index)
 
     def get_batch_single_thread(self, index):
-        input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
+        input_data = np.zeros((self.batch_size, self.resolution, self.resolution, 1))
         output_data = np.zeros((self.batch_size, np.size(self.hermite_modes) * 2))
         for b in range(self.batch_size):
-            raw_modes = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
-            if self.mode_mask:
-                for mode in raw_modes[self.mode_mask:]: # Filter out modes above self.mode_mask
-                    mode.amplitude = 0
-                    mode.phase = 0
-            s = Superposition(*raw_modes)
-            input_data[b, :, :] = self.mode_processor.getImage(s.superpose()) # Generate noise image
-            output_data[b, :] = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [np.cos(s.contains(j).phase) for j in self.hermite_modes])
+            inp, otp = self._getitem_process(b)
+            input_data[b, :, :, :] = inp
+            output_data[b, :] = otp
 
-        input_data = np.array(input_data)[..., np.newaxis]
-        output_data = np.array(output_data) # Convert to arrays of correct shape
+        #input_data = np.array(input_data)[..., np.newaxis]
+        #output_data = np.array(output_data) # Convert to arrays of correct shape
         return input_data, output_data
         
     def get_batch_multiprocessed(self, index):
@@ -481,9 +476,16 @@ class Dataset(keras.utils.Sequence):
                 for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
                     mode.amplitude = 0
                     mode.phase = 0
-        input_data = self.mode_processor.getImage(s.superpose())[..., np.newaxis] # Generate noise image
-        output_data = np.array([s.contains(j).amplitude for j in self.hermite_modes] + [(s.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes])
+        input_data = self.mode_processor.getImage(s.superpose())[..., np.newaxis] # Generate noise image#
+        amplitudes = [s.contains(j).amplitude for j in self.hermite_modes]
+        phases = [s.contains(j).phase for j in self.hermite_modes]
 
+        for i, phase in enumerate(phases):
+            if phase != -10: # Phase not masked
+                new_phase = phase / (2*np.pi)
+                new_phase += 0.5
+                phases[i] = new_phase
+        output_data = np.array(amplitudes + phases)
         return input_data, output_data
 
     def get_classes(self):
@@ -650,7 +652,8 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    x = Dataset(batch_size=6)
-    t = time.time()
-    inp, otp = x[0]
-    print(time.time() - t)
+    x = Dataset(batch_size=6, max_order=3)
+    batch_vals = x[0][1]
+    for val in batch_vals:
+        phases = val[int(len(val)/2):]
+        print(phases)
