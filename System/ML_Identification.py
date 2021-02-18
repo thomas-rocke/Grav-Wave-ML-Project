@@ -112,7 +112,7 @@ class ML:
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator, self.optimiser, self.learning_rate)
+        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate)
 
     def exists(self):
         '''
@@ -129,27 +129,6 @@ class ML:
         LOG.debug("Checking if ML model has been trained before.")
 
         return os.path.exists(f"Models/{self}/model.h5")
-
-    def check_files(self, save_trained: bool = False, info: bool = False):
-        '''
-        Check if the model exists or has been trained before.
-        Returns True if model exists and is trained and False if model exists but has not been trained
-        '''
-        if not self.exists():
-            LOG.warning("Model does not exist! Will now train and save.")
-            print(log("[WARN] Model does not exist! Will now train and save.\n"))
-
-            self.train(info=info)
-            self.save(save_trained)
-            if not save_trained: self.free()
-
-        elif not self.trained():
-            LOG.warning("Model exists but has not been trained! Will only load history.")
-            print(log("[WARN] Model exists but has not been trained! Will only load history.\n"))
-
-            return False
-
-        return True
 
     def accuracy(self, y_true, y_pred):
         '''
@@ -310,7 +289,7 @@ class ML:
 
                     # Save the performance of this epoch
 
-                    LOG.debug(f"Time taken to complete epoch: {perf_counter() - start_time} s")
+                    LOG.debug(f"Time taken to complete epoch: {perf_counter() - start_time}s")
 
                     for i in self.history:
                         if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
@@ -442,9 +421,9 @@ class ML:
         LOG.info("Ploting model history.")
         LOG.debug(f"Locals: {locals()}")
 
-        if not self.check_files(info=info):
-            LOG.error("Model has not been trained!")
-            print(log("[WARN] Model has not been trained!\n"))
+        if not self.exists():
+            LOG.warning("Model does not exist!")
+            print(log("[WARN] Model does not exist!\n"))
 
             return
 
@@ -538,12 +517,18 @@ class ML:
         Load a saved model.
         '''
         LOG.info("Loading ML object.")
-        trained = self.check_files(save_trained=save_trained, info=info)
+
+        if not self.exists():
+            LOG.warning("Model does not exist! Will now train and save.")
+            print(log("[WARN] Model does not exist! Will now train and save.\n"))
+
+            self.train(info)
+            self.save(save_trained)
 
         print(log("[LOAD] Loading model... "), end='')
         LOG.debug("Loading ML object from files.")
 
-        if trained:
+        if self.trained():
             LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
             self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"metrics": [self.accuracy]})
 
@@ -565,8 +550,8 @@ class ML:
         LOG.info("Using model to make a prediction.")
         LOG.debug(f"Locals: {locals()}")
 
-        if not self.check_files(info=info):
-            LOG.error("Model has not been trained!")
+        if not self.trained():
+            LOG.warning("Model has not been trained!")
             print(log("[WARN] Model has not been trained!\n"))
 
             return
@@ -704,8 +689,8 @@ class ML:
         '''
         LOG.info(f"Evaluating model using {N} randomly generated superpositions.")
 
-        if not self.check_files(info=info):
-            LOG.error("Model has not been trained!")
+        if not self.trained():
+            LOG.warning("Model has not been trained!")
             print(log("[WARN] Model has not been trained!\n"))
 
             return
@@ -790,8 +775,8 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=param_name.replace('_', ' ').title() + ": " + str(getattr(m, param_name)), elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                    plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    plt.savefig(f"Optimisation/{self.data_generator.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
@@ -1035,29 +1020,29 @@ if __name__ == '__main__':
 
     # Training and saving
 
-    m = ML(data_generator=BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)) # Dataset(training_strategy_name="stage_change_test")
-    m.train()
-    m.save()
+    # m = ML(data_generator=BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)) # Dataset(training_strategy_name="stage_change_test")
+    # m.train()
+    # m.save()
 
-    data = BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)
-    data.new_stage() # Init stage 1
-    data.new_stage() # Init stage 2
-    data.new_stage() # Init stage 3
-    data.new_stage() # Init stage 4
+    # data = BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)
+    # data.new_stage() # Init stage 1
+    # data.new_stage() # Init stage 2
+    # data.new_stage() # Init stage 3
+    # data.new_stage() # Init stage 4
 
-    for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
+    # for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
-    m = ML(data_generator=BasicGenerator(amplitude_variation=0.5, phase_variation=1.0))
-    m.train()
-    m.save()
+    # m = ML(data_generator=BasicGenerator(amplitude_variation=0.5, phase_variation=1.0))
+    # m.train()
+    # m.save()
 
-    data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
-    data.new_stage() # Init stage 1
-    data.new_stage() # Init stage 2
-    data.new_stage() # Init stage 3
-    data.new_stage() # Init stage 4
+    # data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
+    # data.new_stage() # Init stage 1
+    # data.new_stage() # Init stage 2
+    # data.new_stage() # Init stage 3
+    # data.new_stage() # Init stage 4
 
-    for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
+    # for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
     # datas = [data.get_random() for i in tqdm(range(1000))]
     # p = Pool(cpu_count())
