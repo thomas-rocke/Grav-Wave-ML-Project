@@ -443,7 +443,7 @@ class Dataset(keras.utils.Sequence):
             self.current_repeat += 1
         
         return self.get_batch_single_thread(index)
-        #return self.get_batch_multiprocessed(index)
+        # return self.get_batch_multiprocessed(index)
 
     def get_batch_single_thread(self, index):
         input_data = np.zeros((self.batch_size, self.resolution, self.resolution))
