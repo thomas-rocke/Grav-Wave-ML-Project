@@ -39,4 +39,6 @@ source ${VENV_PATH}/bin/activate
 # Execute your Python scripts
 cd System/
 python3 Main.py -i "ML(Dataset('stage_change_test', 3))" -t -s
-python3 Main.py -i "ML(BasicGenerator(5, 5, 0.2, 0.4))" -t -s
+python3 Main.py -i "ML(Dataset('stage_change_test', 5))" -t -s
+python3 Main.py -i "ML(Dataset('stage_change_test', 3))" -l -e 10000
+python3 Main.py -i "ML(Dataset('stage_change_test', 5))" -l -e 10000

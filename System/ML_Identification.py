@@ -299,7 +299,7 @@ class ML:
 
                     # Fit the model to the stage of the data generator
 
-                    history_callback = self.model.fit(self.data_generator,
+                    history_callback = self.model.fit_generator(self.data_generator,
                                                                 validation_data=self.data_generator,
                                                                 validation_steps=1,
                                                                 steps_per_epoch=len(self.data_generator),
@@ -310,7 +310,7 @@ class ML:
 
                     # Save the performance of this epoch
 
-                    print(perf_counter() - start_time)
+                    LOG.debug(f"Time taken to complete epoch: {perf_counter() - start_time} s")
 
                     for i in self.history:
                         if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
