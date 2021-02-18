@@ -790,8 +790,8 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=param_name.replace('_', ' ').title() + ": " + str(getattr(m, param_name)), elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                    plt.savefig(f"Optimisation/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    plt.savefig(f"Optimisation/{self.data_generator.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
@@ -1035,29 +1035,29 @@ if __name__ == '__main__':
 
     # Training and saving
 
-    m = ML(data_generator=BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)) # Dataset(training_strategy_name="stage_change_test")
-    m.train()
-    m.save()
+    # m = ML(data_generator=BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)) # Dataset(training_strategy_name="stage_change_test")
+    # m.train()
+    # m.save()
 
-    data = BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)
-    data.new_stage() # Init stage 1
-    data.new_stage() # Init stage 2
-    data.new_stage() # Init stage 3
-    data.new_stage() # Init stage 4
+    # data = BasicGenerator(amplitude_variation=0.2, phase_variation=0.2)
+    # data.new_stage() # Init stage 1
+    # data.new_stage() # Init stage 2
+    # data.new_stage() # Init stage 3
+    # data.new_stage() # Init stage 4
 
-    for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
+    # for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
-    m = ML(data_generator=BasicGenerator(amplitude_variation=0.5, phase_variation=1.0))
-    m.train()
-    m.save()
+    # m = ML(data_generator=BasicGenerator(amplitude_variation=0.5, phase_variation=1.0))
+    # m.train()
+    # m.save()
 
-    data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
-    data.new_stage() # Init stage 1
-    data.new_stage() # Init stage 2
-    data.new_stage() # Init stage 3
-    data.new_stage() # Init stage 4
+    # data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
+    # data.new_stage() # Init stage 1
+    # data.new_stage() # Init stage 2
+    # data.new_stage() # Init stage 3
+    # data.new_stage() # Init stage 4
 
-    for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
+    # for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
     # datas = [data.get_random() for i in tqdm(range(1000))]
     # p = Pool(cpu_count())
