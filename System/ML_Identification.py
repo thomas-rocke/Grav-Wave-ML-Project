@@ -310,7 +310,7 @@ class ML:
 
                     # Save the performance of this epoch
 
-                    LOG.debug(f"Time taken to complete epoch: {perf_counter() - start_time} s")
+                    LOG.debug(f"Time taken to complete epoch: {perf_counter() - start_time}s")
 
                     for i in self.history:
                         if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
@@ -442,12 +442,6 @@ class ML:
         LOG.info("Ploting model history.")
         LOG.debug(f"Locals: {locals()}")
 
-        if not self.check_files(info=info):
-            LOG.error("Model has not been trained!")
-            print(log("[WARN] Model has not been trained!\n"))
-
-            return
-
         if info: print(log("[PLOT] Plotting history..."))
 
         if elapsed_time: t = np.array(self.history["time"]) / 60
@@ -565,11 +559,7 @@ class ML:
         LOG.info("Using model to make a prediction.")
         LOG.debug(f"Locals: {locals()}")
 
-        if not self.check_files(info=info):
-            LOG.error("Model has not been trained!")
-            print(log("[WARN] Model has not been trained!\n"))
-
-            return
+        if not self.check_files(info=info): return
 
         start_time = perf_counter()
 
@@ -704,11 +694,7 @@ class ML:
         '''
         LOG.info(f"Evaluating model using {N} randomly generated superpositions.")
 
-        if not self.check_files(info=info):
-            LOG.error("Model has not been trained!")
-            print(log("[WARN] Model has not been trained!\n"))
-
-            return
+        if not self.check_files(info=info): return
 
         while self.data_generator.new_stage(): pass # Move to the last stage of training
         for i in tqdm(range(N), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
