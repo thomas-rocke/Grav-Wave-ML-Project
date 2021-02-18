@@ -15496,3 +15496,668 @@
 2021-02-18 12:24:08,328 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 649
 2021-02-18 12:24:08,329 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 37.9154964s
 2021-02-18 12:24:08,340 - ML_Identification - DEBUG - train:306 - Epoch: 3 - Time: 37.93s - Loss: 0.3712 - Accuracy: 0.6000 - Val Loss: 0.8640 - Val Accuracy: 0.2778 - Stagnation: 1
+2021-02-18 12:24:10,072 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :50
+2021-02-18 12:24:10,072 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 650
+2021-02-18 12:24:10,726 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :51
+2021-02-18 12:24:10,728 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 651
+2021-02-18 12:24:10,736 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :52
+2021-02-18 12:24:10,736 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 652
+2021-02-18 12:24:10,737 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 40.32397s
+2021-02-18 12:24:10,738 - ML_Identification - DEBUG - train:306 - Epoch: 4 - Time: 40.32s - Loss: 0.2665 - Accuracy: 0.6833 - Val Loss: 0.6333 - Val Accuracy: 0.5556 - Stagnation: 0
+2021-02-18 12:24:12,796 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :53
+2021-02-18 12:24:12,796 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 653
+2021-02-18 12:24:13,484 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :54
+2021-02-18 12:24:13,485 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 654
+2021-02-18 12:24:13,487 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :55
+2021-02-18 12:24:13,487 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 655
+2021-02-18 12:24:13,488 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 43.0746595s
+2021-02-18 12:24:13,488 - ML_Identification - DEBUG - train:306 - Epoch: 5 - Time: 43.07s - Loss: 0.1207 - Accuracy: 0.7689 - Val Loss: 1.1055 - Val Accuracy: 0.2222 - Stagnation: 0
+2021-02-18 12:24:15,200 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :56
+2021-02-18 12:24:15,200 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 656
+2021-02-18 12:24:16,165 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :57
+2021-02-18 12:24:16,183 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 657
+2021-02-18 12:24:16,206 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :58
+2021-02-18 12:24:16,207 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 658
+2021-02-18 12:24:16,207 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 45.7938307s
+2021-02-18 12:24:16,207 - ML_Identification - DEBUG - train:306 - Epoch: 6 - Time: 45.79s - Loss: 0.2517 - Accuracy: 0.4333 - Val Loss: 0.6210 - Val Accuracy: 0.3333 - Stagnation: 1
+2021-02-18 12:24:17,680 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :59
+2021-02-18 12:24:17,680 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 659
+2021-02-18 12:24:18,289 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :60
+2021-02-18 12:24:18,289 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 660
+2021-02-18 12:24:18,331 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :61
+2021-02-18 12:24:18,331 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 661
+2021-02-18 12:24:18,336 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 47.9225383s
+2021-02-18 12:24:18,336 - ML_Identification - DEBUG - train:306 - Epoch: 7 - Time: 47.92s - Loss: 0.0934 - Accuracy: 0.9067 - Val Loss: 0.6483 - Val Accuracy: 0.5556 - Stagnation: 0
+2021-02-18 12:24:20,122 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :62
+2021-02-18 12:24:20,122 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 662
+2021-02-18 12:24:20,754 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :63
+2021-02-18 12:24:20,754 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 663
+2021-02-18 12:24:20,755 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :64
+2021-02-18 12:24:20,756 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 664
+2021-02-18 12:24:20,756 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 50.342862600000004s
+2021-02-18 12:24:20,756 - ML_Identification - DEBUG - train:306 - Epoch: 8 - Time: 50.34s - Loss: 0.3950 - Accuracy: 0.6656 - Val Loss: 0.8085 - Val Accuracy: 0.2222 - Stagnation: 5
+2021-02-18 12:24:20,758 - ML_Identification - WARNING - train:335 - Training has stagnated, so model is no longer learning.
+2021-02-18 12:24:20,761 - DataHandling - INFO - new_stage:576 - Stage 4 not found, aborting training
+2021-02-18 12:24:20,761 - ML_Identification - DEBUG - train:362 - Evaluating the training performance.
+2021-02-18 12:24:22,004 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :65
+2021-02-18 12:24:22,004 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 865
+2021-02-18 12:24:22,006 - ML_Identification - DEBUG - train:372 - Loss: 0.8931424021720886 - Accuracy: 0.3044443726539612
+2021-02-18 12:24:22,006 - ML_Identification - INFO - train:377 - Training complete after 0 minutes and 51 seconds.
+2021-02-18 12:24:22,009 - ML_Identification - INFO - save:488 - Saving ML object history to files.
+2021-02-18 12:24:22,011 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/time.txt'.
+2021-02-18 12:24:22,012 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/loss.txt'.
+2021-02-18 12:24:22,013 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-18 12:24:22,014 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-18 12:24:22,015 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-18 12:24:22,016 - ML_Identification - DEBUG - save:501 - Saving classes to 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/classes.txt'.
+2021-02-18 12:24:22,016 - ML_Identification - DEBUG - save:504 - Generating history plot for epochs.
+2021-02-18 12:24:22,017 - ML_Identification - INFO - plot:421 - Ploting model history.
+2021-02-18 12:24:22,017 - ML_Identification - DEBUG - plot:422 - Locals: {'self': ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001), 'info': False, 'axes': None, 'label': False, 'elapsed_time': False}
+2021-02-18 12:24:22,017 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 12:24:22,017 - ML_Identification - DEBUG - plot:436 - Generating axes as none were given.
+2021-02-18 12:24:22,088 - ML_Identification - DEBUG - plot:461 - Formatting plot.
+2021-02-18 12:24:22,092 - ML_Identification - INFO - plot:480 - Model history plotted successfully!
+2021-02-18 12:24:22,387 - ML_Identification - DEBUG - save:508 - Generating history plot for elapsed time.
+2021-02-18 12:24:22,387 - ML_Identification - INFO - plot:421 - Ploting model history.
+2021-02-18 12:24:22,387 - ML_Identification - DEBUG - plot:422 - Locals: {'self': ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001), 'info': False, 'axes': None, 'label': False, 'elapsed_time': True}
+2021-02-18 12:24:22,387 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 12:24:22,387 - ML_Identification - DEBUG - plot:436 - Generating axes as none were given.
+2021-02-18 12:24:22,415 - ML_Identification - DEBUG - plot:461 - Formatting plot.
+2021-02-18 12:24:22,417 - ML_Identification - INFO - plot:480 - Model history plotted successfully!
+2021-02-18 12:24:22,666 - ML_Identification - INFO - save:512 - ML object saved successfully!
+2021-02-18 12:24:22,668 - ML_Identification - DEBUG - load:529 - Loading ML object from files.
+2021-02-18 12:24:22,668 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 12:24:22,668 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/time.txt'.
+2021-02-18 12:24:22,673 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/loss.txt'.
+2021-02-18 12:24:22,677 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-18 12:24:22,680 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-18 12:24:22,683 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-18 12:24:22,687 - ML_Identification - DEBUG - load:539 - Loading classes from 'Models/ML(Dataset('stage_change_test', 3, 128, 1, 50, 1, True), 'Adamax', 0.0001)/classes.txt'.
+2021-02-18 12:24:22,688 - ML_Identification - INFO - load:543 - ML object loaded successfully!
+2021-02-18 12:24:22,689 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 12:24:22,689 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:24:22,689 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-18 12:24:22,689 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:24:22,689 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:24:22,689 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:24:22,689 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:24:22,772 - Utils - INFO - get_strategy:71 - Loading strategy 'stage_change_test'
+2021-02-18 12:24:22,772 - DataHandling - INFO - __init__:397 - Dataset initialised!
+2021-02-18 12:24:22,772 - DataHandling - INFO - __init__:398 - Max order of mode: 3
+2021-02-18 12:24:22,772 - DataHandling - DEBUG - __init__:404 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-18 12:24:22,772 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-18 12:24:22,772 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(Dataset('stage_change_test', 3, 128, 32, 50, 1, True), 'Adamax', 0.0001), 'data_generator': Dataset('stage_change_test', 3, 128, 32, 50, 1, True), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-18 12:24:22,775 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-18 12:24:22,775 - ML_Identification - DEBUG - optimise:751 - New model: ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)
+2021-02-18 12:24:22,776 - ML_Identification - INFO - load:519 - Loading ML object.
+2021-02-18 12:24:22,776 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 12:24:22,776 - ML_Identification - WARNING - load:522 - Model does not exist! Will now train and save.
+2021-02-18 12:24:22,777 - ML_Identification - INFO - train:216 - Initialising the training process for the model.
+2021-02-18 12:24:22,777 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 12:24:22,777 - ML_Identification - DEBUG - train:233 - Creating the data generator object for the dataset.
+2021-02-18 12:24:22,777 - DataHandling - DEBUG - get_classes:489 - Getting classes.
+2021-02-18 12:24:22,778 - ML_Identification - DEBUG - train:240 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0)]
+2021-02-18 12:24:22,778 - ML_Identification - DEBUG - train:241 - Input shape: (128, 128, 1)
+2021-02-18 12:24:22,778 - ML_Identification - DEBUG - train:245 - Creating the Keras model.
+2021-02-18 12:24:22,778 - ML_Identification - DEBUG - create_model:143 - Creating the architecture of the Keras model.
+2021-02-18 12:24:23,177 - ML_Identification - DEBUG - create_model:195 - Keras model layers created.
+2021-02-18 12:24:23,177 - ML_Identification - DEBUG - create_model:196 - Compiling the model.
+2021-02-18 12:24:23,181 - ML_Identification - DEBUG - create_model:201 - Model compiled. Optimiser: Adamax(learning_rate=0.0001).
+2021-02-18 12:24:23,181 - ML_Identification - DEBUG - create_model:209 - Keras model architecture created successfully!
+2021-02-18 12:24:23,183 - ML_Identification - INFO - train:254 - Starting the training process.
+2021-02-18 12:24:23,185 - DataHandling - INFO - new_stage:572 - Changing to stage 1
+2021-02-18 12:24:23,266 - Utils - INFO - get_cams:52 - Loading camera 'ideal_camera'
+2021-02-18 12:24:23,267 - DataHandling - INFO - change_stage:543 - Changing to use camera 'ideal_camera' with properties {'noise_variance': 0, 'exposure_limits': [0, 1], 'bit_depth': 0, 'blur_variance': 0, 'stretch_variance': 0, 'rotational_variance': 0}
+2021-02-18 12:24:23,267 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 12:24:23,267 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0
+2021-02-18 12:24:23,267 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is [0, 1]
+2021-02-18 12:24:23,267 - ImageProcessing - DEBUG - change_camera:194 - New 'bit_depth' is 0
+2021-02-18 12:24:23,267 - ImageProcessing - DEBUG - change_camera:204 - New 'blur_variance' is 0
+2021-02-18 12:24:23,267 - ImageProcessing - DEBUG - change_camera:213 - New 'rotational_variance' is 0
+2021-02-18 12:24:23,267 - ImageProcessing - DEBUG - change_camera:222 - New 'stretch_variance' is 0
+2021-02-18 12:24:23,267 - DataHandling - INFO - change_stage:551 - Changing mode_mask to 2
+2021-02-18 12:24:23,267 - ML_Identification - INFO - train:261 - Stage 1 / 3 of training.
+2021-02-18 12:24:26,631 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :2
+2021-02-18 12:24:26,631 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 202
+2021-02-18 12:24:27,916 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :3
+2021-02-18 12:24:27,916 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 203
+2021-02-18 12:24:27,944 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :4
+2021-02-18 12:24:27,944 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 204
+2021-02-18 12:24:27,946 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 5.169846800000002s
+2021-02-18 12:24:27,946 - ML_Identification - DEBUG - train:306 - Epoch: 1 - Time: 5.17s - Loss: 0.2741 - Accuracy: 0.4772 - Val Loss: 0.1662 - Val Accuracy: 0.4722 - Stagnation: 0
+2021-02-18 12:24:30,411 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :5
+2021-02-18 12:24:30,411 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 205
+2021-02-18 12:24:31,681 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :6
+2021-02-18 12:24:31,681 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 206
+2021-02-18 12:24:31,683 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :7
+2021-02-18 12:24:31,683 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 207
+2021-02-18 12:24:31,683 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 8.906796199999995s
+2021-02-18 12:24:31,684 - ML_Identification - DEBUG - train:306 - Epoch: 2 - Time: 8.91s - Loss: 0.2703 - Accuracy: 0.4944 - Val Loss: 0.1589 - Val Accuracy: 0.4722 - Stagnation: 0
+2021-02-18 12:24:34,106 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :8
+2021-02-18 12:24:34,106 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 208
+2021-02-18 12:24:35,249 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :9
+2021-02-18 12:24:35,249 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 209
+2021-02-18 12:24:35,268 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :10
+2021-02-18 12:24:35,268 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 210
+2021-02-18 12:24:35,273 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 12.496360999999993s
+2021-02-18 12:24:35,273 - ML_Identification - DEBUG - train:306 - Epoch: 3 - Time: 12.50s - Loss: 0.2898 - Accuracy: 0.4978 - Val Loss: 0.2415 - Val Accuracy: 0.5556 - Stagnation: 2
+2021-02-18 12:24:37,883 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :11
+2021-02-18 12:24:37,883 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 211
+2021-02-18 12:24:38,967 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :12
+2021-02-18 12:24:38,967 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 212
+2021-02-18 12:24:38,979 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :13
+2021-02-18 12:24:38,979 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 213
+2021-02-18 12:24:38,980 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 16.204322199999993s
+2021-02-18 12:24:38,981 - ML_Identification - DEBUG - train:306 - Epoch: 4 - Time: 16.20s - Loss: 0.2356 - Accuracy: 0.5167 - Val Loss: 0.2630 - Val Accuracy: 0.3889 - Stagnation: 0
+2021-02-18 12:24:41,733 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :14
+2021-02-18 12:24:41,733 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 214
+2021-02-18 12:24:42,887 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :15
+2021-02-18 12:24:42,887 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 215
+2021-02-18 12:24:42,889 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :16
+2021-02-18 12:24:42,889 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 216
+2021-02-18 12:24:42,893 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 20.116646899999992s
+2021-02-18 12:24:42,893 - ML_Identification - DEBUG - train:306 - Epoch: 5 - Time: 20.12s - Loss: 0.3004 - Accuracy: 0.4906 - Val Loss: 0.1377 - Val Accuracy: 0.6111 - Stagnation: 4
+2021-02-18 12:24:45,822 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :17
+2021-02-18 12:24:45,822 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 217
+2021-02-18 12:24:46,958 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :18
+2021-02-18 12:24:46,958 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 218
+2021-02-18 12:24:46,961 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :19
+2021-02-18 12:24:46,961 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 219
+2021-02-18 12:24:46,965 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 24.187870000000004s
+2021-02-18 12:24:46,965 - ML_Identification - DEBUG - train:306 - Epoch: 6 - Time: 24.19s - Loss: 0.3051 - Accuracy: 0.4944 - Val Loss: 0.1746 - Val Accuracy: 0.6389 - Stagnation: 5
+2021-02-18 12:24:46,967 - ML_Identification - WARNING - train:335 - Training has stagnated, so model is no longer learning.
+2021-02-18 12:24:46,970 - DataHandling - INFO - new_stage:572 - Changing to stage 2
+2021-02-18 12:24:46,970 - DataHandling - INFO - change_stage:546 - No New Camera defined this stage, camera will not be changed
+2021-02-18 12:24:46,970 - DataHandling - INFO - change_stage:551 - Changing mode_mask to 4
+2021-02-18 12:24:46,970 - ML_Identification - INFO - train:261 - Stage 2 / 3 of training.
+2021-02-18 12:24:49,803 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :20
+2021-02-18 12:24:49,803 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 420
+2021-02-18 12:24:50,894 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :21
+2021-02-18 12:24:50,898 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 421
+2021-02-18 12:24:50,904 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :22
+2021-02-18 12:24:50,905 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 422
+2021-02-18 12:24:50,906 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 28.1301055s
+2021-02-18 12:24:50,907 - ML_Identification - DEBUG - train:306 - Epoch: 1 - Time: 28.13s - Loss: 0.2884 - Accuracy: 0.4944 - Val Loss: 0.1841 - Val Accuracy: 0.5833 - Stagnation: 0
+2021-02-18 12:24:54,329 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :23
+2021-02-18 12:24:54,329 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 423
+2021-02-18 12:24:55,621 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :24
+2021-02-18 12:24:55,622 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 424
+2021-02-18 12:24:55,635 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :25
+2021-02-18 12:24:55,635 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 425
+2021-02-18 12:24:55,636 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 32.8590957s
+2021-02-18 12:24:55,636 - ML_Identification - DEBUG - train:306 - Epoch: 2 - Time: 32.86s - Loss: 0.2697 - Accuracy: 0.4828 - Val Loss: 0.3431 - Val Accuracy: 0.4444 - Stagnation: 0
+2021-02-18 12:24:58,267 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :26
+2021-02-18 12:24:58,267 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 426
+2021-02-18 12:24:59,539 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :27
+2021-02-18 12:24:59,539 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 427
+2021-02-18 12:24:59,574 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :28
+2021-02-18 12:24:59,583 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 428
+2021-02-18 12:24:59,586 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 36.81012749999999s
+2021-02-18 12:24:59,587 - ML_Identification - DEBUG - train:306 - Epoch: 3 - Time: 36.81s - Loss: 0.3484 - Accuracy: 0.4539 - Val Loss: 0.2508 - Val Accuracy: 0.4444 - Stagnation: 2
+2021-02-18 12:25:02,534 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :29
+2021-02-18 12:25:02,534 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 429
+2021-02-18 12:25:03,690 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :30
+2021-02-18 12:25:03,690 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 430
+2021-02-18 12:25:03,694 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :31
+2021-02-18 12:25:03,694 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 431
+2021-02-18 12:25:03,696 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 40.919251599999996s
+2021-02-18 12:25:03,696 - ML_Identification - DEBUG - train:306 - Epoch: 4 - Time: 40.92s - Loss: 0.2778 - Accuracy: 0.5017 - Val Loss: 0.2727 - Val Accuracy: 0.6111 - Stagnation: 1
+2021-02-18 12:25:06,855 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :32
+2021-02-18 12:25:06,855 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 432
+2021-02-18 12:25:08,215 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :33
+2021-02-18 12:25:08,216 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 433
+2021-02-18 12:25:08,218 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :34
+2021-02-18 12:25:08,218 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 434
+2021-02-18 12:25:08,219 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 45.4421684s
+2021-02-18 12:25:08,219 - ML_Identification - DEBUG - train:306 - Epoch: 5 - Time: 45.44s - Loss: 0.2727 - Accuracy: 0.5044 - Val Loss: 0.1981 - Val Accuracy: 0.5556 - Stagnation: 1
+2021-02-18 12:25:11,097 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :35
+2021-02-18 12:25:11,097 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 435
+2021-02-18 12:25:12,451 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :36
+2021-02-18 12:25:12,451 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 436
+2021-02-18 12:25:12,458 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :37
+2021-02-18 12:25:12,458 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 437
+2021-02-18 12:25:12,458 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 49.6818311s
+2021-02-18 12:25:12,459 - ML_Identification - DEBUG - train:306 - Epoch: 6 - Time: 49.68s - Loss: 0.3042 - Accuracy: 0.4889 - Val Loss: 0.2165 - Val Accuracy: 0.6111 - Stagnation: 4
+2021-02-18 12:25:15,146 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :38
+2021-02-18 12:25:15,146 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 438
+2021-02-18 12:25:16,213 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :39
+2021-02-18 12:25:16,214 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 439
+2021-02-18 12:25:16,238 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :40
+2021-02-18 12:25:16,238 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 440
+2021-02-18 12:25:16,239 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 53.4628127s
+2021-02-18 12:25:16,239 - ML_Identification - DEBUG - train:306 - Epoch: 7 - Time: 53.46s - Loss: 0.3411 - Accuracy: 0.4933 - Val Loss: 0.2329 - Val Accuracy: 0.5278 - Stagnation: 4
+2021-02-18 12:25:19,410 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :41
+2021-02-18 12:25:19,410 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 441
+2021-02-18 12:25:20,845 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :42
+2021-02-18 12:25:20,845 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 442
+2021-02-18 12:25:20,847 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :43
+2021-02-18 12:25:20,847 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 443
+2021-02-18 12:25:20,848 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 58.0710215s
+2021-02-18 12:25:20,848 - ML_Identification - DEBUG - train:306 - Epoch: 8 - Time: 58.07s - Loss: 0.2678 - Accuracy: 0.4678 - Val Loss: 0.2161 - Val Accuracy: 0.5556 - Stagnation: 0
+2021-02-18 12:25:23,542 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :44
+2021-02-18 12:25:23,542 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 444
+2021-02-18 12:25:24,907 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :45
+2021-02-18 12:25:24,907 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 445
+2021-02-18 12:25:24,912 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :46
+2021-02-18 12:25:24,912 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 446
+2021-02-18 12:25:24,913 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 62.1367005s
+2021-02-18 12:25:24,913 - ML_Identification - DEBUG - train:306 - Epoch: 9 - Time: 62.14s - Loss: 0.3279 - Accuracy: 0.4722 - Val Loss: 0.2961 - Val Accuracy: 0.5556 - Stagnation: 4
+2021-02-18 12:25:27,959 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :47
+2021-02-18 12:25:27,959 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 447
+2021-02-18 12:25:29,171 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :48
+2021-02-18 12:25:29,180 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 448
+2021-02-18 12:25:29,200 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :49
+2021-02-18 12:25:29,200 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 449
+2021-02-18 12:25:29,201 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 66.4248643s
+2021-02-18 12:25:29,202 - ML_Identification - DEBUG - train:306 - Epoch: 10 - Time: 66.43s - Loss: 0.2550 - Accuracy: 0.5217 - Val Loss: 0.2281 - Val Accuracy: 0.5000 - Stagnation: 0
+2021-02-18 12:25:32,055 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :50
+2021-02-18 12:25:32,055 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 450
+2021-02-18 12:25:33,311 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :51
+2021-02-18 12:25:33,311 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 451
+2021-02-18 12:25:33,330 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :52
+2021-02-18 12:25:33,330 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 452
+2021-02-18 12:25:33,331 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 70.5548305s
+2021-02-18 12:25:33,332 - ML_Identification - DEBUG - train:306 - Epoch: 11 - Time: 70.55s - Loss: 0.3156 - Accuracy: 0.4772 - Val Loss: 0.2588 - Val Accuracy: 0.6111 - Stagnation: 3
+2021-02-18 12:25:36,391 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :53
+2021-02-18 12:25:36,391 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 453
+2021-02-18 12:25:37,606 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :54
+2021-02-18 12:25:37,606 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 454
+2021-02-18 12:25:37,608 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :55
+2021-02-18 12:25:37,608 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 455
+2021-02-18 12:25:37,609 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 74.8329321s
+2021-02-18 12:25:37,609 - ML_Identification - DEBUG - train:306 - Epoch: 12 - Time: 74.83s - Loss: 0.2853 - Accuracy: 0.4883 - Val Loss: 0.2554 - Val Accuracy: 0.5556 - Stagnation: 2
+2021-02-18 12:25:40,785 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :56
+2021-02-18 12:25:40,785 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 456
+2021-02-18 12:25:41,849 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :57
+2021-02-18 12:25:41,850 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 457
+2021-02-18 12:25:41,869 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :58
+2021-02-18 12:25:41,870 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 458
+2021-02-18 12:25:41,872 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 79.0953509s
+2021-02-18 12:25:41,872 - ML_Identification - DEBUG - train:306 - Epoch: 13 - Time: 79.10s - Loss: 0.2812 - Accuracy: 0.4928 - Val Loss: 0.3262 - Val Accuracy: 0.4722 - Stagnation: 2
+2021-02-18 12:25:44,886 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :59
+2021-02-18 12:25:44,886 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 459
+2021-02-18 12:25:46,197 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :60
+2021-02-18 12:25:46,198 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 460
+2021-02-18 12:25:46,209 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :61
+2021-02-18 12:25:46,210 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 461
+2021-02-18 12:25:46,210 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 83.4335677s
+2021-02-18 12:25:46,211 - ML_Identification - DEBUG - train:306 - Epoch: 14 - Time: 83.43s - Loss: 0.3003 - Accuracy: 0.4906 - Val Loss: 0.2481 - Val Accuracy: 0.6111 - Stagnation: 3
+2021-02-18 12:25:48,858 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :62
+2021-02-18 12:25:48,858 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 462
+2021-02-18 12:25:50,150 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :63
+2021-02-18 12:25:50,150 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 463
+2021-02-18 12:25:50,152 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :64
+2021-02-18 12:25:50,152 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 464
+2021-02-18 12:25:50,153 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 87.37662610000001s
+2021-02-18 12:25:50,153 - ML_Identification - DEBUG - train:306 - Epoch: 15 - Time: 87.38s - Loss: 0.2650 - Accuracy: 0.5006 - Val Loss: 0.1806 - Val Accuracy: 0.6111 - Stagnation: 1
+2021-02-18 12:25:52,979 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :65
+2021-02-18 12:25:52,979 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 465
+2021-02-18 12:25:54,088 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :66
+2021-02-18 12:25:54,088 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 466
+2021-02-18 12:25:54,095 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :67
+2021-02-18 12:25:54,095 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 467
+2021-02-18 12:25:54,097 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 91.32068469999999s
+2021-02-18 12:25:54,099 - ML_Identification - DEBUG - train:306 - Epoch: 16 - Time: 91.32s - Loss: 0.2746 - Accuracy: 0.5144 - Val Loss: 0.2471 - Val Accuracy: 0.5000 - Stagnation: 1
+2021-02-18 12:25:57,236 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :68
+2021-02-18 12:25:57,236 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 468
+2021-02-18 12:25:58,538 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :69
+2021-02-18 12:25:58,538 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 469
+2021-02-18 12:25:58,540 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :70
+2021-02-18 12:25:58,540 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 470
+2021-02-18 12:25:58,541 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 95.76439690000001s
+2021-02-18 12:25:58,541 - ML_Identification - DEBUG - train:306 - Epoch: 17 - Time: 95.76s - Loss: 0.2556 - Accuracy: 0.5211 - Val Loss: 0.1950 - Val Accuracy: 0.5556 - Stagnation: 0
+2021-02-18 12:26:01,447 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :71
+2021-02-18 12:26:01,447 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 471
+2021-02-18 12:26:02,840 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :72
+2021-02-18 12:26:02,841 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 472
+2021-02-18 12:26:02,843 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :73
+2021-02-18 12:26:02,843 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 473
+2021-02-18 12:26:02,843 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 100.0672333s
+2021-02-18 12:26:02,844 - ML_Identification - DEBUG - train:306 - Epoch: 18 - Time: 100.07s - Loss: 0.3011 - Accuracy: 0.5144 - Val Loss: 0.2173 - Val Accuracy: 0.5556 - Stagnation: 5
+2021-02-18 12:26:02,845 - ML_Identification - WARNING - train:335 - Training has stagnated, so model is no longer learning.
+2021-02-18 12:26:02,846 - DataHandling - INFO - new_stage:572 - Changing to stage 3
+2021-02-18 12:26:02,846 - DataHandling - INFO - change_stage:546 - No New Camera defined this stage, camera will not be changed
+2021-02-18 12:26:02,846 - DataHandling - INFO - change_stage:551 - Changing mode_mask to 6
+2021-02-18 12:26:02,846 - ML_Identification - INFO - train:261 - Stage 3 / 3 of training.
+2021-02-18 12:26:06,742 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :74
+2021-02-18 12:26:06,742 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 674
+2021-02-18 12:26:08,013 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :75
+2021-02-18 12:26:08,013 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 675
+2021-02-18 12:26:08,017 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :76
+2021-02-18 12:26:08,018 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 676
+2021-02-18 12:26:08,019 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 105.24225089999999s
+2021-02-18 12:26:08,020 - ML_Identification - DEBUG - train:306 - Epoch: 1 - Time: 105.24s - Loss: 0.2798 - Accuracy: 0.5256 - Val Loss: 0.3457 - Val Accuracy: 0.4722 - Stagnation: 0
+2021-02-18 12:26:11,347 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :77
+2021-02-18 12:26:11,347 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 677
+2021-02-18 12:26:13,134 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :78
+2021-02-18 12:26:13,134 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 678
+2021-02-18 12:26:13,137 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :79
+2021-02-18 12:26:13,137 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 679
+2021-02-18 12:26:13,138 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 110.36177860000001s
+2021-02-18 12:26:13,139 - ML_Identification - DEBUG - train:306 - Epoch: 2 - Time: 110.36s - Loss: 0.3173 - Accuracy: 0.4861 - Val Loss: 0.2524 - Val Accuracy: 0.5556 - Stagnation: 1
+2021-02-18 12:26:16,661 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :80
+2021-02-18 12:26:16,661 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 680
+2021-02-18 12:26:18,411 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :81
+2021-02-18 12:26:18,411 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 681
+2021-02-18 12:26:18,413 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :82
+2021-02-18 12:26:18,413 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 682
+2021-02-18 12:26:18,414 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 115.6373462s
+2021-02-18 12:26:18,414 - ML_Identification - DEBUG - train:306 - Epoch: 3 - Time: 115.64s - Loss: 0.3129 - Accuracy: 0.4978 - Val Loss: 0.3268 - Val Accuracy: 0.5000 - Stagnation: 1
+2021-02-18 12:26:21,456 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :83
+2021-02-18 12:26:21,456 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 683
+2021-02-18 12:26:22,735 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :84
+2021-02-18 12:26:22,735 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 684
+2021-02-18 12:26:22,740 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :85
+2021-02-18 12:26:22,740 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 685
+2021-02-18 12:26:22,743 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 119.9663933s
+2021-02-18 12:26:22,743 - ML_Identification - DEBUG - train:306 - Epoch: 4 - Time: 119.97s - Loss: 0.3546 - Accuracy: 0.5028 - Val Loss: 0.2987 - Val Accuracy: 0.5556 - Stagnation: 3
+2021-02-18 12:26:26,103 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :86
+2021-02-18 12:26:26,103 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 686
+2021-02-18 12:26:27,626 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :87
+2021-02-18 12:26:27,632 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 687
+2021-02-18 12:26:27,659 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :88
+2021-02-18 12:26:27,660 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 688
+2021-02-18 12:26:27,665 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 124.8885009s
+2021-02-18 12:26:27,665 - ML_Identification - DEBUG - train:306 - Epoch: 5 - Time: 124.89s - Loss: 0.3336 - Accuracy: 0.4961 - Val Loss: 0.2052 - Val Accuracy: 0.5278 - Stagnation: 3
+2021-02-18 12:26:30,823 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :89
+2021-02-18 12:26:30,823 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 689
+2021-02-18 12:26:32,645 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :90
+2021-02-18 12:26:32,645 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 690
+2021-02-18 12:26:32,648 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :91
+2021-02-18 12:26:32,648 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 691
+2021-02-18 12:26:32,649 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 129.8728787s
+2021-02-18 12:26:32,649 - ML_Identification - DEBUG - train:306 - Epoch: 6 - Time: 129.87s - Loss: 0.2919 - Accuracy: 0.5078 - Val Loss: 0.3157 - Val Accuracy: 0.5000 - Stagnation: 1
+2021-02-18 12:26:35,756 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :92
+2021-02-18 12:26:35,756 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 692
+2021-02-18 12:26:37,107 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :93
+2021-02-18 12:26:37,107 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 693
+2021-02-18 12:26:37,115 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :94
+2021-02-18 12:26:37,116 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 694
+2021-02-18 12:26:37,118 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 134.3417752s
+2021-02-18 12:26:37,118 - ML_Identification - DEBUG - train:306 - Epoch: 7 - Time: 134.34s - Loss: 0.2738 - Accuracy: 0.5144 - Val Loss: 0.2342 - Val Accuracy: 0.6667 - Stagnation: 0
+2021-02-18 12:26:40,446 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :95
+2021-02-18 12:26:40,446 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 695
+2021-02-18 12:26:41,952 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :96
+2021-02-18 12:26:41,953 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 696
+2021-02-18 12:26:41,955 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :97
+2021-02-18 12:26:41,955 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 697
+2021-02-18 12:26:41,955 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 139.1792213s
+2021-02-18 12:26:41,956 - ML_Identification - DEBUG - train:306 - Epoch: 8 - Time: 139.18s - Loss: 0.3635 - Accuracy: 0.4944 - Val Loss: 0.2745 - Val Accuracy: 0.4444 - Stagnation: 5
+2021-02-18 12:26:41,957 - ML_Identification - WARNING - train:335 - Training has stagnated, so model is no longer learning.
+2021-02-18 12:26:41,958 - DataHandling - INFO - new_stage:576 - Stage 4 not found, aborting training
+2021-02-18 12:26:41,958 - ML_Identification - DEBUG - train:362 - Evaluating the training performance.
+2021-02-18 12:26:45,090 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :98
+2021-02-18 12:26:45,090 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 898
+2021-02-18 12:26:45,092 - ML_Identification - DEBUG - train:372 - Loss: 0.2806985378265381 - Accuracy: 0.5833333134651184
+2021-02-18 12:26:45,092 - ML_Identification - INFO - train:377 - Training complete after 2 minutes and 22 seconds.
+2021-02-18 12:26:45,093 - ML_Identification - INFO - save:488 - Saving ML object history to files.
+2021-02-18 12:26:45,093 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/time.txt'.
+2021-02-18 12:26:45,094 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/loss.txt'.
+2021-02-18 12:26:45,096 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-18 12:26:45,097 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-18 12:26:45,098 - ML_Identification - DEBUG - save:498 - Saving performance history to 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-18 12:26:45,099 - ML_Identification - DEBUG - save:501 - Saving classes to 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/classes.txt'.
+2021-02-18 12:26:45,100 - ML_Identification - DEBUG - save:504 - Generating history plot for epochs.
+2021-02-18 12:26:45,100 - ML_Identification - INFO - plot:421 - Ploting model history.
+2021-02-18 12:26:45,100 - ML_Identification - DEBUG - plot:422 - Locals: {'self': ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001), 'info': False, 'axes': None, 'label': False, 'elapsed_time': False}
+2021-02-18 12:26:45,100 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 12:26:45,100 - ML_Identification - DEBUG - plot:436 - Generating axes as none were given.
+2021-02-18 12:26:45,140 - ML_Identification - DEBUG - plot:461 - Formatting plot.
+2021-02-18 12:26:45,144 - ML_Identification - INFO - plot:480 - Model history plotted successfully!
+2021-02-18 12:26:45,438 - ML_Identification - DEBUG - save:508 - Generating history plot for elapsed time.
+2021-02-18 12:26:45,438 - ML_Identification - INFO - plot:421 - Ploting model history.
+2021-02-18 12:26:45,439 - ML_Identification - DEBUG - plot:422 - Locals: {'self': ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001), 'info': False, 'axes': None, 'label': False, 'elapsed_time': True}
+2021-02-18 12:26:45,439 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 12:26:45,439 - ML_Identification - DEBUG - plot:436 - Generating axes as none were given.
+2021-02-18 12:26:45,472 - ML_Identification - DEBUG - plot:461 - Formatting plot.
+2021-02-18 12:26:45,476 - ML_Identification - INFO - plot:480 - Model history plotted successfully!
+2021-02-18 12:26:45,728 - ML_Identification - INFO - save:512 - ML object saved successfully!
+2021-02-18 12:26:45,728 - ML_Identification - DEBUG - load:529 - Loading ML object from files.
+2021-02-18 12:26:45,728 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 12:26:45,728 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/time.txt'.
+2021-02-18 12:26:45,734 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/loss.txt'.
+2021-02-18 12:26:45,737 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/accuracy.txt'.
+2021-02-18 12:26:45,741 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/val_loss.txt'.
+2021-02-18 12:26:45,745 - ML_Identification - DEBUG - load:536 - Loading performance history from 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/val_accuracy.txt'.
+2021-02-18 12:26:45,748 - ML_Identification - DEBUG - load:539 - Loading classes from 'Models/ML(Dataset('stage_change_test', 3, 128, 2, 50, 1, True), 'Adamax', 0.0001)/classes.txt'.
+2021-02-18 12:26:45,749 - ML_Identification - INFO - load:543 - ML object loaded successfully!
+2021-02-18 12:26:45,749 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 12:26:45,749 - ImageProcessing - WARNING - change_camera:180 - 'noise_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:26:45,749 - ImageProcessing - WARNING - change_camera:189 - 'exposure_limits' not explicitly defined by new camera, defaulting to (0, 1)
+2021-02-18 12:26:45,749 - ImageProcessing - WARNING - change_camera:199 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:26:45,749 - ImageProcessing - WARNING - change_camera:208 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:26:45,749 - ImageProcessing - WARNING - change_camera:217 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:26:45,749 - ImageProcessing - WARNING - change_camera:226 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-18 12:26:45,831 - Utils - INFO - get_strategy:71 - Loading strategy 'stage_change_test'
+2021-02-18 12:26:45,831 - DataHandling - INFO - __init__:397 - Dataset initialised!
+2021-02-18 12:26:45,831 - DataHandling - INFO - __init__:398 - Max order of mode: 3
+2021-02-18 12:26:45,831 - DataHandling - DEBUG - __init__:404 - [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Laguerre(0, 0, 1.0, 0.0)]
+2021-02-18 12:26:45,831 - ML_Identification - INFO - __init__:81 - Initialising ML model.
+2021-02-18 12:26:45,831 - ML_Identification - DEBUG - __init__:87 - Locals: {'self': ML(Dataset('stage_change_test', 3, 128, 32, 50, 1, True), 'Adamax', 0.0001), 'data_generator': Dataset('stage_change_test', 3, 128, 32, 50, 1, True), 'optimiser': 'Adamax', 'learning_rate': 0.0001}
+2021-02-18 12:26:45,832 - ML_Identification - INFO - __init__:97 - ML model initialised!
+2021-02-18 12:26:45,832 - ML_Identification - DEBUG - optimise:751 - New model: ML(Dataset('stage_change_test', 3, 128, 4, 50, 1, True), 'Adamax', 0.0001)
+2021-02-18 12:26:45,832 - ML_Identification - INFO - load:519 - Loading ML object.
+2021-02-18 12:26:45,832 - ML_Identification - DEBUG - exists:121 - Checking if ML object exists in the file system.
+2021-02-18 12:26:45,832 - ML_Identification - WARNING - load:522 - Model does not exist! Will now train and save.
+2021-02-18 12:26:45,833 - ML_Identification - INFO - train:216 - Initialising the training process for the model.
+2021-02-18 12:26:45,833 - ML_Identification - DEBUG - trained:129 - Checking if ML model has been trained before.
+2021-02-18 12:26:45,833 - ML_Identification - DEBUG - train:233 - Creating the data generator object for the dataset.
+2021-02-18 12:26:45,834 - DataHandling - DEBUG - get_classes:489 - Getting classes.
+2021-02-18 12:26:45,834 - ML_Identification - DEBUG - train:240 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(0, 2, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(1, 2, 1.0, 0.0), Hermite(2, 0, 1.0, 0.0), Hermite(2, 1, 1.0, 0.0), Hermite(2, 2, 1.0, 0.0)]
+2021-02-18 12:26:45,834 - ML_Identification - DEBUG - train:241 - Input shape: (128, 128, 1)
+2021-02-18 12:26:45,834 - ML_Identification - DEBUG - train:245 - Creating the Keras model.
+2021-02-18 12:26:45,835 - ML_Identification - DEBUG - create_model:143 - Creating the architecture of the Keras model.
+2021-02-18 12:26:46,139 - ML_Identification - DEBUG - create_model:195 - Keras model layers created.
+2021-02-18 12:26:46,139 - ML_Identification - DEBUG - create_model:196 - Compiling the model.
+2021-02-18 12:26:46,144 - ML_Identification - DEBUG - create_model:201 - Model compiled. Optimiser: Adamax(learning_rate=0.0001).
+2021-02-18 12:26:46,144 - ML_Identification - DEBUG - create_model:209 - Keras model architecture created successfully!
+2021-02-18 12:26:46,145 - ML_Identification - INFO - train:254 - Starting the training process.
+2021-02-18 12:26:46,147 - DataHandling - INFO - new_stage:572 - Changing to stage 1
+2021-02-18 12:26:46,229 - Utils - INFO - get_cams:52 - Loading camera 'ideal_camera'
+2021-02-18 12:26:46,230 - DataHandling - INFO - change_stage:543 - Changing to use camera 'ideal_camera' with properties {'noise_variance': 0, 'exposure_limits': [0, 1], 'bit_depth': 0, 'blur_variance': 0, 'stretch_variance': 0, 'rotational_variance': 0}
+2021-02-18 12:26:46,230 - ImageProcessing - INFO - change_camera:169 - Changing camera
+2021-02-18 12:26:46,230 - ImageProcessing - DEBUG - change_camera:176 - New 'noise_variance' is 0
+2021-02-18 12:26:46,230 - ImageProcessing - DEBUG - change_camera:185 - New 'exposure_limits' is [0, 1]
+2021-02-18 12:26:46,230 - ImageProcessing - DEBUG - change_camera:194 - New 'bit_depth' is 0
+2021-02-18 12:26:46,230 - ImageProcessing - DEBUG - change_camera:204 - New 'blur_variance' is 0
+2021-02-18 12:26:46,230 - ImageProcessing - DEBUG - change_camera:213 - New 'rotational_variance' is 0
+2021-02-18 12:26:46,230 - ImageProcessing - DEBUG - change_camera:222 - New 'stretch_variance' is 0
+2021-02-18 12:26:46,230 - DataHandling - INFO - change_stage:551 - Changing mode_mask to 2
+2021-02-18 12:26:46,230 - ML_Identification - INFO - train:261 - Stage 1 / 3 of training.
+2021-02-18 12:26:52,291 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :2
+2021-02-18 12:26:52,291 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 202
+2021-02-18 12:26:54,824 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :3
+2021-02-18 12:26:54,825 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 203
+2021-02-18 12:26:54,827 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :4
+2021-02-18 12:26:54,828 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 204
+2021-02-18 12:26:54,829 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 8.995231399999994s
+2021-02-18 12:26:54,829 - ML_Identification - DEBUG - train:306 - Epoch: 1 - Time: 9.00s - Loss: 0.2576 - Accuracy: 0.5014 - Val Loss: 0.1926 - Val Accuracy: 0.5278 - Stagnation: 0
+2021-02-18 12:26:59,805 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :5
+2021-02-18 12:26:59,805 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 205
+2021-02-18 12:27:02,294 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :6
+2021-02-18 12:27:02,294 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 206
+2021-02-18 12:27:02,313 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :7
+2021-02-18 12:27:02,313 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 207
+2021-02-18 12:27:02,317 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 16.48286760000002s
+2021-02-18 12:27:02,317 - ML_Identification - DEBUG - train:306 - Epoch: 2 - Time: 16.48s - Loss: 0.2616 - Accuracy: 0.4978 - Val Loss: 0.2027 - Val Accuracy: 0.6111 - Stagnation: 1
+2021-02-18 12:27:07,269 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :8
+2021-02-18 12:27:07,269 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 208
+2021-02-18 12:27:09,629 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :9
+2021-02-18 12:27:09,629 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 209
+2021-02-18 12:27:09,631 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :10
+2021-02-18 12:27:09,631 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 210
+2021-02-18 12:27:09,631 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 23.797415700000016s
+2021-02-18 12:27:09,632 - ML_Identification - DEBUG - train:306 - Epoch: 3 - Time: 23.80s - Loss: 0.2736 - Accuracy: 0.5083 - Val Loss: 0.2332 - Val Accuracy: 0.5972 - Stagnation: 2
+2021-02-18 12:27:14,797 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :11
+2021-02-18 12:27:14,797 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 211
+2021-02-18 12:27:17,003 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :12
+2021-02-18 12:27:17,003 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 212
+2021-02-18 12:27:17,035 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :13
+2021-02-18 12:27:17,037 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 213
+2021-02-18 12:27:17,053 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 31.218968700000005s
+2021-02-18 12:27:17,059 - ML_Identification - DEBUG - train:306 - Epoch: 4 - Time: 31.23s - Loss: 0.2423 - Accuracy: 0.5131 - Val Loss: 0.2170 - Val Accuracy: 0.5556 - Stagnation: 0
+2021-02-18 12:27:22,436 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :14
+2021-02-18 12:27:22,436 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 214
+2021-02-18 12:27:24,857 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :15
+2021-02-18 12:27:24,857 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 215
+2021-02-18 12:27:24,863 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :16
+2021-02-18 12:27:24,863 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 216
+2021-02-18 12:27:24,864 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 39.029868600000015s
+2021-02-18 12:27:24,864 - ML_Identification - DEBUG - train:306 - Epoch: 5 - Time: 39.03s - Loss: 0.2683 - Accuracy: 0.5025 - Val Loss: 0.2674 - Val Accuracy: 0.5417 - Stagnation: 3
+2021-02-18 12:27:30,215 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :17
+2021-02-18 12:27:30,215 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 217
+2021-02-18 12:27:32,700 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :18
+2021-02-18 12:27:32,701 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 218
+2021-02-18 12:27:32,703 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :19
+2021-02-18 12:27:32,703 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 219
+2021-02-18 12:27:32,707 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 46.87321400000002s
+2021-02-18 12:27:32,707 - ML_Identification - DEBUG - train:306 - Epoch: 6 - Time: 46.87s - Loss: 0.2746 - Accuracy: 0.5122 - Val Loss: 0.2441 - Val Accuracy: 0.5694 - Stagnation: 5
+2021-02-18 12:27:32,708 - ML_Identification - WARNING - train:335 - Training has stagnated, so model is no longer learning.
+2021-02-18 12:27:32,715 - DataHandling - INFO - new_stage:572 - Changing to stage 2
+2021-02-18 12:27:32,715 - DataHandling - INFO - change_stage:546 - No New Camera defined this stage, camera will not be changed
+2021-02-18 12:27:32,715 - DataHandling - INFO - change_stage:551 - Changing mode_mask to 4
+2021-02-18 12:27:32,715 - ML_Identification - INFO - train:261 - Stage 2 / 3 of training.
+2021-02-18 12:27:38,364 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :20
+2021-02-18 12:27:38,364 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 420
+2021-02-18 12:27:40,857 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :21
+2021-02-18 12:27:40,857 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 421
+2021-02-18 12:27:40,894 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :22
+2021-02-18 12:27:40,894 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 422
+2021-02-18 12:27:40,917 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 55.08324329999999s
+2021-02-18 12:27:40,923 - ML_Identification - DEBUG - train:306 - Epoch: 1 - Time: 55.09s - Loss: 0.2880 - Accuracy: 0.5017 - Val Loss: 0.3244 - Val Accuracy: 0.4583 - Stagnation: 0
+2021-02-18 12:27:47,631 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :23
+2021-02-18 12:27:47,631 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 423
+2021-02-18 12:27:50,463 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :24
+2021-02-18 12:27:50,463 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 424
+2021-02-18 12:27:50,465 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :25
+2021-02-18 12:27:50,465 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 425
+2021-02-18 12:27:50,466 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 64.63256250000003s
+2021-02-18 12:27:50,466 - ML_Identification - DEBUG - train:306 - Epoch: 2 - Time: 64.63s - Loss: 0.2685 - Accuracy: 0.4900 - Val Loss: 0.2964 - Val Accuracy: 0.4861 - Stagnation: 0
+2021-02-18 12:27:55,702 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :26
+2021-02-18 12:27:55,702 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 426
+2021-02-18 12:27:58,521 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :27
+2021-02-18 12:27:58,521 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 427
+2021-02-18 12:27:58,524 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :28
+2021-02-18 12:27:58,524 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 428
+2021-02-18 12:27:58,535 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 72.70086990000001s
+2021-02-18 12:27:58,535 - ML_Identification - DEBUG - train:306 - Epoch: 3 - Time: 72.70s - Loss: 0.3157 - Accuracy: 0.4778 - Val Loss: 0.2712 - Val Accuracy: 0.4444 - Stagnation: 2
+2021-02-18 12:28:04,222 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :29
+2021-02-18 12:28:04,222 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 429
+2021-02-18 12:28:06,596 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :30
+2021-02-18 12:28:06,596 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 430
+2021-02-18 12:28:06,612 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :31
+2021-02-18 12:28:06,612 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 431
+2021-02-18 12:28:06,618 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 80.78428629999999s
+2021-02-18 12:28:06,618 - ML_Identification - DEBUG - train:306 - Epoch: 4 - Time: 80.78s - Loss: 0.2804 - Accuracy: 0.4942 - Val Loss: 0.2949 - Val Accuracy: 0.5556 - Stagnation: 1
+2021-02-18 12:28:12,902 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :32
+2021-02-18 12:28:12,902 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 432
+2021-02-18 12:28:15,682 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :33
+2021-02-18 12:28:15,682 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 433
+2021-02-18 12:28:15,688 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :34
+2021-02-18 12:28:15,688 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 434
+2021-02-18 12:28:15,689 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 89.85582890000003s
+2021-02-18 12:28:15,690 - ML_Identification - DEBUG - train:306 - Epoch: 5 - Time: 89.86s - Loss: 0.2661 - Accuracy: 0.5172 - Val Loss: 0.3026 - Val Accuracy: 0.5278 - Stagnation: 0
+2021-02-18 12:28:21,421 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :35
+2021-02-18 12:28:21,421 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 435
+2021-02-18 12:28:24,144 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :36
+2021-02-18 12:28:24,145 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 436
+2021-02-18 12:28:24,146 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :37
+2021-02-18 12:28:24,146 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 437
+2021-02-18 12:28:24,147 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 98.31315909999998s
+2021-02-18 12:28:24,147 - ML_Identification - DEBUG - train:306 - Epoch: 6 - Time: 98.31s - Loss: 0.2836 - Accuracy: 0.5019 - Val Loss: 0.2710 - Val Accuracy: 0.5833 - Stagnation: 3
+2021-02-18 12:28:29,504 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :38
+2021-02-18 12:28:29,504 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 438
+2021-02-18 12:28:31,599 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :39
+2021-02-18 12:28:31,599 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 439
+2021-02-18 12:28:31,613 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :40
+2021-02-18 12:28:31,614 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 440
+2021-02-18 12:28:31,615 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 105.78128990000002s
+2021-02-18 12:28:31,615 - ML_Identification - DEBUG - train:306 - Epoch: 7 - Time: 105.78s - Loss: 0.2970 - Accuracy: 0.4964 - Val Loss: 0.2738 - Val Accuracy: 0.4167 - Stagnation: 4
+2021-02-18 12:28:37,795 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :41
+2021-02-18 12:28:37,795 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 441
+2021-02-18 12:28:40,522 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :42
+2021-02-18 12:28:40,522 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 442
+2021-02-18 12:28:40,524 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :43
+2021-02-18 12:28:40,524 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 443
+2021-02-18 12:28:40,525 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 114.69109219999999s
+2021-02-18 12:28:40,525 - ML_Identification - DEBUG - train:306 - Epoch: 8 - Time: 114.69s - Loss: 0.2787 - Accuracy: 0.4997 - Val Loss: 0.2839 - Val Accuracy: 0.5278 - Stagnation: 1
+2021-02-18 12:28:46,268 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :44
+2021-02-18 12:28:46,268 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 444
+2021-02-18 12:28:49,303 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :45
+2021-02-18 12:28:49,303 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 445
+2021-02-18 12:28:49,306 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :46
+2021-02-18 12:28:49,306 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 446
+2021-02-18 12:28:49,307 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 123.47259890000001s
+2021-02-18 12:28:49,307 - ML_Identification - DEBUG - train:306 - Epoch: 9 - Time: 123.47s - Loss: 0.2960 - Accuracy: 0.4839 - Val Loss: 0.2339 - Val Accuracy: 0.5694 - Stagnation: 4
+2021-02-18 12:28:55,138 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :47
+2021-02-18 12:28:55,138 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 447
+2021-02-18 12:28:57,399 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :48
+2021-02-18 12:28:57,399 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 448
+2021-02-18 12:28:57,409 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :49
+2021-02-18 12:28:57,409 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 449
+2021-02-18 12:28:57,412 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 131.57876439999998s
+2021-02-18 12:28:57,413 - ML_Identification - DEBUG - train:306 - Epoch: 10 - Time: 131.58s - Loss: 0.2502 - Accuracy: 0.5328 - Val Loss: 0.2268 - Val Accuracy: 0.5278 - Stagnation: 0
+2021-02-18 12:29:03,180 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :50
+2021-02-18 12:29:03,180 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 450
+2021-02-18 12:29:05,874 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :51
+2021-02-18 12:29:05,884 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 451
+2021-02-18 12:29:05,905 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :52
+2021-02-18 12:29:05,905 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 452
+2021-02-18 12:29:05,906 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 140.0719134s
+2021-02-18 12:29:05,906 - ML_Identification - DEBUG - train:306 - Epoch: 11 - Time: 140.07s - Loss: 0.2877 - Accuracy: 0.5122 - Val Loss: 0.3116 - Val Accuracy: 0.4167 - Stagnation: 3
+2021-02-18 12:29:11,852 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :53
+2021-02-18 12:29:11,852 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 453
+2021-02-18 12:29:14,526 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :54
+2021-02-18 12:29:14,526 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 454
+2021-02-18 12:29:14,529 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :55
+2021-02-18 12:29:14,529 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 455
+2021-02-18 12:29:14,530 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 148.69605120000003s
+2021-02-18 12:29:14,530 - ML_Identification - DEBUG - train:306 - Epoch: 12 - Time: 148.70s - Loss: 0.2629 - Accuracy: 0.5294 - Val Loss: 0.2453 - Val Accuracy: 0.5139 - Stagnation: 1
+2021-02-18 12:29:20,549 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :56
+2021-02-18 12:29:20,549 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 456
+2021-02-18 12:29:22,723 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :57
+2021-02-18 12:29:22,723 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 457
+2021-02-18 12:29:22,756 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :58
+2021-02-18 12:29:22,756 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 458
+2021-02-18 12:29:22,762 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 156.92790169999998s
+2021-02-18 12:29:22,762 - ML_Identification - DEBUG - train:306 - Epoch: 13 - Time: 156.93s - Loss: 0.2592 - Accuracy: 0.5381 - Val Loss: 0.1824 - Val Accuracy: 0.6250 - Stagnation: 1
+2021-02-18 12:29:28,568 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :59
+2021-02-18 12:29:28,568 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 459
+2021-02-18 12:29:31,287 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :60
+2021-02-18 12:29:31,287 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 460
+2021-02-18 12:29:31,289 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :61
+2021-02-18 12:29:31,289 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 461
+2021-02-18 12:29:31,290 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 165.4559374s
+2021-02-18 12:29:31,290 - ML_Identification - DEBUG - train:306 - Epoch: 14 - Time: 165.46s - Loss: 0.2789 - Accuracy: 0.5147 - Val Loss: 0.2387 - Val Accuracy: 0.5556 - Stagnation: 3
+2021-02-18 12:29:36,627 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :62
+2021-02-18 12:29:36,627 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 462
+2021-02-18 12:29:39,098 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :63
+2021-02-18 12:29:39,098 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 463
+2021-02-18 12:29:39,104 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :64
+2021-02-18 12:29:39,104 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 464
+2021-02-18 12:29:39,107 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 173.2723998s
+2021-02-18 12:29:39,107 - ML_Identification - DEBUG - train:306 - Epoch: 15 - Time: 173.27s - Loss: 0.2501 - Accuracy: 0.5319 - Val Loss: 0.2627 - Val Accuracy: 0.4583 - Stagnation: 0
+2021-02-18 12:29:45,116 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :65
+2021-02-18 12:29:45,116 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 465
+2021-02-18 12:29:48,032 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :66
+2021-02-18 12:29:48,035 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 466
+2021-02-18 12:29:48,045 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :67
+2021-02-18 12:29:48,045 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 467
+2021-02-18 12:29:48,046 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 182.2128726s
+2021-02-18 12:29:48,047 - ML_Identification - DEBUG - train:306 - Epoch: 16 - Time: 182.21s - Loss: 0.2587 - Accuracy: 0.5397 - Val Loss: 0.1720 - Val Accuracy: 0.5833 - Stagnation: 1
+2021-02-18 12:29:53,947 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :68
+2021-02-18 12:29:53,947 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 468
+2021-02-18 12:29:56,510 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :69
+2021-02-18 12:29:56,510 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 469
+2021-02-18 12:29:56,512 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :70
+2021-02-18 12:29:56,512 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 470
+2021-02-18 12:29:56,513 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 190.6800641s
+2021-02-18 12:29:56,514 - ML_Identification - DEBUG - train:306 - Epoch: 17 - Time: 190.68s - Loss: 0.2578 - Accuracy: 0.5289 - Val Loss: 0.2506 - Val Accuracy: 0.4861 - Stagnation: 1
+2021-02-18 12:30:02,121 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :71
+2021-02-18 12:30:02,121 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 471
+2021-02-18 12:30:04,434 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :72
+2021-02-18 12:30:04,438 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 472
+2021-02-18 12:30:04,475 - DataHandling - INFO - on_epoch_end:527 - Changing to Epoch :73
+2021-02-18 12:30:04,487 - DataHandling - DEBUG - on_epoch_end:529 - Epoch seed is 473
+2021-02-18 12:30:04,490 - ML_Identification - DEBUG - train:292 - Time taken to complete epoch: 198.65592310000002s
+2021-02-18 12:30:04,491 - ML_Identification - DEBUG - train:306 - Epoch: 18 - Time: 198.66s - Loss: 0.2654 - Accuracy: 0.5386 - Val Loss: 0.2535 - Val Accuracy: 0.5278 - Stagnation: 4
