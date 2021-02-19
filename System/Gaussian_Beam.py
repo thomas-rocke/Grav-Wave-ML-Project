@@ -237,9 +237,9 @@ class Superposition(list):
 
     def append(self, mode):
         found = 0
-        for i, test_mode in enumerate(self):
-            if str(test_mode) == str(mode): # Mode of correct l and m values exists in the superposition
-                self[i] = self.add_modes(test_mode, mode) # Combine modes and replace ith position of self with combined mode
+        for i in self:
+            if str(i) == str(mode): # Mode of correct l and m values exists in the superposition
+                self.add_modes(i, mode) # Combine modes
                 found = 1
                 break
         if not found:
@@ -331,33 +331,28 @@ class Superposition(list):
 
         return np.arctan(np.imag(superposition / np.real(superposition)))
 
-    def add_modes(self, mode1, mode2):
+    def add_modes(self, mode, new_mode):
         '''
         Combine mode amplitudes and phases in the event of Hermite duplicates.
         '''
-        r1 = mode1.amplitude
-        r2 = mode2.amplitude
-        phi1 = mode1.phase
-        phi2 = mode2.phase
+        r1 = mode.amplitude
+        r2 = new_mode.amplitude
+        phi1 = mode.phase
+        phi2 = new_mode.phase
 
-        amplitude = np.sqrt(r1**2 + r2**2 + 2*r1*r2*np.cos(phi1 - phi2))
-        #phase = np.arctan((r1 * np.sin(phi1) + r2 * np.sin(phi2)) / (r1 * np.cos(phi1) + r2 * np.cos(phi2)))
-        phase = -1j * np.log((r1 * np.exp(1j * phi1) + r2 * np.exp(1j * phi2))/(amplitude))
-        if np.math.isnan(phase):
-            phase = 0
-        new_mode = mode1.copy()
-        new_mode.amplitude = amplitude
-        new_mode.phase = np.real(phase)
+        mode.amplitude = np.sqrt(r1**2 + r2**2 + 2 * r1 * r2 * np.cos(phi1 - phi2))
+        mode.add_phase(np.arctan((r1 * np.sin(phi1) + r2 * np.sin(phi2)) / (r1 * np.cos(phi1) + r2 * np.cos(phi2))) - mode.phase)
 
-        return new_mode
+        return mode
     
     def renormalize(self):
         amplitudes = [mode.amplitude for mode in self]
-        normalisation = np.linalg.norm(amplitudes) # Normalise the amplititudes
+        normalised_amplitudes = amplitudes / np.linalg.norm(amplitudes) # Normalise the amplititudes
 
-        for mode in self: mode.amplitude /= normalisation # Set the normalised amplitude variations to the modes
+        for i, mode in enumerate(self): mode.amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
 
         sorted_modes = sorted(self, key=lambda x: (x.sort_items[0], x.sort_items[1], x.sort_items[2])) # Sort modes
+        
         phase_change = -1 * sorted_modes[0].phase
         [mode.add_phase(phase_change) for mode in self] # Define a consistent zero for phase to reduce degeneracy in machine learning
 
@@ -396,10 +391,11 @@ class Laguerre(Superposition):
                 y.add_phase((s+p)*np.pi)
                 self.modes.append(y)
 
+        super().__init__(*self.modes)
+
         for mode in self.modes:
             mode *= self.amplitude
             mode.add_phase(self.phase) # Propagates total Laguerre amp and phase to each constituent mode
-        super().__init__(*self.modes)
 
     def __str__(self):
         '''
@@ -427,18 +423,18 @@ class Laguerre(Superposition):
         '''
         return Laguerre(self.p, self.m, self.amplitude, self.phase, self.resolution)
 
-    #def add_phase(self, phase):
+    def add_phase(self, phase):
         '''
         Add phase to superposition, and propagate down to component modes.
         '''
-        #self.phase += phase # Adding extra phase
+        self.phase += phase # Adding extra phase
 
-        #if self.phase < -np.pi: # Ensuring phase stays within -π -> π
-        #    self.phase = self.phase % np.pi
-        #    self.phase += 2*np.pi
-        #elif self.phase > np.pi:
-        #    self.phase = self.phase % -np.pi
-        #[mode.add_phase(phase) for mode in self.modes] # Propogate phase to constituent modes
+        if self.phase < -np.pi: # Ensuring phase stays within -π -> π
+            self.phase = self.phase % np.pi
+        elif self.phase > np.pi:
+            self.phase = self.phase % -np.pi
+
+        [mode.add_phase(phase) for mode in self.modes] # Propogate phase to constituent modes
 
     def E_mode(self, x, y, z):
         '''
@@ -475,17 +471,9 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-    fig, ax = plt.subplots(nrows=4, ncols=4)
-    for i in range(4):
-        for j in range(4):
-            mode = Laguerre(i, j)
-            print(mode)
-            print([m for m in mode])
-            print([m.phase for m in mode])
-            ax[i, j].imshow(mode.superpose())
-            ax[i, j].set_title(str(mode))
-            ax[i, j].axis("off")
-    plt.show()
+    x = Superposition(Hermite(0, 1, phase=0.5*np.pi), Hermite(0, 2, phase=np.pi), Laguerre(3, 3), resolution=480)
+    print([str(mode) for mode in x])
+    print([mode.phase for mode in x])
 
 
 

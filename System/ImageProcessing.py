@@ -54,12 +54,13 @@ class BaseProcessor(list):
         return SquareSide, SquareX, SquareY
 
     def get_bounding_box(self, img):
+        img /= np.linalg.norm(img)
         img /= np.max(img)
         
-        blobs = blob(img)
-        center_x = int(np.mean([b[0] for b in blobs]))
-        center_y = int(np.mean([b[1] for b in blobs]))
-        scale = int((4*np.mean([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.mean([b[2] for b in blobs]))/np.sqrt(2))
+        blobs = blob(img, threshold=0.008)
+        center_x = int(np.sum([b[0]*b[2] for b in blobs])/np.sum([b[2] for b in blobs]))
+        center_y = int(np.sum([b[1]*b[2] for b in blobs])/np.sum([b[2] for b in blobs]))
+        scale = int((3*np.max([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.max([b[2] for b in blobs])))
 
         return center_x, center_y, scale
     
@@ -120,7 +121,7 @@ class BaseProcessor(list):
         '''
         msg = "Generating {} images".format(batch_size)
         LOG.info(msg)
-        images = [self[i] for i in range(batch_size)]
+        images = [self[self.frames_processed + i] for i in range(batch_size)]
         SquareSide, SquareX, SquareY = self._resetSquare(self.toGreyscale(images[0])) # Resets the size of the bounding box based on the first image of the batch
         processed_images = [self.processImage(image, SquareSide, SquareX, SquareY) for image in images]
         self.frames_processed += batch_size
@@ -341,7 +342,12 @@ if __name__ == "__main__":
     for i in range(sup_img.shape[0]):
         for j in range(sup_img.shape[1]):
             img[i, j] = sup_img[i, j]
-
-    vals = proc.get_bounding_box(img)
-    plt.imshow(proc.processImage(img, *vals))
+    
+    img /= np.max(img)
+    blobs = blob(img)
+    fig, ax = plt.subplots()
+    ax.imshow(img)
+    for b in blobs:
+        c = plt.Circle((b[1], b[0]), b[2], fill=False)
+        ax.add_patch(c)
     plt.show()
