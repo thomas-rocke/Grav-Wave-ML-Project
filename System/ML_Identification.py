@@ -74,8 +74,7 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
-                 learning_rate: float = 0.0001,
-                 custom_loss: bool = False):
+                 learning_rate: float = 0.0001):
         '''
         Initialise the class.
         '''
@@ -84,7 +83,6 @@ class ML:
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
-        self.custom_loss = custom_loss
 
         LOG.debug(f"Locals: {locals()}")
 
@@ -108,13 +106,13 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}, {self.custom_loss})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate})"
 
     def copy(self):
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate, self.custom_loss)
+        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate)
 
     def exists(self):
         '''
@@ -136,17 +134,16 @@ class ML:
         '''
         Custom metric to determine the accuracy of our regression problem using rounded accuracy.
         '''
-        return K.mean(K.equal(K.round(y_true), K.round(y_pred)))
+        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+
+        return K.mean(K.equal(K.round(y_true * mask), K.round(y_pred * mask)))
 
     def loss(self, y_true, y_pred):
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
-        if self.custom_loss:
-            mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
-            loss = K.square((y_pred * mask) - (y_true * mask))
-        else:
-            loss = K.square(y_pred - y_true)
+        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+        loss = K.square((y_pred * mask) - (y_true * mask))
 
         return K.mean(loss, axis=-1)
 
@@ -590,9 +587,11 @@ class ML:
 
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
+
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
-                modes[-1].phase = (modes[-1].phase * (2 * np.pi)) - np.pi
+
+                phase = prediction[i + (len(prediction) // 2)]
+                modes[-1].phase = (phase * (2 * np.pi)) - np.pi # Set the phase to the corresponding modes phase
 
         if info: print(log("[PRED] V "))
 
@@ -760,8 +759,9 @@ class ML:
 
             elif param_name in dir(m.data_generator):
                 setattr(m.data_generator, param_name, test)
+                m.data_generator = m.data_generator.copy()
 
-                LOG.debug(f"New model: {m}")
+                LOG.debug(f"New data generator: {m.data_generator}")
                 print(log(f"[INFO] New data generator: {m.data_generator}\n"))
 
             else:
@@ -789,7 +789,9 @@ class ML:
 
                 if save:
                     LOG.debug(f"Saving to 'Optimisation/{self}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
-                    plt.savefig(f"Optimisation/{self}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+
+                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}", exist_ok=True) # Create directory for optimisations
+                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
