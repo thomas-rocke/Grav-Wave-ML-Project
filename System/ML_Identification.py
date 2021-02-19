@@ -587,9 +587,11 @@ class ML:
 
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
+
                 modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
-                modes[-1].phase = prediction[i + (len(prediction) // 2)] # Set the phase to the corresponding modes phase
-                modes[-1].phase = (modes[-1].phase * (2 * np.pi)) - np.pi
+
+                phase = prediction[i + (len(prediction) // 2)]
+                modes[-1].phase = (phase * (2 * np.pi)) - np.pi # Set the phase to the corresponding modes phase
 
         if info: print(log("[PRED] V "))
 
@@ -757,8 +759,9 @@ class ML:
 
             elif param_name in dir(m.data_generator):
                 setattr(m.data_generator, param_name, test)
+                m.data_generator = m.data_generator.copy()
 
-                LOG.debug(f"New model: {m}")
+                LOG.debug(f"New data generator: {m.data_generator}")
                 print(log(f"[INFO] New data generator: {m.data_generator}\n"))
 
             else:
