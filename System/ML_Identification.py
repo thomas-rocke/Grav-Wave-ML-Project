@@ -294,7 +294,7 @@ class ML:
                                                                 validation_steps=1,
                                                                 steps_per_epoch=len(self.data_generator),
                                                                 max_queue_size=cpu_count(),
-                                                                use_multiprocessing=False,
+                                                                use_multiprocessing=True,
                                                                 workers=cpu_count(),
                                                                 verbose=int(info))
 
@@ -374,7 +374,7 @@ class ML:
         scores = self.model.evaluate_generator(self.data_generator,
                                                steps=len(self.data_generator),
                                                max_queue_size=cpu_count(),
-                                               use_multiprocessing=False,
+                                               use_multiprocessing=True,
                                                workers=cpu_count(),
                                                verbose=int(info))
 
