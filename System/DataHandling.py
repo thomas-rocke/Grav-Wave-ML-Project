@@ -582,6 +582,13 @@ class Dataset(keras.utils.Sequence):
         else:
             LOG.info("Stage {} not found, aborting training".format(self.stage))
             return False # Abort training
+    
+    def get_random(self):
+        '''
+        Generate superposition representative of trained dataset
+        '''
+        img, sup = self.batch_load_process(0)
+        return sup
 
 
 
