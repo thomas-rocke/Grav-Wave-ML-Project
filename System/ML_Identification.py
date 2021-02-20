@@ -108,13 +108,13 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}. {self.use_multiprocessing})"
 
     def copy(self):
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate)
+        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate, self.use_multiprocessing)
 
     def exists(self):
         '''
