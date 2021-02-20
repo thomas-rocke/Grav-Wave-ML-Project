@@ -74,7 +74,8 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
-                 learning_rate: float = 0.0001):
+                 learning_rate: float = 0.0001,
+                 use_multiprocessing: bool = True):
         '''
         Initialise the class.
         '''
@@ -83,6 +84,7 @@ class ML:
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
+        self.use_multiprocessing = use_multiprocessing
 
         LOG.debug(f"Locals: {locals()}")
 
@@ -294,7 +296,7 @@ class ML:
                                                                 validation_steps=1,
                                                                 steps_per_epoch=len(self.data_generator),
                                                                 max_queue_size=cpu_count(),
-                                                                use_multiprocessing=False,
+                                                                use_multiprocessing=self.use_multiprocessing,
                                                                 workers=cpu_count(),
                                                                 verbose=int(info))
 
@@ -374,7 +376,7 @@ class ML:
         scores = self.model.evaluate_generator(self.data_generator,
                                                steps=len(self.data_generator),
                                                max_queue_size=cpu_count(),
-                                               use_multiprocessing=False,
+                                               use_multiprocessing=self.use_multiprocessing,
                                                workers=cpu_count(),
                                                verbose=int(info))
 
