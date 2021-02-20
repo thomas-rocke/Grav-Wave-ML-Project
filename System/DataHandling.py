@@ -56,8 +56,8 @@ class GenerateData(list):
         if info: print(LOG.info("Generating Gaussian modes..."))
 
         self.hermite_modes = [Hermite(l=i, m=j) for i in range(max_order) for j in range(max_order)]
-        # self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
-        self.gauss_modes = self.hermite_modes# + self.laguerre_modes
+        self.laguerre_modes = [Laguerre(p=i, m=j) for i in range(max_order // 2) for j in range(max_order // 2)]
+        self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
         # if info: print("Done! Found " + str(len(self.hermite_modes)) + " hermite modes and " + str(len(self.laguerre_modes)) + " laguerre modes giving a total of " + str(len(self.gauss_modes)) + " gaussian modes.\n\nGenerating superpositions...")
 
@@ -582,6 +582,13 @@ class Dataset(keras.utils.Sequence):
         else:
             LOG.info("Stage {} not found, aborting training".format(self.stage))
             return False # Abort training
+    
+    def get_random(self):
+        '''
+        Generate superposition representative of trained dataset
+        '''
+        img, sup = self.batch_load_process(0)
+        return sup
 
 
 
