@@ -343,7 +343,7 @@ class Superposition(list):
         amplitude = np.sqrt(r1**2 + r2**2 + 2*r1*r2*np.cos(phi1 - phi2))
         #phase = np.arctan((r1 * np.sin(phi1) + r2 * np.sin(phi2)) / (r1 * np.cos(phi1) + r2 * np.cos(phi2)))
         phase = -1j * np.log((r1 * np.exp(1j * phi1) + r2 * np.exp(1j * phi2))/(amplitude))
-        if np.math.isnan(phase):
+        if np.math.isnan(np.real(phase)):
             phase = 0
         new_mode = mode1.copy()
         new_mode.amplitude = amplitude

@@ -108,7 +108,7 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}. {self.use_multiprocessing})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}, {self.use_multiprocessing})"
 
     def copy(self):
         '''
