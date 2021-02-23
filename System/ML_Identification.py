@@ -559,7 +559,6 @@ class ML:
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
         LOG.info("Using model to make a prediction.")
-        LOG.debug(f"Locals: {locals()}")
 
         if not self.trained():
             LOG.warning("Model has not been trained!")
@@ -584,16 +583,20 @@ class ML:
         modes = []
         for i in range(len(prediction) // 2): # For all values of prediction
 
-            LOG.debug(f"{self.classes[i]}: {prediction[i] :.3f}" + int(prediction[i] > threshold) * " ***")
+            # LOG.debug(f"{self.classes[i]}: {prediction[i] :.3f}" + int(prediction[i] > threshold) * " ***")
             if info: print(log(f"[PRED] |-> {self.classes[i]}: {prediction[i] :.3f}" + Colour.FAIL + int(prediction[i] > threshold) * " ***" + Colour.ENDC))
 
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
 
-                modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
+                amplitude = prediction[i]
+                normalised_phase = prediction[i + (len(prediction) // 2)]
+                actual_phase = (normalised_phase * (2 * np.pi)) - np.pi
 
-                phase = prediction[i + (len(prediction) // 2)]
-                modes[-1].phase = (phase * (2 * np.pi)) - np.pi # Set the phase to the corresponding modes phase
+                LOG.debug(f"{self.classes[i]}: {amplitude :.3f}, {normalised_phase :.3f}, {actual_phase :.3f}")
+
+                modes[-1].amplitude = amplitude # Set that modes amplitude to the prediction value
+                modes[-1].phase = actual_phase # Set the phase to the corresponding modes phase
 
         if info: print(log("[PRED] V "))
 
