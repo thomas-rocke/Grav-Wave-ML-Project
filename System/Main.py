@@ -29,7 +29,7 @@ if __name__ == '__main__':
         model = eval(args.ML)
 
         if args.train: model.train(info=args.verbose)
-        if args.save: model.save()
         if args.load: model.load(info=args.verbose)
+        if args.save: model.save()
         if args.evaluate != None: model.evaluate(int(args.evaluate))
         if args.parameter != None: model.optimise(args.parameter[0], eval(args.parameter[1]), plot=True, save=True)

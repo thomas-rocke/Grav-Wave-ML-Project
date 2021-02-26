@@ -144,6 +144,15 @@ class ML:
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
+        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+        loss = K.square((y_pred * mask) - (y_true * mask))
+
+        return K.mean(loss, axis=-1)
+
+    def masked_loss(self, y_true, y_pred):
+        '''
+        Masks out modes that don't exist in the superposition.
+        '''
         mask = K.cast(K.greater(y_true, 0), K.floatx())
         loss = K.square((y_pred * mask) - (y_true * mask))
 
@@ -209,7 +218,7 @@ class ML:
         LOG.debug("Compiling the model.")
 
         # model = VGG16(self.input_shape, len(self.classes)) # Override model with VGG16 model
-        model.compile(loss=self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
+        model.compile(loss=self.masked_loss if type(self.data_generator) == Dataset else self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
 
         LOG.debug(f"Model compiled. Optimiser: {self.optimiser}(learning_rate={self.learning_rate}).")
 
@@ -472,8 +481,8 @@ class ML:
 
         stage_change_indexes = [i for i in range(1, len(self.history['stage'])) if self.history['stage'][i] != self.history['stage'][i-1]]
         for i in stage_change_indexes:
-            ax1.axvline(self.history['time'][i] if elapsed_time else i, color='r', linestyle='--')
-            ax2.axvline(self.history['time'][i] if elapsed_time else i, color='r', linestyle='--')
+            ax1.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color='r', linestyle='--')
+            ax2.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color='r', linestyle='--')
 
         LOG.debug("Formatting plot.")
 
