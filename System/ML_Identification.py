@@ -74,7 +74,8 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
-                 learning_rate: float = 0.0001):
+                 learning_rate: float = 0.0001,
+                 use_multiprocessing: bool = True):
         '''
         Initialise the class.
         '''
@@ -83,6 +84,7 @@ class ML:
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
+        self.use_multiprocessing = use_multiprocessing
 
         LOG.debug(f"Locals: {locals()}")
 
@@ -106,13 +108,13 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}, {self.use_multiprocessing})"
 
     def copy(self):
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate)
+        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate, self.use_multiprocessing)
 
     def exists(self):
         '''
@@ -142,7 +144,7 @@ class ML:
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
-        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+        mask = K.cast(K.greater(y_true, 0), K.floatx())
         loss = K.square((y_pred * mask) - (y_true * mask))
 
         return K.mean(loss, axis=-1)
@@ -294,7 +296,7 @@ class ML:
                                                                 validation_steps=1,
                                                                 steps_per_epoch=len(self.data_generator),
                                                                 max_queue_size=cpu_count(),
-                                                                use_multiprocessing=False,
+                                                                use_multiprocessing=self.use_multiprocessing,
                                                                 workers=cpu_count(),
                                                                 verbose=int(info))
 
@@ -374,7 +376,7 @@ class ML:
         scores = self.model.evaluate_generator(self.data_generator,
                                                steps=len(self.data_generator),
                                                max_queue_size=cpu_count(),
-                                               use_multiprocessing=False,
+                                               use_multiprocessing=self.use_multiprocessing,
                                                workers=cpu_count(),
                                                verbose=int(info))
 
@@ -552,12 +554,11 @@ class ML:
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
 
-    def predict(self, data, threshold: float = 0.2, info: bool = True):
+    def predict(self, data, threshold: float = 0.05, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
         LOG.info("Using model to make a prediction.")
-        LOG.debug(f"Locals: {locals()}")
 
         if not self.trained():
             LOG.warning("Model has not been trained!")
@@ -582,16 +583,20 @@ class ML:
         modes = []
         for i in range(len(prediction) // 2): # For all values of prediction
 
-            LOG.debug(f"{self.classes[i]}: {prediction[i] :.3f}" + int(prediction[i] > threshold) * " ***")
+            # LOG.debug(f"{self.classes[i]}: {prediction[i] :.3f}" + int(prediction[i] > threshold) * " ***")
             if info: print(log(f"[PRED] |-> {self.classes[i]}: {prediction[i] :.3f}" + Colour.FAIL + int(prediction[i] > threshold) * " ***" + Colour.ENDC))
 
             if prediction[i] > threshold: # If the prediction is above a certain threshold
                 modes.append(self.classes[i].copy()) # Copy the corresponding solution to modes
 
-                modes[-1].amplitude = prediction[i] # Set that modes amplitude to the prediction value
+                amplitude = prediction[i]
+                normalised_phase = prediction[i + (len(prediction) // 2)]
+                actual_phase = (normalised_phase * (2 * np.pi)) - np.pi
 
-                phase = prediction[i + (len(prediction) // 2)]
-                modes[-1].phase = (phase * (2 * np.pi)) - np.pi # Set the phase to the corresponding modes phase
+                LOG.debug(f"{self.classes[i]}: {amplitude :.3f}, {normalised_phase :.3f}, {actual_phase :.3f}")
+
+                modes[-1].amplitude = amplitude # Set that modes amplitude to the prediction value
+                modes[-1].phase = actual_phase # Set the phase to the corresponding modes phase
 
         if info: print(log("[PRED] V "))
 
@@ -612,7 +617,7 @@ class ML:
 
         return answer
 
-    def compare(self, sup: Superposition, camera: dict = None, info: bool = True, save: bool = False):
+    def compare(self, sup: Superposition, camera: dict = None, threshold: float = 0.05, info: bool = True, save: bool = False):
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
@@ -626,16 +631,17 @@ class ML:
         if info: print(log("[PRED] Actual: " + str(sup)))
         raw_image = sup.superpose()
         noisy_image = processor.errorEffects(raw_image)
-        pred = self.predict(noisy_image, info=info)
+        pred = self.predict(noisy_image, threshold=threshold, info=info)
 
         labels = [str(i) for i in sup]
         sup_amps = [i.amplitude for i in sup]
         pred_amps = [pred.contains(i).amplitude for i in sup]
         sup_phases = [i.phase for i in sup]
-        pred_phases = [pred.contains(i).phase for i in sup]
+        raw_pred_phases = [pred.contains(i).phase for i in sup]
+        pred_phases = [0 if i == -10 else i for i in raw_pred_phases] # If mode does not exist, give it a phase of 0
 
-        x = np.arange(len(labels))  # Label locations
-        width = 0.35  # Width of the bars
+        x = np.arange(len(labels)) # Label locations
+        width = 0.35 # Width of the bars
 
         fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(14, 10))
         fig.suptitle(r"$\bf{" + str(self) + "}$")
@@ -655,6 +661,7 @@ class ML:
         rects2 = ax3.bar(x + (width / 2), pred_amps, width, label='Reconstucted', zorder=3)
         rects3 = ax6.bar(x - (width / 2), sup_phases, width, label='Actual', zorder=3)
         rects4 = ax6.bar(x + (width / 2), pred_phases, width, label='Reconstucted', zorder=3)
+        ax3.axhline(threshold, color='r', linestyle='--', zorder=5)
 
         # ax1.colorbar()
         # ax2.colorbar()
