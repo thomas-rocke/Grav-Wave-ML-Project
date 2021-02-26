@@ -180,9 +180,9 @@ class Hermite:
         '''
         self.phase += phase # Adding extra phase
 
-        if self.phase < -np.pi: # Ensuring phase stays within -π -> π
+        if self.phase <= -np.pi: # Ensuring phase stays within -π -> π
             self.phase += 2*np.pi
-        elif self.phase > np.pi:
+        elif self.phase >= np.pi:
             self.phase -= 2*np.pi
 
 
@@ -429,15 +429,15 @@ class Laguerre(Superposition):
 
     def add_phase(self, phase):
         '''
-        Add phase to superposition, and propagate down to component modes.
+        Adds some phase value to current mode phase
         '''
         self.phase += phase # Adding extra phase
 
-        if self.phase < -np.pi: # Ensuring phase stays within -π -> π
-           self.phase = self.phase % np.pi
-           self.phase += 2*np.pi
-        elif self.phase > np.pi:
-           self.phase = self.phase % -np.pi
+        if self.phase <= -np.pi: # Ensuring phase stays within -π -> π
+            self.phase += 2*np.pi
+        elif self.phase >= np.pi:
+            self.phase -= 2*np.pi
+
         [mode.add_phase(phase) for mode in self.modes] # Propogate phase to constituent modes
 
     def E_mode(self, x, y, z):
