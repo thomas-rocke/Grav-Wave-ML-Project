@@ -661,7 +661,5 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__=='__main__':
     x = Dataset(batch_size=6, max_order=3)
-    batch_vals = x[0][1]
-    for val in batch_vals:
-        phases = val[int(len(val)/2):]
-        print(phases)
+    d = [x.get_random() for i in range(10)]
+    print([s.resolution for s in d])
