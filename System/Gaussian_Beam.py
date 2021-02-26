@@ -357,8 +357,8 @@ class Superposition(list):
 
         for mode in self: mode.amplitude /= normalisation # Set the normalised amplitude variations to the modes
 
-        sorted_modes = sorted(self, key=lambda x: (x.sort_items[0], x.sort_items[1], x.sort_items[2])) # Sort modes
-        phase_change = -1 * sorted_modes[0].phase
+        sorted_modes = sorted(self, key=lambda x: x.amplitude) # Sort modes by amplitude
+        phase_change = -1 * sorted_modes[-1].phase # Use phase of highest amplitude mode
         [mode.add_phase(phase_change) for mode in self] # Define a consistent zero for phase to reduce degeneracy in machine learning
 
 
@@ -427,18 +427,18 @@ class Laguerre(Superposition):
         '''
         return Laguerre(self.p, self.m, self.amplitude, self.phase, self.resolution)
 
-    #def add_phase(self, phase):
+    def add_phase(self, phase):
         '''
         Add phase to superposition, and propagate down to component modes.
         '''
-        #self.phase += phase # Adding extra phase
+        self.phase += phase # Adding extra phase
 
-        #if self.phase < -np.pi: # Ensuring phase stays within -π -> π
-        #    self.phase = self.phase % np.pi
-        #    self.phase += 2*np.pi
-        #elif self.phase > np.pi:
-        #    self.phase = self.phase % -np.pi
-        #[mode.add_phase(phase) for mode in self.modes] # Propogate phase to constituent modes
+        if self.phase < -np.pi: # Ensuring phase stays within -π -> π
+            self.phase = self.phase % np.pi
+            self.phase += 2*np.pi
+        elif self.phase > np.pi:
+            self.phase = self.phase % -np.pi
+        [mode.add_phase(phase) for mode in self.modes] # Propogate phase to constituent modes
 
     def E_mode(self, x, y, z):
         '''
@@ -475,17 +475,13 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-    fig, ax = plt.subplots(nrows=4, ncols=4)
-    for i in range(4):
-        for j in range(4):
-            mode = Laguerre(i, j)
-            print(mode)
-            print([m for m in mode])
-            print([m.phase for m in mode])
-            ax[i, j].imshow(mode.superpose())
-            ax[i, j].set_title(str(mode))
-            ax[i, j].axis("off")
-    plt.show()
+    x = Hermite(0, 0)
+    x.amplitude = 0.1
+    x.add_phase(np.pi)
+
+    s2 = Superposition(x, Hermite(2, 1), Hermite(1, 2))
+
+    print([m.phase for m in s2])
 
 
 
