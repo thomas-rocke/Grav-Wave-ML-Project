@@ -1,0 +1,47 @@
+2021-02-26 19:29:08,852 - DataHandling - INFO - __init__:229 - Initialising generator.
+2021-02-26 19:29:08,852 - ImageProcessing - INFO - change_camera:168 - Changing camera
+2021-02-26 19:29:08,852 - ImageProcessing - DEBUG - change_camera:175 - New 'noise_variance' is 0.1
+2021-02-26 19:29:08,852 - ImageProcessing - DEBUG - change_camera:184 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-26 19:29:08,852 - ImageProcessing - WARNING - change_camera:198 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-26 19:29:08,852 - ImageProcessing - WARNING - change_camera:207 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-26 19:29:08,853 - ImageProcessing - WARNING - change_camera:216 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-26 19:29:08,853 - ImageProcessing - WARNING - change_camera:225 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-26 19:29:08,853 - DataHandling - DEBUG - __init__:249 - Locals: {'number_of_modes': 5, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'resolution': 128, 'cosine': False, 'starting_stage': 1, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 5, 'self': BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False, 1)}
+2021-02-26 19:29:08,854 - DataHandling - INFO - __init__:259 - Generator initialised!
+2021-02-26 19:29:08,854 - Main - INFO - <module>:10 - End of program.
+
+
+
+2021-02-26 19:29:08,854 - Main - INFO - <module>:11 - Start of program.
+2021-02-26 19:29:08,855 - Main - DEBUG - <module>:26 - Args: Namespace(ML='ML(BasicGenerator(2,2))', evaluate=None, load=True, parameter=None, save=False, train=False, verbose=False)
+2021-02-26 19:29:08,855 - DataHandling - INFO - __init__:229 - Initialising generator.
+2021-02-26 19:29:08,855 - ImageProcessing - INFO - change_camera:168 - Changing camera
+2021-02-26 19:29:08,855 - ImageProcessing - DEBUG - change_camera:175 - New 'noise_variance' is 0.1
+2021-02-26 19:29:08,855 - ImageProcessing - DEBUG - change_camera:184 - New 'exposure_limits' is (0.0, 1.0)
+2021-02-26 19:29:08,855 - ImageProcessing - WARNING - change_camera:198 - 'bit_depth' not explicitly defined by new camera, defaulting to 0
+2021-02-26 19:29:08,855 - ImageProcessing - WARNING - change_camera:207 - 'blur_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-26 19:29:08,855 - ImageProcessing - WARNING - change_camera:216 - 'rotational_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-26 19:29:08,855 - ImageProcessing - WARNING - change_camera:225 - 'stretch_variance' not explicitly defined by new camera, defaulting to 0
+2021-02-26 19:29:08,855 - DataHandling - DEBUG - __init__:249 - Locals: {'number_of_modes': 2, 'amplitude_variation': 0.5, 'phase_variation': 1.0, 'noise_variation': 0.1, 'exposure': (0.0, 1.0), 'repeats': 32, 'batch_size': 64, 'resolution': 128, 'cosine': False, 'starting_stage': 1, 'cam': {'noise_variance': 0.1, 'exposure_limits': (0.0, 1.0)}, 'max_order': 2, 'self': BasicGenerator(2, 2, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False, 1)}
+2021-02-26 19:29:08,855 - DataHandling - INFO - __init__:259 - Generator initialised!
+2021-02-26 19:29:08,855 - ML_Identification - INFO - __init__:82 - Initialising ML model.
+2021-02-26 19:29:08,856 - ML_Identification - DEBUG - __init__:89 - Locals: {'self': ML(BasicGenerator(2, 2, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False, 1), 'Adamax', 0.0001, True), 'data_generator': BasicGenerator(2, 2, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 64, 128, False, 1), 'optimiser': 'Adamax', 'learning_rate': 0.0001, 'use_multiprocessing': True}
+2021-02-26 19:29:08,856 - ML_Identification - INFO - __init__:99 - ML model initialised!
+2021-02-26 19:29:08,856 - ML_Identification - INFO - load:536 - Loading ML object.
+2021-02-26 19:29:08,856 - ML_Identification - DEBUG - exists:123 - Checking if ML object exists in the file system.
+2021-02-26 19:29:08,856 - ML_Identification - WARNING - load:539 - Model does not exist! Will now train and save.
+2021-02-26 19:29:08,856 - ML_Identification - INFO - train:229 - Initialising the training process for the model.
+2021-02-26 19:29:08,856 - ML_Identification - DEBUG - trained:131 - Checking if ML model has been trained before.
+2021-02-26 19:29:08,856 - ML_Identification - DEBUG - train:246 - Creating the data generator object for the dataset.
+2021-02-26 19:29:08,857 - DataHandling - DEBUG - get_classes:340 - Getting classes.
+2021-02-26 19:29:08,857 - ML_Identification - DEBUG - train:253 - Classes: [Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0), Hermite(0, 0, 1.0, 0.0), Hermite(0, 1, 1.0, 0.0), Hermite(1, 0, 1.0, 0.0), Hermite(1, 1, 1.0, 0.0)]
+2021-02-26 19:29:08,857 - ML_Identification - DEBUG - train:254 - Input shape: (128, 128, 1)
+2021-02-26 19:29:08,857 - ML_Identification - DEBUG - train:258 - Creating the Keras model.
+2021-02-26 19:29:08,857 - ML_Identification - DEBUG - create_model:156 - Creating the architecture of the Keras model.
+2021-02-26 19:29:12,167 - ML_Identification - DEBUG - create_model:208 - Keras model layers created.
+2021-02-26 19:29:12,167 - ML_Identification - DEBUG - create_model:209 - Compiling the model.
+2021-02-26 19:29:12,172 - ML_Identification - DEBUG - create_model:214 - Model compiled. Optimiser: Adamax(learning_rate=0.0001).
+2021-02-26 19:29:12,172 - ML_Identification - DEBUG - create_model:222 - Keras model architecture created successfully!
+2021-02-26 19:29:12,173 - ML_Identification - INFO - train:267 - Starting the training process.
+2021-02-26 19:29:12,173 - DataHandling - DEBUG - new_stage:306 - Incrementing dataset to stage 1.
+2021-02-26 19:29:12,173 - ML_Identification - INFO - train:274 - Stage 1 / 1 of training.

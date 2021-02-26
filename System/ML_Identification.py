@@ -91,7 +91,7 @@ class ML:
         self.max_epochs = 100 # Max epochs before training is terminated
         self.success_loss = 0.001 # Loss at which the training is considered successful
         self.stagnation = 5 # Epochs of stagnation before terminating training stage
-        self.history = {"time": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
+        self.history = {"time": [], "stage": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
 
         print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
@@ -304,6 +304,7 @@ class ML:
 
                     for i in self.history:
                         if i == "time": self.history[i].append(perf_counter() - start_time) # Save time elapsed since training began
+                        elif i == "stage": self.history[i].append(self.data_generator.stage) # Save what stage the data generator was on for this epoch
                         else: self.history[i].append(history_callback.history[i][0]) # Save performance of epoch
 
                         # LOG.debug(f"{i.replace('_', ' ').title()}: {self.history[i][-1]}")
@@ -440,7 +441,7 @@ class ML:
 
         if info: print(log("[PLOT] Plotting history..."))
 
-        if elapsed_time: t = np.array(self.history["time"]) / 60
+        if elapsed_time: t = np.array(self.history['time']) / 60
         else: t = np.arange(1, len(self.history['loss']) + 1)
 
         if axes == None:
@@ -468,6 +469,11 @@ class ML:
             ax2.plot(t, self.history['val_loss'], label=label)[0]
 
             if np.max(self.history['val_loss']) > ax2.get_ylim()[1]: ax2.set_ylim(0, np.max(self.history['val_loss']))
+
+        stage_change_indexes = [i for i in range(1, len(self.history['stage'])) if self.history['stage'][i] != self.history['stage'][i-1]]
+        for i in stage_change_indexes:
+            ax1.axvline(self.history['time'][i] if elapsed_time else i, color='r', linestyle='--')
+            ax2.axvline(self.history['time'][i] if elapsed_time else i, color='r', linestyle='--')
 
         LOG.debug("Formatting plot.")
 
