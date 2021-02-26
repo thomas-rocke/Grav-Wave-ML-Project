@@ -144,7 +144,7 @@ class ML:
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
-        mask = K.cast(K.greater(y_true, 0), K.floatx())
+        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
         loss = K.square((y_pred * mask) - (y_true * mask))
 
         return K.mean(loss, axis=-1)
@@ -472,8 +472,8 @@ class ML:
 
         stage_change_indexes = [i for i in range(1, len(self.history['stage'])) if self.history['stage'][i] != self.history['stage'][i-1]]
         for i in stage_change_indexes:
-            ax1.axvline(self.history['time'][i] if elapsed_time else i, color='r', linestyle='--')
-            ax2.axvline(self.history['time'][i] if elapsed_time else i, color='r', linestyle='--')
+            ax1.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color='r', linestyle='--')
+            ax2.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color='r', linestyle='--')
 
         LOG.debug("Formatting plot.")
 
