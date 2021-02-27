@@ -13,7 +13,7 @@ def str_to_bin(str):
     return format(ord(str), '008b')
 
 if __name__ == "__main__":
-    string = 'Hello World'
+    string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
     fig, ax = plt.subplots(nrows=2, sharex=False)
     labels = [s for s in string]
@@ -29,11 +29,13 @@ if __name__ == "__main__":
     ax[0].set_xlabel("Input Character (inputted as ASCII)")
     ax[1].set_xlabel("Predicted Character")
     ax[0].set_title("Using a model to interpret communicate signals")
+    ax[1].axhline(0.5, linestyle="--")
     offsets = np.linspace(-width/2, width/2, subsections)
 
     model = ML(BasicGenerator(3, 3, 0.5, 0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
     model.load()
     modes = model.data_generator.hermite_modes[:subsections]
+    right = 0
     for i in x:
         true_vals = [int(j) for j in str(str_to_bin(string[i]))]
         for j in range(subsections): modes[j].amplitude = true_vals[j]
@@ -56,5 +58,8 @@ if __name__ == "__main__":
         pred_letter_bin = int(''.join([str(t) for t in trigger]), 2)
         pred_letter = chr(pred_letter_bin)
         pred_labels[i] = pred_letter
+        if pred_letter == labels[i]:
+            right += 1
+    print(right*100/len(labels))
     ax[1].set_xticklabels(pred_labels)
     plt.show()
