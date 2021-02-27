@@ -214,9 +214,9 @@ class BasicGenerator(keras.utils.Sequence):
                  phase_variation: float = 1.0,
                  noise_variation: float = 0.1,
                  exposure: tuple = (0.0, 1.0),
-                 repeats: int = 32,
+                 repeats: int = 64,
                  batch_size: int = 64,
-                 resolution: int = 128,
+                 resolution: int = 64,
                  cosine: bool = False,
                  starting_stage: int = 1):
         '''
