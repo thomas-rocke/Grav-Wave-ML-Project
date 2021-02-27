@@ -137,3 +137,4 @@ dmypy.json
 # *.txt
 
 workspace.code-workspace
+*.log
