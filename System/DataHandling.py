@@ -477,7 +477,7 @@ class Dataset(keras.utils.Sequence):
                 for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
                     mode.amplitude = 0
                     mode.phase = 0
-        input_data = self.mode_processor.getImage(s.superpose())[..., np.newaxis] # Generate noise image#
+        input_data = self.mode_processor.errorEffects(s.superpose())[..., np.newaxis] # Generate noise image#
         amplitudes = [s.contains(j).amplitude for j in self.hermite_modes]
         phases = [s.contains(j).phase for j in self.hermite_modes]
 
@@ -661,5 +661,6 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__=='__main__':
     x = Dataset(batch_size=6, max_order=3)
-    d = [x.get_random() for i in range(10)]
-    print([s.resolution for s in d])
+    d = x[0][0][0]
+    plt.imshow(d)
+    plt.show()
