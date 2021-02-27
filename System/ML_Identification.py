@@ -698,6 +698,9 @@ class ML:
         ax6.set_xticks(x)
         ax6.set_xticklabels(labels)
         ax6.set_ylim(-np.pi, np.pi)
+
+        ax6.set_yticks([-np.pi, -3*np.pi/4, -np.pi/2, -np.pi/4, 0, np.pi/4, np.pi/2, 3*np.pi/4, np.pi])
+        ax6.set_yticklabels(["$-\\pi$", "$-\\frac{3}{4}\\pi$", "$-\\frac{1}{2}\\pi$", "$-\\frac{1}{4}\\pi$", "$0$", "$\\frac{1}{4}\\pi$", "$\\frac{1}{2}\\pi$", "$\\frac{3}{4}\\pi$", "$\\pi$"])
         ax6.legend()
 
         auto_label(rects1, ax3)
