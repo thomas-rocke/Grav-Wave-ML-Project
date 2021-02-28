@@ -564,7 +564,7 @@ class ML:
 
         LOG.debug(f"Loading classes from 'Models/{str(self)}/classes.txt'.")
         self.classes = np.loadtxt(f"Models/{str(self)}/classes.txt", dtype=str, delimiter="\n")
-        self.classes = [eval(i.replace("HG", "Hermite")) for i in self.classes]
+        self.classes = [eval(i.replace("H", "Hermite")) for i in self.classes]
 
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
