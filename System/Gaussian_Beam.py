@@ -185,6 +185,12 @@ class Hermite:
         elif self.phase > np.pi:
             self.phase -= 2*np.pi
 
+    def latex_print(self):
+        '''
+        Stylised printing method
+        '''
+        return "".join(["$H_{", str(self.l), ",", str(self.m), "}$"])
+
 
 
 
@@ -360,7 +366,16 @@ class Superposition(list):
         sorted_modes = sorted(self, key=lambda x: x.amplitude) # Sort modes by amplitude
         phase_change = -1 * sorted_modes[-1].phase # Use phase of highest amplitude mode
         # [mode.add_phase(phase_change) for mode in self] # Define a consistent zero for phase to reduce degeneracy in machine learning
+    
+    def latex_print(self):
+        '''
+        Stylised printing method
+        '''
+        mode_strings = [mode.latex_print() for mode in self]
+        single_string = ", ".join(mode_strings)
 
+        string = "S(" + single_string + ")"
+        return string
 
 
 
@@ -481,7 +496,7 @@ if __name__ == '__main__':
 
     s2 = Superposition(x, Hermite(2, 1), Hermite(1, 2))
 
-    print([m.phase for m in s2])
+    print(s2.latex_print())
 
 
 

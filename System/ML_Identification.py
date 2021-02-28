@@ -14,6 +14,7 @@ import os
 import gc
 import logging
 import argparse
+import textwrap
 
 # os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
 # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
@@ -648,7 +649,7 @@ class ML:
         noisy_image = processor.errorEffects(raw_image)
         pred = self.predict(noisy_image, threshold=threshold, info=info)
 
-        labels = [str(i) for i in sup]
+        labels = [i.latex_print() for i in sup]
         sup_amps = [i.amplitude for i in sup]
         pred_amps = [pred.contains(i).amplitude for i in sup]
         sup_phases = [i.phase for i in sup]
@@ -661,8 +662,8 @@ class ML:
         fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(14, 10))
         fig.suptitle(r"$\bf{" + str(self) + "}$")
 
-        ax4.set_xlabel(r"$\bf{Actual: }$" + str(sup))
-        ax5.set_xlabel(r"$\bf{Reconst: }$" + str(pred))
+        ax4.set_xlabel(r"$\bf{Actual: }$" + "\n".join(textwrap.wrap(sup.latex_print())))
+        ax5.set_xlabel(r"$\bf{Reconst: }$" + "\n".join(textwrap.wrap(pred.latex_print())))
         ax1.set_ylabel(r"$\bf{Amplitude}$")
         ax4.set_ylabel(r"$\bf{Phase}$")
         ax3.set_title(r"$\bf{Mode}$ $\bf{Amplitudes}$")
@@ -698,6 +699,9 @@ class ML:
         ax6.set_xticks(x)
         ax6.set_xticklabels(labels)
         ax6.set_ylim(-np.pi, np.pi)
+
+        ax6.set_yticks([-np.pi, -3*np.pi/4, -np.pi/2, -np.pi/4, 0, np.pi/4, np.pi/2, 3*np.pi/4, np.pi])
+        ax6.set_yticklabels(["$-\\pi$", "$-\\frac{3}{4}\\pi$", "$-\\frac{1}{2}\\pi$", "$-\\frac{1}{4}\\pi$", "$0$", "$\\frac{1}{4}\\pi$", "$\\frac{1}{2}\\pi$", "$\\frac{3}{4}\\pi$", "$\\pi$"])
         ax6.legend()
 
         auto_label(rects1, ax3)
