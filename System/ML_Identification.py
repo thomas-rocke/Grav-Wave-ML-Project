@@ -148,6 +148,9 @@ class ML:
         mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
         loss = K.square((y_pred * mask) - (y_true * mask))
 
+        # K.print_tensor(y_pred * mask)
+        # K.print_tensor(y_true * mask)
+
         return K.mean(loss, axis=-1)
 
     def masked_loss(self, y_true, y_pred):
@@ -565,7 +568,7 @@ class ML:
 
         LOG.debug(f"Loading classes from 'Models/{str(self)}/classes.txt'.")
         self.classes = np.loadtxt(f"Models/{str(self)}/classes.txt", dtype=str, delimiter="\n")
-        self.classes = [eval(i.replace("HG", "Hermite")) for i in self.classes]
+        self.classes = [eval(i.replace("H", "Hermite")) for i in self.classes]
 
         LOG.info("ML object loaded successfully!")
         print("Done!\n")

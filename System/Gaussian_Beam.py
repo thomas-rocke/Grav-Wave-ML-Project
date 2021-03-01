@@ -58,7 +58,7 @@ class Hermite:
         '''
         Magic method for the str() function.
         '''
-        return "HG(" + str(self.l) + ", " + str(self.m) + ")"
+        return "H(" + str(self.l) + "," + str(self.m) + ")"
 
     def __repr__(self):
         '''
@@ -259,7 +259,7 @@ class Superposition(list):
         '''
         Magic method for the str() function.
         '''
-        return "S" + str(tuple([str(i) for i in self])).replace("'", "")
+        return "S" + str(tuple([str(i) for i in self])).replace("'", "").replace(" ", "")
 
     def __repr__(self):
         '''
@@ -420,7 +420,7 @@ class Laguerre(Superposition):
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ")"
+        return "L(" + str(self.p) + "," + str(self.m) + ")"
 
     def __repr__(self):
         '''
