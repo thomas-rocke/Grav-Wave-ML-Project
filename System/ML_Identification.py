@@ -148,6 +148,9 @@ class ML:
         mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
         loss = K.square((y_pred * mask) - (y_true * mask))
 
+        # K.print_tensor(y_pred * mask)
+        # K.print_tensor(y_true * mask)
+
         return K.mean(loss, axis=-1)
 
     def masked_loss(self, y_true, y_pred):

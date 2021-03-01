@@ -365,7 +365,7 @@ class Superposition(list):
 
         sorted_modes = sorted(self, key=lambda x: x.amplitude) # Sort modes by amplitude
         phase_change = -1 * sorted_modes[-1].phase # Use phase of highest amplitude mode
-        # [mode.add_phase(phase_change) for mode in self] # Define a consistent zero for phase to reduce degeneracy in machine learning
+        [mode.add_phase(phase_change) for mode in self] # Define a consistent zero for phase to reduce degeneracy in machine learning
     
     def latex_print(self):
         '''
