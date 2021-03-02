@@ -640,13 +640,13 @@ class ML:
         LOG.info(f"Comparing test superposition: {repr(sup)}")
 
         if self.errs is None:
-            LOG.warning("Model errors have not yet been computed. Comuting errors now:")
+            LOG.warning("Model errors have not yet been computed. Computing errors now:")
             self.get_errs_of_model()
             LOG.warning("Model errors computed, resuming comparison")
 
 
-        amp_errs = self.errs[:int(len(self.errs)/2)]
-        phase_errs = self.errs[int(len(self.errs)/2):]
+        raw_amp_errs = self.errs[:int(len(self.errs)/2)]
+        raw_phase_errs = self.errs[int(len(self.errs)/2):]
 
         if camera is not None:
             processor = ModeProcessor(camera)
@@ -664,6 +664,12 @@ class ML:
         sup_phases = [i.phase for i in sup]
         raw_pred_phases = [pred.contains(i).phase for i in sup]
         pred_phases = [0 if i == -10 else i for i in raw_pred_phases] # If mode does not exist, give it a phase of 0
+
+
+        pred_strings = [str(mode) for mode in pred]
+        amp_errs = [raw_amp_errs[i] for i in range(len(sup)) if str(sup[i]) in pred_strings]
+        phase_errs = [raw_phase_errs[i] for i in range(len(sup)) if str(sup[i]) in pred_strings]
+
 
         x = np.arange(len(labels)) # Label locations
         width = 0.35 # Width of the bars
