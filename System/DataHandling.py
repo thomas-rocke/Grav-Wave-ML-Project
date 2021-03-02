@@ -566,7 +566,7 @@ class Dataset(keras.utils.Sequence):
         half_index = len(amps_and_phases)//2
         amps = amps_and_phases[:half_index]
         phases = amps_and_phases[half_index:]
-        s = Superposition(*self.hermite_modes, phase_norm_method=self.phase_norm_method])
+        s = Superposition(*self.hermite_modes, phase_norm_method=self.phase_norm_method)
         for i, mode in enumerate(s):
             mode.amplitude = amps[i]
             mode.phase = phases[i]

@@ -21,7 +21,19 @@ import time
 np.seterr(divide='ignore', invalid='ignore')
 
 
+def lowest_order_zero_phase(modes):
+    '''
+    Define phase offset so that lowest order mode has zero phase
+    '''
+    lowest_order_mode = sorted(modes, key=lambda x: [(x.l**2 + x.m**2), x.l**2, x.m**2])[0]
+    return - lowest_order_mode.phase
 
+def highest_amp_zero_phase(modes):
+    '''
+    Def phase offset so that highest amplitude mode has zero phase
+    '''
+    highest_amp_mode = sorted(modes, key=lambda x: x.amplitude)[-1]
+    return - highest_amp_mode.phase
 
 ##################################################
 ##########                              ##########
@@ -478,20 +490,6 @@ def fact(x):
 
 def choose(n, r):
     return fact(n)/(fact(r)*fact(n-r))
-
-def lowest_order_zero_phase(modes):
-    '''
-    Define phase offset so that lowest order mode has zero phase
-    '''
-    lowest_order_mode = sorted(modes, key=lambda x: [(x.l**2 + x.m**2), x.l**2, x.m**2])[0]
-    return - lowest_order_mode.phase
-
-def highest_amp_zero_phase(modes):
-    '''
-    Def phase offset so that highest amplitude mode has zero phase
-    '''
-    highest_amp_mode = sorted(modes, key=lambda x: x.amplitude)[-1]
-    return - highest_amp_mode.phase
 
 
 ##################################################

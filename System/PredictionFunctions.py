@@ -53,7 +53,10 @@ model = ML(BasicGenerator(3, 3, 0.5, 0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 
 model.load()
 
 model.data_generator.new_stage()
-model.compare(model.data_generator.get_random())
+
+model.get_errs_of_model()
+print(model.errs)
+#model.compare(model.data_generator.get_random())
 
 #dat = visualise_video_predictions(fname, model)
 #mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)
