@@ -81,7 +81,7 @@ class ML:
         Initialise the class.
         '''
         LOG.info("Initialising ML model.")
-
+        self.errs = None
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
@@ -639,6 +639,15 @@ class ML:
         '''
         LOG.info(f"Comparing test superposition: {repr(sup)}")
 
+        if self.errs is None:
+            LOG.warning("Model errors have not yet been computed. Comuting errors now:")
+            self.get_errs_of_model()
+            LOG.warning("Model errors computed, resuming comparison")
+
+
+        amp_errs = self.errs[:int(len(self.errs)/2)]
+        phase_errs = self.errs[int(len(self.errs)/2):]
+
         if camera is not None:
             processor = ModeProcessor(camera)
         else:
@@ -674,9 +683,9 @@ class ML:
         ax4.imshow(sup.phase_map(), cmap='jet')
         ax5.imshow(pred.phase_map(), cmap='jet')
         rects1 = ax3.bar(x - (width / 2), sup_amps, width, label='Actual', zorder=3)
-        rects2 = ax3.bar(x + (width / 2), pred_amps, width, label='Reconstucted', zorder=3)
+        rects2 = ax3.bar(x + (width / 2), pred_amps, width, yerr=amp_errs,  label='Reconstucted', zorder=3)
         rects3 = ax6.bar(x - (width / 2), sup_phases, width, label='Actual', zorder=3)
-        rects4 = ax6.bar(x + (width / 2), pred_phases, width, label='Reconstucted', zorder=3)
+        rects4 = ax6.bar(x + (width / 2), pred_phases, width, yerr=phase_errs, label='Reconstucted', zorder=3)
         ax3.axhline(threshold, color='r', linestyle='--', zorder=5)
 
         # ax1.colorbar()
