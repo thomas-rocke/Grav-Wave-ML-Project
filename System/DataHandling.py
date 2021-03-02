@@ -13,7 +13,7 @@ import sys
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 from Utils import meanError, get_cams, get_strategy
-from Gaussian_Beam import Hermite, Superposition, Laguerre
+from Gaussian_Beam import Hermite, Superposition, Laguerre, lowest_order_zero_phase, highest_amp_zero_phase
 import Logger
 import keras
 from ImageProcessing import ModeProcessor
@@ -218,7 +218,8 @@ class BasicGenerator(keras.utils.Sequence):
                  batch_size: int = 64,
                  resolution: int = 64,
                  cosine: bool = False,
-                 starting_stage: int = 1):
+                 starting_stage: int = 1,
+                 phase_norm_method=lowest_order_zero_phase):
         '''
         Initialise the class with the required complexity.
 
@@ -227,7 +228,7 @@ class BasicGenerator(keras.utils.Sequence):
         'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
         '''
         LOG.info("Initialising generator.")
-
+        self.phase_norm_method = phase_norm_method
         self.max_order = max_order
         self.max_number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
@@ -318,7 +319,7 @@ class BasicGenerator(keras.utils.Sequence):
         '''
         Generates the superposition with randomised amplitudes, phase, noise and exposure for a given combination.
         '''
-        return Superposition(*[self.randomise_amp_and_phase(i) for i in comb])
+        return Superposition(*[self.randomise_amp_and_phase(i) for i in comb], phase_norm_method=self.phase_norm_method)
 
     def get_inputs(self, *sups):
         '''
@@ -372,10 +373,11 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, training_strategy_name: str = "default", max_order: int = 3, resolution: int = 128, batch_size: int = 32, steps: int = 50, repeats: int = 1, info: bool = True):
+    def __init__(self, training_strategy_name: str = "default", max_order: int = 3, resolution: int = 128, batch_size: int = 32, steps: int = 50, repeats: int = 1, info: bool = True, phase_norm_method=lowest_order_zero_phase):
         '''
         Initialise the class with the required complexity.
         '''
+        self.phase_norm_method = phase_norm_method
         self.training_strategy_name = training_strategy_name
         self.max_order = max_order
         self.resolution = resolution
@@ -472,12 +474,8 @@ class Dataset(keras.utils.Sequence):
         return input_data, output_data
 
     def _getitem_process(self, i):
-        s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
-        if self.mode_mask:
-                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
-                    mode.amplitude = 0
-                    mode.phase = 0
-        input_data = self.mode_processor.errorEffects(s.superpose())[..., np.newaxis] # Generate noise image#
+        img, s = self.batch_load_process(i)
+        input_data = img[..., np.newaxis] # Generate noise image#
         amplitudes = [s.contains(j).amplitude for j in self.hermite_modes]
         phases = [s.contains(j).phase for j in self.hermite_modes]
 
@@ -516,12 +514,13 @@ class Dataset(keras.utils.Sequence):
         return input_data, output_data
 
     def batch_load_process(self, n):
-        s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+        modes = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
         if self.mode_mask:
-                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                for mode in modes[self.mode_mask:]: # Filter out modes above self.mode_mask
                     mode.amplitude = 0
                     mode.phase = 0
-        input_data = self.mode_processor.getImage(s.superpose()) # Generate noise image
+        s = Superposition(*modes, phase_norm_method=self.phase_norm_method)
+        input_data = self.mode_processor.errorEffects(s.superpose()) # Generate noise image
         output_data = s
 
         return input_data, output_data
@@ -567,7 +566,7 @@ class Dataset(keras.utils.Sequence):
         half_index = len(amps_and_phases)//2
         amps = amps_and_phases[:half_index]
         phases = amps_and_phases[half_index:]
-        s = Superposition(*self.hermite_modes)
+        s = Superposition(*self.hermite_modes, phase_norm_method=self.phase_norm_method)
         for i, mode in enumerate(s):
             mode.amplitude = amps[i]
             mode.phase = phases[i]
@@ -587,7 +586,7 @@ class Dataset(keras.utils.Sequence):
         '''
         Generate superposition representative of trained dataset
         '''
-        img, sup = self.batch_load_process(0)
+        sup = self.batch_load_process(0)[1]
         return sup
 
 
@@ -608,7 +607,7 @@ def randomise_amp_and_phase(mode):
     x = mode.copy()
 
     x *= np.random.uniform(0, 1) # Change amp by random amount
-    x.add_phase(np.random.uniform(0, 2*np.pi)) # Add random amount of phase
+    x.add_phase(np.random.uniform(-np.pi, np.pi)) # Add random amount of phase
 
     return x
 
@@ -661,6 +660,5 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__=='__main__':
     x = Dataset(batch_size=6, max_order=3)
-    d = x[0][0][0]
-    plt.imshow(d)
-    plt.show()
+    s = x.get_random()
+    print(s)

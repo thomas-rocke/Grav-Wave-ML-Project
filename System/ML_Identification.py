@@ -81,7 +81,7 @@ class ML:
         Initialise the class.
         '''
         LOG.info("Initialising ML model.")
-
+        self.errs = None
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
@@ -642,6 +642,15 @@ class ML:
         '''
         LOG.info(f"Comparing test superposition: {repr(sup)}")
 
+        if self.errs is None:
+            LOG.warning("Model errors have not yet been computed. Computing errors now:")
+            self.get_errs_of_model()
+            LOG.warning("Model errors computed, resuming comparison")
+
+
+        raw_amp_errs = self.errs[:int(len(self.errs)/2)]
+        raw_phase_errs = self.errs[int(len(self.errs)/2):]
+
         if camera is not None:
             processor = ModeProcessor(camera)
         else:
@@ -658,6 +667,12 @@ class ML:
         sup_phases = [i.phase for i in sup]
         raw_pred_phases = [pred.contains(i).phase for i in sup]
         pred_phases = [0 if i == -10 else i for i in raw_pred_phases] # If mode does not exist, give it a phase of 0
+
+
+        pred_strings = [str(mode) for mode in pred]
+        amp_errs = [raw_amp_errs[i] for i in range(len(sup)) if str(sup[i]) in pred_strings]
+        phase_errs = [raw_phase_errs[i] for i in range(len(sup)) if str(sup[i]) in pred_strings]
+
 
         x = np.arange(len(labels)) # Label locations
         width = 0.35 # Width of the bars
@@ -677,9 +692,9 @@ class ML:
         ax4.imshow(sup.phase_map(), cmap='jet')
         ax5.imshow(pred.phase_map(), cmap='jet')
         rects1 = ax3.bar(x - (width / 2), sup_amps, width, label='Actual', zorder=3)
-        rects2 = ax3.bar(x + (width / 2), pred_amps, width, label='Reconstucted', zorder=3)
+        rects2 = ax3.bar(x + (width / 2), pred_amps, width, yerr=amp_errs,  label='Reconstucted', zorder=3)
         rects3 = ax6.bar(x - (width / 2), sup_phases, width, label='Actual', zorder=3)
-        rects4 = ax6.bar(x + (width / 2), pred_phases, width, label='Reconstucted', zorder=3)
+        rects4 = ax6.bar(x + (width / 2), pred_phases, width, yerr=phase_errs, label='Reconstucted', zorder=3)
         ax3.axhline(threshold, color='r', linestyle='--', zorder=5)
 
         # ax1.colorbar()
@@ -826,6 +841,23 @@ class ML:
 
         LOG.info("Optimisation complete.\n")
 
+    def get_errs_of_model(self, n_test_points:int=1000):
+        cumulative_error = np.zeros(len(self.classes))
+
+        for i in range(n_test_points):
+            test_sup = self.data_generator.get_random()
+            true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
+            true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
+            y_true = np.array(true_amplitudes + true_phases)
+
+            test_img = self.data_generator.mode_processor.errorEffects(test_sup.superpose())
+            pred = self.predict(test_img)
+            pred_amps = [pred.contains(j).amplitude for j in self.data_generator.hermite_modes]
+            pred_phases = [pred.contains(j).phase for j in self.data_generator.hermite_modes]
+            y_pred = np.array(pred_amps + pred_phases)
+            
+            cumulative_error += (y_true - y_pred)**2
+        self.errs = cumulative_error / np.sqrt(n_test_points)
 
 
 
