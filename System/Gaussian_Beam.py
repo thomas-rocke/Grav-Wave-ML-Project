@@ -199,7 +199,7 @@ class Superposition(list):
     Class repreenting a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, *modes):
+    def __init__(self, *modes, phase_norm_method=lowest_order_zero_phase):
         '''
         Initialise the class with the list of modes that compose the superposition.
         '''
@@ -232,6 +232,7 @@ class Superposition(list):
 
         for i in range(len(self)): self[i].amplitude = normalised_amplitudes[i] # Set the normalised amplitude variations to the modes
         '''
+        self.get_phase_change = phase_norm_method
         self.resolution = modes[0].resolution
         super().__init__()
         for mode in modes:
@@ -363,8 +364,7 @@ class Superposition(list):
 
         for mode in self: mode.amplitude /= normalisation # Set the normalised amplitude variations to the modes
 
-        sorted_modes = sorted(self, key=lambda x: x.amplitude) # Sort modes by amplitude
-        phase_change = -1 * sorted_modes[-1].phase # Use phase of highest amplitude mode
+        phase_change = self.get_phase_change(self)
         [mode.add_phase(phase_change) for mode in self] # Define a consistent zero for phase to reduce degeneracy in machine learning
     
     def latex_print(self):
@@ -479,7 +479,19 @@ def fact(x):
 def choose(n, r):
     return fact(n)/(fact(r)*fact(n-r))
 
+def lowest_order_zero_phase(modes):
+    '''
+    Define phase offset so that lowest order mode has zero phase
+    '''
+    lowest_order_mode = sorted(modes, key=lambda x: [(x.l**2 + x.m**2), x.l**2, x.m**2])[0]
+    return - lowest_order_mode.phase
 
+def highest_amp_zero_phase(modes):
+    '''
+    Def phase offset so that highest amplitude mode has zero phase
+    '''
+    highest_amp_mode = sorted(modes, key=lambda x: x.amplitude)[-1]
+    return - highest_amp_mode.phase
 
 
 ##################################################
@@ -490,14 +502,8 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-    x = Hermite(0, 0)
-    x.amplitude = 0.1
-    x.add_phase(np.pi)
-
-    s2 = Superposition(x, Hermite(2, 1), Hermite(1, 2))
-
-    print(s2.latex_print())
-
+    modes = [Hermite(0, 0), Hermite(0, 1, phase=np.pi/2, amplitude=2)]
+    print(highest_amp_zero_phase(modes))
 
 
 ##################################################
