@@ -472,12 +472,8 @@ class Dataset(keras.utils.Sequence):
         return input_data, output_data
 
     def _getitem_process(self, i):
-        s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
-        if self.mode_mask:
-                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
-                    mode.amplitude = 0
-                    mode.phase = 0
-        input_data = self.mode_processor.errorEffects(s.superpose())[..., np.newaxis] # Generate noise image#
+        img, s = self.batch_load_process(i)
+        input_data = img[..., np.newaxis] # Generate noise image#
         amplitudes = [s.contains(j).amplitude for j in self.hermite_modes]
         phases = [s.contains(j).phase for j in self.hermite_modes]
 
@@ -516,12 +512,13 @@ class Dataset(keras.utils.Sequence):
         return input_data, output_data
 
     def batch_load_process(self, n):
-        s = Superposition(*[randomise_amp_and_phase(mode) for mode in self.gauss_modes])
+        modes = [randomise_amp_and_phase(mode) for mode in self.gauss_modes]
         if self.mode_mask:
-                for mode in s[self.mode_mask:]: # Filter out modes above self.mode_mask
+                for mode in modes[self.mode_mask:]: # Filter out modes above self.mode_mask
                     mode.amplitude = 0
                     mode.phase = 0
-        input_data = self.mode_processor.getImage(s.superpose()) # Generate noise image
+        s = Superposition(*modes)
+        input_data = self.mode_processor.errorEffects(s.superpose()) # Generate noise image
         output_data = s
 
         return input_data, output_data
@@ -587,7 +584,7 @@ class Dataset(keras.utils.Sequence):
         '''
         Generate superposition representative of trained dataset
         '''
-        img, sup = self.batch_load_process(0)
+        sup = self.batch_load_process(0)[1]
         return sup
 
 
@@ -661,6 +658,5 @@ def grouper(iterable, n, fillvalue=None):
 
 if __name__=='__main__':
     x = Dataset(batch_size=6, max_order=3)
-    d = x[0][0][0]
-    plt.imshow(d)
-    plt.show()
+    s = x.get_random()
+    print(s)
