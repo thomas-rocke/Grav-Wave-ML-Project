@@ -692,7 +692,7 @@ class ML:
         ax4.imshow(sup.phase_map(), cmap='jet')
         ax5.imshow(pred.phase_map(), cmap='jet')
         rects1 = ax3.bar(x - (width / 2), sup_amps, width, label='Actual', zorder=3)
-        rects2 = ax3.bar(x + (width / 2), pred_amps, width, yerr=amp_errs,  label='Reconstucted', zorder=3)
+        rects2 = ax3.bar(x + (width / 2), pred_amps, width, yerr=amp_errs,  label='Reconstucted', zorder=3, capsize=10)
         rects3 = ax6.bar(x - (width / 2), sup_phases, width, label='Actual', zorder=3)
         rects4 = ax6.bar(x + (width / 2), pred_phases, width, yerr=phase_errs, label='Reconstucted', zorder=3)
         ax3.axhline(threshold, color='r', linestyle='--', zorder=5)

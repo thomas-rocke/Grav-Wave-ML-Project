@@ -378,6 +378,12 @@ class Superposition(list):
 
         phase_change = self.get_phase_change(self)
         [mode.add_phase(phase_change) for mode in self] # Define a consistent zero for phase to reduce degeneracy in machine learning
+
+        if len(self) > 1:
+            next_to_lowest_order_mode = sorted(self, key=lambda x: [(x.l**2 + x.m**2), x.l**2, x.m**2])[1]
+            if next_to_lowest_order_mode.phase < 0: # Remove degeneracy between s and it's complex conjugate
+                for mode in self:
+                    mode.phase *= -1
     
     def latex_print(self):
         '''
@@ -500,10 +506,12 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-    modes = [Hermite(0, 0), Hermite(0, 1, phase=np.pi/2, amplitude=2)]
-    print(highest_amp_zero_phase(modes))
-
-
+    fig, ax = plt.subplots(nrows=2)
+    s1 = Superposition(Hermite(0, 0), Hermite(0, 1, phase=np.pi/2), Hermite(1, 0, phase=-np.pi/3))
+    s2 = Superposition(Hermite(0, 0), Hermite(0, 1, phase=np.pi/2), Hermite(1, 0, phase=np.pi/3))
+    ax[0].imshow(s1.superpose())
+    ax[1].imshow(s2.superpose())
+    plt.show()
 ##################################################
 ##########                              ##########
 ##########           TESTING            ##########
