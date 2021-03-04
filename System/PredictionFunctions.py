@@ -52,7 +52,9 @@ fname = r"C:\Users\Tom\Documents\EditedBeamModes.mp4"
 model = ML(BasicGenerator(3, 3, 0.5, 0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
 model.load()
 
-model.data_generator.new_stage()
+[model.data_generator.new_stage() for i in range(3)]
+
+model.get_errs_of_model()
 model.compare(model.data_generator.get_random())
 
 #dat = visualise_video_predictions(fname, model)
