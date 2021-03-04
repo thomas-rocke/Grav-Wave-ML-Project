@@ -844,14 +844,14 @@ class ML:
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
-        for i in range(n_test_points):
+        for i in tqdm(range(n_test_points)):
             test_sup = self.data_generator.get_random()
             true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
             true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
             y_true = np.array(true_amplitudes + true_phases)
 
             test_img = self.data_generator.mode_processor.errorEffects(test_sup.superpose())
-            pred = self.predict(test_img)
+            pred = self.predict(test_img, info=False)
             pred_amps = [pred.contains(j).amplitude for j in self.data_generator.hermite_modes]
             pred_phases = [pred.contains(j).phase for j in self.data_generator.hermite_modes]
             y_pred = np.array(pred_amps + pred_phases)
