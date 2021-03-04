@@ -55,7 +55,7 @@ model.load()
 [model.data_generator.new_stage() for i in range(3)]
 
 model.get_errs_of_model()
-for i in range(10):
+for i in range(1):
     model.compare(model.data_generator.get_random())
 
 #dat = visualise_video_predictions(fname, model)
