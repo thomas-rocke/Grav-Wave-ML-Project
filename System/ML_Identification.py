@@ -560,6 +560,8 @@ class ML:
 
         if self.trained():
             LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
+            keras.losses.loss = self.loss
+            keras.losses.masked_loss = self.masked_loss
             self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.masked_loss if type(self.data_generator) == Dataset else self.loss, "metrics": [self.accuracy]})
 
         for i in self.history:
