@@ -49,13 +49,14 @@ def mode_sweep_test(model, modes, freqs, iterations):
 
 #os.chdir("System")
 fname = r"C:\Users\Tom\Documents\EditedBeamModes.mp4"
-model = ML(BasicGenerator(3, 3, 0.5, 0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+model = ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
 model.load()
 
 [model.data_generator.new_stage() for i in range(3)]
 
 model.get_errs_of_model()
-model.compare(model.data_generator.get_random())
+for i in range(10):
+    model.compare(model.data_generator.get_random())
 
 #dat = visualise_video_predictions(fname, model)
 #mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)

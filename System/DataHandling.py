@@ -308,7 +308,7 @@ class BasicGenerator(keras.utils.Sequence):
 
         self.number_of_modes += 1
         self.stage += 1
-        if self.number_of_modes > self.max_number_of_modes: return False
+        if self.number_of_modes  > self.max_number_of_modes: return False
 
         self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))] * self.repeats
@@ -520,7 +520,8 @@ class Dataset(keras.utils.Sequence):
                     mode.amplitude = 0
                     mode.phase = 0
         s = Superposition(*modes, phase_norm_method=self.phase_norm_method)
-        input_data = self.mode_processor.errorEffects(s.superpose()) # Generate noise image
+        img = s.superpose()
+        input_data = self.mode_processor.errorEffects(img) # Generate noise image
         output_data = s
 
         return input_data, output_data
@@ -659,6 +660,7 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
-    x = Dataset(batch_size=6, max_order=3)
-    s = x.get_random()
+    x = Dataset(batch_size=6, max_order=3, training_strategy_name="errors_throughout")
+    x.new_stage()
+    s = x[0]
     print(s)
