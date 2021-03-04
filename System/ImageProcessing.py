@@ -231,8 +231,8 @@ class ModeProcessor(BaseProcessor):
         '''
         #shifted_image = shift_image(image,) # Shift the image in x and y coords
         rotated_image = self.add_rotational_error(raw_image, self.rotational_variance) # Perform rotation
-        stretched_image = self.add_random_stretch(rotated_image, self.stretch_variance) # Add rstretch warping in random direction
-        noisy_image = self.add_noise(stretched_image, self.noise_variance) # Add Gaussian Noise to the image
+        #stretched_image = self.add_random_stretch(rotated_image, self.stretch_variance) # Add rstretch warping in random direction
+        noisy_image = self.add_noise(rotated_image, self.noise_variance) # Add Gaussian Noise to the image
         blurred_image = self.blur_image(noisy_image, self.blur_variance) # Add gaussian blur
         exposed_image = self.add_exposure(blurred_image, self.exposure_limits) # Add exposure
         quantized_image = self.quantize_image(exposed_image, self.bit_depth) # Quantize
@@ -316,6 +316,7 @@ class ModeProcessor(BaseProcessor):
         rotated_im = self.rotate_image(image, angle)
         stretched_dims = (rotated_im.shape[0], int(rotated_im.shape[1]*stretch_factor))
         stretched_im = cv2.resize(rotated_im, stretched_dims, interpolation=cv2.INTER_CUBIC)
+
         restored_im = self.rotate_image(stretched_im, -angle)
         return restored_im
 
