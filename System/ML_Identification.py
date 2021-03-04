@@ -81,7 +81,7 @@ class ML:
         Initialise the class.
         '''
         LOG.info("Initialising ML model.")
-        self.errs = None
+
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
@@ -94,6 +94,7 @@ class ML:
         self.stagnation = 5 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "stage": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
+        self.errs = None
 
         print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
 
@@ -145,20 +146,15 @@ class ML:
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
-        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+        if type(self.data_generator) == Dataset:
+            mask = K.cast(K.greater(y_true, 0), K.floatx())
+        else:
+            mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
+
         loss = K.square((y_pred * mask) - (y_true * mask))
 
         # K.print_tensor(y_pred * mask)
         # K.print_tensor(y_true * mask)
-
-        return K.mean(loss, axis=-1)
-
-    def masked_loss(self, y_true, y_pred):
-        '''
-        Masks out modes that don't exist in the superposition.
-        '''
-        mask = K.cast(K.greater(y_true, 0), K.floatx())
-        loss = K.square((y_pred * mask) - (y_true * mask))
 
         return K.mean(loss, axis=-1)
 
@@ -222,7 +218,7 @@ class ML:
         LOG.debug("Compiling the model.")
 
         # model = VGG16(self.input_shape, len(self.classes)) # Override model with VGG16 model
-        model.compile(loss=self.masked_loss if type(self.data_generator) == Dataset else self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
+        model.compile(loss=self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
 
         LOG.debug(f"Model compiled. Optimiser: {self.optimiser}(learning_rate={self.learning_rate}).")
 
@@ -506,7 +502,7 @@ class ML:
         if info:
             plt.show()
             print(log("[PLOT] Done!\n"))
-        
+
         LOG.info("Model history plotted successfully!")
         return (ax1, ax2)
 
@@ -560,9 +556,7 @@ class ML:
 
         if self.trained():
             LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
-            keras.losses.loss = self.loss
-            keras.losses.masked_loss = self.masked_loss
-            self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.masked_loss if type(self.data_generator) == Dataset else self.loss, "metrics": [self.accuracy]})
+            self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
 
         for i in self.history:
             LOG.debug(f"Loading performance history from 'Models/{str(self)}/{i}.txt'.")
@@ -649,7 +643,6 @@ class ML:
             self.get_errs_of_model()
             LOG.warning("Model errors computed, resuming comparison")
 
-
         raw_amp_errs = self.errs[:int(len(self.errs)/2)]
         raw_phase_errs = self.errs[int(len(self.errs)/2):]
 
@@ -661,7 +654,7 @@ class ML:
         if info: print(log("[PRED] Actual: " + str(sup)))
         raw_image = sup.superpose()
         noisy_image = processor.errorEffects(raw_image)
-        pred = self.predict(noisy_image, threshold=threshold, info=info)
+        pred = self.predict(raw_image, threshold=threshold, info=info)
 
         labels = [i.latex_print() for i in sup]
         sup_amps = [i.amplitude for i in sup]
@@ -670,11 +663,9 @@ class ML:
         raw_pred_phases = [pred.contains(i).phase for i in sup]
         pred_phases = [0 if i == -10 else i for i in raw_pred_phases] # If mode does not exist, give it a phase of 0
 
-
         pred_strings = [str(mode) for mode in pred]
         amp_errs = [raw_amp_errs[i] for i in range(len(sup)) if str(sup[i]) in pred_strings]
         phase_errs = [raw_phase_errs[i] for i in range(len(sup)) if str(sup[i]) in pred_strings]
-
 
         x = np.arange(len(labels)) # Label locations
         width = 0.35 # Width of the bars
