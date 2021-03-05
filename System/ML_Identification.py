@@ -81,7 +81,7 @@ class ML:
         Initialise the class.
         '''
         LOG.info("Initialising ML model.")
-        self.errs = None
+
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
@@ -94,6 +94,7 @@ class ML:
         self.stagnation = 5 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "stage": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
+        self.errs = None
 
         print(Colour.HEADER + Colour.BOLD + "____________________| " + str(self) + " |____________________\n" + Colour.ENDC)
 
@@ -145,17 +146,21 @@ class ML:
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
         '''
-        mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
-        loss = K.square((y_pred * mask) - (y_true * mask))
+        if type(self.data_generator) == Dataset:
+            mask = K.cast(K.greater(y_true, 0), K.floatx())
+        else:
+            mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
 
-        return K.mean(loss, axis=-1)
+        diff = K.abs((y_pred * mask) - (y_true * mask))
 
-    def masked_loss(self, y_true, y_pred):
-        '''
-        Masks out modes that don't exist in the superposition.
-        '''
-        mask = K.cast(K.greater(y_true, 0), K.floatx())
-        loss = K.square((y_pred * mask) - (y_true * mask))
+        amplitudes = diff * K.constant(np.array([1 if i < len(self.classes) // 2 else 0 for i in range(len(self.classes))]))
+        phases = diff * K.constant(np.array([0 if i < len(self.classes) // 2 else 1 for i in range(len(self.classes))]))
+
+        reduced_phases = K.minimum(phases, K.minimum(diff + 1, K.abs(diff - 1)))
+        loss = K.square(amplitudes + reduced_phases)
+
+        # K.print_tensor(phases)
+        # K.print_tensor(reduced_phases)
 
         return K.mean(loss, axis=-1)
 
@@ -219,7 +224,7 @@ class ML:
         LOG.debug("Compiling the model.")
 
         # model = VGG16(self.input_shape, len(self.classes)) # Override model with VGG16 model
-        model.compile(loss=self.masked_loss if type(self.data_generator) == Dataset else self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
+        model.compile(loss=self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
 
         LOG.debug(f"Model compiled. Optimiser: {self.optimiser}(learning_rate={self.learning_rate}).")
 
@@ -503,7 +508,7 @@ class ML:
         if info:
             plt.show()
             print(log("[PLOT] Done!\n"))
-        
+
         LOG.info("Model history plotted successfully!")
         return (ax1, ax2)
 
@@ -565,7 +570,7 @@ class ML:
 
         LOG.debug(f"Loading classes from 'Models/{str(self)}/classes.txt'.")
         self.classes = np.loadtxt(f"Models/{str(self)}/classes.txt", dtype=str, delimiter="\n")
-        self.classes = [eval(i.replace("HG", "Hermite")) for i in self.classes]
+        self.classes = [eval(i.replace("H", "Hermite")) for i in self.classes]
 
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
@@ -644,7 +649,6 @@ class ML:
             self.get_errs_of_model()
             LOG.warning("Model errors computed, resuming comparison")
 
-
         raw_amp_errs = self.errs[:int(len(self.errs)/2)]
         raw_phase_errs = self.errs[int(len(self.errs)/2):]
 
@@ -656,7 +660,7 @@ class ML:
         if info: print(log("[PRED] Actual: " + str(sup)))
         raw_image = sup.superpose()
         noisy_image = processor.errorEffects(raw_image)
-        pred = self.predict(noisy_image, threshold=threshold, info=info)
+        pred = self.predict(raw_image, threshold=threshold, info=info)
 
         '''
         labels = [i.latex_print() for i in sup]
@@ -705,7 +709,6 @@ class ML:
                 
                 amp_errs.append(raw_amp_errs[i])
                 phase_errs.append(raw_phase_errs[i])
-
 
 
         x = np.arange(len(labels)) # Label locations
@@ -765,8 +768,8 @@ class ML:
         if save:
             LOG.debug(f"Saving to 'Comparisons/{str(self)}/{str(sup)}.png'.")
 
-            os.makedirs(f"Comparisons/{str(self)}", exist_ok=True) # Create directory for image
-            plt.savefig(f"Comparisons/{str(self)}/{str(sup)}.png", bbox_inches="tight", pad_inches=0) # Save image
+            os.makedirs(f"Comparisons/{self}", exist_ok=True) # Create directory for image
+            plt.savefig(f"Comparisons/{self}/{np.random.randint(1000,9999)}.png", bbox_inches="tight", pad_inches=0) # Save image
 
         else:
             plt.show()
@@ -785,8 +788,11 @@ class ML:
 
             return
 
-        while self.data_generator.new_stage(): pass # Move to the last stage of training
-        for i in tqdm(range(N), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
+        try:
+            while self.data_generator.new_stage(): pass # Move to the last stage of training
+            for i in tqdm(range(N), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
+
+        except KeyboardInterrupt: LOG.info("Stopped evaluation due to keyboard interrupt.")
 
         LOG.info("Evaluation complete!")
         print(log("[EVAL] Done!\n"))
@@ -889,7 +895,7 @@ class ML:
             pred_amps = [pred.contains(j).amplitude for j in self.data_generator.hermite_modes]
             pred_phases = [pred.contains(j).phase for j in self.data_generator.hermite_modes]
             y_pred = np.array(pred_amps + pred_phases)
-            
+
             cumulative_error += (y_true - y_pred)**2
         self.errs = cumulative_error / (np.sqrt(n_test_points)*(n_test_points - 1))
 
@@ -1020,7 +1026,6 @@ def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Sup
     else:
         test_data = np.array([sup.copy() for i in range(test_number)]) # Make several copies of the target superposition
 
-    
     test_data = np.array([Superposition(*[data_object.randomise_amp_and_phase(j) for j in i]) for i in test_data]) # Randomise all amps and phases
     model_predictions = np.array([model.predict(data.superpose()) for data in test_data]) # Predict superpositions through models
 

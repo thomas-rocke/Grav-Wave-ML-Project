@@ -1,0 +1,16 @@
++--------------------------------------------------------------------------+
+| Job on the BlueBEAR cluster:
+| Starting at Tue Feb 23 19:10:02 2021 for jxw1025(596795)
+| Identity jobid 30581843 jobname Optimise_Basic_Generator.sh
+| Running against project martynod-optical-modes and in partition power9-gpuv100-shared
+| Requested cpu=36,mem=244800M,node=1,billing=36,gres/gpu=1 - 7-00:00:00 walltime
+| Assigned to nodes bear-pg0305u03a
+| Command /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/BlueBear/Optimise_Basic_Generator.sh
+| WorkDir /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/BlueBear
++--------------------------------------------------------------------------+
++--------------------------------------------------------------------------+
+| Finished at Wed Feb 24 02:45:47 2021 for jxw1025(596795) on the BlueBEAR Cluster
+| Required (3-06:01:06 cputime, 3671168128K memory used) - 07:35:45 walltime
+| JobState COMPLETING - Reason NonZeroExitCode
+| Exitcode 1:0
++--------------------------------------------------------------------------+

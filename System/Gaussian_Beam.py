@@ -12,7 +12,7 @@ import numpy as np
 from scipy import special
 from scipy.stats import truncnorm
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
@@ -70,7 +70,7 @@ class Hermite:
         '''
         Magic method for the str() function.
         '''
-        return "HG(" + str(self.l) + ", " + str(self.m) + ")"
+        return "H(" + str(self.l) + "," + str(self.m) + ")"
 
     def __repr__(self):
         '''
@@ -272,7 +272,7 @@ class Superposition(list):
         '''
         Magic method for the str() function.
         '''
-        return "S" + str(tuple([str(i) for i in self])).replace("'", "")
+        return "S" + str(tuple([str(i) for i in self])).replace("'", "").replace(" ", "")
 
     def __repr__(self):
         '''
@@ -300,6 +300,12 @@ class Superposition(list):
         '''
         for i in self: i.amplitude *= value
         return self
+
+    def copy(self):
+        '''
+        Make a copy of this superposition.
+        '''
+        return Superposition(*self, phase_norm_method=self.get_phase_change)
 
     def contains(self, mode: Hermite):
         '''
@@ -395,9 +401,30 @@ class Superposition(list):
         string = "S(" + single_string + ")"
         return string
 
+    def animate(self):
+        '''
+        Animate changing the phase of the first mode in the superposition.
+        '''
+        fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+        sup = self.copy()
+        sup[0].add_phase(0.05)
 
+        sup_plot = ax1.imshow(sup.superpose(), cmap='jet')
+        phase_plot = ax2.imshow(sup.phase_map(), cmap='jet')
 
+        fig.suptitle(repr(sup))
+        ax1.axis('off')
+        ax2.axis('off')
 
+        def update(i):
+            sup[0].add_phase(0.05)
+            sup_plot.set_data(sup.superpose())
+            phase_plot.set_data(sup.phase_map())
+            ax1.set_title(f"{sup[0].phase / np.pi :.2f}$\pi$")
+            return sup_plot, phase_plot
+
+        anim = FuncAnimation(fig, update, interval=20)
+        plt.show()
 
 
 
@@ -438,7 +465,7 @@ class Laguerre(Superposition):
         '''
         Magic method for the str() function.
         '''
-        return self.__class__.__name__ + "(" + str(self.p) + ", " + str(self.m) + ")"
+        return "L(" + str(self.p) + "," + str(self.m) + ")"
 
     def __repr__(self):
         '''
