@@ -223,6 +223,7 @@ class ML:
         LOG.debug("Keras model layers created.")
         LOG.debug("Compiling the model.")
 
+        # model = keras.applications.VGG16(include_top=False, input_shape=self.input_shape, pooling='avg', classes=len(self.classes))
         # model = VGG16(self.input_shape, len(self.classes)) # Override model with VGG16 model
         model.compile(loss=self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
 
