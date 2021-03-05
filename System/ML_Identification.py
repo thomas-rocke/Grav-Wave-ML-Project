@@ -854,7 +854,7 @@ class ML:
             y_pred = np.array(pred_amps + pred_phases)
             
             cumulative_error += (y_true - y_pred)**2
-        self.errs = cumulative_error / np.sqrt(n_test_points)
+        self.errs = cumulative_error / (np.sqrt(n_test_points)*(n_test_points - 1))
 
 
 
