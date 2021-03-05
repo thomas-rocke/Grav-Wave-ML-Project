@@ -487,8 +487,8 @@ class ML:
 
         stage_change_indexes = [i for i in range(1, len(self.history['stage'])) if self.history['stage'][i] != self.history['stage'][i-1]]
         for i in stage_change_indexes:
-            ax1.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color='r', linestyle='--')
-            ax2.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color='r', linestyle='--')
+            ax1.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color=ax1.get_lines()[0].get_color(), linestyle='--')
+            ax2.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color=ax2.get_lines()[0].get_color(), linestyle='--')
 
         LOG.debug("Formatting plot.")
 
@@ -575,7 +575,7 @@ class ML:
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
 
-    def predict(self, data, threshold: float = 0.05, info: bool = True):
+    def predict(self, data, threshold: float = 0.1, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
@@ -638,7 +638,7 @@ class ML:
 
         return answer
 
-    def compare(self, sup: Superposition, camera: dict = None, threshold: float = 0.05, info: bool = True, save: bool = False):
+    def compare(self, sup: Superposition, camera: dict = None, threshold: float = 0.1, info: bool = True, save: bool = False):
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
@@ -750,14 +750,14 @@ class ML:
         ax3.set_xticks(x)
         ax3.set_xticklabels(labels)
         ax3.set_ylim(0.0, 1.1)
-        ax3.legend()
+        ax3.legend(loc="upper right")
         ax6.set_xticks(x)
         ax6.set_xticklabels(labels)
         ax6.set_ylim(-np.pi, np.pi)
 
         ax6.set_yticks([-np.pi, -3*np.pi/4, -np.pi/2, -np.pi/4, 0, np.pi/4, np.pi/2, 3*np.pi/4, np.pi])
         ax6.set_yticklabels(["$-\\pi$", "$-\\frac{3}{4}\\pi$", "$-\\frac{1}{2}\\pi$", "$-\\frac{1}{4}\\pi$", "$0$", "$\\frac{1}{4}\\pi$", "$\\frac{1}{2}\\pi$", "$\\frac{3}{4}\\pi$", "$\\pi$"])
-        ax6.legend()
+        ax6.legend(loc="upper right")
 
         auto_label(rects1, ax3)
         auto_label(rects2, ax3)
@@ -773,10 +773,11 @@ class ML:
 
         else:
             plt.show()
-        
+
+        plt.close(fig)
         LOG.info("Comparison complete!")
 
-    def evaluate(self, N: int = 1000, info: bool = False):
+    def evaluate(self, N: int = 100, info: bool = False):
         '''
         Evaluate the model by comparing against N randomly generated superpositions.
         '''
@@ -795,7 +796,7 @@ class ML:
         except KeyboardInterrupt: LOG.info("Stopped evaluation due to keyboard interrupt.")
 
         LOG.info("Evaluation complete!")
-        print(log("[EVAL] Done!\n"))
+        print("")
 
     def calculate_phase(self, data, superposition: Superposition):
         '''
@@ -872,10 +873,10 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
 
-                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    os.makedirs(f"Optimisation/{self.data_generator}", exist_ok=True) # Create directory for optimisations
+                    plt.savefig(f"Optimisation/{self.data_generator}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
