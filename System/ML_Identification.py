@@ -151,10 +151,16 @@ class ML:
         else:
             mask = K.cast(K.greater_equal(y_true, 0), K.floatx())
 
-        loss = K.square((y_pred * mask) - (y_true * mask))
+        diff = K.abs((y_pred * mask) - (y_true * mask))
 
-        # K.print_tensor(y_pred * mask)
-        # K.print_tensor(y_true * mask)
+        amplitudes = diff * K.constant(np.array([1 if i < len(self.classes) // 2 else 0 for i in range(len(self.classes))]))
+        phases = diff * K.constant(np.array([0 if i < len(self.classes) // 2 else 1 for i in range(len(self.classes))]))
+
+        reduced_phases = K.minimum(phases, K.minimum(diff + 1, K.abs(diff - 1)))
+        loss = K.square(amplitudes + reduced_phases)
+
+        # K.print_tensor(phases)
+        # K.print_tensor(reduced_phases)
 
         return K.mean(loss, axis=-1)
 
