@@ -777,7 +777,7 @@ class ML:
         plt.close(fig)
         LOG.info("Comparison complete!")
 
-    def evaluate(self, N: int = 1000, info: bool = False):
+    def evaluate(self, N: int = 100, info: bool = False):
         '''
         Evaluate the model by comparing against N randomly generated superpositions.
         '''
