@@ -658,6 +658,7 @@ class ML:
         noisy_image = processor.errorEffects(raw_image)
         pred = self.predict(noisy_image, threshold=threshold, info=info)
 
+        '''
         labels = [i.latex_print() for i in sup]
         sup_amps = [i.amplitude for i in sup]
         pred_amps = [pred.contains(i).amplitude for i in sup]
@@ -665,10 +666,46 @@ class ML:
         raw_pred_phases = [pred.contains(i).phase for i in sup]
         pred_phases = [0 if i == -10 else i for i in raw_pred_phases] # If mode does not exist, give it a phase of 0
 
-
         pred_strings = [str(mode) for mode in pred]
         amp_errs = [raw_amp_errs[i] for i in range(len(sup)) if str(sup[i]) in pred_strings]
         phase_errs = [raw_phase_errs[i] for i in range(len(sup)) if str(sup[i]) in pred_strings]
+        '''
+        true_strings = [str(m) for m in sup]
+        pred_strings = [str(m) for m in pred]
+        all_strings = true_strings + pred_strings
+
+        sup_amps = []
+        sup_phases = []
+        pred_amps = []
+        pred_phases = []
+        amp_errs = []
+        phase_errs = []
+        labels = []
+
+        for i, test_mode in enumerate(self.data_generator.hermite_modes): # Iterate over all possible modes
+            if str(test_mode) in all_strings: # test_mode in input superposition and/or predicted superposition
+                
+                labels.append(test_mode.latex_print())
+
+                # Input Superposition
+                if str(test_mode) in true_strings: # test_mode present in input sup
+                    sup_amps.append(sup.contains(test_mode).amplitude)
+                    sup_phases.append(sup.contains(test_mode).phase)
+                else: # test_mode not present in input superposition, but is in prediction
+                    sup_amps.append(0)
+                    sup_phases.append(0)
+                
+                # Predicted Superposition
+                if str(test_mode) in pred_strings: # test_mode is in predicted superposition
+                    pred_amps.append(pred.contains(test_mode).amplitude)
+                    pred_phases.append(pred.contains(test_mode).phase)
+                else: # test_mode not present in prediction, but is in input superposition
+                    pred_amps.append(0)
+                    pred_phases.append(0)
+                
+                amp_errs.append(raw_amp_errs[i])
+                phase_errs.append(raw_phase_errs[i])
+
 
 
         x = np.arange(len(labels)) # Label locations
@@ -848,7 +885,7 @@ class ML:
             y_true = np.array(true_amplitudes + true_phases)
 
             test_img = self.data_generator.mode_processor.errorEffects(test_sup.superpose())
-            pred = self.predict(test_img, info=False)
+            pred = self.predict(test_img, threshold=0, info=False)
             pred_amps = [pred.contains(j).amplitude for j in self.data_generator.hermite_modes]
             pred_phases = [pred.contains(j).phase for j in self.data_generator.hermite_modes]
             y_pred = np.array(pred_amps + pred_phases)
