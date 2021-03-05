@@ -487,8 +487,8 @@ class ML:
 
         stage_change_indexes = [i for i in range(1, len(self.history['stage'])) if self.history['stage'][i] != self.history['stage'][i-1]]
         for i in stage_change_indexes:
-            ax1.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color='r', linestyle='--')
-            ax2.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color='r', linestyle='--')
+            ax1.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color=ax1.get_lines()[0].get_color(), linestyle='--')
+            ax2.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color=ax2.get_lines()[0].get_color(), linestyle='--')
 
         LOG.debug("Formatting plot.")
 
@@ -796,7 +796,7 @@ class ML:
         except KeyboardInterrupt: LOG.info("Stopped evaluation due to keyboard interrupt.")
 
         LOG.info("Evaluation complete!")
-        print(log("[EVAL] Done!\n"))
+        print("")
 
     def calculate_phase(self, data, superposition: Superposition):
         '''
@@ -873,10 +873,10 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
 
-                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    os.makedirs(f"Optimisation/{self.data_generator}", exist_ok=True) # Create directory for optimisations
+                    plt.savefig(f"Optimisation/{self.data_generator}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
