@@ -575,7 +575,7 @@ class ML:
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
 
-    def predict(self, data, threshold: float = 0.05, info: bool = True):
+    def predict(self, data, threshold: float = 0.1, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
         '''
@@ -638,7 +638,7 @@ class ML:
 
         return answer
 
-    def compare(self, sup: Superposition, camera: dict = None, threshold: float = 0.05, info: bool = True, save: bool = False):
+    def compare(self, sup: Superposition, camera: dict = None, threshold: float = 0.1, info: bool = True, save: bool = False):
         '''
         Plot given superposition against predicted superposition for visual comparison.
         '''
@@ -750,14 +750,14 @@ class ML:
         ax3.set_xticks(x)
         ax3.set_xticklabels(labels)
         ax3.set_ylim(0.0, 1.1)
-        ax3.legend()
+        ax3.legend(loc="upper right")
         ax6.set_xticks(x)
         ax6.set_xticklabels(labels)
         ax6.set_ylim(-np.pi, np.pi)
 
         ax6.set_yticks([-np.pi, -3*np.pi/4, -np.pi/2, -np.pi/4, 0, np.pi/4, np.pi/2, 3*np.pi/4, np.pi])
         ax6.set_yticklabels(["$-\\pi$", "$-\\frac{3}{4}\\pi$", "$-\\frac{1}{2}\\pi$", "$-\\frac{1}{4}\\pi$", "$0$", "$\\frac{1}{4}\\pi$", "$\\frac{1}{2}\\pi$", "$\\frac{3}{4}\\pi$", "$\\pi$"])
-        ax6.legend()
+        ax6.legend(loc="upper right")
 
         auto_label(rects1, ax3)
         auto_label(rects2, ax3)
@@ -773,10 +773,11 @@ class ML:
 
         else:
             plt.show()
-        
+
+        plt.close(fig)
         LOG.info("Comparison complete!")
 
-    def evaluate(self, N: int = 1000, info: bool = False):
+    def evaluate(self, N: int = 100, info: bool = False):
         '''
         Evaluate the model by comparing against N randomly generated superpositions.
         '''
@@ -884,7 +885,7 @@ class ML:
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
-        for i in tqdm(range(n_test_points)):
+        for i in range(n_test_points):
             test_sup = self.data_generator.get_random()
             true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
             true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
