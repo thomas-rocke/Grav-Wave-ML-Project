@@ -725,7 +725,7 @@ class ML:
             LOG.debug(f"Saving to 'Comparisons/{str(self)}/{str(sup)}.png'.")
 
             os.makedirs(f"Comparisons/{self}", exist_ok=True) # Create directory for image
-            plt.savefig(f"Comparisons/{self}/{np.random.randint(10000)}.png", bbox_inches="tight", pad_inches=0) # Save image
+            plt.savefig(f"Comparisons/{self}/{np.random.randint(1000,9999)}.png", bbox_inches="tight", pad_inches=0) # Save image
 
         else:
             plt.show()
@@ -848,7 +848,7 @@ class ML:
             pred_amps = [pred.contains(j).amplitude for j in self.data_generator.hermite_modes]
             pred_phases = [pred.contains(j).phase for j in self.data_generator.hermite_modes]
             y_pred = np.array(pred_amps + pred_phases)
-            
+
             cumulative_error += (y_true - y_pred)**2
         self.errs = cumulative_error / np.sqrt(n_test_points)
 
@@ -979,7 +979,6 @@ def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Sup
     else:
         test_data = np.array([sup.copy() for i in range(test_number)]) # Make several copies of the target superposition
 
-    
     test_data = np.array([Superposition(*[data_object.randomise_amp_and_phase(j) for j in i]) for i in test_data]) # Randomise all amps and phases
     model_predictions = np.array([model.predict(data.superpose()) for data in test_data]) # Predict superpositions through models
 
