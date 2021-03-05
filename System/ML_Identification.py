@@ -744,8 +744,11 @@ class ML:
 
             return
 
-        while self.data_generator.new_stage(): pass # Move to the last stage of training
-        for i in tqdm(range(N), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
+        try:
+            while self.data_generator.new_stage(): pass # Move to the last stage of training
+            for i in tqdm(range(N), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
+
+        except KeyboardInterrupt: LOG.info("Stopped evaluation due to keyboard interrupt.")
 
         LOG.info("Evaluation complete!")
         print(log("[EVAL] Done!\n"))

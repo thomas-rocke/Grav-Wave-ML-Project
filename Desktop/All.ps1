@@ -1,11 +1,11 @@
 conda activate ML-GPU
 
-try { & "BG(3,3).ps1" } catch { "Program failed! "}
-try { & "D(3).ps1" } catch { "Program failed! "}
-try { & "BG(5,5).ps1" } catch { "Program failed! "}
-try { & "D(5).ps1" } catch { "Program failed! "}
-try { & "Multiprocessing.ps1" } catch { "Program failed! "}
-try { & "Optimise_BG(3,3).ps1" } catch { "Program failed! "}
-try { & "Optimise_D(3).ps1" } catch { "Program failed! "}
-try { & "Optimise_BG(5,5).ps1" } catch { "Program failed! "}
-try { & "Optimise_D(5).ps1" } catch { "Program failed! "}
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\BG(3,3).ps1'
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\D(3).ps1'
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\BG(5,5).ps1'
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\D(5).ps1'
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\Multiprocessing.ps1'
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\Optimise_BG(3,3).ps1'
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\Optimise_D(3).ps1'
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\Optimise_BG(5,5).ps1'
+& 'C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Desktop\Optimise_D(5).ps1'
