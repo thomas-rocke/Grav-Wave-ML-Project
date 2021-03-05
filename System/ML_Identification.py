@@ -724,8 +724,8 @@ class ML:
         if save:
             LOG.debug(f"Saving to 'Comparisons/{str(self)}/{str(sup)}.png'.")
 
-            os.makedirs(f"Comparisons/{str(self)}", exist_ok=True) # Create directory for image
-            plt.savefig(f"Comparisons/{str(self)}/{str(sup)}.png", bbox_inches="tight", pad_inches=0) # Save image
+            os.makedirs(f"Comparisons/{self}", exist_ok=True) # Create directory for image
+            plt.savefig(f"Comparisons/{self}/{np.random.randint(10000)}.png", bbox_inches="tight", pad_inches=0) # Save image
 
         else:
             plt.show()
