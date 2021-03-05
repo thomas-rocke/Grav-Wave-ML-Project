@@ -767,9 +767,9 @@ class ML:
         # fig.tight_layout()
         if save:
             LOG.debug(f"Saving to 'Comparisons/{str(self)}/{str(sup)}.png'.")
-
+            rand_num = np.random.randint(1000,9999)
             os.makedirs(f"Comparisons/{self}", exist_ok=True) # Create directory for image
-            plt.savefig(f"Comparisons/{self}/{np.random.randint(1000,9999)}.png", bbox_inches="tight", pad_inches=0) # Save image
+            plt.savefig(f"Comparisons/{self}/{rand_num}.png", bbox_inches="tight", pad_inches=0) # Save image
 
         else:
             plt.show()
@@ -884,19 +884,23 @@ class ML:
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
-        for i in tqdm(range(n_test_points)):
+        for i in tqdm(range(n_test_points), desc="Generating Error Estimates"):
             test_sup = self.data_generator.get_random()
             true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
             true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
-            y_true = np.array(true_amplitudes + true_phases)
 
             test_img = self.data_generator.mode_processor.errorEffects(test_sup.superpose())
             pred = self.predict(test_img, threshold=0, info=False)
             pred_amps = [pred.contains(j).amplitude for j in self.data_generator.hermite_modes]
             pred_phases = [pred.contains(j).phase for j in self.data_generator.hermite_modes]
-            y_pred = np.array(pred_amps + pred_phases)
+            
+            diff_amps = [(true_amplitudes[i] - pred_amps[i])**2 for i in range(len(pred_amps))]
+            diff_phases = [0]*len(pred_phases)
+            for i in range(len(pred_phases)):
+                diff_phases[i] = np.min([(true_phases[i] - 2*np.pi - pred_phases[i])**2, (true_phases[i] - pred_phases[i])**2, (true_phases[i] + 2*np.pi - pred_phases[i])**2]) # Account for phase wrapping massively changing the error
 
-            cumulative_error += (y_true - y_pred)**2
+            diffs = diff_amps + diff_phases
+            cumulative_error += diffs
         self.errs = cumulative_error / (np.sqrt(n_test_points)*(n_test_points - 1))
 
 
