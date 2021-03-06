@@ -11,6 +11,7 @@
 from re import ASCII
 import sys
 import os
+import shutil
 import gc
 import logging
 import argparse
@@ -567,10 +568,13 @@ class ML:
             try:
                 self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
             except:
-                LOG.error("Model corrupted! Will now retrain.")
-                print(log("[WARN] Model corrupted! Will now retrain.\n"))
-                os.remove(f"Models/{str(self)}/model.h5")
-                self.train()
+                LOG.error("Model corrupted! Will now delete and reload.")
+                print("Model corrupted! Will now delete and reload.\n")
+
+                shutil.rmtree(f"Models/{str(self)}")
+                self.load(save_trained, info)
+
+                return
 
         for i in self.history:
             LOG.debug(f"Loading performance history from 'Models/{str(self)}/{i}.txt'.")
@@ -769,11 +773,14 @@ class ML:
 
         # fig.tight_layout()
         if save:
-            rand_num = np.random.randint(1000,9999)
-            LOG.debug(f"Saving to 'Comparisons/{str(self)}/{rand_num}.png'.")
+            if os.path.exists(f"Comparisons/{self}"):
+                id = max([int(name[:-4]) for name in os.listdir(f"Comparisons/{self}")]) + 1
+            else:
+                os.makedirs(f"Comparisons/{self}") # Create directory for image
+                id = 1
 
-            os.makedirs(f"Comparisons/{self}", exist_ok=True) # Create directory for image
-            plt.savefig(f"Comparisons/{self}/{rand_num}.png", bbox_inches="tight", pad_inches=0) # Save image
+            LOG.debug(f"Saving to 'Comparisons/{self}/{id}.png'.")
+            plt.savefig(f"Comparisons/{self}/{id}.png", bbox_inches="tight", pad_inches=0) # Save image
 
         else: plt.show()
 
@@ -899,10 +906,10 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png'.")
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order})/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png'.")
 
-                    os.makedirs(f"Optimisation/{self.data_generator}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/{self.data_generator}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order})", exist_ok=True) # Create directory for optimisations
+                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order})/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
