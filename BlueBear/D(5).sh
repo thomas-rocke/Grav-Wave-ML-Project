@@ -39,10 +39,10 @@ source ${VENV_PATH}/bin/activate
 # Execute your Python scripts
 cd ../System/
 
-python3 Main.py -i "ML(Dataset('stage_change_test', 5))" -t -s
-python3 Main.py -i "ML(Dataset('slow_curve', 5))" -t -s
-python3 Main.py -i "ML(Dataset('fast_curve', 5))" -t -s
-python3 Main.py -i "ML(Dataset('errors_throughout', 5))" -t -s
-python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -t -s
+python3 Main.py -i "ML(Dataset('stage_change_test', 5))" -t -s -e
+python3 Main.py -i "ML(Dataset('slow_curve', 5))" -t -s -e
+python3 Main.py -i "ML(Dataset('fast_curve', 5))" -t -s -e
+python3 Main.py -i "ML(Dataset('errors_throughout', 5))" -t -s -e
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -t -s -e
 
 python3 Main.py -i "ML(Dataset('stage_change_test', 5))" -l -o "training_strategy_name" "['stage_change_test', 'slow_curve', 'fast_curve', 'errors_throughout', 'errors_at_end']"

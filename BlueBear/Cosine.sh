@@ -39,8 +39,4 @@ source ${VENV_PATH}/bin/activate
 # Execute your Python scripts
 cd ../System/
 
-python3 Main.py -i "ML(BasicGenerator(3, 3, 0.2, 0.4), use_multiprocessing=True)" -t -s -e
-python3 Main.py -i "ML(BasicGenerator(3, 3, 0.5, 1.0), use_multiprocessing=True)" -t -s -e
-python3 Main.py -i "ML(BasicGenerator(3, 3, 1.0, 2.0), use_multiprocessing=True)" -t -s -e
-python3 Main.py -i "ML(BasicGenerator(3, 3, 1.0, 0.0), use_multiprocessing=True)" -t -s -e
-python3 Main.py -i "ML(BasicGenerator(3, 3, 0.0, 2.0), use_multiprocessing=True)" -t -s -e
+python3 Main.py -i "ML(BasicGenerator(3, 3), use_multiprocessing=True)" -l -o "cosine" "[True, False]"
