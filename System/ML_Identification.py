@@ -796,7 +796,7 @@ class ML:
                 self.get_errs_of_model()
                 LOG.warning("Model errors computed, resuming comparison.")
     
-            for i in tqdm(range(N), desc=log("[EVAL] Generating comparison plots")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
+            for i in tqdm(range(N), desc=log("[EVAL] |-> Generating comparison plots")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
 
         except KeyboardInterrupt: LOG.info("Stopped evaluation due to keyboard interrupt.")
 
