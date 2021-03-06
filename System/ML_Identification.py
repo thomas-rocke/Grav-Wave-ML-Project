@@ -156,7 +156,7 @@ class ML:
         amplitudes = diff * K.constant(np.array([1 if i < len(self.classes) // 2 else 0 for i in range(len(self.classes))]))
         phases = diff * K.constant(np.array([0 if i < len(self.classes) // 2 else 1 for i in range(len(self.classes))]))
 
-        reduced_phases = K.minimum(phases, K.minimum(diff + 1, K.abs(diff - 1)))
+        reduced_phases = K.minimum(phases, K.abs(diff - 1))
         loss = K.square(amplitudes + reduced_phases)
 
         # K.print_tensor(phases)
@@ -335,7 +335,7 @@ class ML:
 
                     # Update the loading bar description with the current losses
 
-                    iterator.set_description(log(f"[TRAIN] |-> {indicator} Loss: {self.history['loss'][-1] :.4f} - Val Loss: {self.history['val_loss'][-1] :.4f}"))
+                    iterator.set_description(log(f"[TRAIN] |-> {indicator} Loss: {self.history['loss'][-1] :.4f} - Val Loss: {self.history['val_loss'][-1] :.4f} "))
 
                     # Check if gradient descent has diverged so training has failed
 
@@ -488,8 +488,8 @@ class ML:
 
         stage_change_indexes = [i for i in range(1, len(self.history['stage'])) if self.history['stage'][i] != self.history['stage'][i-1]]
         for i in stage_change_indexes:
-            ax1.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color=ax1.get_lines()[0].get_color(), linestyle='--')
-            ax2.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color=ax2.get_lines()[0].get_color(), linestyle='--')
+            ax1.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color=ax1.get_lines()[-1].get_color(), linestyle='--')
+            ax2.axvline(self.history['time'][i-1] / 60 if elapsed_time else i, color=ax2.get_lines()[-1].get_color(), linestyle='--')
 
         LOG.debug("Formatting plot.")
 
@@ -762,18 +762,18 @@ class ML:
 
         # fig.tight_layout()
         if save:
-            LOG.debug(f"Saving to 'Comparisons/{str(self)}/{str(sup)}.png'.")
             rand_num = np.random.randint(1000,9999)
+            LOG.debug(f"Saving to 'Comparisons/{str(self)}/{rand_num}.png'.")
+
             os.makedirs(f"Comparisons/{self}", exist_ok=True) # Create directory for image
             plt.savefig(f"Comparisons/{self}/{rand_num}.png", bbox_inches="tight", pad_inches=0) # Save image
 
-        else:
-            plt.show()
+        else: plt.show()
 
         plt.close(fig)
         LOG.info("Comparison complete!")
 
-    def evaluate(self, N: int = 100, info: bool = False):
+    def evaluate(self, N: int = 500, info: bool = False):
         '''
         Evaluate the model by comparing against N randomly generated superpositions.
         '''
@@ -785,6 +785,18 @@ class ML:
 
             return
 
+        # Check if the max number of comparison plots have already been generated
+
+        if os.path.exists(f"Comparisons/{self}"):
+            num_comps = len([name for name in os.listdir(f"Comparisons/{self}")])
+            LOG.debug(f"Found {num_comps} existing comparison plots in 'Comparisons/{self}'.")
+
+            if num_comps >= N:
+                LOG.warning(f"Found {num_comps} comparison plots which exceeds the maximum of {N} plots.")
+                print(log(f"[WARN] Found {num_comps} comparison plots which exceeds the maximum of {N} plots.\n"))
+
+                return
+
         print(log("[EVAL] Evaluating..."))
         print(log("[EVAL] |"))
 
@@ -795,8 +807,8 @@ class ML:
                 LOG.warning("Model errors have not yet been computed. Computing errors now")
                 self.get_errs_of_model()
                 LOG.warning("Model errors computed, resuming comparison.")
-    
-            for i in tqdm(range(N), desc=log("[EVAL] |-> Generating comparison plots")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
+
+            for i in tqdm(range(N - num_comps), desc=log("[EVAL] |-> Generating comparison plots ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
 
         except KeyboardInterrupt: LOG.info("Stopped evaluation due to keyboard interrupt.")
 
@@ -879,10 +891,10 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png'.")
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png'.")
 
                     os.makedirs(f"Optimisation/{self.data_generator}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/{self.data_generator}/Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    plt.savefig(f"Optimisation/{self.data_generator}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} across {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 
@@ -891,7 +903,7 @@ class ML:
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
-        for i in tqdm(range(n_test_points), desc=log("[EVAL] |-> Computing model errors")):
+        for i in tqdm(range(n_test_points), desc=log("[EVAL] |-> Computing model errors ")):
             test_sup = self.data_generator.get_random()
             true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
             true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
