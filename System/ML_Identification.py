@@ -567,8 +567,8 @@ class ML:
             try:
                 self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
             except:
-                LOG.error("Model corrupted! Will now retrained.")
-                print(log("[WARN] Model corrupted! Will now retrained.\n"))
+                LOG.error("Model corrupted! Will now retrain.")
+                print(log("[WARN] Model corrupted! Will now retrain.\n"))
                 os.remove(f"Models/{str(self)}/model.h5")
                 self.train()
 
