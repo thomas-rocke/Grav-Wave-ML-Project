@@ -45,3 +45,6 @@ python3 Main.py -i "ML(Dataset(3))" -o "optimiser" "['SGD', 'RMSprop', 'Adam', '
 python3 Main.py -i "ML(Dataset(3))" -o "learning_rate" "[round(0.1**n, n) for n in range(8)]"
 python3 Main.py -i "ML(Dataset(3))" -o "learning_rate" "[round(0.0001 * n, 4) for n in range(1, 9)]"
 python3 Main.py -i "ML(Dataset(3))" -o "batch_size" "[2**n for n in range(9)]"
+python3 Main.py -i "ML(Dataset(3))" -o "noise_variation" "[round(0.1 * n, 1) for n in range(1, 11)]"
+python3 Main.py -i "ML(Dataset(3))" -o "amplitude_variation" "[round(0.1 * n, 1) for n in range(1, 11)]"
+python3 Main.py -i "ML(Dataset(3))" -o "phase_variation" "[round(0.2 * n, 1) for n in range(1, 11)]"
