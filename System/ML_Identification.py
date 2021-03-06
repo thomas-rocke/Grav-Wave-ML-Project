@@ -645,11 +645,6 @@ class ML:
         '''
         LOG.info(f"Comparing test superposition: {repr(sup)}")
 
-        if self.errs is None:
-            LOG.warning("Model errors have not yet been computed. Computing errors now:")
-            self.get_errs_of_model()
-            LOG.warning("Model errors computed, resuming comparison")
-
         raw_amp_errs = self.errs[:int(len(self.errs)/2)]
         raw_phase_errs = self.errs[int(len(self.errs)/2):]
 
@@ -790,14 +785,24 @@ class ML:
 
             return
 
+        print(log("[EVAL] Evaluating..."))
+        print(log("[EVAL] |"))
+
         try:
             while self.data_generator.new_stage(): pass # Move to the last stage of training
-            for i in tqdm(range(N), log("[EVAL] Evaluating ")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
+
+            if self.errs is None:
+                LOG.warning("Model errors have not yet been computed. Computing errors now")
+                self.get_errs_of_model()
+                LOG.warning("Model errors computed, resuming comparison.")
+    
+            for i in tqdm(range(N), desc=log("[EVAL] Generating comparison plots")): self.compare(self.data_generator.get_random(), info=False, save=True) # Generate comparison plots
 
         except KeyboardInterrupt: LOG.info("Stopped evaluation due to keyboard interrupt.")
 
         LOG.info("Evaluation complete!")
-        print("")
+        print(log("[EVAL] V"))
+        print(log("[EVAL] Done!\n"))
 
     def calculate_phase(self, data, superposition: Superposition):
         '''
@@ -886,7 +891,7 @@ class ML:
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
-        for i in range(n_test_points):
+        for i in tqdm(range(n_test_points), desc=log("[EVAL] |-> Computing model errors")):
             test_sup = self.data_generator.get_random()
             true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
             true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
@@ -898,12 +903,16 @@ class ML:
             
             diff_amps = [(true_amplitudes[i] - pred_amps[i])**2 for i in range(len(pred_amps))]
             diff_phases = [0]*len(pred_phases)
+
             for i in range(len(pred_phases)):
                 diff_phases[i] = np.min([(true_phases[i] - 2*np.pi - pred_phases[i])**2, (true_phases[i] - pred_phases[i])**2, (true_phases[i] + 2*np.pi - pred_phases[i])**2]) # Account for phase wrapping massively changing the error
 
             diffs = diff_amps + diff_phases
             cumulative_error += diffs
+
         self.errs = cumulative_error / (np.sqrt(n_test_points)*(n_test_points - 1))
+        print(log("[EVAL] |"))
+
 
 
 
