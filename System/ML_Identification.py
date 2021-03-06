@@ -563,7 +563,14 @@ class ML:
 
         if self.trained():
             LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
-            self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
+
+            try:
+                self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
+            except:
+                LOG.error("Model corrupted! Will now retrained.")
+                print(log("[WARN] Model corrupted! Will now retrained.\n"))
+                os.remove(f"Models/{str(self)}/model.h5")
+                self.train()
 
         for i in self.history:
             LOG.debug(f"Loading performance history from 'Models/{str(self)}/{i}.txt'.")
@@ -796,6 +803,7 @@ class ML:
                 print(log(f"[WARN] Found {num_comps} comparison plots which exceeds the maximum of {N} plots.\n"))
 
                 return
+        else: num_comps = 0
 
         print(log("[EVAL] Evaluating..."))
         print(log("[EVAL] |"))
