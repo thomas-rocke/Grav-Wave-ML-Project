@@ -801,7 +801,7 @@ class ML:
         except KeyboardInterrupt: LOG.info("Stopped evaluation due to keyboard interrupt.")
 
         LOG.info("Evaluation complete!")
-        print(log("[EVAL] V"))
+        print(log("[EVAL] V "))
         print(log("[EVAL] Done!\n"))
 
     def calculate_phase(self, data, superposition: Superposition):
