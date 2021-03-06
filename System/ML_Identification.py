@@ -886,7 +886,7 @@ class ML:
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
-        for i in tqdm(range(n_test_points), desc="Generating Error Estimates"):
+        for i in range(n_test_points):
             test_sup = self.data_generator.get_random()
             true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
             true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
