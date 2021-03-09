@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #SBATCH --qos bbgpu
-#SBATCH --gres gpu:v100:1
-#SBATCH --ntasks 36
+#SBATCH --gres gpu:p100:1
+#SBATCH --ntasks 144
 #SBATCH --mem-per-cpu 6800m
 #SBATCH --account martynod-optical-modes
 #SBATCH --time 7-0:0
