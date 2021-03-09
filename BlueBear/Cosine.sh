@@ -2,7 +2,7 @@
 
 #SBATCH --qos bbgpu
 #SBATCH --gres gpu:p100:1
-#SBATCH --ntasks 144
+#SBATCH --ntasks 20
 #SBATCH --mem-per-cpu 6800m
 #SBATCH --account martynod-optical-modes
 #SBATCH --time 7-0:0
