@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --qos bbpowergpu
+#SBATCH --qos bbgpu
 #SBATCH --gres gpu:v100:1
 #SBATCH --ntasks 36
 #SBATCH --mem-per-cpu 6800m
@@ -39,4 +39,4 @@ source ${VENV_PATH}/bin/activate
 # Execute your Python scripts
 cd ../System/
 
-python3 Main.py -i "ML(BasicGenerator(3, 8, 0.5, 0.0), use_multiprocessing=True)" -t -s
+python3 Main.py -i "ML(BasicGenerator(3, 8, 0.5, 0.0, repeats=256), use_multiprocessing=True)" -t -s

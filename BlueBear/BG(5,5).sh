@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --qos bbpowergpu
+#SBATCH --qos bbgpu
 #SBATCH --gres gpu:v100:1
 #SBATCH --ntasks 36
 #SBATCH --mem-per-cpu 6800m
@@ -39,8 +39,8 @@ source ${VENV_PATH}/bin/activate
 # Execute your Python scripts
 cd ../System/
 
-python3 Main.py -i "ML(BasicGenerator(5, 5, 0.2, 0.4), use_multiprocessing=True)" -t -s -e
-python3 Main.py -i "ML(BasicGenerator(5, 5, 0.5, 1.0), use_multiprocessing=True)" -t -s -e
-python3 Main.py -i "ML(BasicGenerator(5, 5, 1.0, 2.0), use_multiprocessing=True)" -t -s -e
-python3 Main.py -i "ML(BasicGenerator(5, 5, 1.0, 0.0), use_multiprocessing=True)" -t -s -e
-python3 Main.py -i "ML(BasicGenerator(5, 5, 0.0, 2.0), use_multiprocessing=True)" -t -s -e
+python3 Main.py -i "ML(BasicGenerator(5, 5, 0.2, 0.4, repeats=256), use_multiprocessing=True)" -t -s -e
+python3 Main.py -i "ML(BasicGenerator(5, 5, 0.5, 1.0, repeats=256), use_multiprocessing=True)" -t -s -e
+python3 Main.py -i "ML(BasicGenerator(5, 5, 1.0, 2.0, repeats=256), use_multiprocessing=True)" -t -s -e
+python3 Main.py -i "ML(BasicGenerator(5, 5, 1.0, 0.0, repeats=256), use_multiprocessing=True)" -t -s -e
+python3 Main.py -i "ML(BasicGenerator(5, 5, 0.0, 2.0, repeats=256), use_multiprocessing=True)" -t -s -e

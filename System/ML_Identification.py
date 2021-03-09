@@ -76,7 +76,7 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
-                 learning_rate: float = 0.0001,
+                 learning_rate: float = 0.0007,
                  use_multiprocessing: bool = True):
         '''
         Initialise the class.
@@ -90,7 +90,7 @@ class ML:
 
         LOG.debug(f"Locals: {locals()}")
 
-        self.max_epochs = 100 # Max epochs before training is terminated
+        self.max_epochs = 150 # Max epochs before training is terminated
         self.success_loss = 0.001 # Loss at which the training is considered successful
         self.stagnation = 5 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "stage": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
@@ -906,10 +906,16 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}{f' for {param_range}' if not param_name == 'training_strategy_name' else ''}.png'.")
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png'.")
 
                     os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}{f' for {param_range}' if not param_name == 'training_strategy_name' else ''}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+
+                    plt.ylim(0, 0.0099)
+                    plt.ylim(0, 0.0099)
+
+                    os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}", exist_ok=True) # Create directory for optimisations
+                    plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                 else:
                     plt.show()
 

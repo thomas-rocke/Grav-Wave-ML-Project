@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --qos bbpowergpu
+#SBATCH --qos bbgpu
 #SBATCH --gres gpu:v100:1
 #SBATCH --ntasks 36
 #SBATCH --mem-per-cpu 6800m
