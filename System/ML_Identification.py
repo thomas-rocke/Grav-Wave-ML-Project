@@ -76,7 +76,7 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
-                 learning_rate: float = 0.0007,
+                 learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
         '''
         Initialise the class.
