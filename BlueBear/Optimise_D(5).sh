@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --qos bbpowergpu
+#SBATCH --qos bbgpu
 #SBATCH --gres gpu:v100:1
 #SBATCH --ntasks 36
 #SBATCH --mem-per-cpu 6800m
@@ -39,12 +39,12 @@ source ${VENV_PATH}/bin/activate
 # Execute your Python scripts
 cd ../System/
 
-python3 Main.py -i "ML(Dataset(5))" -o "resolution" "[8, 16, 32, 64, 128]"
-python3 Main.py -i "ML(Dataset(5))" -o "repeats" "[2**n for n in range(9)]"
-python3 Main.py -i "ML(Dataset(5))" -o "optimiser" "['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl']"
-python3 Main.py -i "ML(Dataset(5))" -o "learning_rate" "[round(0.1**n, n) for n in range(8)]"
-python3 Main.py -i "ML(Dataset(5))" -o "learning_rate" "[round(0.0001 * n, 4) for n in range(1, 9)]"
-python3 Main.py -i "ML(Dataset(5))" -o "batch_size" "[2**n for n in range(9)]"
-python3 Main.py -i "ML(Dataset(5))" -o "noise_variation" "[round(0.1 * n, 1) for n in range(1, 11)]"
-python3 Main.py -i "ML(Dataset(5))" -o "amplitude_variation" "[round(0.1 * n, 1) for n in range(1, 11)]"
-python3 Main.py -i "ML(Dataset(5))" -o "phase_variation" "[round(0.2 * n, 1) for n in range(1, 11)]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "resolution" "[8, 16, 32, 64, 128]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "repeats" "[2*n for n in range(1, 4)]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "optimiser" "['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl']"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "learning_rate" "[round(0.1**n, n) for n in range(8)]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "learning_rate" "[round(0.0001 * n, 4) for n in range(1, 9)]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "batch_size" "[2**n for n in range(9)]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "noise_variation" "[round(0.1 * n, 1) for n in range(11)]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "amplitude_variation" "[round(0.1 * n, 1) for n in range(11)]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "phase_variation" "[round(0.2 * n, 1) for n in range(11)]"
