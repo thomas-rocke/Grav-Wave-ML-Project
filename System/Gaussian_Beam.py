@@ -284,7 +284,7 @@ class Superposition(list):
         '''
         Magic method for the * operator.
         '''
-        x = Superposition(*self.modes)
+        x = Superposition(*self)
         x *= value
         return x
 
@@ -345,6 +345,7 @@ class Superposition(list):
         superposition = np.abs(sum([i.E_mode(X, Y, 0) for i in self])**2)
 
         return superposition / np.linalg.norm(superposition) # Normalise the superposition
+        #return superposition / np.max(superposition) # Normalise the superposition
 
     def phase_map(self):
         '''
@@ -533,11 +534,13 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-    fig, ax = plt.subplots(nrows=2)
-    s1 = Superposition(Hermite(0, 0), Hermite(0, 1, phase=np.pi/2), Hermite(1, 0, phase=-np.pi/3))
-    s2 = Superposition(Hermite(0, 0), Hermite(0, 1, phase=np.pi/2), Hermite(1, 0, phase=np.pi/3))
-    ax[0].imshow(s1.superpose())
-    ax[1].imshow(s2.superpose())
+    s1 = Superposition(Hermite(1, 0, amplitude=0.5, phase=np.pi/2), Hermite(0, 1, amplitude=0.5))
+    s2 = Superposition(Hermite(1, 0, amplitude=0.5, phase=np.pi/2), Hermite(0, 1, amplitude=0.51))
+    im1 = s1.superpose()
+    im2 = s2.superpose()
+    diff = (im1 - im2)**2
+    plt.imshow(diff)
+    plt.colorbar()
     plt.show()
 ##################################################
 ##########                              ##########

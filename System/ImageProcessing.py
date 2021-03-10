@@ -334,15 +334,26 @@ def get_bounding_box(img):
 
 
 if __name__ == "__main__":
-    proc = BaseProcessor()
+    proc = ModeProcessor()
 
     img = np.zeros((480, 480))
     x = Superposition(Hermite(3, 1, resolution=256))
     sup_img = x.superpose()
-    for i in range(sup_img.shape[0]):
-        for j in range(sup_img.shape[1]):
-            img[i, j] = sup_img[i, j]
+    
+    fig, ax = plt.subplots(ncols=2)
+    ax[0].imshow(sup_img)
+    ax[0].set_title("No Quantisation Applied")
 
-    vals = proc.get_bounding_box(img)
-    plt.imshow(proc.processImage(img, *vals))
+    proc.bit_depth = 4
+    proc._reset_bins()
+    ax[1].imshow(proc.errorEffects(sup_img))
+    ax[1].set_title("bit_depth=4")
+
+    #proc.bit_depth = 10
+    #proc._reset_bins()
+    #ax[2].imshow(proc.errorEffects(sup_img))
+    #ax[2].set_title("bit_depth=10")
+    ax[0].axis("off")
+    ax[1].axis("off")
+    #ax[2].axis("off")
     plt.show()
