@@ -40,6 +40,7 @@ source ${VENV_PATH}/bin/activate
 cd ../System/
 
 python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "resolution" "[8, 16, 32, 64, 128]"
+python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "resolution" "[64, 128, 256]"
 python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "repeats" "[2*n for n in range(1, 4)]"
 python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "optimiser" "['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl']"
 python3 Main.py -i "ML(Dataset('errors_at_end', 5))" -o "learning_rate" "[round(0.1**n, n) for n in range(8)]"

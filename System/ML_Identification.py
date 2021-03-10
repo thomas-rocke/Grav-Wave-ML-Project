@@ -38,7 +38,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
-from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam
+from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 from ImageProcessing import ModeProcessor
@@ -76,7 +76,7 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  optimiser: str = "Adamax",
-                 learning_rate: float = 0.0007,
+                 learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
         '''
         Initialise the class.
@@ -787,7 +787,7 @@ class ML:
         plt.close(fig)
         LOG.info("Comparison complete!")
 
-    def evaluate(self, N: int = 500, info: bool = False):
+    def evaluate(self, N: int = 100, info: bool = False):
         '''
         Evaluate the model by comparing against N randomly generated superpositions.
         '''

@@ -130,13 +130,9 @@ dmypy.json
 *.sqlite
 
 # Other
-# *Old_Models
+*/Old_*
 *.h5
-
-# Dataset files
-# *.txt
-
-workspace.code-workspace
+*workspace.code-workspace
 *.log
-*.txt
-*.png
+# *.txt
+# *.png

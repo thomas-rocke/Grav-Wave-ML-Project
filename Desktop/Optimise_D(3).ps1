@@ -1,6 +1,7 @@
 cd ../System/
 
 python Main.py -i "ML(Dataset('errors_at_end', 3), use_multiprocessing=False)" -o "resolution" "[8, 16, 32, 64, 128]"
+python Main.py -i "ML(Dataset('errors_at_end', 3), use_multiprocessing=False)" -o "resolution" "[64, 128, 256]"
 python Main.py -i "ML(Dataset('errors_at_end', 3), use_multiprocessing=False)" -o "repeats" "[2*n for n in range(1, 4)]"
 python Main.py -i "ML(Dataset('errors_at_end', 3), use_multiprocessing=False)" -o "optimiser" "['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl']"
 python Main.py -i "ML(Dataset('errors_at_end', 3), use_multiprocessing=False)" -o "learning_rate" "[round(0.1**n, n) for n in range(8)]"
