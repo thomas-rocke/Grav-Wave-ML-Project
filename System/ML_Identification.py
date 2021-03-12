@@ -75,6 +75,7 @@ class ML:
     '''
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
+                 architecture: bool = "VGG16",
                  optimiser: str = "Adamax",
                  learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
@@ -86,6 +87,7 @@ class ML:
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
+        self.architecture = architecture
         self.use_multiprocessing = use_multiprocessing
 
         LOG.debug(f"Locals: {locals()}")
@@ -111,13 +113,13 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}, {self.use_multiprocessing})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.architecture}', '{self.optimiser}', {self.learning_rate}, {self.use_multiprocessing})"
 
     def copy(self):
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate, self.use_multiprocessing)
+        return ML(self.data_generator.copy(), self.architecture, self.optimiser, self.learning_rate, self.use_multiprocessing)
 
     def exists(self):
         '''
@@ -160,8 +162,7 @@ class ML:
         reduced_phases = K.minimum(phases, K.abs(diff - 1))
         loss = K.square(amplitudes + reduced_phases)
 
-        # K.print_tensor(phases)
-        # K.print_tensor(reduced_phases)
+        # K.print_tensor(K.mean(loss))
 
         return K.mean(loss, axis=-1)
 
@@ -178,54 +179,69 @@ class ML:
         # The VGG16 convolutional neural net (CNN) architecture was used to win ILSVR (Imagenet) competition in 2014
         # It is considered to be one of the best vision model architectures to date
 
-        # Our custom architecture:
+        if self.architecture == "VGG16":
+            LOG.debug("Loading the VGG16 architecture.")
+            model = VGG16(self.input_shape, len(self.classes)) # Set model to use VGG16 model
 
-        model = Sequential()
+        elif self.architecture == "VGG19":
+            LOG.debug("Loading the VGG19 architecture.")
+            model = VGG16(self.input_shape, len(self.classes), VGG19=True) # Set model to use VGG19 model
 
-        model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        elif self.architecture == "default":
+            LOG.debug("Loading the default architecture.")
 
-        model.add(Conv2D(64, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model = Sequential()
 
-        model.add(Conv2D(128, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
+            model.add(Activation('relu'))
+            model.add(MaxPooling2D(pool_size=(2, 2)))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
 
-        model.add(Conv2D(256, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model.add(Conv2D(64, (3, 3), padding='same'))
+            model.add(Activation('relu'))
+            model.add(MaxPooling2D(pool_size=(2, 2)))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
 
-        model.add(Flatten())
-        model.add(Dropout(0.2))
+            model.add(Conv2D(128, (3, 3), padding='same'))
+            model.add(Activation('relu'))
+            model.add(MaxPooling2D(pool_size=(2, 2)))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
 
-        model.add(Dense(512, kernel_constraint=maxnorm(3)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model.add(Conv2D(256, (3, 3), padding='same'))
+            model.add(Activation('relu'))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
 
-        model.add(Dense(128, kernel_constraint=maxnorm(3)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model.add(Flatten())
+            model.add(Dropout(0.2))
 
-        model.add(Dense(units=len(self.classes)))
-        model.add(Activation('sigmoid'))
+            model.add(Dense(512, kernel_constraint=maxnorm(3)))
+            model.add(Activation('relu'))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
+
+            model.add(Dense(128, kernel_constraint=maxnorm(3)))
+            model.add(Activation('relu'))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
+
+            model.add(Dense(units=len(self.classes)))
+            model.add(Activation('sigmoid'))
+
+        else:
+            LOG.critical(f"Unrecognised architecture '{self.architecture}'!")
+            print(log(f"[FATAL] Unrecognised architecture '{self.architecture}'!\n"))
+
+            sys.exit()
+
+        # model = keras.applications.VGG16(include_top=False, input_shape=self.input_shape, pooling='avg', classes=len(self.classes))
 
         LOG.debug("Keras model layers created.")
         LOG.debug("Compiling the model.")
 
-        # model = keras.applications.VGG16(include_top=False, input_shape=self.input_shape, pooling='avg', classes=len(self.classes))
-        # model = VGG16(self.input_shape, len(self.classes)) # Override model with VGG16 model
         model.compile(loss=self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
 
         LOG.debug(f"Model compiled. Optimiser: {self.optimiser}(learning_rate={self.learning_rate}).")
@@ -273,7 +289,7 @@ class ML:
         # Create the Keras model
 
         LOG.debug("Creating the Keras model.")
-        print(log("[INIT] Generating model (input shape = " + str(self.input_shape) + ", classes = " + str(len(self.classes)) + ", optimiser: " + self.optimiser + ")... "), end='')
+        print(log(f"[INIT] Generating model (architecture: {self.architecture}, input shape: {self.input_shape}, classes: {len(self.classes)}, optimiser: {self.optimiser})... "), end='')
 
         self.model = self.create_model(summary=False)
 
@@ -373,6 +389,7 @@ class ML:
 
             except KeyboardInterrupt:
                 LOG.warning("Keyboard interrupt detected. Will abort the training stage.")
+
                 print(log("[TRAIN] |"))
                 print(log("[WARN]  |-> Aborted at epoch " + str(len(self.history['loss']) + 1) + "!"))
 
@@ -869,18 +886,21 @@ class ML:
 
             m = self.copy()
 
+            LOG.debug(f"Changing parameter '{param_name}' to '{test}'.")
+            print(log(f"[INFO] Changing parameter '{param_name}' to '{test}'... "), end='')
+
             if param_name in dir(m):
                 setattr(m, param_name, test)
 
-                LOG.debug(f"New model: {m}")
-                print(log(f"[INFO] New model: {m}\n"))
+                LOG.debug(f"New model: {m}.")
+                print(f"Done! New model: {m}.\n")
 
             elif param_name in dir(m.data_generator):
                 setattr(m.data_generator, param_name, test)
                 m.data_generator = m.data_generator.copy()
 
-                LOG.debug(f"New data generator: {m.data_generator}")
-                print(log(f"[INFO] New data generator: {m.data_generator}\n"))
+                LOG.debug(f"New data generator: {m.data_generator}.")
+                print(f"Done! New data generator: {m.data_generator}.\n")
 
             else:
                 LOG.critical(f"Parameter {param_name} does not exist!")
@@ -998,54 +1018,41 @@ def log(message):
 
     return message
 
-def VGG16(input_shape, classes):
+def VGG16(input_shape, classes, VGG19: bool = False):
     '''
     Returns the VGG16 model.
     '''
     model = Sequential()
 
-    model.add(ZeroPadding2D((1, 1), input_shape=input_shape))
-    model.add(Convolution2D(64, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(input_shape=input_shape, filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(128, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(128, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    if VGG19: model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    if VGG19: model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     model.add(Flatten())
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(classes, activation='sigmoid'))
+    model.add(Dense(units=4096, activation="relu"))
+    model.add(Dense(units=4096, activation="relu"))
+    model.add(Dense(units=classes, activation="sigmoid"))
 
     return model
 
@@ -1199,11 +1206,34 @@ if __name__ == '__main__':
     # m.train()
     # m.save()
 
-    # data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
-    # data.new_stage() # Init stage 1
-    # data.new_stage() # Init stage 2
-    # data.new_stage() # Init stage 3
-    # data.new_stage() # Init stage 4
+    data = BasicGenerator(3, 3)
+    while data.new_stage(): pass
+    
+    m = ML(BasicGenerator(3, 3), use_multiprocessing=False)
+    m.load()
+
+    losses = []
+
+    for i in range(100):
+        sup = data.get_random()
+        true = [sup.contains(j).amplitude for j in data.hermite_modes] + [(sup.contains(j).phase + np.pi) / (2 * np.pi) for j in data.hermite_modes]
+
+        formatted_data = np.array([sup.superpose()[..., np.newaxis]]) # Convert to the correct format for our neural network
+        pred = m.model.predict(formatted_data)[0] # Make prediction using model
+
+        mask = np.greater_equal(true, 0)
+
+        diff = np.abs((pred * mask) - (true * mask))
+
+        amplitudes = diff * np.array([1 if i < len(m.classes) // 2 else 0 for i in range(len(m.classes))])
+        phases = diff * np.array([0 if i < len(m.classes) // 2 else 1 for i in range(len(m.classes))])
+
+        reduced_phases = np.minimum(phases, np.abs(diff - 1))
+        loss = np.square(amplitudes + reduced_phases)
+
+        losses.append(np.mean(loss, axis=-1))
+
+    print(np.mean(losses))
 
     # for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
@@ -1215,12 +1245,12 @@ if __name__ == '__main__':
     #     sup = data.get_random()
     #     m.compare(sup)
 
-    optimise("repeats", [2**n for n in range(1, 10)], plot=True, save=True)
-    optimise("batch_size", [2**n for n in range(9)], plot=True, save=True)
-    optimise("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
-    optimise("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
-    optimise("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
-    optimise("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=True, save=True)
+    # optimise("repeats", [2**n for n in range(1, 10)], plot=True, save=True)
+    # optimise("batch_size", [2**n for n in range(9)], plot=True, save=True)
+    # optimise("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
+    # optimise("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
+    # optimise("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
+    # optimise("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=True, save=True)
 
     # print(tf.config.list_physical_devices())
     # with tf.device("gpu:0"):

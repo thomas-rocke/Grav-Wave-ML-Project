@@ -217,9 +217,8 @@ class BasicGenerator(keras.utils.Sequence):
                  repeats: int = 64,
                  batch_size: int = 64,
                  resolution: int = 64,
-                 cosine: bool = False,
                  starting_stage: int = 1,
-                 phase_norm_method=lowest_order_zero_phase):
+                 cosine: bool = False):
         '''
         Initialise the class with the required complexity.
 
@@ -228,7 +227,6 @@ class BasicGenerator(keras.utils.Sequence):
         'ampiltude_variation': How much you want to vary the amplitude of the Gaussian modes by (x > 0).
         '''
         LOG.info("Initialising generator.")
-        self.phase_norm_method = phase_norm_method
         self.max_order = max_order
         self.max_number_of_modes = number_of_modes
         self.amplitude_variation = amplitude_variation
@@ -245,6 +243,7 @@ class BasicGenerator(keras.utils.Sequence):
                 "exposure_limits": self.exposure
               }
 
+        self.phase_norm_method = lowest_order_zero_phase
         self.mode_processor = ModeProcessor(camera=cam)
 
         LOG.debug(f"Locals: {locals()}")
@@ -269,13 +268,13 @@ class BasicGenerator(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size}, {self.resolution}, {self.cosine}, {self.starting_stage})"
+        return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size}, {self.resolution}, {self.starting_stage}, {self.cosine})"
 
     def copy(self):
         '''
         Copy this data generator.
         '''
-        return BasicGenerator(self.max_order, self.max_number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size, self.resolution, self.cosine, self.starting_stage)
+        return BasicGenerator(self.max_order, self.max_number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size, self.resolution, self.starting_stage, self.cosine)
 
     def __len__(self):
         '''
@@ -373,7 +372,14 @@ class Dataset(keras.utils.Sequence):
     Class to load/generate dataset for Machine Learning
     '''
 
-    def __init__(self, training_strategy_name: str = "default", max_order: int = 3, resolution: int = 128, batch_size: int = 32, steps: int = 50, repeats: int = 1, info: bool = True, phase_norm_method=lowest_order_zero_phase):
+    def __init__(self,
+                 training_strategy_name: str = "default",
+                 max_order: int = 3, resolution: int = 128,
+                 batch_size: int = 64,
+                 steps: int = 50,
+                 repeats: int = 1,
+                 info: bool = True,
+                 phase_norm_method=lowest_order_zero_phase):
         '''
         Initialise the class with the required complexity.
         '''
@@ -420,13 +426,13 @@ class Dataset(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.steps}, {self.repeats}, {self.info})"
+        return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.steps}, {self.repeats}, {self.info}, {self.phase_norm_method})"
 
     def copy(self):
         '''
         Copy this data generator.
         '''
-        return Dataset(self.training_strategy_name, self.max_order, self.resolution, self.batch_size, self.steps, self.repeats, self.info)
+        return Dataset(self.training_strategy_name, self.max_order, self.resolution, self.batch_size, self.steps, self.repeats, self.info, self.phase_norm_method)
 
     def __len__(self):
         '''
