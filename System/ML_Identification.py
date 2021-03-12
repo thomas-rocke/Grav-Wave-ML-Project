@@ -482,7 +482,7 @@ class ML:
             LOG.debug("Generating axes as none were given.")
 
             fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-            fig.suptitle(f"Training and Validation History for {str(self)}")
+            fig.suptitle(f"Training and Validation History for {self}")
             ax1.grid()
             ax2.grid()
 
@@ -539,18 +539,18 @@ class ML:
         else: LOG.info("Saving ML object history to files.")
         print(log("[SAVE] Saving model... "), end='')
 
-        os.makedirs(f"Models/{str(self)}", exist_ok=True) # Create directory for model
+        os.makedirs(f"Models/{self}", exist_ok=True) # Create directory for model
 
         if save_trained:
-            LOG.debug(f"Saving Keras model to 'Models/{str(self)}/model.h5'.")
-            self.model.save(f"Models/{str(self)}/model.h5")
+            LOG.debug(f"Saving Keras model to 'Models/{self}/model.h5'.")
+            self.model.save(f"Models/{self}/model.h5")
 
         for i in self.history:
-            LOG.debug(f"Saving performance history to 'Models/{str(self)}/{i}.txt'.")
-            np.savetxt(f"Models/{str(self)}/{i}.txt", self.history[i], delimiter=",")
+            LOG.debug(f"Saving performance history to 'Models/{self}/{i}.txt'.")
+            np.savetxt(f"Models/{self}/{i}.txt", self.history[i], delimiter=",")
 
-        LOG.debug(f"Saving classes to 'Models/{str(self)}/classes.txt'.")
-        np.savetxt(f"Models/{str(self)}/classes.txt", self.classes, fmt="%s", delimiter=",")
+        LOG.debug(f"Saving classes to 'Models/{self}/classes.txt'.")
+        np.savetxt(f"Models/{self}/classes.txt", self.classes, fmt="%s", delimiter=",")
 
         LOG.debug("Generating history plot for epochs.")
         self.plot(info=False, elapsed_time=False)
@@ -580,25 +580,25 @@ class ML:
         LOG.debug("Loading ML object from files.")
 
         if self.trained():
-            LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
+            LOG.debug(f"Loading Keras model from 'Models/{self}/model.h5'.")
 
             try:
-                self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
+                self.model = keras.models.load_model(f"Models/{self}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
             except:
                 LOG.error("Model corrupted! Will now delete and reload.")
                 print("Model corrupted! Will now delete and reload.\n")
 
-                shutil.rmtree(f"Models/{str(self)}")
+                shutil.rmtree(f"Models/{self}")
                 self.load(save_trained, info)
 
                 return
 
         for i in self.history:
-            LOG.debug(f"Loading performance history from 'Models/{str(self)}/{i}.txt'.")
-            self.history[i] = np.loadtxt(f"Models/{str(self)}/{i}.txt", delimiter=",")
+            LOG.debug(f"Loading performance history from 'Models/{self}/{i}.txt'.")
+            self.history[i] = np.loadtxt(f"Models/{self}/{i}.txt", delimiter=",")
 
-        LOG.debug(f"Loading classes from 'Models/{str(self)}/classes.txt'.")
-        self.classes = np.loadtxt(f"Models/{str(self)}/classes.txt", dtype=str, delimiter="\n")
+        LOG.debug(f"Loading classes from 'Models/{self}/classes.txt'.")
+        self.classes = np.loadtxt(f"Models/{self}/classes.txt", dtype=str, delimiter="\n")
         self.classes = [eval(i.replace("H", "Hermite")) for i in self.classes]
 
         LOG.info("ML object loaded successfully!")
@@ -926,16 +926,22 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png'.")
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png'.")
 
-                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'} using '{self.architecture}'", exist_ok=True) # Create directory for optimisations
+                    try:
+                        plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    except:
+                        plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
 
                     plt.ylim(0, 0.0099)
-                    plt.ylim(0, 0.0099)
 
-                    os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'} using '{self.architecture}'", exist_ok=True) # Create directory for optimisations
+                    try:
+                        plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    except:
+                        plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
+
                 else:
                     plt.show()
 
