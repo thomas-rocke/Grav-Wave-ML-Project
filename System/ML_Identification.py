@@ -310,7 +310,7 @@ class ML:
             print(log(f"[TRAIN] |-> Size                : {len(self.data_generator)}."))
             print(log(f"[TRAIN] |-> Cores               : {cpu_count()}."))
             print(log(f"[TRAIN] |-> Classes             : {' '.join([str(i).replace(' ', '') for i in self.classes])}."))
-            print(log(f"[TRAIN] |-> Success Condition   : A loss of {self.success_loss}."))
+            print(log(f"[TRAIN] |-> Success Condition   : A loss of {self.success_loss * 1000 :.1f}m."))
             print(log(f"[TRAIN] |-> Terminate Condition : Reaching epoch {len(self.history['loss']) + self.max_epochs} or {self.stagnation} consecutive epochs of stagnation."))
             print(log(f"[TRAIN] |"))
 
@@ -359,7 +359,7 @@ class ML:
                     if isnan(self.history['loss'][-1]): # Loss is nan so training has failed
                         LOG.critical("Loss is 'nan' so training has diverged and failed.")
                         print(log("\n[TRAIN] V "))
-                        print(log("[FATAL] Training failed! Gradient descent diverged at epoch " + str(len(self.history['loss'])) + ".\n"))
+                        print(log(f"[FATAL] Training failed! Gradient descent diverged at epoch {len(self.history['loss'])}.\n"))
 
                         sys.exit()
 
@@ -370,7 +370,7 @@ class ML:
                         iterator.close()
 
                         print(log("[TRAIN] |"))
-                        print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history['loss'])) + "."))
+                        print(log(f"[TRAIN] |-> {self.success_loss * 1000 :.1f}m loss achieved at epoch {len(self.history['loss'])}."))
 
                         break
 
@@ -381,7 +381,7 @@ class ML:
                         iterator.close()
 
                         print(log("[TRAIN] |"))
-                        print(log("[WARN]  |-> Learning stagnated at epoch " + str(len(self.history['loss'])) + "."))
+                        print(log(f"[WARN]  |-> Learning stagnated at epoch {len(self.history['loss'])}."))
 
                         break
 
@@ -391,7 +391,7 @@ class ML:
                 LOG.warning("Keyboard interrupt detected. Will abort the training stage.")
 
                 print(log("[TRAIN] |"))
-                print(log("[WARN]  |-> Aborted at epoch " + str(len(self.history['loss']) + 1) + "!"))
+                print(log(f"[WARN]  |-> Aborted at epoch {len(self.history['loss']) + 1}!"))
 
             # Check if stage has reached the max epoch
 
@@ -399,7 +399,7 @@ class ML:
                 LOG.warning(f"Reached max epoch of {len(self.history['loss'])}.")
 
                 print(log("[TRAIN] |"))
-                print(log("[WARN]  |-> Reached max epoch of " + str(len(self.history['loss'])) + "!"))
+                print(log(f"[WARN]  |-> Reached max epoch of {len(self.history['loss'])}!"))
 
             print(log("[TRAIN] |"))
 
@@ -416,7 +416,7 @@ class ML:
                                                verbose=int(info))
 
         LOG.debug(f"Loss: {scores[0]} - Accuracy: {scores[1]}")
-        print(f"Loss: {scores[0] :.4f} - Accuracy: {scores[1] * 100 :.2f}%")
+        print(f"Loss: {scores[0] * 1000 :.1f} - Accuracy: {scores[1] * 100 :.2f}%")
 
         # Training complete
 
