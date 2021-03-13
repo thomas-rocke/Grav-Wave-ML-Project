@@ -140,9 +140,9 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         '''
         Get inputs from list of superpositions.
         '''
-        inputs = []
-        for sup in sups:
-            inputs.append(self.errorEffects(sup.superpose()))
+        inputs = [0]*len(sups)
+        for i, sup in enumerate(sups):
+            inputs[i] = self.getImage(sup.superpose())
 
         return inputs
 
@@ -161,7 +161,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         '''
         x = mode.copy()
 
-        x *= np.abs(np.random.normal(scale=self.amplitude_variation) + 1)
+        x *= np.abs(np.random.normal(loc=1, scale=self.amplitude_variation))
         x.add_phase(np.random.normal(scale=self.phase_variation))
 
         return x
@@ -194,10 +194,9 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
 
 
 if __name__ == "__main__":
-    gen = SuperpositionGenerator(training_strategy_name="errors_at_end", network_resolution=64, starting_stage=5)
+    gen = SuperpositionGenerator(training_strategy_name="errors_at_end", network_resolution=80, starting_stage=5)
     gen.new_stage()
-    print(gen.noise_variance)
     gen.number_of_modes=4
     gen._reset_combs()
-    plt.imshow(gen[0][0][50])
+    plt.imshow(gen[0][0][54])
     plt.show()

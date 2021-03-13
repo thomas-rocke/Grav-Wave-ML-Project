@@ -3,7 +3,7 @@
         "1" : {
             "number_of_modes" : 2,
             "amplitude_variation" : 0.2,
-            "phase_variation" : 0.2
+            "phase_variation" : 0.2,
             "camera" : "ideal_camera"
         },
 

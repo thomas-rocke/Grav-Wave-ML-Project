@@ -243,8 +243,9 @@ class ModeProcessor(BaseProcessor):
         Perform all processing on target superposition image to preprare it for training.
         '''
         noisy_image = self.errorEffects(raw_image)
-        SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
-        resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
+        #SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
+        #resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
+        resized_image = self.processImage(noisy_image, noisy_image.shape[0], int(noisy_image.shape[0]/2), int(noisy_image.shape[1]/2))
         return resized_image
 
     # Error/Noise functions:
