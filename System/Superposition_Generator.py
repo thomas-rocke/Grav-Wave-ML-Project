@@ -52,7 +52,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
         # Setting parameter defaults, in case they are not defined by training strategy
-        self.change_camera(get_cams("default"))
+        self.change_camera(get_cams("ideal_camera"))
         self.amplitude_variation = 0
         self.phase_variation = 0
         self.number_of_modes = 1
