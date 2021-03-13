@@ -93,7 +93,7 @@ class ML:
         LOG.debug(f"Locals: {locals()}")
 
         self.max_epochs = 150 # Max epochs before training is terminated
-        self.success_loss = 0.001 # Loss at which the training is considered successful
+        self.success_loss = 0.0001 # Loss at which the training is considered successful
         self.stagnation = 8 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "stage": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
@@ -486,12 +486,12 @@ class ML:
             ax1.grid()
             ax2.grid()
 
-            ax1.plot(t, self.history['loss'], label="Training Loss")[0]
-            ax2.plot(t, self.history['accuracy'], label="Training Accuracy")[0]
-            ax1.plot(t, self.history['val_loss'], label="Validation Loss")[0]
-            ax2.plot(t, self.history['val_accuracy'], label="Validation Accuracy")[0]
+            ax1.plot(t, np.array(self.history['loss']) * 1000, label="Training Loss (m)")[0]
+            ax2.plot(t, np.array(self.history['accuracy']) * 100, label="Training Accuracy (%)")[0]
+            ax1.plot(t, np.array(self.history['val_loss']) * 1000, label="Validation Loss (m)")[0]
+            ax2.plot(t, np.array(self.history['val_accuracy']) * 100, label="Validation Accuracy (%)")[0]
 
-            ax2.set_ylim(0, 1)
+            ax2.set_ylim(0, 100)
 
         else:
             LOG.debug("Plotting history using axes given.")
@@ -499,10 +499,10 @@ class ML:
             ax1, ax2 = axes
             if not label: label = str(self)
 
-            ax1.plot(t, self.history['loss'], label=label)[0]
-            ax2.plot(t, self.history['val_loss'], label=label)[0]
+            ax1.plot(t, np.array(self.history['loss']) * 1000, label=label)[0]
+            ax2.plot(t, np.array(self.history['val_loss']) * 1000, label=label)[0]
 
-            if np.max(self.history['val_loss']) > ax2.get_ylim()[1]: ax2.set_ylim(0, np.max(self.history['val_loss']))
+            if np.max(self.history['val_loss']) * 1000 > ax2.get_ylim()[1]: ax2.set_ylim(0, np.max(self.history['val_loss']) * 1000)
 
         stage_change_indexes = [i for i in range(1, len(self.history['stage'])) if self.history['stage'][i] != self.history['stage'][i-1]]
         for i in stage_change_indexes:
@@ -512,14 +512,14 @@ class ML:
         LOG.debug("Formatting plot.")
 
         if t[-1] > ax1.get_xlim()[1]: plt.xlim(0, t[-1])
-        if np.max(self.history['loss']) > ax1.get_ylim()[1]: ax1.set_ylim(0, np.max(self.history['loss']))
+        if np.max(self.history['loss']) * 1000 > ax1.get_ylim()[1]: ax1.set_ylim(0, np.max(self.history['loss']) * 1000)
 
         ax1.set_ylim(0)
         ax2.set_ylim(0)
 
-        ax1.set_ylabel("Loss")
+        ax1.set_ylabel("Loss (m)")
         ax2.set_xlabel(f"{'Elapsed Time (mins)' if elapsed_time else 'Epoch'}")
-        ax2.set_ylabel(f"{'Accuracy' if axes == None else 'Validation Loss'}")
+        ax2.set_ylabel(f"{'Accuracy (%)' if axes == None else 'Validation Loss (m)'}")
 
         ax1.legend(loc="upper right")
         ax2.legend(loc="upper right")
@@ -934,7 +934,8 @@ class ML:
                     except:
                         plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
 
-                    plt.ylim(0, 0.0099)
+                    ax1.set_ylim(0, 9.9)
+                    ax2.set_ylim(0, 9.9)
 
                     os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'", exist_ok=True) # Create directory for optimisations
                     try:
