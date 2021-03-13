@@ -352,7 +352,7 @@ class ML:
 
                     # Update the loading bar description with the current losses
 
-                    iterator.set_description(log(f"[TRAIN] |-> {indicator} Loss: {self.history['loss'][-1] :.4f} - Val Loss: {self.history['val_loss'][-1] :.4f} "))
+                    iterator.set_description(log(f"[TRAIN] |-> {indicator} Loss: {self.history['loss'][-1] * 1000 :.1f}m - Val Loss: {self.history['val_loss'][-1] * 1000 :.1f}m "))
 
                     # Check if gradient descent has diverged so training has failed
 
