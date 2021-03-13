@@ -374,22 +374,22 @@ class Dataset(keras.utils.Sequence):
 
     def __init__(self,
                  training_strategy_name: str = "default",
-                 max_order: int = 3, resolution: int = 128,
-                 batch_size: int = 64,
+                 max_order: int = 3,
+                 resolution: int = 128,
+                 batch_size: int = 32,
                  steps: int = 50,
                  repeats: int = 1,
-                 info: bool = True,
-                 phase_norm_method=lowest_order_zero_phase):
+                 info: bool = True):
         '''
         Initialise the class with the required complexity.
         '''
-        self.phase_norm_method = phase_norm_method
         self.training_strategy_name = training_strategy_name
         self.max_order = max_order
         self.resolution = resolution
         self.batch_size = batch_size
         self.info = info
 
+        self.phase_norm_method = lowest_order_zero_phase
         self.mode_mask = 0
         self.mode_processor = ModeProcessor(target_resolution = (resolution, resolution))
         self.strategy = get_strategy(training_strategy_name)
@@ -426,13 +426,13 @@ class Dataset(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.steps}, {self.repeats}, {self.info}, {self.phase_norm_method})"
+        return self.__class__.__name__ + f"('{self.training_strategy_name}', {self.max_order}, {self.resolution}, {self.batch_size}, {self.steps}, {self.repeats}, {self.info})"
 
     def copy(self):
         '''
         Copy this data generator.
         '''
-        return Dataset(self.training_strategy_name, self.max_order, self.resolution, self.batch_size, self.steps, self.repeats, self.info, self.phase_norm_method)
+        return Dataset(self.training_strategy_name, self.max_order, self.resolution, self.batch_size, self.steps, self.repeats, self.info)
 
     def __len__(self):
         '''
