@@ -1,73 +1,45 @@
 {
     "default" : {
         "1" : {
-            "mode_mask" : 0,
-            "camera" : "ideal_camera"
-        }
-    },
-
-    "errors_at_end" : {
-        "1" : {
-            "mode_mask" : 2,
+            "number_of_modes" : 2,
+            "amplitude_variation" : 0.2,
+            "phase_variation" : 0.2,
             "camera" : "ideal_camera"
         },
 
         "2" : {
-            "mode_mask" : 4
-        },
-
-        "3" : {
-            "mode_mask" : 6
-        },
-
-        "4" : {
-            "mode_mask" : 8
-        },
-
-        "5" : {
-            "camera" : "small_errors"
+            "number_of_modes" : 3
         }
     },
 
-    "extreme_short" : {
+    "class_then_vary" : {
         "1" : {
-            "camera" : "ideal_camera",
-            "mode_mask" : 0
-        }
-    },
-
-    "extreme_long" : {
-        "1" : {
-            "camera" : "ideal_camera",
-            "mode_mask" : 2
+            "number_of_modes" : 2,
+            "amplitude_variation" : 0,
+            "phase_variation" : 0,
+            "camera" : "ideal_camera"
         },
 
         "2" : {
-            "mode_mask" : 3
+            "number_of_modes" : 3
         },
-
+        
         "3" : {
-            "mode_mask" : 4
+            "amplitude_variation" : 0.5,
+            "phase_variation" : 0.5
+        }
+    },
+
+    "variance_throughout" : {
+        "1" : {
+            "number_of_modes" : 2,
+            "amplitude_variation" : 0.5,
+            "phase_variation" : 0.5,
+            "camera" : "ideal_camera"
         },
 
-        "4" : {
-            "mode_mask" : 5
-        },
-
-        "5" : {
-            "mode_mask" : 6
-        },
-
-        "6" : {
-            "mode_mask" : 7
-        },
-
-        "7" : {
-            "mode_mask" : 8
-        },
-
-        "8" : {
-            "mode_mask" : 0
+        "2" : {
+            "number_of_modes" : 3
         }
     }
 }
