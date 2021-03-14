@@ -72,6 +72,6 @@ def get_strategy(training_strategy_name:str = "default"):
         return strats[training_strategy_name]
     else:
         msg = "Strategy '{}' not found, defaulting to 'default'".format(training_strategy_name)
-        print(LOG.error(msg))
+        LOG.error(msg)
         return strats["default"]
     
