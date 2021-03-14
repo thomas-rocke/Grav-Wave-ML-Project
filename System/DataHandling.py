@@ -218,7 +218,7 @@ class BasicGenerator(keras.utils.Sequence):
                  batch_size: int = 64,
                  resolution: int = 64,
                  starting_stage: int = 1,
-                 cosine: bool = False):
+                 always_H00: bool = False):
         '''
         Initialise the class with the required complexity.
 
@@ -236,8 +236,8 @@ class BasicGenerator(keras.utils.Sequence):
         self.repeats = repeats
         self.batch_size = batch_size
         self.resolution = resolution
-        self.cosine = cosine
         self.starting_stage = starting_stage
+        self.always_H00 = always_H00
 
         cam = {"noise_variance": self.noise_variation,
                 "exposure_limits": self.exposure
@@ -268,13 +268,13 @@ class BasicGenerator(keras.utils.Sequence):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size}, {self.resolution}, {self.starting_stage}, {self.cosine})"
+        return self.__class__.__name__ + f"({self.max_order}, {self.max_number_of_modes}, {self.amplitude_variation}, {self.phase_variation}, {self.noise_variation}, {self.exposure}, {self.repeats}, {self.batch_size}, {self.resolution}, {self.starting_stage}, {self.always_H00})"
 
     def copy(self):
         '''
         Copy this data generator.
         '''
-        return BasicGenerator(self.max_order, self.max_number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size, self.resolution, self.starting_stage, self.cosine)
+        return BasicGenerator(self.max_order, self.max_number_of_modes, self.amplitude_variation, self.phase_variation, self.noise_variation, self.exposure, self.repeats, self.batch_size, self.resolution, self.starting_stage, self.always_H00)
 
     def __len__(self):
         '''
@@ -294,7 +294,7 @@ class BasicGenerator(keras.utils.Sequence):
         sups = [self.generate_superposition(comb) for comb in combs]
 
         X = np.array(self.get_inputs(*sups))[..., np.newaxis]
-        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [np.cos(i.contains(j).phase) if self.cosine else (i.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes] for i in sups])
+        Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [(i.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes] for i in sups])
 
         return X, Y
 
@@ -309,7 +309,9 @@ class BasicGenerator(keras.utils.Sequence):
         self.stage += 1
         if self.number_of_modes  > self.max_number_of_modes: return False
 
-        self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
+        if self.always_H00: self.combs = [[[self.gauss_modes[0]] + list(y) for y in list(combinations(self.gauss_modes[1:], i))] for i in range(self.number_of_modes)]
+        else: self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
+
         self.combs = [i[j] for i in self.combs for j in range(len(i))] * self.repeats
 
         return True
