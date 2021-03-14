@@ -668,4 +668,5 @@ def grouper(iterable, n, fillvalue=None):
 if __name__=='__main__':
     x = Dataset(batch_size=6, max_order=3, training_strategy_name="errors_throughout")
     x.new_stage()
+    
     s = x[0]

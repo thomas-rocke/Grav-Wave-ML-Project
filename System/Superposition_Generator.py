@@ -129,6 +129,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         if self.info: LOG.info("Resetting list of combinations")
         self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))] * self.repeats
+        np.random.shuffle(self.combs)
     
     def generate_superposition(self, comb):
         '''
@@ -191,10 +192,14 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [(i.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes] for i in sups])
 
         return X, Y
+    
+    def on_epoch_end(self):
+        np.random.shuffle(self.combs)
+
 
 
 if __name__ == "__main__":
-    gen = SuperpositionGenerator(training_strategy_name="errors_at_end", network_resolution=80, starting_stage=5)
+    gen = SuperpositionGenerator(training_strategy_name="class_then_vary", network_resolution=80, starting_stage=1)
     gen.new_stage()
     gen.number_of_modes=4
     gen._reset_combs()
