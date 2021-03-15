@@ -38,7 +38,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         self.strategy = get_strategy(training_strategy_name)
         self.camera_resolution = camera_resolution
         self.info = info
-
+        self.starting_stage = starting_stage
         self.network_resolution = network_resolution
         ModeProcessor.__init__(self, target_resolution=(network_resolution, network_resolution))
 
@@ -58,7 +58,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         self.phase_variation = 0
         self.number_of_modes = 1
         self._reset_combs()
-    
+
     def new_stage(self):
         self.stage += 1
         if str(self.stage) in self.strategy: # Stage defined in training strategy
