@@ -356,5 +356,5 @@ if __name__ == "__main__":
     #ax[2].set_title("bit_depth=10")
     ax[0].axis("off")
     ax[1].axis("off")
-    #ax[2].axis("off")
+    
     plt.show()
