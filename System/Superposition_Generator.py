@@ -201,6 +201,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
 if __name__ == "__main__":
     gen = SuperpositionGenerator(training_strategy_name="class_then_vary", network_resolution=80, starting_stage=1)
     gen.new_stage()
+    #gen.stretch_variance = 2
     gen.number_of_modes=4
     gen._reset_combs()
     plt.imshow(gen[0][0][54])
