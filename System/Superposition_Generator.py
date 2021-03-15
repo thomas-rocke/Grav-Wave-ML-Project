@@ -30,12 +30,15 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         '''
         Init the class
         '''
+
         self.batch_size = batch_size
         self.repeats = repeats
         self.max_order = max_order
 
         self.training_strategy_name = training_strategy_name
         self.strategy = get_strategy(training_strategy_name)
+
+        self.max_stage = str(list(self.strategy.keys())[-1])
         self.camera_resolution = camera_resolution
         self.info = info
         self.starting_stage = starting_stage
@@ -199,10 +202,6 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
 
 
 if __name__ == "__main__":
-    gen = SuperpositionGenerator(training_strategy_name="class_then_vary", network_resolution=80, starting_stage=1)
+    gen = SuperpositionGenerator(training_strategy_name="variance_throughout", network_resolution=80, starting_stage=1)
     gen.new_stage()
-    #gen.stretch_variance = 2
-    gen.number_of_modes=4
-    gen._reset_combs()
-    plt.imshow(gen[0][0][54])
-    plt.show()
+    print(gen.max_stage)
