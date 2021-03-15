@@ -231,8 +231,8 @@ class ModeProcessor(BaseProcessor):
         '''
         #shifted_image = shift_image(image,) # Shift the image in x and y coords
         rotated_image = self.add_rotational_error(raw_image, self.rotational_variance) # Perform rotation
-        #stretched_image = self.add_random_stretch(rotated_image, self.stretch_variance) # Add rstretch warping in random direction
-        noisy_image = self.add_noise(rotated_image, self.noise_variance) # Add Gaussian Noise to the image
+        stretched_image = self.add_random_stretch(rotated_image, self.stretch_variance) # Add rstretch warping in random direction
+        noisy_image = self.add_noise(stretched_image, self.noise_variance) # Add Gaussian Noise to the image
         blurred_image = self.blur_image(noisy_image, self.blur_variance) # Add gaussian blur
         exposed_image = self.add_exposure(blurred_image, self.exposure_limits) # Add exposure
         quantized_image = self.quantize_image(exposed_image, self.bit_depth) # Quantize
@@ -243,8 +243,9 @@ class ModeProcessor(BaseProcessor):
         Perform all processing on target superposition image to preprare it for training.
         '''
         noisy_image = self.errorEffects(raw_image)
-        SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
-        resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
+        #SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
+        #resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
+        resized_image = self.processImage(noisy_image, noisy_image.shape[0], int(noisy_image.shape[0]/2), int(noisy_image.shape[1]/2))
         return resized_image
 
     # Error/Noise functions:
