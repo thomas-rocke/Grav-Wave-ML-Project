@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 from skimage.measure import regionprops
 from skimage.filters import threshold_otsu, gaussian, laplace
-from skimage.feature import blob_log as blob
+from skimage.feature import blob_log as blob, canny
 from scipy.ndimage import gaussian_laplace
 from Gaussian_Beam import Superposition, Hermite, Laguerre
 from multiprocessing import cpu_count, Pool
@@ -45,12 +45,14 @@ class BaseProcessor(list):
         '''
         Resets the Square bounding box size
         '''
-        #SquareX, SquareY = self._getCenterOfMass(image)
-        #max_sidelength = np.min(image.shape) # Get the length of the shortest image side
-        #test_sides = np.arange(5, max_sidelength)
-        #least_square_vals = [self._widthModel(side_length, SquareX, SquareY, image) for side_length in test_sides]
-        #SquareSide = test_sides[np.argmax(least_square_vals)]
-        SquareX, SquareY, SquareSide = self.get_bounding_box(image)
+        maxed_im = image / np.max(image)
+        edges = canny(maxed_im, sigma=1)
+        SquareX, SquareY = self._getCenterOfMass(maxed_im)
+        max_sidelength = np.min(maxed_im.shape) # Get the length of the shortest image side
+        test_sides = np.arange(5, max_sidelength, step=5)
+        least_square_vals = [self._widthModel(side_length, SquareX, SquareY, edges) for side_length in test_sides]
+        SquareSide = test_sides[np.argmax(least_square_vals)]
+        #SquareX, SquareY, SquareSide = self.get_bounding_box(image)
         return SquareSide, SquareX, SquareY
 
     def get_bounding_box(self, img):
@@ -69,8 +71,8 @@ class BaseProcessor(list):
         y_start = int(SquareY - SquareSide/2)
         x_end = int(min(x_start + SquareSide, image.shape[0]))
         y_end = int(min(y_start + SquareSide, image.shape[1]))
-        mean_square = (image[x_start:x_end, y_start:y_end]**2).mean(axis=None)
-        return (mean_square - (SquareSide/max(image.shape))**2)
+        mean_square = (image[x_start:x_end, y_start:y_end]**2).sum(axis=None)
+        return (mean_square - (np.max(image)*SquareSide/max(image.shape))**2)
 
     def makeSquare(self, image, SquareSide=0, SquareX=0, SquareY=0):
         '''
@@ -243,9 +245,9 @@ class ModeProcessor(BaseProcessor):
         Perform all processing on target superposition image to preprare it for training.
         '''
         noisy_image = self.errorEffects(raw_image)
-        #SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
-        #resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
-        resized_image = self.processImage(noisy_image, noisy_image.shape[0], int(noisy_image.shape[0]/2), int(noisy_image.shape[1]/2))
+        SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
+        resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
+        #resized_image = self.processImage(noisy_image, noisy_image.shape[0], int(noisy_image.shape[0]/2), int(noisy_image.shape[1]/2))
         return resized_image
 
     # Error/Noise functions:

@@ -17,6 +17,7 @@ from Gaussian_Beam import Hermite, Superposition, Laguerre, lowest_order_zero_ph
 import Logger
 import keras
 from ImageProcessing import ModeProcessor
+from skimage.feature import canny
 
 LOG = Logger.get_logger(__name__)
 
@@ -38,7 +39,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         self.strategy = get_strategy(training_strategy_name)
         self.camera_resolution = camera_resolution
         self.info = info
-
+        self.starting_stage = starting_stage
         self.network_resolution = network_resolution
         ModeProcessor.__init__(self, target_resolution=(network_resolution, network_resolution))
 
@@ -110,7 +111,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.max_order}, {self.batch_size}, {self.repeats}, {self.training_strategy_name}, {self.network_resolution}, {self.camera_resolution}, {self.stage}, {self.info}"
+        return self.__class__.__name__ + f"({self.max_order}, {self.batch_size}, {self.repeats}, {self.training_strategy_name}, {self.network_resolution}, {self.camera_resolution}, {self.starting_stage}, {self.info}"
 
     def copy(self):
         '''
@@ -199,10 +200,20 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
 
 
 if __name__ == "__main__":
-    gen = SuperpositionGenerator(training_strategy_name="class_then_vary", network_resolution=80, starting_stage=1)
+    gen = SuperpositionGenerator(training_strategy_name="class_then_vary", network_resolution=128, camera_resolution=480, starting_stage=1)
     gen.new_stage()
-    #gen.stretch_variance = 2
-    gen.number_of_modes=4
+    gen.number_of_modes = 2
     gen._reset_combs()
-    plt.imshow(gen[0][0][54])
-    plt.show()
+    gen.exposure_limits = (0.1, 1)
+    gen.noise_variance = 0.1
+    gen.blur_variance = 0.1
+
+    for i in range(4):
+        fig, ax = plt.subplots(ncols=2)
+        t = time.time()
+        raw_img = gen.get_random().superpose()
+        img = gen.getImage(raw_img)
+        print(time.time() - t)
+        ax[0].imshow(raw_img)
+        ax[1].imshow(img)
+        plt.show()
