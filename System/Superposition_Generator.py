@@ -198,6 +198,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
     
     def on_epoch_end(self):
         #np.random.shuffle(self.combs)
+        pass
 
 
 
