@@ -21,7 +21,8 @@ import textwrap
 # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
 from Gaussian_Beam import Hermite, Superposition, Laguerre
-from DataHandling import GenerateData, BasicGenerator, Dataset
+from Old_Data_Generators import GenerateData, BasicGenerator, Dataset
+from Superposition_Generator import SuperpositionGenerator
 import Logger
 from time import perf_counter
 from datetime import datetime
@@ -916,7 +917,7 @@ class ML:
 
             for time in (True, False):
                 fig, (ax1, ax2) = plt.subplots(2, figsize=(10, 8), sharex=True, gridspec_kw={'hspace': 0})
-                fig.suptitle(f"Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'")
+                fig.suptitle(f"Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'")
                 ax1.grid()
                 ax2.grid()
 
@@ -926,27 +927,28 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png'.")
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png'.")
 
-                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'", exist_ok=True) # Create directory for optimisations
+                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'", exist_ok=True) # Create directory for optimisations
                     try:
-                        plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                        plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                     except:
-                        plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
+                        plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
 
-                    ax1.set_ylim(0, 9.9)
-                    ax2.set_ylim(0, 9.9)
+                    ax1.set_ylim(0, 4.99)
+                    ax2.set_ylim(0, 1.99)
 
-                    os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'", exist_ok=True) # Create directory for optimisations
+                    os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'", exist_ok=True) # Create directory for optimisations
                     try:
-                        plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                        plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
                     except:
-                        plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
+                        plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
 
                 else:
                     plt.show()
 
         LOG.info("Optimisation complete.\n")
+        print(log(f"[INFO] Optimisation complete!\n"))
 
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
