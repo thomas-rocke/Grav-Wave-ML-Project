@@ -21,7 +21,7 @@ from ImageProcessing import ModeProcessor
 LOG = Logger.get_logger(__name__)
 
 
-class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
+class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
     '''
     SuperpositionGenerator is the combination of BasicGenerator in the old generators, with new JSON and image processing techniques built in
     '''
@@ -43,7 +43,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         self.info = info
         self.starting_stage = starting_stage
         self.network_resolution = network_resolution
-        ModeProcessor.__init__(self, target_resolution=(network_resolution, network_resolution))
+        self.mode_processor = ModeProcessor(target_resolution=(network_resolution, network_resolution))
 
         self.stage = starting_stage - 1 # Set so that first call of new_stage changes stage to the starting_stage
 
@@ -55,7 +55,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
 
         # Setting parameter defaults, in case they are not defined by training strategy
-        self.change_camera(get_cams("ideal_camera"))
+        self.mode_processor.change_camera(get_cams("ideal_camera"))
         self.amplitude_variation = 0
         self.phase_variation = 0
         self.number_of_modes = 1
@@ -76,7 +76,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
             cam = kwargs['camera']
             cam_props = get_cams(cam)
             if self.info: LOG.info("Changing to use camera '{}' with properties {}".format(cam, cam_props))
-            self.change_camera(cam_props)
+            self.mode_processor.change_camera(cam_props)
         else:
             if self.info: LOG.info("No New Camera defined this stage, camera will not be changed")
 
@@ -85,7 +85,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
             new_num = kwargs['number_of_modes']
             if self.info: LOG.info("Changing number_of_modes to {}".format(new_num))
             self.number_of_modes = new_num
-            self._reset_bins()
+            self._reset_combs()
         else:
             if self.info: LOG.info("No new number_of_modes defined this stage, number_of_modes will not be changed")
         
@@ -132,7 +132,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         if self.info: LOG.info("Resetting list of combinations")
         self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))] * self.repeats
-        np.random.shuffle(self.combs)
+        #np.random.shuffle(self.combs)
     
     def generate_superposition(self, comb):
         '''
@@ -146,7 +146,7 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         '''
         inputs = [0]*len(sups)
         for i, sup in enumerate(sups):
-            inputs[i] = self.getImage(sup.superpose())
+            inputs[i] = self.mode_processor.getImage(sup.superpose())
 
         return inputs
 
@@ -197,11 +197,15 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         return X, Y
     
     def on_epoch_end(self):
-        np.random.shuffle(self.combs)
+        #np.random.shuffle(self.combs)
 
 
 
 if __name__ == "__main__":
-    gen = SuperpositionGenerator(training_strategy_name="variance_throughout", network_resolution=80, starting_stage=1)
+    gen = SuperpositionGenerator()
     gen.new_stage()
-    print(gen.max_stage)
+    val = gen[0]
+
+    print(val[0].shape)
+    print(val[1].shape)
+    print(len(gen))
