@@ -934,8 +934,8 @@ class ML:
                     except:
                         plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
 
-                    ax1.set_ylim(0, 9.9)
-                    ax2.set_ylim(0, 9.9)
+                    ax1.set_ylim(0, 4.99)
+                    ax2.set_ylim(0, 1.99)
 
                     os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'", exist_ok=True) # Create directory for optimisations
                     try:
@@ -947,7 +947,7 @@ class ML:
                     plt.show()
 
         LOG.info("Optimisation complete.\n")
-        print(log(f"[INFO] Optimisation complete!"))
+        print(log(f"[INFO] Optimisation complete!\n"))
 
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
