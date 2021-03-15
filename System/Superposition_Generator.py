@@ -133,7 +133,6 @@ class SuperpositionGenerator(keras.utils.Sequence, ModeProcessor):
         if self.info: LOG.info("Resetting list of combinations")
         self.combs = [list(combinations(self.gauss_modes, i + 1)) for i in range(self.number_of_modes)]
         self.combs = [i[j] for i in self.combs for j in range(len(i))] * self.repeats
-        np.random.shuffle(self.combs)
     
     def generate_superposition(self, comb):
         '''
