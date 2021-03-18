@@ -38,7 +38,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
         self.training_strategy_name = training_strategy_name
         self.strategy = get_strategy(training_strategy_name)
 
-        self.max_stage = str(list(self.strategy.keys())[-1])
+        self.max_stage = int(list(self.strategy.keys())[-1])
         self.camera_resolution = camera_resolution
         self.info = info
         self.starting_stage = starting_stage
@@ -187,11 +187,9 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
         Generates and returns one batch of data.
         '''
         # LOG.debug(f"Getting item {index}.")
-
         combs = [self.combs[i] for i in range(index * self.batch_size, (index + 1) * self.batch_size)] # Take combs in order
         # combs = [self.combs[np.random.randint(len(self.combs))] for i in range(self.batch_size)] # Take random combs from self.combs
         sups = [self.generate_superposition(comb) for comb in combs]
-
         X = np.array(self.get_inputs(*sups))[..., np.newaxis]
         Y = np.array([[i.contains(j).amplitude for j in self.hermite_modes] + [(i.contains(j).phase + np.pi) / (2 * np.pi) for j in self.hermite_modes] for i in sups])
 
@@ -205,9 +203,8 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
 if __name__ == "__main__":
     gen = SuperpositionGenerator()
-    gen.new_stage()
-    val = gen[0]
-
-    print(val[0].shape)
-    print(val[1].shape)
-    print(len(gen))
+    print(gen.max_order)
+    for i in range(20):
+        gen2 = gen.copy()
+        setattr(gen2, "resolution", 256)
+        print(gen2.max_order)
