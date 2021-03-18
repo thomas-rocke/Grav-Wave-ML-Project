@@ -203,9 +203,8 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
 if __name__ == "__main__":
     gen = SuperpositionGenerator()
-    gen.new_stage()
-    
-    for i in range(5):
-        img = gen[i][0][0]
-        plt.imshow(img)
-        plt.show()
+    print(gen.max_order)
+    for i in range(20):
+        gen2 = gen.copy()
+        setattr(gen2, "resolution", 256)
+        print(gen2.max_order)
