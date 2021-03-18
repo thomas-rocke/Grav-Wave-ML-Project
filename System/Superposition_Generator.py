@@ -202,9 +202,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
 
 if __name__ == "__main__":
-    gen = SuperpositionGenerator()
-    print(gen.max_order)
-    for i in range(20):
-        gen2 = gen.copy()
-        setattr(gen2, "resolution", 256)
-        print(gen2.max_order)
+    gen = SuperpositionGenerator(training_strategy_name="opti_test_strat")
+    gen.new_stage()
+    print(len(gen.combs))
+    
