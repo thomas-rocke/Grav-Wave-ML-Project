@@ -214,11 +214,11 @@ class BasicGenerator(keras.utils.Sequence):
                  phase_variation: float = 1.0,
                  noise_variation: float = 0.1,
                  exposure: tuple = (0.0, 1.0),
-                 repeats: int = 64,
-                 batch_size: int = 16,
+                 repeats: int = 128,
+                 batch_size: int = 32,
                  resolution: int = 64,
                  starting_stage: int = 1,
-                 always_H00: bool = True):
+                 always_H00: bool = False):
         '''
         Initialise the class with the required complexity.
 
@@ -668,7 +668,60 @@ def grouper(iterable, n, fillvalue=None):
 ##################################################
 
 if __name__=='__main__':
+    data = BasicGenerator(3, 3, phase_variation=1.5)
+    while data.new_stage(): pass
+
+    fig, axes = plt.subplots(4, 4, figsize=(10, 11.2))
+
+    for n in range(4):
+        sup = data.get_random()
+        while not len(sup) == 3: sup = data.get_random()
+        for i in range(len(sup)):
+            mode = sup[i]
+
+            axes[n][i].set_xticklabels([])
+            axes[n][i].set_yticklabels([])
+            axes[n][i].set_xticks([])
+            axes[n][i].set_yticks([])
+
+            X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / mode.resolution), np.arange(-1.2, 1.2, 2.4 / mode.resolution))
+
+            superposition = mode.E_mode(X, Y, 0)**2
+
+            axes[n][i].imshow(np.abs(superposition) / np.linalg.norm(np.abs(superposition)), cmap='jet')
+
+            axes[n][i].set_title(f"{mode}")
+            p = round(mode.phase / np.pi, 2)
+            axes[n][i].set_xlabel(f"$A_{i + 1} =$ {mode.amplitude :.2f}, $\phi_{i + 1} =$ {0 if p == 0 else p :.2f}$\pi$")
+            if not i == 0:
+                axes[n][i].set_ylabel(f"$+$")
+            else:
+                axes[n][i].set_ylabel(rf"$\bf{chr(ord('`')+n+1)})$       ", rotation=0)
+
+        x = axes[n][-1].set_ylabel(f"$=$     ")
+        x.set_rotation(0)
+        axes[n][-1].set_xticklabels([])
+        axes[n][-1].set_yticklabels([])
+        axes[n][-1].set_xticks([])
+        axes[n][-1].set_yticks([])
+        axes[n][-1].imshow(sup.superpose(), cmap='jet')
+        axes[n][-1].set_title(f"{sup}")
+
+    plt.show()
+
+    fig, axes = plt.subplots(4, 4, figsize=(10, 10))
+
+    for i in range(4):
+        for j in range(4):
+            sup = data.get_random()
+
+            axes[i][j].axis('off')
+            axes[i][j].imshow(sup.superpose(), cmap='jet')
+            axes[i][j].set_title(f"{sup.latex_print()}")
+
+    plt.show()
+
     x = Dataset(batch_size=6, max_order=3, training_strategy_name="errors_throughout")
     x.new_stage()
     s = x[0]
-    print(s)
+    x.get_random().plot()
