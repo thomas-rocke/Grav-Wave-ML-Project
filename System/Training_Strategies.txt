@@ -1,119 +1,54 @@
 {
     "default" : {
         "1" : {
-            "mode_mask" : 0,
-            "camera" : "ideal_camera"
-        }
-    },
-
-    "stage_change_test" : {
-        "1" : {
-            "mode_mask" : 2,
+            "number_of_modes" : 2,
+            "amplitude_variation" : 0.2,
+            "phase_variation" : 0.2,
             "camera" : "ideal_camera"
         },
 
         "2" : {
-            "mode_mask" : 4
-        },
-
-        "3" : {
-            "mode_mask" : 6
+            "number_of_modes" : 3
         }
     },
 
-    "slow_curve" : {
+    "class_then_vary" : {
         "1" : {
-            "mode_mask" : 2,
+            "number_of_modes" : 2,
+            "amplitude_variation" : 0,
+            "phase_variation" : 0,
             "camera" : "ideal_camera"
         },
 
         "2" : {
-            "mode_mask" : 4
-        },
-
-        "3" : {
-            "mode_mask" : 6
-        },
-
-        "4" : {
-            "mode_mask" : 8
-        },
-
-        "5" : {
-            "mode_mask" : 0
-        },
-
-        "6" : {
-            "camera" : "small_errors"
-        },
-
-        "7" : {
-            "camera" : "medium_errors"
-        },
-
-        "8" : {
-            "camera" : "large_errors"
-        }
-    },
-
-    "fast_curve" : {
-        "1" : {
-            "mode_mask" : 5,
-            "camera" : "ideal_camera"
+            "number_of_modes" : 3
         },
         
-        "2" : {
-            "mode_mask" : 0
-        },
-
         "3" : {
-            "camera" : "small_errors"
-        },
-
-        "4" : {
-            "camera" : "large_errors"
+            "amplitude_variation" : 0.5,
+            "phase_variation" : 0.5
         }
     },
 
-    "errors_throughout" : {
+    "variance_throughout" : {
         "1" : {
-            "mode_mask" : 2,
-            "camera" : "small_errors"
-        },
-
-        "2" : {
-            "mode_mask" : 4
-        },
-
-        "3" : {
-            "mode_mask" : 6
-        },
-
-        "4" : {
-            "mode_mask" : 8
-        }
-    },
-
-    "errors_at_end" : {
-        "1" : {
-            "mode_mask" : 2,
+            "number_of_modes" : 2,
+            "amplitude_variation" : 0.5,
+            "phase_variation" : 0.5,
             "camera" : "ideal_camera"
         },
 
         "2" : {
-            "mode_mask" : 4
-        },
+            "number_of_modes" : 3
+        }
+    },
 
-        "3" : {
-            "mode_mask" : 6
-        },
-
-        "4" : {
-            "mode_mask" : 8
-        },
-
-        "5" : {
-            "camera" : "small_errors"
+    "opti_test_strat" : {
+        "1" : {
+            "amplitude_variation" : 1,
+            "phase_variation" : 1,
+            "number_of_modes" : 2,
+            "camera" : "ideal_camera"
         }
     }
 }

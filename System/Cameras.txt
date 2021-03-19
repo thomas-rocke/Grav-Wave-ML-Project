@@ -26,7 +26,7 @@
     },
 
 "small_errors" : {
-    "noise_variance" : 0.005,
+    "noise_variance" : 0.008,
     "exposure_limits" : [0.1, 1],
     "bit_depth" : 0,
     "blur_variance" : 0.1,

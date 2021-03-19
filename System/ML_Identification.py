@@ -21,7 +21,8 @@ import textwrap
 # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Hide Tensorflow info, warning and error messages
 
 from Gaussian_Beam import Hermite, Superposition, Laguerre
-from DataHandling import GenerateData, BasicGenerator, Dataset
+from Old_Data_Generators import GenerateData, BasicGenerator, Dataset
+from Superposition_Generator import SuperpositionGenerator
 import Logger
 from time import perf_counter
 from datetime import datetime
@@ -38,7 +39,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
-from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam
+from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 from ImageProcessing import ModeProcessor
@@ -75,7 +76,8 @@ class ML:
     '''
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
-                 optimiser: str = "Adamax",
+                 architecture: bool = "VGG16",
+                 optimiser: str = "Adam",
                  learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
         '''
@@ -86,13 +88,14 @@ class ML:
         self.data_generator = data_generator
         self.optimiser = optimiser
         self.learning_rate = learning_rate
+        self.architecture = architecture
         self.use_multiprocessing = use_multiprocessing
 
         LOG.debug(f"Locals: {locals()}")
 
         self.max_epochs = 150 # Max epochs before training is terminated
-        self.success_loss = 0.001 # Loss at which the training is considered successful
-        self.stagnation = 5 # Epochs of stagnation before terminating training stage
+        self.success_loss = 0.0001 # Loss at which the training is considered successful
+        self.stagnation = 8 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "stage": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
         self.errs = None
@@ -111,13 +114,13 @@ class ML:
         '''
         Magic method for the repr() function.
         '''
-        return self.__class__.__name__ + f"({self.data_generator}, '{self.optimiser}', {self.learning_rate}, {self.use_multiprocessing})"
+        return self.__class__.__name__ + f"({self.data_generator}, '{self.architecture}', '{self.optimiser}', {self.learning_rate}, {self.use_multiprocessing})"
 
     def copy(self):
         '''
         Copy the model object.
         '''
-        return ML(self.data_generator.copy(), self.optimiser, self.learning_rate, self.use_multiprocessing)
+        return ML(self.data_generator.copy(), self.architecture, self.optimiser, self.learning_rate, self.use_multiprocessing)
 
     def exists(self):
         '''
@@ -160,8 +163,7 @@ class ML:
         reduced_phases = K.minimum(phases, K.abs(diff - 1))
         loss = K.square(amplitudes + reduced_phases)
 
-        # K.print_tensor(phases)
-        # K.print_tensor(reduced_phases)
+        # K.print_tensor(K.mean(loss))
 
         return K.mean(loss, axis=-1)
 
@@ -178,54 +180,69 @@ class ML:
         # The VGG16 convolutional neural net (CNN) architecture was used to win ILSVR (Imagenet) competition in 2014
         # It is considered to be one of the best vision model architectures to date
 
-        # Our custom architecture:
+        if self.architecture == "VGG16":
+            LOG.debug("Loading the VGG16 architecture.")
+            model = VGG16(self.input_shape, len(self.classes)) # Set model to use VGG16 model
 
-        model = Sequential()
+        elif self.architecture == "VGG19":
+            LOG.debug("Loading the VGG19 architecture.")
+            model = VGG16(self.input_shape, len(self.classes), VGG19=True) # Set model to use VGG19 model
 
-        model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+        elif self.architecture == "default":
+            LOG.debug("Loading the default architecture.")
 
-        model.add(Conv2D(64, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model = Sequential()
 
-        model.add(Conv2D(128, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model.add(Conv2D(32, (3, 3), input_shape=self.input_shape, padding='same'))
+            model.add(Activation('relu'))
+            model.add(MaxPooling2D(pool_size=(2, 2)))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
 
-        model.add(Conv2D(256, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model.add(Conv2D(64, (3, 3), padding='same'))
+            model.add(Activation('relu'))
+            model.add(MaxPooling2D(pool_size=(2, 2)))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
 
-        model.add(Flatten())
-        model.add(Dropout(0.2))
+            model.add(Conv2D(128, (3, 3), padding='same'))
+            model.add(Activation('relu'))
+            model.add(MaxPooling2D(pool_size=(2, 2)))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
 
-        model.add(Dense(512, kernel_constraint=maxnorm(3)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model.add(Conv2D(256, (3, 3), padding='same'))
+            model.add(Activation('relu'))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
 
-        model.add(Dense(128, kernel_constraint=maxnorm(3)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.2))
-        model.add(BatchNormalization())
+            model.add(Flatten())
+            model.add(Dropout(0.2))
 
-        model.add(Dense(units=len(self.classes)))
-        model.add(Activation('sigmoid'))
+            model.add(Dense(512, kernel_constraint=maxnorm(3)))
+            model.add(Activation('relu'))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
+
+            model.add(Dense(128, kernel_constraint=maxnorm(3)))
+            model.add(Activation('relu'))
+            model.add(Dropout(0.2))
+            model.add(BatchNormalization())
+
+            model.add(Dense(units=len(self.classes)))
+            model.add(Activation('sigmoid'))
+
+        else:
+            LOG.critical(f"Unrecognised architecture '{self.architecture}'!")
+            print(log(f"[FATAL] Unrecognised architecture '{self.architecture}'!\n"))
+
+            sys.exit()
+
+        # model = keras.applications.VGG16(include_top=False, input_shape=self.input_shape, pooling='avg', classes=len(self.classes))
 
         LOG.debug("Keras model layers created.")
         LOG.debug("Compiling the model.")
 
-        # model = keras.applications.VGG16(include_top=False, input_shape=self.input_shape, pooling='avg', classes=len(self.classes))
-        # model = VGG16(self.input_shape, len(self.classes)) # Override model with VGG16 model
         model.compile(loss=self.loss, optimizer=eval(f"{self.optimiser}(learning_rate={self.learning_rate})"), metrics=[self.accuracy])
 
         LOG.debug(f"Model compiled. Optimiser: {self.optimiser}(learning_rate={self.learning_rate}).")
@@ -273,7 +290,7 @@ class ML:
         # Create the Keras model
 
         LOG.debug("Creating the Keras model.")
-        print(log("[INIT] Generating model (input shape = " + str(self.input_shape) + ", classes = " + str(len(self.classes)) + ", optimiser: " + self.optimiser + ")... "), end='')
+        print(log(f"[INIT] Generating model (architecture: {self.architecture}, input shape: {self.input_shape}, classes: {len(self.classes)}, optimiser: {self.optimiser})... "), end='')
 
         self.model = self.create_model(summary=False)
 
@@ -294,7 +311,7 @@ class ML:
             print(log(f"[TRAIN] |-> Size                : {len(self.data_generator)}."))
             print(log(f"[TRAIN] |-> Cores               : {cpu_count()}."))
             print(log(f"[TRAIN] |-> Classes             : {' '.join([str(i).replace(' ', '') for i in self.classes])}."))
-            print(log(f"[TRAIN] |-> Success Condition   : A loss of {self.success_loss}."))
+            print(log(f"[TRAIN] |-> Success Condition   : A loss of {self.success_loss * 1000 :.1f}m."))
             print(log(f"[TRAIN] |-> Terminate Condition : Reaching epoch {len(self.history['loss']) + self.max_epochs} or {self.stagnation} consecutive epochs of stagnation."))
             print(log(f"[TRAIN] |"))
 
@@ -336,14 +353,14 @@ class ML:
 
                     # Update the loading bar description with the current losses
 
-                    iterator.set_description(log(f"[TRAIN] |-> {indicator} Loss: {self.history['loss'][-1] :.4f} - Val Loss: {self.history['val_loss'][-1] :.4f} "))
+                    iterator.set_description(log(f"[TRAIN] |-> {indicator} Loss: {self.history['loss'][-1] * 1000 :.1f}m - Val Loss: {self.history['val_loss'][-1] * 1000 :.1f}m "))
 
                     # Check if gradient descent has diverged so training has failed
 
                     if isnan(self.history['loss'][-1]): # Loss is nan so training has failed
                         LOG.critical("Loss is 'nan' so training has diverged and failed.")
                         print(log("\n[TRAIN] V "))
-                        print(log("[FATAL] Training failed! Gradient descent diverged at epoch " + str(len(self.history['loss'])) + ".\n"))
+                        print(log(f"[FATAL] Training failed! Gradient descent diverged at epoch {len(self.history['loss'])}.\n"))
 
                         sys.exit()
 
@@ -354,7 +371,7 @@ class ML:
                         iterator.close()
 
                         print(log("[TRAIN] |"))
-                        print(log("[TRAIN] |-> " + str(self.success_loss) + " loss achieved at epoch " + str(len(self.history['loss'])) + "."))
+                        print(log(f"[TRAIN] |-> {self.success_loss * 1000 :.1f}m loss achieved at epoch {len(self.history['loss'])}."))
 
                         break
 
@@ -365,7 +382,7 @@ class ML:
                         iterator.close()
 
                         print(log("[TRAIN] |"))
-                        print(log("[WARN]  |-> Learning stagnated at epoch " + str(len(self.history['loss'])) + "."))
+                        print(log(f"[WARN]  |-> Learning stagnated at epoch {len(self.history['loss'])}."))
 
                         break
 
@@ -373,8 +390,9 @@ class ML:
 
             except KeyboardInterrupt:
                 LOG.warning("Keyboard interrupt detected. Will abort the training stage.")
+
                 print(log("[TRAIN] |"))
-                print(log("[WARN]  |-> Aborted at epoch " + str(len(self.history['loss']) + 1) + "!"))
+                print(log(f"[WARN]  |-> Aborted at epoch {len(self.history['loss']) + 1}!"))
 
             # Check if stage has reached the max epoch
 
@@ -382,7 +400,7 @@ class ML:
                 LOG.warning(f"Reached max epoch of {len(self.history['loss'])}.")
 
                 print(log("[TRAIN] |"))
-                print(log("[WARN]  |-> Reached max epoch of " + str(len(self.history['loss'])) + "!"))
+                print(log(f"[WARN]  |-> Reached max epoch of {len(self.history['loss'])}!"))
 
             print(log("[TRAIN] |"))
 
@@ -399,7 +417,7 @@ class ML:
                                                verbose=int(info))
 
         LOG.debug(f"Loss: {scores[0]} - Accuracy: {scores[1]}")
-        print(f"Loss: {scores[0] :.4f} - Accuracy: {scores[1] * 100 :.2f}%")
+        print(f"Loss: {scores[0] * 1000 :.1f}m - Accuracy: {scores[1] * 100 :.2f}%")
 
         # Training complete
 
@@ -465,16 +483,16 @@ class ML:
             LOG.debug("Generating axes as none were given.")
 
             fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
-            fig.suptitle(f"Training and Validation History for {str(self)}")
+            fig.suptitle(f"Training and Validation History for {self}")
             ax1.grid()
             ax2.grid()
 
-            ax1.plot(t, self.history['loss'], label="Training Loss")[0]
-            ax2.plot(t, self.history['accuracy'], label="Training Accuracy")[0]
-            ax1.plot(t, self.history['val_loss'], label="Validation Loss")[0]
-            ax2.plot(t, self.history['val_accuracy'], label="Validation Accuracy")[0]
+            ax1.plot(t, np.array(self.history['loss']) * 1000, label="Training Loss (m)")[0]
+            ax2.plot(t, np.array(self.history['accuracy']) * 100, label="Training Accuracy (%)")[0]
+            ax1.plot(t, np.array(self.history['val_loss']) * 1000, label="Validation Loss (m)")[0]
+            ax2.plot(t, np.array(self.history['val_accuracy']) * 100, label="Validation Accuracy (%)")[0]
 
-            ax2.set_ylim(0, 1)
+            ax2.set_ylim(0, 100)
 
         else:
             LOG.debug("Plotting history using axes given.")
@@ -482,10 +500,10 @@ class ML:
             ax1, ax2 = axes
             if not label: label = str(self)
 
-            ax1.plot(t, self.history['loss'], label=label)[0]
-            ax2.plot(t, self.history['val_loss'], label=label)[0]
+            ax1.plot(t, np.array(self.history['loss']) * 1000, label=label)[0]
+            ax2.plot(t, np.array(self.history['val_loss']) * 1000, label=label)[0]
 
-            if np.max(self.history['val_loss']) > ax2.get_ylim()[1]: ax2.set_ylim(0, np.max(self.history['val_loss']))
+            if np.max(self.history['val_loss']) * 1000 > ax2.get_ylim()[1]: ax2.set_ylim(0, np.max(self.history['val_loss']) * 1000)
 
         stage_change_indexes = [i for i in range(1, len(self.history['stage'])) if self.history['stage'][i] != self.history['stage'][i-1]]
         for i in stage_change_indexes:
@@ -495,14 +513,14 @@ class ML:
         LOG.debug("Formatting plot.")
 
         if t[-1] > ax1.get_xlim()[1]: plt.xlim(0, t[-1])
-        if np.max(self.history['loss']) > ax1.get_ylim()[1]: ax1.set_ylim(0, np.max(self.history['loss']))
+        if np.max(self.history['loss']) * 1000 > ax1.get_ylim()[1]: ax1.set_ylim(0, np.max(self.history['loss']) * 1000)
 
         ax1.set_ylim(0)
         ax2.set_ylim(0)
 
-        ax1.set_ylabel("Loss")
+        ax1.set_ylabel("Loss (m)")
         ax2.set_xlabel(f"{'Elapsed Time (mins)' if elapsed_time else 'Epoch'}")
-        ax2.set_ylabel(f"{'Accuracy' if axes == None else 'Validation Loss'}")
+        ax2.set_ylabel(f"{'Accuracy (%)' if axes == None else 'Validation Loss (m)'}")
 
         ax1.legend(loc="upper right")
         ax2.legend(loc="upper right")
@@ -522,18 +540,18 @@ class ML:
         else: LOG.info("Saving ML object history to files.")
         print(log("[SAVE] Saving model... "), end='')
 
-        os.makedirs(f"Models/{str(self)}", exist_ok=True) # Create directory for model
+        os.makedirs(f"Models/{self}", exist_ok=True) # Create directory for model
 
         if save_trained:
-            LOG.debug(f"Saving Keras model to 'Models/{str(self)}/model.h5'.")
-            self.model.save(f"Models/{str(self)}/model.h5")
+            LOG.debug(f"Saving Keras model to 'Models/{self}/model.h5'.")
+            self.model.save(f"Models/{self}/model.h5")
 
         for i in self.history:
-            LOG.debug(f"Saving performance history to 'Models/{str(self)}/{i}.txt'.")
-            np.savetxt(f"Models/{str(self)}/{i}.txt", self.history[i], delimiter=",")
+            LOG.debug(f"Saving performance history to 'Models/{self}/{i}.txt'.")
+            np.savetxt(f"Models/{self}/{i}.txt", self.history[i], delimiter=",")
 
-        LOG.debug(f"Saving classes to 'Models/{str(self)}/classes.txt'.")
-        np.savetxt(f"Models/{str(self)}/classes.txt", self.classes, fmt="%s", delimiter=",")
+        LOG.debug(f"Saving classes to 'Models/{self}/classes.txt'.")
+        np.savetxt(f"Models/{self}/classes.txt", self.classes, fmt="%s", delimiter=",")
 
         LOG.debug("Generating history plot for epochs.")
         self.plot(info=False, elapsed_time=False)
@@ -563,25 +581,25 @@ class ML:
         LOG.debug("Loading ML object from files.")
 
         if self.trained():
-            LOG.debug(f"Loading Keras model from 'Models/{str(self)}/model.h5'.")
+            LOG.debug(f"Loading Keras model from 'Models/{self}/model.h5'.")
 
             try:
-                self.model = keras.models.load_model(f"Models/{str(self)}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
+                self.model = keras.models.load_model(f"Models/{self}/model.h5", custom_objects={"loss": self.loss, "metrics": [self.accuracy]})
             except:
                 LOG.error("Model corrupted! Will now delete and reload.")
                 print("Model corrupted! Will now delete and reload.\n")
 
-                shutil.rmtree(f"Models/{str(self)}")
+                shutil.rmtree(f"Models/{self}")
                 self.load(save_trained, info)
 
                 return
 
         for i in self.history:
-            LOG.debug(f"Loading performance history from 'Models/{str(self)}/{i}.txt'.")
-            self.history[i] = np.loadtxt(f"Models/{str(self)}/{i}.txt", delimiter=",")
+            LOG.debug(f"Loading performance history from 'Models/{self}/{i}.txt'.")
+            self.history[i] = np.loadtxt(f"Models/{self}/{i}.txt", delimiter=",")
 
-        LOG.debug(f"Loading classes from 'Models/{str(self)}/classes.txt'.")
-        self.classes = np.loadtxt(f"Models/{str(self)}/classes.txt", dtype=str, delimiter="\n")
+        LOG.debug(f"Loading classes from 'Models/{self}/classes.txt'.")
+        self.classes = np.loadtxt(f"Models/{self}/classes.txt", dtype=str, delimiter="\n")
         self.classes = [eval(i.replace("H", "Hermite")) for i in self.classes]
 
         LOG.info("ML object loaded successfully!")
@@ -736,9 +754,9 @@ class ML:
         ax4.imshow(sup.phase_map(), cmap='jet')
         ax5.imshow(pred.phase_map(), cmap='jet')
         rects1 = ax3.bar(x - (width / 2), sup_amps, width, label='Actual', zorder=3)
-        rects2 = ax3.bar(x + (width / 2), pred_amps, width, yerr=amp_errs,  label='Reconstucted', zorder=3, capsize=10)
+        rects2 = ax3.bar(x + (width / 2), pred_amps, width, yerr=amp_errs,  label='Reconstucted', zorder=3)
         rects3 = ax6.bar(x - (width / 2), sup_phases, width, label='Actual', zorder=3)
-        rects4 = ax6.bar(x + (width / 2), pred_phases, width, yerr=phase_errs, label='Reconstucted', zorder=3, capsize=10)
+        rects4 = ax6.bar(x + (width / 2), pred_phases, width, yerr=phase_errs, label='Reconstucted', zorder=3)
         ax3.axhline(threshold, color='r', linestyle='--', zorder=5)
 
         # ax1.colorbar()
@@ -787,7 +805,7 @@ class ML:
         plt.close(fig)
         LOG.info("Comparison complete!")
 
-    def evaluate(self, N: int = 500, info: bool = False):
+    def evaluate(self, N: int = 100, info: bool = False):
         '''
         Evaluate the model by comparing against N randomly generated superpositions.
         '''
@@ -869,18 +887,21 @@ class ML:
 
             m = self.copy()
 
+            LOG.debug(f"Changing parameter '{param_name}' to '{test}'.")
+            print(log(f"[INFO] Changing parameter '{param_name}' to '{test}'... "), end='')
+
             if param_name in dir(m):
                 setattr(m, param_name, test)
 
-                LOG.debug(f"New model: {m}")
-                print(log(f"[INFO] New model: {m}\n"))
+                LOG.debug(f"New model: {m}.")
+                print(f"Done! New model: {m}.\n")
 
             elif param_name in dir(m.data_generator):
                 setattr(m.data_generator, param_name, test)
                 m.data_generator = m.data_generator.copy()
 
-                LOG.debug(f"New data generator: {m.data_generator}")
-                print(log(f"[INFO] New data generator: {m.data_generator}\n"))
+                LOG.debug(f"New data generator: {m.data_generator}.")
+                print(f"Done! New data generator: {m.data_generator}.\n")
 
             else:
                 LOG.critical(f"Parameter {param_name} does not exist!")
@@ -896,7 +917,7 @@ class ML:
 
             for time in (True, False):
                 fig, (ax1, ax2) = plt.subplots(2, figsize=(10, 8), sharex=True, gridspec_kw={'hspace': 0})
-                fig.suptitle(f"Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}")
+                fig.suptitle(f"Comparing {param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'")
                 ax1.grid()
                 ax2.grid()
 
@@ -906,20 +927,28 @@ class ML:
                 for m in models: m.plot(info=False, axes=(ax1, ax2), label=f"{param_name.replace('_', ' ').title()}: {getattr(m, param_name) if param_name in dir(m) else getattr(m.data_generator, param_name)}", elapsed_time=time)
 
                 if save:
-                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png'.")
+                    LOG.debug(f"Saving to 'Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png'.")
 
-                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    os.makedirs(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'", exist_ok=True) # Create directory for optimisations
+                    try:
+                        plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    except:
+                        plt.savefig(f"Optimisation/{self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
 
-                    plt.ylim(0, 0.0099)
-                    plt.ylim(0, 0.0099)
+                    ax1.set_ylim(0, 4.99)
+                    ax2.set_ylim(0, 1.99)
 
-                    os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}", exist_ok=True) # Create directory for optimisations
-                    plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}){' on BlueBear' if self.use_multiprocessing else ' on Desktop'}/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    os.makedirs(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'", exist_ok=True) # Create directory for optimisations
+                    try:
+                        plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'} for {param_range}.png", bbox_inches="tight", pad_inches=0) # Save image
+                    except:
+                        plt.savefig(f"Optimisation/Zoomed {self.data_generator.__class__.__name__}({self.data_generator.max_order}) on {'BlueBear' if self.use_multiprocessing else 'Desktop'} using '{self.architecture}' and '{self.optimiser}'/{param_name.replace('_', ' ').title()} by {'Elapsed Time' if time else 'Epoch'}.png", bbox_inches="tight", pad_inches=0) # Save image
+
                 else:
                     plt.show()
 
         LOG.info("Optimisation complete.\n")
+        print(log(f"[INFO] Optimisation complete!\n"))
 
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
@@ -998,54 +1027,41 @@ def log(message):
 
     return message
 
-def VGG16(input_shape, classes):
+def VGG16(input_shape, classes, VGG19: bool = False):
     '''
     Returns the VGG16 model.
     '''
     model = Sequential()
 
-    model.add(ZeroPadding2D((1, 1), input_shape=input_shape))
-    model.add(Convolution2D(64, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(input_shape=input_shape, filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(128, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(128, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(256, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    if VGG19: model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(ZeroPadding2D((1, 1)))
-    model.add(Convolution2D(512, (3, 3), activation='relu'))
-    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    if VGG19: model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     model.add(Flatten())
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(classes, activation='sigmoid'))
+    model.add(Dense(units=4096, activation="relu"))
+    model.add(Dense(units=4096, activation="relu"))
+    model.add(Dense(units=classes, activation="sigmoid"))
 
     return model
 
@@ -1199,11 +1215,34 @@ if __name__ == '__main__':
     # m.train()
     # m.save()
 
-    # data = BasicGenerator(amplitude_variation=0.5, phase_variation=1.0)
-    # data.new_stage() # Init stage 1
-    # data.new_stage() # Init stage 2
-    # data.new_stage() # Init stage 3
-    # data.new_stage() # Init stage 4
+    data = BasicGenerator(3, 3)
+    while data.new_stage(): pass
+    
+    m = ML(BasicGenerator(3, 3), use_multiprocessing=False)
+    m.load()
+
+    losses = []
+
+    for i in range(100):
+        sup = data.get_random()
+        true = [sup.contains(j).amplitude for j in data.hermite_modes] + [(sup.contains(j).phase + np.pi) / (2 * np.pi) for j in data.hermite_modes]
+
+        formatted_data = np.array([sup.superpose()[..., np.newaxis]]) # Convert to the correct format for our neural network
+        pred = m.model.predict(formatted_data)[0] # Make prediction using model
+
+        mask = np.greater_equal(true, 0)
+
+        diff = np.abs((pred * mask) - (true * mask))
+
+        amplitudes = diff * np.array([1 if i < len(m.classes) // 2 else 0 for i in range(len(m.classes))])
+        phases = diff * np.array([0 if i < len(m.classes) // 2 else 1 for i in range(len(m.classes))])
+
+        reduced_phases = np.minimum(phases, np.abs(diff - 1))
+        loss = np.square(amplitudes + reduced_phases)
+
+        losses.append(np.mean(loss, axis=-1))
+
+    print(np.mean(losses))
 
     # for i in tqdm(range(1000)): m.compare(data.get_random(), info=False, save=True)
 
@@ -1215,12 +1254,12 @@ if __name__ == '__main__':
     #     sup = data.get_random()
     #     m.compare(sup)
 
-    optimise("repeats", [2**n for n in range(1, 10)], plot=True, save=True)
-    optimise("batch_size", [2**n for n in range(9)], plot=True, save=True)
-    optimise("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
-    optimise("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
-    optimise("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
-    optimise("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=True, save=True)
+    # optimise("repeats", [2**n for n in range(1, 10)], plot=True, save=True)
+    # optimise("batch_size", [2**n for n in range(9)], plot=True, save=True)
+    # optimise("optimiser", ["SGD", "RMSprop", "Adam", "Adadelta", "Adagrad", "Adamax", "Nadam", "Ftrl"], plot=True, save=True)
+    # optimise("learning_rate", [round(0.1**n, n) for n in range(8)], plot=True, save=True)
+    # optimise("learning_rate", [0.001 * n for n in range(1, 9)], plot=True, save=True)
+    # optimise("learning_rate", [round(0.0001 * n, 4) for n in range(1, 9)], plot=True, save=True)
 
     # print(tf.config.list_physical_devices())
     # with tf.device("gpu:0"):
