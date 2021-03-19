@@ -70,7 +70,7 @@ class Hermite:
         '''
         Magic method for the str() function.
         '''
-        return "HG(" + str(self.l) + "," + str(self.m) + ")"
+        return "H(" + str(self.l) + "," + str(self.m) + ")"
 
     def __repr__(self):
         '''

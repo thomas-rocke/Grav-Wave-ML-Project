@@ -37,7 +37,7 @@ source ${VENV_PATH}/bin/activate
 #pip3 install tqdm matplotlib scikit-image opencv-python-headless
 
 # Execute your Python scripts
-cd ../System/
+cd ../../System/
 
 python3 Main.py -i "ML(Dataset('errors_at_end', 3))" -o "resolution" "[8, 16, 32, 64, 128]"
 python3 Main.py -i "ML(Dataset('errors_at_end', 3))" -o "resolution" "[64, 128, 256]"
