@@ -41,5 +41,14 @@
         "2" : {
             "number_of_modes" : 3
         }
+    },
+
+    "opti_test_strat" : {
+        "1" : {
+            "amplitude_variation" : 1,
+            "phase_variation" : 1,
+            "number_of_modes" : 2,
+            "camera" : "ideal_camera"
+        }
     }
 }

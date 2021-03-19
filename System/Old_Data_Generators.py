@@ -722,6 +722,9 @@ if __name__=='__main__':
     plt.show()
 
     x = Dataset(batch_size=6, max_order=3, training_strategy_name="errors_throughout")
+    x = BasicGenerator(batch_size=129)
     x.new_stage()
+    t = time.time()
     s = x[0]
     x.get_random().plot()
+    print(time.time() - t)
