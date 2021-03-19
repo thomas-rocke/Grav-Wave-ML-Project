@@ -112,7 +112,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
     def __repr__(self):
         '''
-        Magic method for the repr() function.
+        Magic method for the respr() function.
         '''
         return self.__class__.__name__ + f"({self.max_order}, {self.batch_size}, {self.repeats}, '{self.training_strategy_name}', {self.network_resolution}, {self.camera_resolution}, {self.starting_stage}, {self.info})"
 
@@ -120,7 +120,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
         '''
         Copy this data generator.
         '''
-        return SuperpositionGenerator()
+        return SuperpositionGenerator(self.max_order, self.batch_size, self.repeats, self.training_strategy_name, self.network_resolution, self.camera_resolution, self.starting_stage, self.info)
 
     def __len__(self):
         '''
