@@ -534,6 +534,19 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
+
+    fig, axes = plt.subplots(4, 4, figsize=(10, 10))
+
+    for i in range(4):
+        for j in range(4):
+            mode = Laguerre(i, j)
+
+            axes[i][j].axis('off')
+            axes[i][j].imshow(mode.superpose(), cmap='jet')
+            axes[i][j].set_title(f"Laguerre({i}, {j})")
+
+    plt.show()
+
     s1 = Superposition(Hermite(1, 0, amplitude=0.5, phase=np.pi/2), Hermite(0, 1, amplitude=0.5))
     s2 = Superposition(Hermite(1, 0, amplitude=0.5, phase=np.pi/2), Hermite(0, 1, amplitude=0.51))
     im1 = s1.superpose()
