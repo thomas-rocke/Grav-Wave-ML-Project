@@ -26,7 +26,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
     SuperpositionGenerator is the combination of BasicGenerator in the old generators, with new JSON and image processing techniques built in
     '''
 
-    def __init__(self, training_strategy_name:str="default", max_order:int=3, batch_size:int=128, repeats:int=64, network_resolution:int=128, camera_resolution:int=128, starting_stage:int=1, info:bool = False):
+    def __init__(self, max_order:int=3, batch_size:int=128, repeats:int=64, training_strategy_name:str="default", network_resolution:int=128, camera_resolution:int=128, starting_stage:int=1, info:bool = False):
         '''
         Init the class
         '''
@@ -120,7 +120,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
         '''
         Copy this data generator.
         '''
-        return eval(repr(self))
+        return SuperpositionGenerator()
 
     def __len__(self):
         '''
