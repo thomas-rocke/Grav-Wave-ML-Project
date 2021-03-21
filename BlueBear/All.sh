@@ -1,0 +1,6 @@
+sbatch 'OptimiseArc.sh'
+sbatch 'OptimiseLearn.sh'
+sbatch 'OptimiseOpti.sh'
+sbatch 'OptimiseRepBatch.sh'
+sbatch 'OptimiseRes.sh'
+sbatch 'OptimiseVar.sh'

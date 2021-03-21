@@ -37,7 +37,7 @@ source ${VENV_PATH}/bin/activate
 #pip3 install tqdm matplotlib scikit-image opencv-python-headless
 
 # Execute your Python scripts
-cd ../../System/
+cd ../System/
 
 python3 Main.py -i "ML(Dataset('stage_change_test', 5))" -t -s -e
 python3 Main.py -i "ML(Dataset('slow_curve', 5))" -t -s -e
