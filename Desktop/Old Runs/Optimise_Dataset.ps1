@@ -1,4 +1,4 @@
-cd ../../System/
+cd ../System/
 
 python Main.py -i "ML(BasicGenerator(3, 3), use_multiprocessing=False)" -o "starting_stage" "[1, 2]"
 python Main.py -i "ML(BasicGenerator(3, 3), use_multiprocessing=False)" -o "batch_size" "[2**n for n in range(9)]"
