@@ -53,7 +53,8 @@ def get_cams(camera_name:str = "ideal_camera"):
         return cams[camera_name]
     else:
         msg = "Camera '{}' not found, defaulting to 'ideal_camera'".format(camera_name)
-        print(LOG.error(msg))
+        LOG.error(msg)
+        print(msg)
         return cams['ideal_camera']
 
 
@@ -73,5 +74,6 @@ def get_strategy(training_strategy_name:str = "default"):
     else:
         msg = "Strategy '{}' not found, defaulting to 'default'".format(training_strategy_name)
         LOG.error(msg)
+        print(msg)
         return strats["default"]
     
