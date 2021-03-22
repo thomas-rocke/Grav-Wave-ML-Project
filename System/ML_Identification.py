@@ -77,7 +77,11 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  architecture: bool = "default",
+<<<<<<< HEAD
                  optimiser: str = "Adam",
+=======
+                 optimiser: str = "RMSprop",
+>>>>>>> cc65a977561d33cc6c9a323ee9eb282d67afe9a9
                  learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
         '''
@@ -95,7 +99,7 @@ class ML:
 
         self.max_epochs = 150 # Max epochs before training is terminated
         self.success_loss = 0.0001 # Loss at which the training is considered successful
-        self.stagnation = 8 # Epochs of stagnation before terminating training stage
+        self.stagnation = 5 # Epochs of stagnation before terminating training stage
         self.history = {"time": [], "stage": [], "loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
         self.model = None
         self.errs = None

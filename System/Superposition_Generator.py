@@ -54,7 +54,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
         self.hermite_modes = [Hermite(l=i, m=j, resolution=self.camera_resolution) for i in range(max_order) for j in range(max_order)]
         self.laguerre_modes = [Laguerre(p=i, m=j, resolution=self.camera_resolution) for i in range(self.max_order // 2) for j in range(self.max_order // 2)]
         self.gauss_modes = self.hermite_modes + self.laguerre_modes
-
+    
         # Setting parameter defaults, in case they are not defined by training strategy
         self.mode_processor.change_camera(get_cams("ideal_camera"))
         self.amplitude_variation = 0
@@ -202,7 +202,15 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
 
 if __name__ == "__main__":
-    gen = SuperpositionGenerator(training_strategy_name="opti_test_strat")
+    gen = SuperpositionGenerator(training_strategy_name="opti_test_strat", batch_size=5, camera_resolution=1200)
     gen.new_stage()
+<<<<<<< HEAD
     print(len(gen.combs))
     
+=======
+    gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
+    for i in range(5):
+        plt.imshow(gen[i][0][0])
+        plt.show()
+    
+>>>>>>> cc65a977561d33cc6c9a323ee9eb282d67afe9a9
