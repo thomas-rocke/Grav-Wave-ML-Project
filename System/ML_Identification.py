@@ -487,12 +487,12 @@ class ML:
             ax1.grid()
             ax2.grid()
 
-            ax1.plot(t, np.array(self.history['loss']) * 1000, label="Training Loss (m)")[0]
-            ax2.plot(t, np.array(self.history['accuracy']) * 100, label="Training Accuracy (%)")[0]
-            ax1.plot(t, np.array(self.history['val_loss']) * 1000, label="Validation Loss (m)")[0]
-            ax2.plot(t, np.array(self.history['val_accuracy']) * 100, label="Validation Accuracy (%)")[0]
+            ax1.plot(t, np.array(self.history['loss']) * 1000, label="Training Loss")[0]
+            ax2.plot(t, np.array(self.history['accuracy']) * 100, label="Training Accuracy")[0]
+            ax1.plot(t, np.array(self.history['val_loss']) * 1000, label="Validation Loss")[0]
+            ax2.plot(t, np.array(self.history['val_accuracy']) * 100, label="Validation Accuracy")[0]
 
-            ax2.set_ylim(0, 100)
+            ax2.set_ylim(0, 99.9)
 
         else:
             LOG.debug("Plotting history using axes given.")
@@ -523,7 +523,7 @@ class ML:
         ax2.set_ylabel(f"{'Accuracy (%)' if axes == None else 'Validation Loss (m)'}")
 
         ax1.legend(loc="upper right")
-        ax2.legend(loc="upper right")
+        ax2.legend(loc="lower right")
 
         if info:
             plt.show()
@@ -542,7 +542,7 @@ class ML:
 
         os.makedirs(f"Models/{self}", exist_ok=True) # Create directory for model
 
-        if save_trained:
+        if self.trained():
             LOG.debug(f"Saving Keras model to 'Models/{self}/model.h5'.")
             self.model.save(f"Models/{self}/model.h5")
 
