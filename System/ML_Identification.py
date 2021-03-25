@@ -542,7 +542,7 @@ class ML:
 
         os.makedirs(f"Models/{self}", exist_ok=True) # Create directory for model
 
-        if self.trained():
+        if save_trained:
             LOG.debug(f"Saving Keras model to 'Models/{self}/model.h5'.")
             self.model.save(f"Models/{self}/model.h5")
 
@@ -658,6 +658,8 @@ class ML:
             sys.exit()
 
         answer = Superposition(*modes) # Normalise the amplitudes
+
+        # mode_processor = ModeProcessor(camera={"noise_variance": self.data_generator.noise_variation, "exposure_limits": self.data_generator.exposure})
 
         # self.calculate_phase(data, answer)
 

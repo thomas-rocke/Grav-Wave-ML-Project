@@ -134,5 +134,7 @@ dmypy.json
 *.h5
 *workspace.code-workspace
 *.log
+*/Animations
+*/Cavity
 # *.txt
 # *.png
