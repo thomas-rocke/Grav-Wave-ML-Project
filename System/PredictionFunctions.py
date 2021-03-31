@@ -1,5 +1,9 @@
 import numpy as np
+import pathlib
+from tqdm import tqdm
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib.animation as animation
 from ImageProcessing import VideoProcessor, BaseProcessor, ModeProcessor
 from ML_Identification import ML
 from Old_Data_Generators import Dataset, BasicGenerator
@@ -9,32 +13,44 @@ import os
 LOG = Logger.get_logger(__name__)
 
 def visualise_video_predictions(video_file: str, model:ML):
-    resolution = model.data_generator.mode_processor.target_resolution
+    resolution = (64, 64)#model.data_generator.mode_processor.target_resolution
     fig, ax = plt.subplots(ncols=2)
-    ax[0].set_title("Processed input image")
-    ax[1].set_title("Image reconstruction of predictions")
-    processor = VideoProcessor(video_file)
+    ax[0].set_title("Processed Input Image")
+    ax[1].set_title("Image Reconstruction")
+    ax[0].axis('off')
+    ax[1].axis('off')
+    processor = VideoProcessor(video_file, resolution)
     predictions = np.zeros((resolution[0], resolution[1], processor.frameCount))
-    for i in range(processor.frameCount):
+
+    frames = []
+    for i in tqdm(range(processor.frameCount - 10), desc=pathlib.PurePath(video_file).name):
         img = processor[i]
         if i == 0:
             params = processor.get_bounding_box(processor.toGreyscale(img/np.linalg.norm(img)))
         processed_frame = processor.processImage(img, *params) # Get and process next frame
-        predicted_image = model.predict(processed_frame).superpose()
+        predicted = model.predict(processed_frame, info=False)
+        predicted_image = predicted.superpose()
         predictions[:,  :, i] = predicted_image
 
-        ax[0].imshow(processed_frame)
-        ax[1].imshow(predicted_image)
-        plt.pause(0.05)
-        #LOG.warning("Unexpected EOF")
-    plt.show()
+        f1 = ax[0].imshow(processed_frame, cmap='jet', animated=True)
+        ax[1].set_xlabel(predicted.latex_print())
+        f2 = ax[1].imshow(predicted_image, cmap='jet', animated=True)
+        frames.append([f1, f2])
+        # plt.pause(0.05)
+
+    ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True, repeat_delay=1000)
+    os.makedirs(f"Animations/{model}", exist_ok=True) # Create directory for model
+    ani.save(f'Animations/{model}/{pathlib.PurePath(video_file).name[:-4]}.gif', writer=animation.PillowWriter(fps=30))
+    # plt.show()
     return predictions
 
 def mode_sweep_test(model, modes, freqs, iterations):
     fig, ax = plt.subplots(ncols=2)
-    ax[0].set_title("Processed input image")
-    ax[1].set_title("Image reconstruction of predictions")
+    ax[0].set_title("Processed Input Image")
+    ax[1].set_title("Image Reconstruction")
     processor = ModeProcessor()
+
+    frames = []
     for step in range(iterations):
         for i, mode in enumerate(modes):
             mode.amplitude = np.sin(freqs[i] * step)
@@ -42,18 +58,120 @@ def mode_sweep_test(model, modes, freqs, iterations):
         img = Superposition(*modes).superpose()
         processed_frame = processor.getImage(img) # Get and process next frame
         predicted_image = model.predict(processed_frame).superpose()
-        ax[0].imshow(processed_frame)
-        ax[1].imshow(predicted_image)
-        plt.pause(0.05)
+
+        f1 = ax[0].imshow(processed_frame, cmap='jet', animated=True)
+        f2 = ax[1].imshow(predicted_image, cmap='jet', animated=True)
+        frames.append([f1, f2])
+
+    ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True, repeat_delay=1000)
+    ani.save('movie.mp4')
     plt.show()
 
-#os.chdir("System")
-fname = r"C:\Users\Tom\Documents\EditedBeamModes.mp4"
-model = ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+
+
+model = ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 0.6), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+model.train()
+model.save()
+model.load()
+model.evaluate()
+
+while model.data_generator.new_stage(): pass
+
+dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
+
+model = ML(BasicGenerator(5, 5, 1.0, 2.0, 0.1, (0.0, 0.6), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+model.train()
+model.save()
+model.load()
+model.evaluate()
+
+# while model.data_generator.new_stage(): pass
+
+dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
+
+model = ML(BasicGenerator(3, 9, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+model.train()
+model.save()
 model.load()
 
-[model.data_generator.new_stage() for i in range(3)]
+while model.data_generator.new_stage(): pass
 
+dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Test.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
+
+model = ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+model.train()
+model.save()
+model.load()
+
+while model.data_generator.new_stage(): pass
+
+dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
+
+model = ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+model.train()
+model.save()
+model.load()
+
+while model.data_generator.new_stage(): pass
+
+dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
+
+model = ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+model.train()
+model.save()
+model.load()
+
+while model.data_generator.new_stage(): pass
+
+dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
+
+model = ML(BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 8, 32, 64, 1, False), 'default', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+model.train()
+model.save()
+model.load()
+
+while model.data_generator.new_stage(): pass
+
+dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
+
+
+
+<<<<<<< HEAD
+# mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)
+# model.get_errs_of_model()
+# for i in range(1):
+#     model.compare(model.data_generator.get_random())
+# print(model.errs)
+=======
 model.get_errs_of_model()
 
 for i in range(1):
@@ -61,3 +179,4 @@ for i in range(1):
 print(model.errs)
 dat = visualise_video_predictions(fname, model)
 #mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)
+>>>>>>> 487fef4f61c8c058cbc119522acf25b5ffb99690

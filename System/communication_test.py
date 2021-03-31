@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from multiprocessing import Pool, cpu_count
-from DataHandling import Dataset, BasicGenerator
+from Old_Data_Generators import Dataset, BasicGenerator
 from ML_Identification import ML
 from Utils import *
 import random
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     ax[1].axhline(0.5, linestyle="--")
     offsets = np.linspace(-width/2, width/2, subsections)
 
-    model = ML(BasicGenerator(3, 3, 0.5, 0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
+    model = ML(BasicGenerator(3, 8, 0.5, 0.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
     modes = model.data_generator.hermite_modes[:subsections]
     right = 0

@@ -80,8 +80,12 @@ class ML:
 <<<<<<< HEAD
                  optimiser: str = "Adam",
 =======
+<<<<<<< HEAD
+                 optimiser: str = "Adam",
+=======
                  optimiser: str = "RMSprop",
 >>>>>>> cc65a977561d33cc6c9a323ee9eb282d67afe9a9
+>>>>>>> 487fef4f61c8c058cbc119522acf25b5ffb99690
                  learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
         '''
@@ -491,12 +495,12 @@ class ML:
             ax1.grid()
             ax2.grid()
 
-            ax1.plot(t, np.array(self.history['loss']) * 1000, label="Training Loss (m)")[0]
-            ax2.plot(t, np.array(self.history['accuracy']) * 100, label="Training Accuracy (%)")[0]
-            ax1.plot(t, np.array(self.history['val_loss']) * 1000, label="Validation Loss (m)")[0]
-            ax2.plot(t, np.array(self.history['val_accuracy']) * 100, label="Validation Accuracy (%)")[0]
+            ax1.plot(t, np.array(self.history['loss']) * 1000, label="Training Loss")[0]
+            ax2.plot(t, np.array(self.history['accuracy']) * 100, label="Training Accuracy")[0]
+            ax1.plot(t, np.array(self.history['val_loss']) * 1000, label="Validation Loss")[0]
+            ax2.plot(t, np.array(self.history['val_accuracy']) * 100, label="Validation Accuracy")[0]
 
-            ax2.set_ylim(0, 100)
+            ax2.set_ylim(0, 99.9)
 
         else:
             LOG.debug("Plotting history using axes given.")
@@ -527,7 +531,7 @@ class ML:
         ax2.set_ylabel(f"{'Accuracy (%)' if axes == None else 'Validation Loss (m)'}")
 
         ax1.legend(loc="upper right")
-        ax2.legend(loc="upper right")
+        ax2.legend(loc="lower right")
 
         if info:
             plt.show()
@@ -662,6 +666,8 @@ class ML:
             sys.exit()
 
         answer = Superposition(*modes) # Normalise the amplitudes
+
+        # mode_processor = ModeProcessor(camera={"noise_variance": self.data_generator.noise_variation, "exposure_limits": self.data_generator.exposure})
 
         # self.calculate_phase(data, answer)
 
