@@ -12,7 +12,7 @@ import time
 from Utils import meanError, get_cams
 
 import Logger
-
+from Profiler import profile
 LOG = Logger.get_logger(__name__)
 
 
@@ -366,7 +366,7 @@ if __name__ == "__main__":
     proc = VideoProcessor(fname)
     fig, ax = plt.subplots()
     ax.axis("off")
-    for i in range(proc.frameCount):
+    for i in range(1):
         t = time.time()
         img = proc.getImages(batch_size=1)[0]
         ax.imshow(img, animated=True)
