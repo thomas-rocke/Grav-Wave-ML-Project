@@ -84,8 +84,8 @@ class BaseProcessor(list):
         y_square = (y_vec - y_com)**2
 
 
-        sigma_x = int(4*np.sqrt(np.dot(x_square, clipped_im).sum()/norm))
-        sigma_y = int(4*np.sqrt(np.dot(y_square, clipped_im.transpose()).sum()/norm))
+        sigma_x = int(0.8*4*np.sqrt(np.dot(x_square, clipped_im).sum()/norm))
+        sigma_y = int(0.8*4*np.sqrt(np.dot(y_square, clipped_im.transpose()).sum()/norm))
         scale = np.max([sigma_x, sigma_y])
         return x_com, y_com, scale
     
@@ -105,19 +105,27 @@ class BaseProcessor(list):
         if SquareSide == 0:
             SquareSide = min(image.shape)
 
+        bounds = (int(SquareX - SquareSide/2), int(SquareX + SquareSide/2), int(SquareY - SquareSide/2), int(SquareY + SquareSide/2))
+        res = image[bounds[0]:bounds[1], bounds[2]:bounds[3]]
+
+        return res
+
+        """ im_bounds = image.shape
+
         new_image = np.zeros((SquareSide, SquareSide))
         x_start = int(SquareX - SquareSide/2)
         y_start = int(SquareY - SquareSide/2)
-        for i in range(SquareSide):
-            for j in range(SquareSide):
-                x = i + x_start
-                y = j + y_start
-                if x >= 0 and y >= 0:
-                    try:
-                        new_image[i, j] = image[x, y]
-                    except:
-                        pass
-        return new_image
+        x_end = x_start + SquareSide
+        y_end = y_start + SquareSide
+
+        x_bounds = (max([x_start, 0]), min(x_end, im_bounds[0] - 1))
+        y_bounds = (max([y_start, 0]), min(y_end, im_bounds[1] - 1))
+
+        x_diffs = (x_start - x_bounds[0], x_end - x_bounds[1])
+        y_diffs = (y_start - y_bounds[0], y_end - y_bounds[1])
+        
+        new_image[(x_diffs[0] + x_bounds[0]):(x_diffs[1] + x_bounds[1]), (y_diffs[0] + y_bounds[0]):(y_diffs[1] + y_bounds[1])] = image[x_bounds[0]:x_bounds[1], y_bounds[0]:y_bounds[1]]
+        return new_image """
 
     def changeResolution(self, image, target_resolution:tuple=(0, 0)):
         '''
@@ -269,9 +277,9 @@ class ModeProcessor(BaseProcessor):
         Perform all processing on target superposition image to preprare it for training.
         '''
         noisy_image = self.errorEffects(raw_image)
-        #SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
-        #resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
-        resized_image = self.processImage(noisy_image, noisy_image.shape[0], int(noisy_image.shape[0]/2), int(noisy_image.shape[1]/2))
+        SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
+        resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
+        #resized_image = self.processImage(noisy_image, noisy_image.shape[0], int(noisy_image.shape[0]/2), int(noisy_image.shape[1]/2))
         return resized_image
 
     # Error/Noise functions:

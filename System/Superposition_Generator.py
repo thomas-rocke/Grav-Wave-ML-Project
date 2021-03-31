@@ -207,9 +207,10 @@ if __name__ == "__main__":
     
     dat = gen[0]
 
-    fig, ax = plt.subplots(ncols=3)
-    ax[0].imshow(dat[0][0])
-    ax[1].imshow(dat[0][44])
-    ax[2].imshow(dat[0][55])
+    fig, ax = plt.subplots(ncols=10, nrows = 10)
+    for i in range(10):
+        for j in range(10):
+            ax[i, j].imshow(dat[0][10*i + j])
+            ax[i, j].axis("off")
     plt.show()
     
