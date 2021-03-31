@@ -165,8 +165,18 @@ dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmi
 
 
 
+<<<<<<< HEAD
 # mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)
 # model.get_errs_of_model()
 # for i in range(1):
 #     model.compare(model.data_generator.get_random())
 # print(model.errs)
+=======
+model.get_errs_of_model()
+
+for i in range(1):
+    model.compare(model.data_generator.get_random())
+print(model.errs)
+dat = visualise_video_predictions(fname, model)
+#mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)
+>>>>>>> 487fef4f61c8c058cbc119522acf25b5ffb99690
