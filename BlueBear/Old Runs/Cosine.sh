@@ -37,6 +37,6 @@ source ${VENV_PATH}/bin/activate
 #pip3 install tqdm matplotlib scikit-image opencv-python-headless
 
 # Execute your Python scripts
-cd ../System/
+cd ../../System/
 
 python3 Main.py -i "ML(BasicGenerator(3, 3, repeats=256), use_multiprocessing=True)" -l -o "cosine" "[True, False]"

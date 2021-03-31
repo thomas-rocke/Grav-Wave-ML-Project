@@ -77,7 +77,11 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  architecture: bool = "default",
+<<<<<<< HEAD
+                 optimiser: str = "Adam",
+=======
                  optimiser: str = "RMSprop",
+>>>>>>> cc65a977561d33cc6c9a323ee9eb282d67afe9a9
                  learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
         '''

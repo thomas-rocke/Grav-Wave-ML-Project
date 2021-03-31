@@ -201,6 +201,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 if __name__ == "__main__":
     gen = SuperpositionGenerator(training_strategy_name="opti_test_strat", batch_size=128, camera_resolution=128)
     gen.new_stage()
+
     gen.number_of_modes = 4
     gen._reset_combs()
     gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
@@ -213,4 +214,10 @@ if __name__ == "__main__":
             ax[i, j].imshow(dat[0][10*i + j])
             ax[i, j].axis("off")
     plt.show()
-    
+
+    print(len(gen.combs))
+
+    gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
+    for i in range(5):
+        plt.imshow(gen[i][0][0])
+        plt.show()
