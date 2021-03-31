@@ -38,6 +38,6 @@ source ${VENV_PATH}/bin/activate
 #pip3 install tqdm matplotlib scikit-image opencv-python-headless
 
 # Execute your Python scripts
-cd ../System/
+cd System/
 
 python3 Main.py -i "ML(BasicGenerator(5, 5, 1.0, 2.0, 0.1, (0.0, 0.6)), use_multiprocessing=True, optimiser='Adam', learning_rate=0.0001)" -t -s -e

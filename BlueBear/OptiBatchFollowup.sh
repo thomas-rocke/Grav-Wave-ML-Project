@@ -38,7 +38,7 @@ source ${VENV_PATH}/bin/activate
 #pip3 install tqdm matplotlib scikit-image opencv-python-headless
 
 # Execute your Python scripts
-cd ../System/
+cd System/
 
 python3 Main.py -i "ML(SuperpositionGenerator(3, batch_size=64, repeats=64, training_strategy_name='opti_test_strat'), use_multiprocessing=True, optimiser='RMSprop', learning_rate=0.0001)" -o "repeats" "[16, 32, 64, 128, 256]"
 python3 Main.py -i "ML(SuperpositionGenerator(3, batch_size=64, repeats=64, training_strategy_name='opti_test_strat'), use_multiprocessing=True, optimiser='RMSprop', learning_rate=0.0001)" -o "batch_size" "[16, 32, 64, 128, 256]"
