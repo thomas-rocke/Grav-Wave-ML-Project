@@ -145,11 +145,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
         '''
         Get inputs from list of superpositions.
         '''
-        inputs = [0]*len(sups)
-        for i, sup in enumerate(sups):
-            inputs[i] = self.mode_processor.getImage(sup.superpose())
-
-        return inputs
+        return np.array([self.mode_processor.getImage(sup.superpose()) for sup in sups])
 
     def get_classes(self):
         '''
@@ -182,6 +178,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
         return sup
 
+    @profile
     def __getitem__(self, index):
         '''
         Generates and returns one batch of data.
@@ -207,5 +204,12 @@ if __name__ == "__main__":
     gen.number_of_modes = 4
     gen._reset_combs()
     gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
-    gen[0]
+    
+    dat = gen[0]
+
+    fig, ax = plt.subplots(ncols=3)
+    ax[0].imshow(dat[0][0])
+    ax[1].imshow(dat[0][44])
+    ax[2].imshow(dat[0][55])
+    plt.show()
     
