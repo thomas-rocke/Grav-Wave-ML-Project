@@ -121,10 +121,10 @@ LZO/2.10-GCCcore-8.3.0
 Blosc/1.17.1-GCCcore-8.3.0
 PyTables/3.6.1-fosscuda-2019b-Python-3.7.4
 BEAR-Python-DataScience/2019b-fosscuda-2019b-Python-3.7.4-ppc64le
+Using TensorFlow backend.
 Traceback (most recent call last):
   File "Main.py", line 4, in <module>
     from ML_Identification import *
-  File "/rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/System/ML_Identification.py", line 80
-    <<<<<<< HEAD
-     ^
-SyntaxError: invalid syntax
+  File "/rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/System/ML_Identification.py", line 42, in <module>
+    from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
+ImportError: cannot import name 'Ftrl' from 'keras.optimizers' (/rds/bear-apps/2019b/EL8-p9/software/Keras/2.3.1-fosscuda-2019b-Python-3.7.4/lib/python3.7/site-packages/keras/optimizers.py)
