@@ -78,10 +78,10 @@ model.evaluate()
 while model.data_generator.new_stage(): pass
 
 dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
 
 model = ML(BasicGenerator(5, 5, 1.0, 2.0, 0.1, (0.0, 0.6), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
 model.train()
@@ -89,13 +89,13 @@ model.save()
 model.load()
 model.evaluate()
 
-while model.data_generator.new_stage(): pass
+# while model.data_generator.new_stage(): pass
 
 dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
 
 model = ML(BasicGenerator(3, 9, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
 model.train()
@@ -105,11 +105,11 @@ model.load()
 while model.data_generator.new_stage(): pass
 
 dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Test.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Test.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
 
 model = ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
 model.train()
@@ -119,10 +119,10 @@ model.load()
 while model.data_generator.new_stage(): pass
 
 dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
 
 model = ML(BasicGenerator(3, 3, 1.0, 2.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
 model.train()
@@ -132,10 +132,10 @@ model.load()
 while model.data_generator.new_stage(): pass
 
 dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
 
 model = ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
 model.train()
@@ -145,10 +145,10 @@ model.load()
 while model.data_generator.new_stage(): pass
 
 dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
 
 model = ML(BasicGenerator(5, 5, 0.5, 1.0, 0.1, (0.0, 1.0), 8, 32, 64, 1, False), 'default', 'Adam', 0.0001, False) # ML(BasicGenerator(3, 3, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, False, 1), 'Adamax', 0.0001, False)
 model.train()
@@ -158,10 +158,10 @@ model.load()
 while model.data_generator.new_stage(): pass
 
 dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
-dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Video2.mov", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\Edited2.mp4", model)
+# dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmingham\Uni\Year 4\Project\Grav-Wave-ML-Project\Cavity\LIGO2.mp4", model)
 
 
 

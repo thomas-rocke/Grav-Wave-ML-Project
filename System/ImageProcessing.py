@@ -64,8 +64,8 @@ class BaseProcessor(list):
         scale = int((4*np.mean([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.mean([b[2] for b in blobs]))/np.sqrt(2))
 
         print(center_x, center_y, scale)
-        # return center_x * 3, center_y / 2, scale * 1.8
-        return center_x * 2, center_y, scale * 1
+        # return int(center_x * 2.4), center_y // 1.6, scale // 1.05    # LIGO
+        return center_x * 2, center_y, scale * 1         # VIDEO
     
     def _widthModel(self, SquareSide, SquareX, SquareY, image):
         # Model used in maximisation problem to find bounding box
