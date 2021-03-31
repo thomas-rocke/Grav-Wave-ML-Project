@@ -1,288 +1,0 @@
-GCCcore/8.3.0
-zlib/1.2.11-GCCcore-8.3.0
-binutils/2.32-GCCcore-8.3.0
-GCC/8.3.0
-CUDA/10.1.243-GCC-8.3.0
-gcccuda/2019b
-numactl/2.0.12-GCCcore-8.3.0
-XZ/5.2.4-GCCcore-8.3.0
-libxml2/2.9.9-GCCcore-8.3.0
-libpciaccess/0.14-GCCcore-8.3.0
-hwloc/1.11.12-GCCcore-8.3.0
-UCX/1.6.1-GCCcore-8.3.0
-OpenMPI/3.1.6-gcccuda-2019b
-OpenBLAS/0.3.7-GCC-8.3.0
-gompic/2019b
-FFTW/3.3.8-gompic-2019b
-ScaLAPACK/2.0.2-gompic-2019b
-fosscuda/2019b
-bzip2/1.0.8-GCCcore-8.3.0
-ncurses/6.1-GCCcore-8.3.0
-libreadline/8.0-GCCcore-8.3.0
-ncurses/6.1-GCCcore-8.3.0
-Tcl/8.6.9-GCCcore-8.3.0
-SQLite/3.29.0-GCCcore-8.3.0
-GMP/6.1.2-GCCcore-8.3.0
-libffi/3.2.1-GCCcore-8.3.0
-Python/3.7.4-GCCcore-8.3.0
-SciPy-bundle/2019.10-fosscuda-2019b-Python-3.7.4
-zlib/1.2.11-GCCcore-8.3.0
-NASM/2.14.02-GCCcore-8.3.0
-x264/20190925-GCCcore-8.3.0
-LAME/3.100-GCCcore-8.3.0
-x265/3.2-GCCcore-8.3.0
-expat/2.2.7-GCCcore-8.3.0
-libpng/1.6.37-GCCcore-8.3.0
-freetype/2.10.1-GCCcore-8.3.0
-util-linux/2.34-GCCcore-8.3.0
-fontconfig/2.13.1-GCCcore-8.3.0
-freetype/2.10.1-GCCcore-8.3.0
-X11/20190717-GCCcore-8.3.0
-freetype/2.10.1-GCCcore-8.3.0
-fontconfig/2.13.1-GCCcore-8.3.0
-FriBidi/1.0.5-GCCcore-8.3.0
-FFmpeg/4.2.1-GCCcore-8.3.0
-libjpeg-turbo/2.0.3-GCCcore-8.3.0
-libpng/1.6.37-GCCcore-8.3.0
-LibTIFF/4.0.10-GCCcore-8.3.0
-JasPer/2.0.14-GCCcore-8.3.0
-Java/11.0.2
-Java/11.0.2
-ant/1.10.7-Java-11
-gettext/0.20.1-GCCcore-8.3.0
-PCRE/8.43-GCCcore-8.3.0
-GLib/2.62.0-GCCcore-8.3.0
-ATK/2.34.1-GCCcore-8.3.0
-DBus/1.13.12-GCCcore-8.3.0
-at-spi2-core/2.34.0-GCCcore-8.3.0
-at-spi2-atk/2.34.1-GCCcore-8.3.0
-Gdk-Pixbuf/2.38.2-GCCcore-8.3.0
-pixman/0.38.4-GCCcore-8.3.0
-cairo/1.16.0-GCCcore-8.3.0
-ICU/64.2-GCCcore-8.3.0
-HarfBuzz/2.6.4-GCCcore-8.3.0
-Pango/1.44.7-GCCcore-8.3.0
-nettle/3.5.1-GCCcore-8.3.0
-libdrm/2.4.99-GCCcore-8.3.0
-LLVM/9.0.0-GCCcore-8.3.0
-libunwind/1.3.1-GCCcore-8.3.0
-Mesa/19.1.7-GCCcore-8.3.0
-libepoxy/1.5.4-GCCcore-8.3.0
-GTK+/3.24.13-GCCcore-8.3.0
-OpenCV/4.2.0-fosscuda-2019b-Python-3.7.4
-Szip/2.1.1-GCCcore-8.3.0
-HDF5/1.10.5-gompic-2019b
-h5py/2.10.0-fosscuda-2019b-Python-3.7.4
-cuDNN/7.6.4.38-gcccuda-2019b
-NCCL/2.4.8-gcccuda-2019b
-TensorFlow/2.0.0-fosscuda-2019b-Python-3.7.4
-libyaml/0.2.2-GCCcore-8.3.0
-PyYAML/5.1.2-GCCcore-8.3.0
-MPFR/4.0.2-GCCcore-8.3.0
-Pillow/6.2.1-GCCcore-8.3.0
-magma/2.5.4-fosscuda-2019b
-PyTorch/1.4.0-fosscuda-2019b-Python-3.7.4
-bokeh/1.4.0-fosscuda-2019b-Python-3.7.4
-dask/2.8.0-fosscuda-2019b-Python-3.7.4
-Tk/8.6.9-GCCcore-8.3.0
-Tkinter/3.7.4-GCCcore-8.3.0
-matplotlib/3.1.1-fosscuda-2019b-Python-3.7.4
-TinyDB/3.15.2-GCCcore-8.3.0
-libxslt/1.1.34-GCCcore-8.3.0
-lxml/4.4.2-GCCcore-8.3.0
-Pillow-SIMD/6.0.0-GCCcore-8.3.0
-torchvision/0.5.0-fosscuda-2019b-Python-3.7.4-PyTorch-1.4.0
-Mako/1.1.0-GCCcore-8.3.0
-libgpuarray/0.7.6-fosscuda-2019b-Python-3.7.4
-Theano/1.0.4-fosscuda-2019b-Python-3.7.4
-tensorflow_probability/0.8.0-fosscuda-2019b-Python-3.7.4
-scikit-image/0.16.2-fosscuda-2019b-Python-3.7.4
-tqdm/4.41.1-GCCcore-8.3.0
-SoftRas/f644279-fosscuda-2019b-Python-3.7.4-PyTorch-1.4.0
-imageio/2.6.1-fosscuda-2019b-Python-3.7.4
-OpenPGM/5.2.122-GCCcore-8.3.0
-libsodium/1.0.18-GCCcore-8.3.0
-ZeroMQ/4.3.2-GCCcore-8.3.0
-IPython/7.9.0-fosscuda-2019b-Python-3.7.4
-PyTorch3D/0.1.1-fosscuda-2019b-Python-3.7.4-PyTorch-1.4.0
-neural_renderer_pytorch/1.1.3-fosscuda-2019b-Python-3.7.4-PyTorch-1.4.0
-Keras/2.3.1-fosscuda-2019b-Python-3.7.4
-scikit-image/0.16.2-fosscuda-2019b-Python-3.7.4
-hdf5storage/0.1.15-fosscuda-2019b-Python-3.7.4
-detectron2/0.1.1-fosscuda-2019b-Python-3.7.4
-libgpuarray/0.7.6-fosscuda-2019b-Python-3.7.4
-imageio-ffmpeg/0.3.0-fosscuda-2019b-Python-3.7.4
-imageio/2.6.1-fosscuda-2019b-Python-3.7.4
-hypothesis/4.44.2-GCCcore-8.3.0-Python-3.7.4
-Mako/1.1.0-GCCcore-8.3.0
-Globus-CLI/1.11.0-GCCcore-8.3.0-Python-3.7.4
-numexpr/2.7.1-fosscuda-2019b-Python-3.7.4
-LZO/2.10-GCCcore-8.3.0
-Blosc/1.17.1-GCCcore-8.3.0
-PyTables/3.6.1-fosscuda-2019b-Python-3.7.4
-BEAR-Python-DataScience/2019b-fosscuda-2019b-Python-3.7.4-ppc64le
-Using TensorFlow backend.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][95m[1m____________________| ML(Dataset('stage_change_test', 3, 128, 32, 50, 1, True), 'Adamax', 0.0001, True) |____________________
-[0m
-[92m[INIT][0m Initialising dataset... Done!
-[92m[INIT][0m Generating model (input shape = (128, 128, 1), classes = 18, optimiser: Adamax)... Done!
-
-[92m[TRAIN][0m Training...
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 1 / 3.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('stage_change_test', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 100 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0488 - Val Loss: 0.0225:   0%|          | 0/100 [00:44<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0488 - Val Loss: 0.0225:   1%|          | 1/100 [00:44<1:13:58, 44.83s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0448 - Val Loss: 0.0258:   1%|          | 1/100 [01:02<1:13:58, 44.83s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0448 - Val Loss: 0.0258:   2%|▏         | 2/100 [01:02<1:00:02, 36.76s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0451 - Val Loss: 0.0327:   2%|▏         | 2/100 [01:17<1:00:02, 36.76s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0451 - Val Loss: 0.0327:   3%|▎         | 3/100 [01:17<48:55, 30.26s/it]  [92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0408 - Val Loss: 0.0322:   3%|▎         | 3/100 [01:32<48:55, 30.26s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0408 - Val Loss: 0.0322:   4%|▍         | 4/100 [01:32<41:08, 25.71s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0384 - Val Loss: 0.0333:   4%|▍         | 4/100 [01:47<41:08, 25.71s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0384 - Val Loss: 0.0333:   5%|▌         | 5/100 [01:47<35:28, 22.41s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0366 - Val Loss: 0.0328:   5%|▌         | 5/100 [02:02<35:28, 22.41s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0366 - Val Loss: 0.0328:   6%|▌         | 6/100 [02:02<31:38, 20.19s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0341 - Val Loss: 0.0290:   6%|▌         | 6/100 [02:20<31:38, 20.19s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0341 - Val Loss: 0.0290:   7%|▋         | 7/100 [02:20<30:09, 19.46s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0331 - Val Loss: 0.0271:   7%|▋         | 7/100 [02:39<30:09, 19.46s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0331 - Val Loss: 0.0271:   8%|▊         | 8/100 [02:39<29:27, 19.22s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0308 - Val Loss: 0.0248:   8%|▊         | 8/100 [02:57<29:27, 19.22s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0308 - Val Loss: 0.0248:   9%|▉         | 9/100 [02:57<28:54, 19.06s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0339 - Val Loss: 0.0253:   9%|▉         | 9/100 [03:15<28:54, 19.06s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0339 - Val Loss: 0.0253:  10%|█         | 10/100 [03:15<28:12, 18.80s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0260 - Val Loss: 0.0138:  10%|█         | 10/100 [03:34<28:12, 18.80s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0260 - Val Loss: 0.0138:  11%|█         | 11/100 [03:34<27:42, 18.68s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0265 - Val Loss: 0.0176:  11%|█         | 11/100 [03:49<27:42, 18.68s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0265 - Val Loss: 0.0176:  12%|█▏        | 12/100 [03:49<25:41, 17.52s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0252 - Val Loss: 0.0188:  12%|█▏        | 12/100 [04:07<25:41, 17.52s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0252 - Val Loss: 0.0188:  13%|█▎        | 13/100 [04:07<25:54, 17.86s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0271 - Val Loss: 0.0175:  13%|█▎        | 13/100 [04:22<25:54, 17.86s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0271 - Val Loss: 0.0175:  14%|█▍        | 14/100 [04:22<24:13, 16.90s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0244 - Val Loss: 0.0150:  14%|█▍        | 14/100 [04:41<24:13, 16.90s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0244 - Val Loss: 0.0150:  15%|█▌        | 15/100 [04:41<24:38, 17.39s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0272 - Val Loss: 0.0204:  15%|█▌        | 15/100 [04:55<24:38, 17.39s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0272 - Val Loss: 0.0204:  15%|█▌        | 15/100 [04:55<27:55, 19.71s/it]
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][92m[TRAIN][0m[96m |[0m
-[93m[WARN][0m [96m |[0m[96m->[0m Learning stagnated at epoch 16.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 2 / 3.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('stage_change_test', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 116 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0468 - Val Loss: 0.0280:   0%|          | 0/100 [00:15<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0468 - Val Loss: 0.0280:   1%|          | 1/100 [00:15<25:11, 15.27s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0384 - Val Loss: 0.0279:   1%|          | 1/100 [00:33<25:11, 15.27s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0384 - Val Loss: 0.0279:   2%|▏         | 2/100 [00:33<26:20, 16.13s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0400 - Val Loss: 0.0237:   2%|▏         | 2/100 [00:51<26:20, 16.13s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0400 - Val Loss: 0.0237:   3%|▎         | 3/100 [00:51<27:05, 16.75s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0429 - Val Loss: 0.0271:   3%|▎         | 3/100 [01:09<27:05, 16.75s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0429 - Val Loss: 0.0271:   4%|▍         | 4/100 [01:09<27:14, 17.02s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0381 - Val Loss: 0.0242:   4%|▍         | 4/100 [01:23<27:14, 17.02s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0381 - Val Loss: 0.0242:   5%|▌         | 5/100 [01:23<25:48, 16.30s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0318 - Val Loss: 0.0233:   5%|▌         | 5/100 [01:41<25:48, 16.30s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0318 - Val Loss: 0.0233:   6%|▌         | 6/100 [01:41<26:15, 16.76s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0392 - Val Loss: 0.0264:   6%|▌         | 6/100 [01:59<26:15, 16.76s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0392 - Val Loss: 0.0264:   7%|▋         | 7/100 [01:59<26:40, 17.20s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0387 - Val Loss: 0.0262:   7%|▋         | 7/100 [02:14<26:40, 17.20s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0387 - Val Loss: 0.0262:   8%|▊         | 8/100 [02:14<25:20, 16.53s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0324 - Val Loss: 0.0241:   8%|▊         | 8/100 [02:33<25:20, 16.53s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0324 - Val Loss: 0.0241:   9%|▉         | 9/100 [02:33<25:48, 17.02s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0380 - Val Loss: 0.0258:   9%|▉         | 9/100 [02:51<25:48, 17.02s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0380 - Val Loss: 0.0258:  10%|█         | 10/100 [02:51<25:59, 17.33s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0341 - Val Loss: 0.0225:  10%|█         | 10/100 [03:09<25:59, 17.33s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0341 - Val Loss: 0.0225:  11%|█         | 11/100 [03:09<26:19, 17.75s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0335 - Val Loss: 0.0227:  11%|█         | 11/100 [03:24<26:19, 17.75s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0335 - Val Loss: 0.0227:  12%|█▏        | 12/100 [03:24<24:43, 16.86s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0272 - Val Loss: 0.0207:  12%|█▏        | 12/100 [03:39<24:43, 16.86s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0272 - Val Loss: 0.0207:  13%|█▎        | 13/100 [03:39<23:35, 16.27s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0245 - Val Loss: 0.0197:  13%|█▎        | 13/100 [03:54<23:35, 16.27s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0245 - Val Loss: 0.0197:  14%|█▍        | 14/100 [03:54<22:48, 15.91s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0226 - Val Loss: 0.0187:  14%|█▍        | 14/100 [04:12<22:48, 15.91s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0226 - Val Loss: 0.0187:  15%|█▌        | 15/100 [04:12<23:33, 16.62s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0368 - Val Loss: 0.0205:  15%|█▌        | 15/100 [04:31<23:33, 16.62s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0368 - Val Loss: 0.0205:  15%|█▌        | 15/100 [04:31<25:38, 18.10s/it]
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][92m[TRAIN][0m[96m |[0m
-[93m[WARN][0m [96m |[0m[96m->[0m Learning stagnated at epoch 32.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 3 / 3.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('stage_change_test', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 132 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0495 - Val Loss: 0.0364:   0%|          | 0/100 [00:15<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0495 - Val Loss: 0.0364:   1%|          | 1/100 [00:15<24:48, 15.04s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0364 - Val Loss: 0.0321:   1%|          | 1/100 [00:30<24:48, 15.04s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0364 - Val Loss: 0.0321:   2%|▏         | 2/100 [00:30<24:49, 15.20s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0318 - Val Loss: 0.0302:   2%|▏         | 2/100 [00:49<24:49, 15.20s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0318 - Val Loss: 0.0302:   3%|▎         | 3/100 [00:49<26:34, 16.44s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0490 - Val Loss: 0.0340:   3%|▎         | 3/100 [01:05<26:34, 16.44s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0490 - Val Loss: 0.0340:   4%|▍         | 4/100 [01:05<25:38, 16.03s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0358 - Val Loss: 0.0306:   4%|▍         | 4/100 [01:23<25:38, 16.03s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0358 - Val Loss: 0.0306:   5%|▌         | 5/100 [01:23<26:25, 16.69s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0530 - Val Loss: 0.0335:   5%|▌         | 5/100 [01:41<26:25, 16.69s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0530 - Val Loss: 0.0335:   5%|▌         | 5/100 [01:41<32:03, 20.25s/it][92m[TRAIN][0m[96m |[0m
-[93m[WARN][0m [96m |[0m[96m->[0m Learning stagnated at epoch 38.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Evaluating : 
-Loss: 0.0412 - Accuracy: 55.73%
-[92m[TRAIN][0m[96m V [0m
-[92m[TRAIN][0m Done!
-
-[94m[INFO][0m Training complete after 11 minutes and 18 seconds.
-
-[92m[SAVE][0m Saving model... Done!
-
-Using TensorFlow backend.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][95m[1m____________________| ML(Dataset('slow_curve', 3, 128, 32, 50, 1, True), 'Adamax', 0.0001, True) |____________________
-[0m
-[92m[INIT][0m Initialising dataset... Done!
-[92m[INIT][0m Generating model (input shape = (128, 128, 1), classes = 18, optimiser: Adamax)... Done!
-
-[92m[TRAIN][0m Training...
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 1 / 8.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('slow_curve', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 100 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0464 - Val Loss: 0.0151:   0%|          | 0/100 [00:45<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0464 - Val Loss: 0.0151:   1%|          | 1/100 [00:45<1:15:18, 45.64s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0431 - Val Loss: 0.0208:   1%|          | 1/100 [01:03<1:15:18, 45.64s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0431 - Val Loss: 0.0208:   2%|▏         | 2/100 [01:03<1:01:06, 37.42s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0431 - Val Loss: 0.0216:   2%|▏         | 2/100 [01:21<1:01:06, 37.42s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0431 - Val Loss: 0.0216:   3%|▎         | 3/100 [01:21<51:01, 31.57s/it]  [92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0382 - Val Loss: 0.0217:   3%|▎         | 3/100 [01:36<51:01, 31.57s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0382 - Val Loss: 0.0217:   4%|▍         | 4/100 [01:36<42:29, 26.56s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0344 - Val Loss: 0.0241:   4%|▍         | 4/100 [01:51<42:29, 26.56s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0344 - Val Loss: 0.0241:   5%|▌         | 5/100 [01:51<36:30, 23.05s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0329 - Val Loss: 0.0224:   5%|▌         | 5/100 [02:06<36:30, 23.05s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0329 - Val Loss: 0.0224:   6%|▌         | 6/100 [02:06<32:17, 20.61s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0298 - Val Loss: 0.0186:   6%|▌         | 6/100 [02:21<32:17, 20.61s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0298 - Val Loss: 0.0186:   7%|▋         | 7/100 [02:21<29:11, 18.83s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0288 - Val Loss: 0.0179:   7%|▋         | 7/100 [02:39<29:11, 18.83s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0288 - Val Loss: 0.0179:   8%|▊         | 8/100 [02:39<28:40, 18.70s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0287 - Val Loss: 0.0199:   8%|▊         | 8/100 [02:57<28:40, 18.70s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0287 - Val Loss: 0.0199:   9%|▉         | 9/100 [02:57<28:10, 18.57s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0319 - Val Loss: 0.0215:   9%|▉         | 9/100 [03:15<28:10, 18.57s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0319 - Val Loss: 0.0215:  10%|█         | 10/100 [03:15<27:32, 18.36s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0247 - Val Loss: 0.0108:  10%|█         | 10/100 [03:30<27:32, 18.36s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0247 - Val Loss: 0.0108:  11%|█         | 11/100 [03:30<25:51, 17.43s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0228 - Val Loss: 0.0108:  11%|█         | 11/100 [03:45<25:51, 17.43s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0228 - Val Loss: 0.0108:  12%|█▏        | 12/100 [03:45<24:21, 16.61s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0208 - Val Loss: 0.0100:  12%|█▏        | 12/100 [04:03<24:21, 16.61s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0208 - Val Loss: 0.0100:  13%|█▎        | 13/100 [04:03<24:43, 17.05s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0242 - Val Loss: 0.0111:  13%|█▎        | 13/100 [04:22<24:43, 17.05s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0242 - Val Loss: 0.0111:  14%|█▍        | 14/100 [04:22<25:00, 17.45s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0261 - Val Loss: 0.0123:  14%|█▍        | 14/100 [04:37<25:00, 17.45s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0261 - Val Loss: 0.0123:  15%|█▌        | 15/100 [04:37<23:59, 16.94s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0237 - Val Loss: 0.0115:  15%|█▌        | 15/100 [04:53<23:59, 16.94s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0237 - Val Loss: 0.0115:  16%|█▌        | 16/100 [04:53<23:01, 16.45s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0223 - Val Loss: 0.0110:  16%|█▌        | 16/100 [05:08<23:01, 16.45s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0223 - Val Loss: 0.0110:  17%|█▋        | 17/100 [05:08<22:19, 16.14s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0215 - Val Loss: 0.0104:  17%|█▋        | 17/100 [05:27<22:19, 16.14s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0215 - Val Loss: 0.0104:  18%|█▊        | 18/100 [05:27<23:02, 16.86s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0246 - Val Loss: 0.0134:  18%|█▊        | 18/100 [05:41<23:02, 16.86s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0246 - Val Loss: 0.0134:  19%|█▉        | 19/100 [05:41<21:52, 16.20s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0216 - Val Loss: 0.0124:  19%|█▉        | 19/100 [05:56<21:52, 16.20s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0216 - Val Loss: 0.0124:  20%|██        | 20/100 [05:56<20:56, 15.71s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0203 - Val Loss: 0.0113:  20%|██        | 20/100 [06:11<20:56, 15.71s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0203 - Val Loss: 0.0113:  21%|██        | 21/100 [06:11<20:22, 15.48s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0193 - Val Loss: 0.0106:  21%|██        | 21/100 [06:30<20:22, 15.48s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0193 - Val Loss: 0.0106:  22%|██▏       | 22/100 [06:30<21:29, 16.53s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0239 - Val Loss: 0.0116:  22%|██▏       | 22/100 [06:49<21:29, 16.53s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0239 - Val Loss: 0.0116:  23%|██▎       | 23/100 [06:49<22:07, 17.24s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0199 - Val Loss: 0.0096:  23%|██▎       | 23/100 [07:04<22:07, 17.24s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0199 - Val Loss: 0.0096:  24%|██▍       | 24/100 [07:04<21:09, 16.70s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0181 - Val Loss: 0.0099:  24%|██▍       | 24/100 [07:22<21:09, 16.70s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0181 - Val Loss: 0.0099:  25%|██▌       | 25/100 [07:22<21:30, 17.21s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0209 - Val Loss: 0.0111:  25%|██▌       | 25/100 [07:38<21:30, 17.21s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0209 - Val Loss: 0.0111:  26%|██▌       | 26/100 [07:38<20:27, 16.59s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0184 - Val Loss: 0.0105:  26%|██▌       | 26/100 [07:55<20:27, 16.59s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0184 - Val Loss: 0.0105:  27%|██▋       | 27/100 [07:55<20:35, 16.92s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0210 - Val Loss: 0.0092:  27%|██▋       | 27/100 [08:11<20:35, 16.92s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0210 - Val Loss: 0.0092:  28%|██▊       | 28/100 [08:11<19:49, 16.52s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0188 - Val Loss: 0.0088:  28%|██▊       | 28/100 [08:29<19:49, 16.52s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0188 - Val Loss: 0.0088:  29%|██▉       | 29/100 [08:29<20:10, 17.06s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0210 - Val Loss: 0.0101:  29%|██▉       | 29/100 [08:48<20:10, 17.06s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0210 - Val Loss: 0.0101:  29%|██▉       | 29/100 [08:48<21:33, 18.22s/it]
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][92m[TRAIN][0m[96m |[0m
-[93m[WARN][0m [96m |[0m[96m->[0m Learning stagnated at epoch 30.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 2 / 8.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('slow_curve', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 130 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0394 - Val Loss: 0.0299:   0%|          | 0/100 [00:15<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0394 - Val Loss: 0.0299:   1%|          | 1/100 [00:15<25:59, 15.75s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0324 - Val Loss: 0.0255:   1%|          | 1/100 [00:31<25:59, 15.75s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0324 - Val Loss: 0.0255:   2%|▏         | 2/100 [00:31<25:34, 15.65s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0286 - Val Loss: 0.0211:   2%|▏         | 2/100 [00:46<25:34, 15.65s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0286 - Val Loss: 0.0211:   3%|▎         | 3/100 [00:46<25:18, 15.65s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0259 - Val Loss: 0.0190:   3%|▎         | 3/100 [01:05<25:18, 15.65s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0259 - Val Loss: 0.0190:   4%|▍         | 4/100 [01:05<26:38, 16.65s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0362 - Val Loss: 0.0216:   4%|▍         | 4/100 [01:21<26:38, 16.65s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0362 - Val Loss: 0.0216:   5%|▌         | 5/100 [01:21<25:48, 16.30s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0284 - Val Loss: 0.0197:   5%|▌         | 5/100 [01:36<25:48, 16.30s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0284 - Val Loss: 0.0197:   6%|▌         | 6/100 [01:36<25:07, 16.04s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0252 - Val Loss: 0.0187:   6%|▌         | 6/100 [01:51<25:07, 16.04s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0252 - Val Loss: 0.0187:   7%|▋         | 7/100 [01:51<24:30, 15.81s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0234 - Val Loss: 0.0179:   7%|▋         | 7/100 [02:07<24:30, 15.81s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0234 - Val Loss: 0.0179:   8%|▊         | 8/100 [02:07<24:04, 15.71s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0215 - Val Loss: 0.0169:   8%|▊         | 8/100 [02:22<24:04, 15.71s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0215 - Val Loss: 0.0169:   9%|▉         | 9/100 [02:22<23:26, 15.46s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0208 - Val Loss: 0.0165:   9%|▉         | 9/100 [02:38<23:26, 15.46s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0208 - Val Loss: 0.0165:  10%|█         | 10/100 [02:38<23:23, 15.59s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0197 - Val Loss: 0.0156:  10%|█         | 10/100 [02:56<23:23, 15.59s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0197 - Val Loss: 0.0156:  11%|█         | 11/100 [02:56<24:18, 16.39s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0313 - Val Loss: 0.0213:  11%|█         | 11/100 [03:14<24:18, 16.39s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0313 - Val Loss: 0.0213:  11%|█         | 11/100 [03:14<26:14, 17.69s/it]
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][92m[TRAIN][0m[96m |[0m
-[93m[WARN][0m [96m |[0m[96m->[0m Learning stagnated at epoch 42.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 3 / 8.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('slow_curve', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 142 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0516 - Val Loss: 0.0390:   0%|          | 0/100 [00:14<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0516 - Val Loss: 0.0390:   1%|          | 1/100 [00:14<24:38, 14.94s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0392 - Val Loss: 0.0335:   1%|          | 1/100 [00:29<24:38, 14.94s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0392 - Val Loss: 0.0335:   2%|▏         | 2/100 [00:29<24:08, 14.78s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0338 - Val Loss: 0.0303:   2%|▏         | 2/100 [00:44<24:08, 14.78s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0338 - Val Loss: 0.0303:   3%|▎         | 3/100 [00:44<23:58, 14.83s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0305 - Val Loss: 0.0277:   3%|▎         | 3/100 [00:59<23:58, 14.83s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0305 - Val Loss: 0.0277:   4%|▍         | 4/100 [00:59<24:02, 15.03s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0284 - Val Loss: 0.0264:   4%|▍         | 4/100 [01:18<24:02, 15.03s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0284 - Val Loss: 0.0264:   5%|▌         | 5/100 [01:18<25:21, 16.02s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0469 - Val Loss: 0.0331:   5%|▌         | 5/100 [01:37<25:21, 16.02s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0469 - Val Loss: 0.0331:   6%|▌         | 6/100 [01:37<26:33, 16.95s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0456 - Val Loss: 0.0303:   6%|▌         | 6/100 [01:52<26:33, 16.95s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-4[0m Loss: 0.0456 - Val Loss: 0.0303:   7%|▋         | 7/100 [01:52<25:26, 16.41s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0338 - Val Loss: 0.0269:   7%|▋         | 7/100 [02:07<25:26, 16.41s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0338 - Val Loss: 0.0269:   8%|▊         | 8/100 [02:07<24:45, 16.15s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0296 - Val Loss: 0.0265:   8%|▊         | 8/100 [02:23<24:45, 16.15s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0296 - Val Loss: 0.0265:   9%|▉         | 9/100 [02:23<24:02, 15.85s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0267 - Val Loss: 0.0253:   9%|▉         | 9/100 [02:37<24:02, 15.85s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0267 - Val Loss: 0.0253:  10%|█         | 10/100 [02:37<23:19, 15.55s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0252 - Val Loss: 0.0246:  10%|█         | 10/100 [02:53<23:19, 15.55s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0252 - Val Loss: 0.0246:  11%|█         | 11/100 [02:53<23:00, 15.52s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0233 - Val Loss: 0.0241:  11%|█         | 11/100 [03:08<23:00, 15.52s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0233 - Val Loss: 0.0241:  12%|█▏        | 12/100 [03:08<22:44, 15.51s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0218 - Val Loss: 0.0229:  12%|█▏        | 12/100 [03:24<22:44, 15.51s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0218 - Val Loss: 0.0229:  13%|█▎        | 13/100 [03:24<22:35, 15.58s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0209 - Val Loss: 0.0228:  13%|█▎        | 13/100 [03:40<22:35, 15.58s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0209 - Val Loss: 0.0228:  14%|█▍        | 14/100 [03:40<22:21, 15.60s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0202 - Val Loss: 0.0214:  14%|█▍        | 14/100 [03:59<22:21, 15.60s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0202 - Val Loss: 0.0214:  15%|█▌        | 15/100 [03:59<23:33, 16.63s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0520 - Val Loss: 0.0311:  15%|█▌        | 15/100 [04:17<23:33, 16.63s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0520 - Val Loss: 0.0311:  15%|█▌        | 15/100 [04:17<24:20, 17.18s/it]
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][92m[TRAIN][0m[96m |[0m
-[93m[WARN][0m [96m |[0m[96m->[0m Learning stagnated at epoch 58.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 4 / 8.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('slow_curve', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 158 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0678 - Val Loss: 0.0447:   0%|          | 0/100 [00:18<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0678 - Val Loss: 0.0447:   1%|          | 1/100 [00:18<30:27, 18.46s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0656 - Val Loss: 0.0456:   1%|          | 1/100 [00:33<30:27, 18.46s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0656 - Val Loss: 0.0456:   2%|▏         | 2/100 [00:33<28:31, 17.47s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0492 - Val Loss: 0.0426:   2%|▏         | 2/100 [00:48<28:31, 17.47s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0492 - Val Loss: 0.0426:   3%|▎         | 3/100 [00:48<27:08, 16.79s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0424 - Val Loss: 0.0393:   3%|▎         | 3/100 [01:04<27:08, 16.79s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0424 - Val Loss: 0.0393:   4%|▍         | 4/100 [01:04<26:16, 16.43s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0373 - Val Loss: 0.0363:   4%|▍         | 4/100 [01:23<26:16, 16.43s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0373 - Val Loss: 0.0363:   5%|▌         | 5/100 [01:23<27:25, 17.32s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0585 - Val Loss: 0.0409:   5%|▌         | 5/100 [01:39<27:25, 17.32s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-3[0m Loss: 0.0585 - Val Loss: 0.0409:   6%|▌         | 6/100 [01:39<26:28, 16.90s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0450 - Val Loss: 0.0391:   6%|▌         | 6/100 [01:54<26:28, 16.90s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-2[0m Loss: 0.0450 - Val Loss: 0.0391:   7%|▋         | 7/100 [01:54<25:23, 16.38s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0388 - Val Loss: 0.0371:   7%|▋         | 7/100 [02:10<25:23, 16.38s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [93m-1[0m Loss: 0.0388 - Val Loss: 0.0371:   8%|▊         | 8/100 [02:10<24:47, 16.17s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0351 - Val Loss: 0.0362:   8%|▊         | 8/100 [02:29<24:47, 16.17s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0351 - Val Loss: 0.0362:   9%|▉         | 9/100 [02:29<25:43, 16.96s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0592 - Val Loss: 0.0439:   9%|▉         | 9/100 [02:47<25:43, 16.96s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0592 - Val Loss: 0.0439:   9%|▉         | 9/100 [02:47<28:15, 18.63s/it]
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][92m[TRAIN][0m[96m |[0m
-[93m[WARN][0m [96m |[0m[96m->[0m Learning stagnated at epoch 68.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 5 / 8.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('slow_curve', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 168 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0688 - Val Loss: 0.0526:   0%|          | 0/100 [00:18<?, ?it/s][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0688 - Val Loss: 0.0526:   1%|          | 1/100 [00:18<29:51, 18.10s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0677 - Val Loss: 0.0545:   1%|          | 1/100 [00:33<29:51, 18.10s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0677 - Val Loss: 0.0545:   2%|▏         | 2/100 [00:33<28:01, 17.15s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0533 - Val Loss: 0.0513:   2%|▏         | 2/100 [00:47<28:01, 17.15s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0533 - Val Loss: 0.0513:   3%|▎         | 3/100 [00:47<26:29, 16.39s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0470 - Val Loss: 0.0469:   3%|▎         | 3/100 [01:01<26:29, 16.39s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0470 - Val Loss: 0.0469:   4%|▍         | 4/100 [01:01<25:14, 15.77s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0424 - Val Loss: 0.0441:   4%|▍         | 4/100 [01:20<25:14, 15.77s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [92m++[0m Loss: 0.0424 - Val Loss: 0.0441:   5%|▌         | 5/100 [01:20<26:02, 16.45s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0693 - Val Loss: 0.0502:   5%|▌         | 5/100 [01:35<26:02, 16.45s/it][92m[TRAIN][0m[96m |[0m[96m->[0m [91m-5[0m Loss: 0.0693 - Val Loss: 0.0502:   5%|▌         | 5/100 [01:35<30:05, 19.00s/it]
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:00<?, ?it/s][92m[TRAIN][0m[96m |[0m
-[93m[WARN][0m [96m |[0m[96m->[0m Learning stagnated at epoch 74.
-[92m[TRAIN][0m[96m |[0m
-[92m[TRAIN][0m[96m |[0m[96m->[0m Stage               : 6 / 8.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Dataset             : Dataset('slow_curve', 3, 128, 32, 50, 1, True).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Size                : 50.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Cores               : 144.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Classes             : H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2) H(0,0) H(0,1) H(0,2) H(1,0) H(1,1) H(1,2) H(2,0) H(2,1) H(2,2).
-[92m[TRAIN][0m[96m |[0m[96m->[0m Success Condition   : A loss of 0.001.
-[92m[TRAIN][0m[96m |[0m[96m->[0m Terminate Condition : Reaching epoch 174 or 5 consecutive epochs of stagnation.
-[92m[TRAIN][0m[96m |[0m
-multiprocessing.pool.RemoteTraceback: 
-"""
-Traceback (most recent call last):
-  File "/rds/bear-apps/2019b/EL8-p9/software/Python/3.7.4-GCCcore-8.3.0/lib/python3.7/multiprocessing/pool.py", line 121, in worker
-    result = (True, func(*args, **kwds))
-  File "/rds/bear-apps/2019b/EL8-p9/software/Keras/2.3.1-fosscuda-2019b-Python-3.7.4/lib/python3.7/site-packages/keras/utils/data_utils.py", line 406, in get_index
-    return _SHARED_SEQUENCES[uid][i]
-  File "/rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/System/DataHandling.py", line 450, in __getitem__
-    return self.get_batch_single_thread(index)
-  File "/rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/System/DataHandling.py", line 458, in get_batch_single_thread
-    input_data[b, :, :, :] = inp
-ValueError: could not broadcast input array from shape (129,128,1) into shape (128,128,1)
-"""
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "Main.py", line 31, in <module>
-    if args.train: model.train(info=args.verbose)
-  File "/rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/System/ML_Identification.py", line 314, in train
-    verbose=int(info))
-  File "/rds/bear-apps/2019b/EL8-p9/software/Keras/2.3.1-fosscuda-2019b-Python-3.7.4/lib/python3.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
-    return func(*args, **kwargs)
-  File "/rds/bear-apps/2019b/EL8-p9/software/Keras/2.3.1-fosscuda-2019b-Python-3.7.4/lib/python3.7/site-packages/keras/engine/training.py", line 1732, in fit_generator
-    initial_epoch=initial_epoch)
-  File "/rds/bear-apps/2019b/EL8-p9/software/Keras/2.3.1-fosscuda-2019b-Python-3.7.4/lib/python3.7/site-packages/keras/engine/training_generator.py", line 185, in fit_generator
-    generator_output = next(output_generator)
-  File "/rds/bear-apps/2019b/EL8-p9/software/Keras/2.3.1-fosscuda-2019b-Python-3.7.4/lib/python3.7/site-packages/keras/utils/data_utils.py", line 625, in get
-    six.reraise(*sys.exc_info())
-  File "/rds/bear-apps/2019b/EL8-p9/software/Python/3.7.4-GCCcore-8.3.0/lib/python3.7/site-packages/six.py", line 693, in reraise
-    raise value
-  File "/rds/bear-apps/2019b/EL8-p9/software/Keras/2.3.1-fosscuda-2019b-Python-3.7.4/lib/python3.7/site-packages/keras/utils/data_utils.py", line 610, in get
-    inputs = future.get(timeout=30)
-  File "/rds/bear-apps/2019b/EL8-p9/software/Python/3.7.4-GCCcore-8.3.0/lib/python3.7/multiprocessing/pool.py", line 657, in get
-    raise self._value
-ValueError: could not broadcast input array from shape (129,128,1) into shape (128,128,1)
-[92m[TRAIN][0m[96m |[0m[96m->[0m Training :   0%|          | 0/100 [00:41<?, ?it/s]

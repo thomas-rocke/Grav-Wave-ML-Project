@@ -25,12 +25,14 @@ class BaseProcessor(list):
         '''
         Convert target image to greyscale
         '''
-        if len(image.shape) == 3:
-            grey_vec = [0.2989, 0.5870, 0.1140]
-            grey_image = np.dot(image[..., :3], grey_vec)
-            return grey_image
-        else:
-            return image
+        if image is not None:
+            if len(image.shape) == 3:
+                grey_vec = [0.2989, 0.5870, 0.1140]
+                grey_image = np.dot(image[..., :3], grey_vec)
+                return grey_image
+            else:
+                return image
+        return None
 
     def _getCenterOfMass(self, image):
         '''
