@@ -20,12 +20,12 @@ from ImageProcessing import ModeProcessor
 
 LOG = Logger.get_logger(__name__)
 
+from Profiler import profile
 
 class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
     '''
     SuperpositionGenerator is the combination of BasicGenerator in the old generators, with new JSON and image processing techniques built in
     '''
-
     def __init__(self, max_order:int=3, batch_size:int=128, repeats:int=64, training_strategy_name:str="default", network_resolution:int=128, camera_resolution:int=128, starting_stage:int=1, info:bool = False):
         '''
         Init the class
@@ -145,11 +145,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
         '''
         Get inputs from list of superpositions.
         '''
-        inputs = [0]*len(sups)
-        for i, sup in enumerate(sups):
-            inputs[i] = self.mode_processor.getImage(sup.superpose())
-
-        return inputs
+        return np.array([self.mode_processor.getImage(sup.superpose()) for sup in sups])
 
     def get_classes(self):
         '''
@@ -182,6 +178,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
         return sup
 
+    @profile
     def __getitem__(self, index):
         '''
         Generates and returns one batch of data.
@@ -207,7 +204,13 @@ if __name__ == "__main__":
     gen.number_of_modes = 4
     gen._reset_combs()
     gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
-    t = time.time()
-    gen[0]
-    print(time.time() - t)
+    
+    dat = gen[0]
+
+    fig, ax = plt.subplots(ncols=10, nrows = 10)
+    for i in range(10):
+        for j in range(10):
+            ax[i, j].imshow(dat[0][10*i + j])
+            ax[i, j].axis("off")
+    plt.show()
     
