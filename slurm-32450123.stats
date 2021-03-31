@@ -1,0 +1,16 @@
++--------------------------------------------------------------------------+
+| Job on the BlueBEAR cluster:
+| Starting at Wed Mar 31 22:53:21 2021 for jxw1025(596795)
+| Identity jobid 32450123 jobname Cavity.sh
+| Running against project martynod-optical-modes and in partition power9-gpuv100-shared
+| Requested cpu=36,mem=244800M,node=1,billing=36,gres/gpu=1 - 7-00:00:00 walltime
+| Assigned to nodes bear-pg0305u03a
+| Command /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project/BlueBear/Cavity.sh
+| WorkDir /rds/projects/m/martynod-optical-modes/Grav-Wave-ML-Project
++--------------------------------------------------------------------------+
++--------------------------------------------------------------------------+
+| Finished at Wed Mar 31 22:53:37 2021 for jxw1025(596795) on the BlueBEAR Cluster
+| Required (00:11.572 cputime, 7360K memory used) - 00:00:16 walltime
+| JobState COMPLETING - Reason NonZeroExitCode
+| Exitcode 1:0
++--------------------------------------------------------------------------+
