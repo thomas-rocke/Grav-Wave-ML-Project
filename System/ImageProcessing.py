@@ -2,16 +2,17 @@ import numpy as np
 import cv2
 from skimage.measure import regionprops
 from skimage.filters import threshold_otsu, gaussian, laplace
-from skimage.feature import blob_log as blob
+from skimage.feature import blob_doh as blob
 from scipy.ndimage import gaussian_laplace
 from Gaussian_Beam import Superposition, Hermite, Laguerre
 from multiprocessing import cpu_count, Pool
 import matplotlib.pyplot as plt
+from matplotlib.patches import Ellipse
 import time
 from Utils import meanError, get_cams
 
 import Logger
-
+from Profiler import profile
 LOG = Logger.get_logger(__name__)
 
 
@@ -35,11 +36,18 @@ class BaseProcessor(list):
         '''
         Searches for center of mass of target image
         '''
-        threshold_value = threshold_otsu(image)
-        labeled_foreground = (image > threshold_value).astype(int)
-        properties = regionprops(labeled_foreground, image)
-        center_of_mass = properties[0].centroid
-        return center_of_mass[1], center_of_mass[0]
+        clipped_im = np.clip(img/np.max(img), 1/np.e**2, 1)
+    
+        x_dims, y_dims = clipped_im.shape
+
+        x_vec = np.arange(x_dims)
+        y_vec = np.arange(y_dims)
+
+        norm = clipped_im.sum()
+        
+        x_com = int(np.dot(x_vec, clipped_im).sum()/norm)
+        y_com = int(np.dot(y_vec, clipped_im.transpose()).sum()/norm)
+        return x_com, y_com
 
     def _resetSquare(self, image):
         '''
@@ -54,14 +62,32 @@ class BaseProcessor(list):
         return SquareSide, SquareX, SquareY
 
     def get_bounding_box(self, img):
-        img /= np.max(img)
+        #img /= np.max(img)
         
-        blobs = blob(img)
-        center_x = int(np.mean([b[0] for b in blobs]))
-        center_y = int(np.mean([b[1] for b in blobs]))
-        scale = int((4*np.mean([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.mean([b[2] for b in blobs]))/np.sqrt(2))
+        #blobs = blob(img)
+        #center_x = int(np.mean([b[0] for b in blobs]))
+        #center_y = int(np.mean([b[1] for b in blobs]))
+        #scale = int((4*np.mean([np.sqrt((b[0] - center_x)**2 + (b[1] - center_y)**2) for b in blobs]) + 6*np.mean([b[2] for b in blobs]))/np.sqrt(2))
+        clipped_im = np.clip(img/np.max(img), 1/np.e**2, 1)
+    
+        x_dims, y_dims = clipped_im.shape
 
-        return center_x, center_y, scale
+        x_vec = np.arange(x_dims)
+        y_vec = np.arange(y_dims)
+
+        norm = clipped_im.sum()
+        
+        x_com = int(np.dot(x_vec, clipped_im).sum()/norm)
+        y_com = int(np.dot(y_vec, clipped_im.transpose()).sum()/norm)
+        
+        x_square = (x_vec - x_com)**2
+        y_square = (y_vec - y_com)**2
+
+
+        sigma_x = int(0.8*4*np.sqrt(np.dot(x_square, clipped_im).sum()/norm))
+        sigma_y = int(0.8*4*np.sqrt(np.dot(y_square, clipped_im.transpose()).sum()/norm))
+        scale = np.max([sigma_x, sigma_y])
+        return x_com, y_com, scale
     
     def _widthModel(self, SquareSide, SquareX, SquareY, image):
         # Model used in maximisation problem to find bounding box
@@ -79,19 +105,27 @@ class BaseProcessor(list):
         if SquareSide == 0:
             SquareSide = min(image.shape)
 
+        bounds = (int(SquareX - SquareSide/2), int(SquareX + SquareSide/2), int(SquareY - SquareSide/2), int(SquareY + SquareSide/2))
+        res = image[bounds[0]:bounds[1], bounds[2]:bounds[3]]
+
+        return res
+
+        """ im_bounds = image.shape
+
         new_image = np.zeros((SquareSide, SquareSide))
         x_start = int(SquareX - SquareSide/2)
         y_start = int(SquareY - SquareSide/2)
-        for i in range(SquareSide):
-            for j in range(SquareSide):
-                x = i + x_start
-                y = j + y_start
-                if x >= 0 and y >= 0:
-                    try:
-                        new_image[i, j] = image[x, y]
-                    except:
-                        pass
-        return new_image
+        x_end = x_start + SquareSide
+        y_end = y_start + SquareSide
+
+        x_bounds = (max([x_start, 0]), min(x_end, im_bounds[0] - 1))
+        y_bounds = (max([y_start, 0]), min(y_end, im_bounds[1] - 1))
+
+        x_diffs = (x_start - x_bounds[0], x_end - x_bounds[1])
+        y_diffs = (y_start - y_bounds[0], y_end - y_bounds[1])
+        
+        new_image[(x_diffs[0] + x_bounds[0]):(x_diffs[1] + x_bounds[1]), (y_diffs[0] + y_bounds[0]):(y_diffs[1] + y_bounds[1])] = image[x_bounds[0]:x_bounds[1], y_bounds[0]:y_bounds[1]]
+        return new_image """
 
     def changeResolution(self, image, target_resolution:tuple=(0, 0)):
         '''
@@ -243,9 +277,9 @@ class ModeProcessor(BaseProcessor):
         Perform all processing on target superposition image to preprare it for training.
         '''
         noisy_image = self.errorEffects(raw_image)
-        #SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
-        #resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
-        resized_image = self.processImage(noisy_image, noisy_image.shape[0], int(noisy_image.shape[0]/2), int(noisy_image.shape[1]/2))
+        SquareSide, SquareX, SquareY = self._resetSquare(noisy_image) # Relocation of the square bounding boix should be unique for each superposition, as the center of mass movesd
+        resized_image = self.processImage(noisy_image, SquareSide, SquareX, SquareY)
+        #resized_image = self.processImage(noisy_image, noisy_image.shape[0], int(noisy_image.shape[0]/2), int(noisy_image.shape[1]/2))
         return resized_image
 
     # Error/Noise functions:
@@ -335,26 +369,16 @@ def get_bounding_box(img):
 
 
 if __name__ == "__main__":
-    proc = ModeProcessor()
+    fname = r"C:\Users\Tom\Downloads\Screen Recording 2021-03-24 at 12.00.34.mov"
 
-    img = np.zeros((480, 480))
-    x = Superposition(Hermite(3, 1, resolution=256))
-    sup_img = x.superpose()
-    
-    fig, ax = plt.subplots(ncols=2)
-    ax[0].imshow(sup_img)
-    ax[0].set_title("No Quantisation Applied")
-
-    proc.bit_depth = 4
-    proc._reset_bins()
-    ax[1].imshow(proc.errorEffects(sup_img))
-    ax[1].set_title("bit_depth=4")
-
-    #proc.bit_depth = 10
-    #proc._reset_bins()
-    #ax[2].imshow(proc.errorEffects(sup_img))
-    #ax[2].set_title("bit_depth=10")
-    ax[0].axis("off")
-    ax[1].axis("off")
-    
+    proc = VideoProcessor(fname)
+    fig, ax = plt.subplots()
+    ax.axis("off")
+    for i in range(1):
+        t = time.time()
+        img = proc.getImages(batch_size=1)[0]
+        ax.imshow(img, animated=True)
+        ax.set_title("Image {} of {} \n Time taken: {}s".format(i, proc.frameCount, round((time.time() - t), 2)))
+        plt.pause(0.05)
     plt.show()
+

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from ImageProcessing import VideoProcessor, BaseProcessor, ModeProcessor
 from ML_Identification import ML
-from DataHandling import Dataset, BasicGenerator
+from Old_Data_Generators import Dataset, BasicGenerator
 from Gaussian_Beam import Hermite, Superposition
 import Logger
 import os
@@ -55,8 +55,9 @@ model.load()
 [model.data_generator.new_stage() for i in range(3)]
 
 model.get_errs_of_model()
+
 for i in range(1):
     model.compare(model.data_generator.get_random())
 print(model.errs)
-#dat = visualise_video_predictions(fname, model)
+dat = visualise_video_predictions(fname, model)
 #mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)
