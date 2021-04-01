@@ -178,7 +178,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
         return sup
 
-    @profile
+    
     def __getitem__(self, index):
         '''
         Generates and returns one batch of data.

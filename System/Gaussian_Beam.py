@@ -441,7 +441,7 @@ class Laguerre(Superposition):
     Class representing a Laguerre mode generated as a superposition of multiple Gaussian modes.
     '''
 
-    def __init__(self, p: int = 1, m: int = 1, amplitude: float = 1.0, phase: float = 0.0, resolution: int = 128):
+    def __init__(self, p: int = 1, m: int = 1, amplitude: float = 1.0, phase: float = 0.0, resolution: int = 128, update_modes:bool = True):
         '''
         Initialise the class with the order (p, m) of the Laguerre mode.
         '''
@@ -453,19 +453,20 @@ class Laguerre(Superposition):
         self.sort_items = [self.p**2 + self.m**2, self.p, self.m] # Define the sorting index for this mode (for Superposition sorting)
 
         # From https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=247715
+        if update_modes:
+            modes = np.empty((p+1, int((m)/2) + 1), dtype=Hermite)
+            for q in range(p + 1):
+                for s in range(int((m)/2) + 1):
+                    frac = ((fact(2*(q-s) + m)*fact(2*(p-q+s)))/(2**(2*p + m - 1) * fact(p) * fact(p+m) * (1 + choose(0, m))))**0.5
+                    y = Hermite(2*(q - s) + m, 2*(p - q + s), resolution=resolution)
+                    y.amplitude = choose(p, q) * choose(m, 2*s) * frac
+                    y.add_phase((s+p)*np.pi)
+                    modes[q, s] = y
+            self.modes = modes.flatten()
 
-        self.modes = []
-        for q in range(p + 1):
-            for s in range(int((m)/2) + 1):
-                frac = ((fact(2*(q-s) + m)*fact(2*(p-q+s)))/(2**(2*p + m - 1) * fact(p) * fact(p+m) * (1 + choose(0, m))))**0.5
-                y = Hermite(2*(q - s) + m, 2*(p - q + s), resolution=resolution)
-                y.amplitude = choose(p, q) * choose(m, 2*s) * frac
-                y.add_phase((s+p)*np.pi)
-                self.modes.append(y)
-
-        for mode in self.modes:
-            mode *= self.amplitude
-            mode.add_phase(self.phase) # Propagates total Laguerre amp and phase to each constituent mode
+            for mode in self.modes:
+                mode *= self.amplitude
+                mode.add_phase(self.phase) # Propagates total Laguerre amp and phase to each constituent mode
         super().__init__(*self.modes)
 
     def __str__(self):
@@ -492,7 +493,9 @@ class Laguerre(Superposition):
         '''
         Make a copy of the object.
         '''
-        return Laguerre(self.p, self.m, self.amplitude, self.phase, self.resolution)
+        copy = Laguerre(self.p, self.m, self.amplitude, self.phase, self.resolution, update_modes=False)
+        copy.modes = np.array([mode.copy() for mode in self])
+        return copy
 
     def add_phase(self, phase):
         '''
@@ -545,9 +548,9 @@ def choose(n, r):
 
 
 if __name__ == '__main__':
-    arr = np.array([Hermite(0, 0), Hermite(0, 1), Hermite(0, 2)])
-    X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / arr[0].resolution), np.arange(-1.2, 1.2, 2.4 / arr[0].resolution))
-    
+    mode = Laguerre(2, 4)
+    plt.imshow(mode.superpose())
+    plt.show()
     
     #t = time.time()
     #np.abs(sum([i.amplitude * np.exp(1j * i.phase) * i.E_mode(X, Y, 0) for i in arr])**2)
