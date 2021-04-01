@@ -467,7 +467,7 @@ class Laguerre(Superposition):
             for mode in self.modes:
                 mode *= self.amplitude
                 mode.add_phase(self.phase) # Propagates total Laguerre amp and phase to each constituent mode
-        super().__init__(*self.modes)
+            super().__init__(*self.modes)
 
     def __str__(self):
         '''
@@ -495,6 +495,7 @@ class Laguerre(Superposition):
         '''
         copy = Laguerre(self.p, self.m, self.amplitude, self.phase, self.resolution, update_modes=False)
         copy.modes = np.array([mode.copy() for mode in self])
+        Superposition.__init__(copy, *copy.modes)
         return copy
 
     def add_phase(self, phase):
