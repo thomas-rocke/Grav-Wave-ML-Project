@@ -178,7 +178,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
 
         return sup
 
-    
+    # @profile
     def __getitem__(self, index):
         '''
         Generates and returns one batch of data.
@@ -207,17 +207,3 @@ if __name__ == "__main__":
     gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
     
     dat = gen[0]
-
-    fig, ax = plt.subplots(ncols=10, nrows = 10)
-    for i in range(10):
-        for j in range(10):
-            ax[i, j].imshow(dat[0][10*i + j])
-            ax[i, j].axis("off")
-    plt.show()
-
-    print(len(gen.combs))
-
-    gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
-    for i in range(5):
-        plt.imshow(gen[i][0][0])
-        plt.show()
