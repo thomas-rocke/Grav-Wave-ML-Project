@@ -639,7 +639,29 @@ class ML:
         LOG.debug(f"Prediction: {list(prediction)}")
         LOG.debug(f"Generating superposition of modes above threshold of {threshold} and asigning the respective amplitudes and phases.")
 
-        modes = []
+        pred_amps = prediction[:int(len(self.errs)/2)] # Separate out the amplitudes
+        raw_phases = prediction[int(len(self.errs)/2):]
+        pred_phases = (raw_phases * (2 * np.pi)) - np.pi # Reverse the "Normalisation" applied to phase predictions
+
+        raw_modes = np.array([mode.copy() for mode in self.data_generator.hermite_modes])
+        added_phases = np.array([mode.add_phase(pred_phases[i]) for i, mode in enumerate(raw_modes)])
+        pred_modes = np.dot(added_phases, pred_amps)
+
+        predicted_superposition = Superposition(*[mode if mode.amplitude > threshold for mode in pred_modes])
+
+        if len(predicted_superposition) == 0:
+            LOG.critical(f"Prediction failed! A threshold of {threshold} is likely too high.")
+            print(log(f"[FATAL] Prediction failed! A threshold of {threshold} is likely too high.\n"))
+
+            sys.exit()
+
+        LOG.info(f"Prediction complete! Took {round((perf_counter() - start_time) * 1000, 3)} milliseconds.")
+        LOG.info(f"Reconstructed: {repr(predicted_superposition)}")
+        if info: print(log(f"[PRED] Done! Took {round((perf_counter() - start_time) * 1000, 3)} milliseconds."))
+        if info: print(log(f"[PRED] Reconstructed: {str(predicted_superposition)}\n"))
+
+        return predicted_superposition
+        """ modes = []
         for i in range(len(prediction) // 2): # For all values of prediction
 
             # LOG.debug(f"{self.classes[i]}: {prediction[i] :.3f}" + int(prediction[i] > threshold) * " ***")
@@ -676,7 +698,9 @@ class ML:
         if info: print(log(f"[PRED] Done! Took {round((perf_counter() - start_time) * 1000, 3)} milliseconds."))
         if info: print(log(f"[PRED] Reconstructed: {str(answer)}\n"))
 
-        return answer
+        return answer """
+
+
 
     def compare(self, sup: Superposition, camera: dict = None, threshold: float = 0.1, info: bool = True, save: bool = False):
         '''
