@@ -24,6 +24,7 @@ from Gaussian_Beam import Hermite, Superposition, Laguerre
 from Old_Data_Generators import GenerateData, BasicGenerator, Dataset
 from Superposition_Generator import SuperpositionGenerator
 import Logger
+from Profiler import profile
 from time import perf_counter
 from datetime import datetime
 from math import isnan
@@ -146,6 +147,7 @@ class ML:
 
         return K.mean(K.equal(K.round(y_true * mask), K.round(y_pred * mask)))
 
+    # @profile
     def loss(self, y_true, y_pred):
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
@@ -256,6 +258,7 @@ class ML:
         LOG.debug("Keras model architecture created successfully!")
         return model
 
+    @profile
     def train(self, info: bool = False):
         '''
         Train the model.
@@ -952,6 +955,7 @@ class ML:
         LOG.info("Optimisation complete.\n")
         print(log(f"[INFO] Optimisation complete!\n"))
 
+    @profile
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
