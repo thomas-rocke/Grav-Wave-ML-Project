@@ -35,7 +35,14 @@ if __name__ == "__main__":
     model = ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'default', 'Adamax', 0.0001, False)
     model.load()
     modes = model.data_generator.hermite_modes[:subsections]
-    right = 0
+    model.data_generator.new_stage()
+
+
+    img = model.data_generator.get_random().superpose()
+
+    model.predict(img, threshold=0)
+    model.predict(img)
+    """ right = 0
     for i in [x[0]]:
         true_vals = [int(j) for j in str(str_to_bin(string[i]))]
         for j in range(subsections): modes[j].amplitude = true_vals[j]
@@ -61,4 +68,4 @@ if __name__ == "__main__":
         if pred_letter == labels[i]:
             right += 1
     ax[1].set_xticklabels(pred_labels)
-    plt.show()
+    plt.show() """

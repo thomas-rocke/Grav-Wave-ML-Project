@@ -607,7 +607,6 @@ class ML:
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
 
-    @profile
     def predict(self, data, threshold: float = 0.1, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
