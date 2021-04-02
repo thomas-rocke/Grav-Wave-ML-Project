@@ -634,13 +634,15 @@ class ML:
         LOG.debug(f"Prediction: {list(prediction)}")
         LOG.debug(f"Generating superposition of modes above threshold of {threshold} and asigning the respective amplitudes and phases.")
 
-        pred_amps = prediction[:int(len(self.errs)/2)] # Separate out the amplitudes
-        raw_phases = prediction[int(len(self.errs)/2):]
+        raw_modes = np.array([mode.copy() for mode in self.data_generator.hermite_modes])
+
+        pred_amps = prediction[:len(raw_modes)] # Separate out the amplitudes
+        raw_phases = prediction[len(raw_modes):]
         pred_phases = (raw_phases * (2 * np.pi)) - np.pi # Reverse the "Normalisation" applied to phase predictions
 
-        raw_modes = np.array([mode.copy() for mode in self.data_generator.hermite_modes])
-        added_phases = np.array([mode.add_phase(pred_phases[i]) for i, mode in enumerate(raw_modes)])
-        pred_modes = np.dot(added_phases, pred_amps)
+        np.array([mode.add_phase(pred_phases[i]) for i, mode in enumerate(raw_modes)])
+        
+        pred_modes = raw_modes * pred_amps
 
         predicted_superposition = Superposition(*[mode for mode in pred_modes if mode.amplitude > threshold])
 
