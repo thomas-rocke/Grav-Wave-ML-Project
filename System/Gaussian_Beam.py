@@ -104,6 +104,12 @@ class Hermite:
         self.amplitude *= val
         return self
 
+    def __gt__(self, val):
+        '''
+        Defines greater than operator
+        '''
+        return self.amplitude > val
+
     def copy(self):
         '''
         Method for copying the Gaussian mode.

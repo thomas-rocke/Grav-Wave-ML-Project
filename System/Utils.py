@@ -7,6 +7,7 @@ import json
 import os
 import glob
 import Logger
+import time
 
 LOG = Logger.get_logger(__name__)
 
@@ -70,3 +71,14 @@ def get_strategy(training_strategy_name:str = "default"):
         print(msg)
         return strats["default"]
     
+if __name__ == '__main__':
+    n = np.arange(100000)
+    t = time.time()
+    res = [x for x in n if x > 10]
+    print(res[:20])
+    print(time.time() - t)
+
+    t = time.time()
+    res = n[n > 10]
+    print(res[:20])
+    print(time.time() - t)
