@@ -258,7 +258,7 @@ class ML:
         LOG.debug("Keras model architecture created successfully!")
         return model
 
-    @profile
+    # @profile
     def train(self, info: bool = False):
         '''
         Train the model.
@@ -608,6 +608,7 @@ class ML:
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
 
+    @profile
     def predict(self, data, threshold: float = 0.1, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
@@ -955,7 +956,7 @@ class ML:
         LOG.info("Optimisation complete.\n")
         print(log(f"[INFO] Optimisation complete!\n"))
 
-    @profile
+    # @profile
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
