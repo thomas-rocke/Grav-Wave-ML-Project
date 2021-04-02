@@ -202,8 +202,9 @@ if __name__ == "__main__":
     gen = SuperpositionGenerator(training_strategy_name="opti_test_strat", batch_size=128, camera_resolution=128)
     gen.new_stage()
 
-    gen.number_of_modes = 4
+    gen.number_of_modes = 2
     gen._reset_combs()
     gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
     
     dat = gen[0]
+    print(len(gen.combs))

@@ -43,6 +43,7 @@ from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nada
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 from ImageProcessing import ModeProcessor
+from Profiler import profile
 
 logging.getLogger('tensorflow').setLevel(logging.ERROR)
 logging.getLogger('matplotlib.font_manager').disabled = True
@@ -77,15 +78,8 @@ class ML:
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
                  architecture: bool = "default",
-<<<<<<< HEAD
+
                  optimiser: str = "Adam",
-=======
-<<<<<<< HEAD
-                 optimiser: str = "Adam",
-=======
-                 optimiser: str = "RMSprop",
->>>>>>> cc65a977561d33cc6c9a323ee9eb282d67afe9a9
->>>>>>> 487fef4f61c8c058cbc119522acf25b5ffb99690
                  learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
         '''
@@ -613,6 +607,7 @@ class ML:
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
 
+    @profile
     def predict(self, data, threshold: float = 0.1, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
@@ -647,7 +642,7 @@ class ML:
         added_phases = np.array([mode.add_phase(pred_phases[i]) for i, mode in enumerate(raw_modes)])
         pred_modes = np.dot(added_phases, pred_amps)
 
-        predicted_superposition = Superposition(*[mode if mode.amplitude > threshold for mode in pred_modes])
+        predicted_superposition = Superposition(*[mode for mode in pred_modes if mode.amplitude > threshold])
 
         if len(predicted_superposition) == 0:
             LOG.critical(f"Prediction failed! A threshold of {threshold} is likely too high.")
