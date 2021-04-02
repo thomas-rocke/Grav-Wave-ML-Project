@@ -41,7 +41,9 @@ if __name__ == "__main__":
     img = model.data_generator.get_random().superpose()
 
     model.predict(img, threshold=0)
-    model.predict(img)
+    print("Clearing space")
+    for i in range(5):
+        model.predict(img)
     """ right = 0
     for i in [x[0]]:
         true_vals = [int(j) for j in str(str_to_bin(string[i]))]

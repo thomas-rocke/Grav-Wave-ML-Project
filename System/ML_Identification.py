@@ -643,7 +643,7 @@ class ML:
         
         pred_modes = raw_modes * pred_amps
 
-        predicted_superposition = Superposition(*[mode for mode in pred_modes if mode.amplitude > threshold])
+        predicted_superposition = Superposition(*pred_modes[pred_modes > threshold])
 
         if len(predicted_superposition) == 0:
             LOG.critical(f"Prediction failed! A threshold of {threshold} is likely too high.")
