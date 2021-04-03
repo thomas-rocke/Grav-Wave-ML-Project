@@ -24,10 +24,7 @@ def visualise_video_predictions(video_file: str, model:ML):
 
     frames = []
     for i in tqdm(range(processor.frameCount - 10), desc=pathlib.PurePath(video_file).name):
-        img = processor[i]
-        if i == 0:
-            params = processor.get_bounding_box(processor.toGreyscale(img/np.linalg.norm(img)))
-        processed_frame = processor.processImage(img, *params) # Get and process next frame
+        processed_frame = processor.getImages(batch_size=1)[0] # Get and process next frame
         predicted = model.predict(processed_frame, info=False)
         predicted_image = predicted.superpose()
         predictions[:,  :, i] = predicted_image
@@ -36,12 +33,12 @@ def visualise_video_predictions(video_file: str, model:ML):
         ax[1].set_xlabel(predicted.latex_print())
         f2 = ax[1].imshow(predicted_image, cmap='jet', animated=True)
         frames.append([f1, f2])
-        # plt.pause(0.05)
+        plt.pause(1e-9)
 
     ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True, repeat_delay=1000)
     os.makedirs(f"Animations/{model}", exist_ok=True) # Create directory for model
     ani.save(f'Animations/{model}/{pathlib.PurePath(video_file).name[:-4]}.gif', writer=animation.PillowWriter(fps=30))
-    # plt.show()
+    plt.show()
     return predictions
 
 def mode_sweep_test(model, modes, freqs, iterations):
@@ -66,6 +63,11 @@ def mode_sweep_test(model, modes, freqs, iterations):
     ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True, repeat_delay=1000)
     ani.save('movie.mp4')
     plt.show()
+
+if __name__ == '__main__':
+    model = ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'default', 'Adamax', 0.0001, False)
+    model.load()
+    visualise_video_predictions(r'C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\video.mov', model)
 
 
 
@@ -165,18 +167,7 @@ dat = visualise_video_predictions(r"C:\Users\Jake\OneDrive - University of Birmi
 
 
 
-<<<<<<< HEAD
-# mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)
 # model.get_errs_of_model()
 # for i in range(1):
 #     model.compare(model.data_generator.get_random())
 # print(model.errs)
-=======
-model.get_errs_of_model()
-
-for i in range(1):
-    model.compare(model.data_generator.get_random())
-print(model.errs)
-dat = visualise_video_predictions(fname, model)
-#mode_sweep_test(model, [Hermite(0, 0), Hermite(0, 1), Hermite(1, 1), Hermite(1, 0)], [1, 1.5, 0.25, 1/3], 20)
->>>>>>> 487fef4f61c8c058cbc119522acf25b5ffb99690
