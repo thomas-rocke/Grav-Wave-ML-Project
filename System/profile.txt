@@ -1,0 +1,139 @@
+         54166 function calls (53121 primitive calls) in 0.342 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+3246/2201    0.072    0.000    0.141    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
+      580    0.071    0.000    0.072    0.000 {method 'normal' of 'numpy.random.mtrand.RandomState' objects}
+      256    0.048    0.000    0.048    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\_methods.py:78(_clip_dep_invoke_with_casting)
+      384    0.037    0.000    0.037    0.000 {warpAffine}
+      128    0.020    0.000    0.054    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:351(superpose)
+      256    0.013    0.000    0.013    0.000 {resize}
+     1453    0.013    0.000    0.013    0.000 {built-in method numpy.array}
+     1664    0.011    0.000    0.011    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+      128    0.005    0.000    0.084    0.001 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:66(get_bounding_box)
+     7876    0.004    0.000    0.004    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:74(__str__)
+     2084    0.003    0.000    0.003    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:51(__init__)
+      640    0.003    0.000    0.003    0.000 {method 'uniform' of 'numpy.random.mtrand.RandomState' objects}
+     2304    0.003    0.000    0.009    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:322(contains)
+      405    0.002    0.000    0.022    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\linalg\linalg.py:2316(norm)
+      128    0.002    0.000    0.016    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numeric.py:913(tensordot)
+      128    0.002    0.000    0.012    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:140(normalise)
+      512    0.002    0.000    0.004    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\_methods.py:63(_clip_dep_is_scalar_nan)
+      128    0.002    0.000    0.002    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\scipy\ndimage\filters.py:220(gaussian_filter)
+      128    0.002    0.000    0.028    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:301(add_exposure)
+      768    0.002    0.000    0.008    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:73(_wrapreduction)
+      352    0.002    0.000    0.002    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:355(<genexpr>)
+      384    0.001    0.000    0.001    0.000 {getRotationMatrix2D}
+        1    0.001    0.001    0.322    0.322 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:144(get_inputs)
+      128    0.001    0.000    0.033    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:347(add_random_stretch)
+      128    0.001    0.000    0.006    0.000 C:\Users\Tom\AppData\Roaming\Python\Python37\site-packages\skimage\filters\_gaussian.py:12(gaussian)
+     1045    0.001    0.000    0.070    0.000 <__array_function__ internals>:2(dot)
+      128    0.001    0.000    0.001    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:103(makeSquare)
+      128    0.001    0.000    0.001    0.000 C:\Users\Tom\AppData\Roaming\Python\Python37\site-packages\skimage\util\dtype.py:179(_convert)
+      384    0.001    0.000    0.039    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:329(rotate_image)
+        1    0.001    0.001    0.342    0.342 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:181(__getitem__)
+      128    0.001    0.000    0.157    0.001 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:264(errorEffects)
+        1    0.001    0.001    0.317    0.317 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:148(<listcomp>)
+      512    0.001    0.000    0.007    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:2551(amax)
+      256    0.001    0.000    0.052    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\_methods.py:97(_clip)
+      128    0.001    0.000    0.263    0.002 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:277(getImage)
+      640    0.001    0.000    0.006    0.000 {method 'sum' of 'numpy.ndarray' objects}
+      896    0.001    0.000    0.001    0.000 {built-in method builtins.hasattr}
+      226    0.001    0.000    0.003    0.000 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:158(randomise_amp_and_phase)
+      512    0.000    0.000    0.001    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:3037(ndim)
+      256    0.000    0.000    0.001    0.000 {method 'any' of 'numpy.generic' objects}
+      512    0.000    0.000    0.007    0.000 <__array_function__ internals>:2(amax)
+      149    0.000    0.000    0.003    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:392(renormalize)
+      256    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
+      405    0.000    0.000    0.000    0.000 {method 'ravel' of 'numpy.ndarray' objects}
+      384    0.000    0.000    0.000    0.000 {method 'reshape' of 'numpy.ndarray' objects}
+      768    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:74(<dictcomp>)
+     1301    0.000    0.000    0.001    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\_asarray.py:16(asarray)
+      405    0.000    0.000    0.022    0.000 <__array_function__ internals>:2(norm)
+      128    0.000    0.000    0.085    0.001 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:54(_resetSquare)
+      128    0.000    0.000    0.002    0.000 {built-in method numpy.fromiter}
+      128    0.000    0.000    0.021    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:146(processImage)
+      128    0.000    0.000    0.074    0.001 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:288(add_noise)
+      149    0.000    0.000    0.004    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:226(__init__)
+      245    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:29(<lambda>)
+      512    0.000    0.000    0.000    0.000 {method 'transpose' of 'numpy.ndarray' objects}
+      512    0.000    0.000    0.001    0.000 <__array_function__ internals>:2(ndim)
+      128    0.000    0.000    0.005    0.000 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:191(<listcomp>)
+      256    0.000    0.000    0.053    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:2021(clip)
+      245    0.000    0.000    0.001    0.000 {built-in method builtins.sorted}
+      128    0.000    0.000    0.014    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:339(add_rotational_error)
+      247    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:269(append)
+      512    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\_methods.py:73(_clip_dep_is_byte_swapped)
+      384    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\scipy\ndimage\_ni_support.py:55(_normalize_sequence)
+      640    0.000    0.000    0.005    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\_methods.py:36(_sum)
+      640    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
+      256    0.000    0.000    0.053    0.000 {method 'clip' of 'numpy.ndarray' objects}
+      256    0.000    0.000    0.002    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:2236(any)
+      192    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:402(<lambda>)
+     1548    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+      256    0.000    0.000    0.003    0.000 <__array_function__ internals>:2(any)
+      128    0.000    0.000    0.007    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:325(blur_image)
+     1322    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+      256    0.000    0.000    0.054    0.000 <__array_function__ internals>:2(clip)
+      228    0.000    0.000    0.001    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:113(copy)
+      492    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:201(add_phase)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\scipy\ndimage\_ni_support.py:71(_get_output)
+      256    0.000    0.000    0.053    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:55(_wrapfunc)
+      128    0.000    0.000    0.017    0.000 <__array_function__ internals>:2(tensordot)
+     1045    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\multiarray.py:707(dot)
+      128    0.000    0.000    0.007    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:132(changeResolution)
+      512    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:1009(_handle_fromlist)
+      128    0.000    0.000    0.006    0.000 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:138(generate_superposition)
+      128    0.000    0.000    0.001    0.000 C:\Users\Tom\AppData\Roaming\Python\Python37\site-packages\skimage\util\dtype.py:432(img_as_float)
+      405    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\linalg\linalg.py:121(isComplexType)
+      128    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:24(toGreyscale)
+      768    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numerictypes.py:365(issubdtype)
+      128    0.000    0.000    0.001    0.000 C:\Users\Tom\AppData\Roaming\Python\Python37\site-packages\skimage\_shared\utils.py:350(convert_to_float)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numerictypes.py:239(obj2sctype)
+       21    0.000    0.000    0.001    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:497(copy)
+      917    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+      128    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
+      128    0.000    0.000    0.000    0.000 <__array_function__ internals>:2(empty_like)
+      256    0.000    0.000    0.001    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\_methods.py:44(_any)
+      512    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:2546(_amax_dispatcher)
+      226    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:100(__imul__)
+      149    0.000    0.000    0.001    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:25(lowest_order_zero_phase)
+      128    0.000    0.000    0.003    0.000 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:142(<listcomp>)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\scipy\ndimage\filters.py:294(<listcomp>)
+      149    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:399(<listcomp>)
+      128    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:356(<listcomp>)
+        2    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:372(add_modes)
+      256    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numerictypes.py:293(issubclass_)
+      405    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\linalg\linalg.py:2312(_norm_dispatcher)
+      128    0.000    0.000    0.000    0.000 C:\Users\Tom\AppData\Roaming\Python\Python37\site-packages\skimage\filters\_gaussian.py:129(_guess_spatial_dimensions)
+      512    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:3033(_ndim_dispatcher)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numeric.py:1092(<listcomp>)
+        1    0.000    0.000    0.007    0.007 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:189(<listcomp>)
+      256    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:2017(_clip_dispatcher)
+      256    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\fromnumeric.py:2232(_any_dispatcher)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numeric.py:1097(<listcomp>)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numeric.py:909(_tensordot_dispatcher)
+       21    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:518(<listcomp>)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numeric.py:1084(<listcomp>)
+      149    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:393(<listcomp>)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numeric.py:1098(<listcomp>)
+      128    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\ImageProcessing.py:314(quantize_image)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numeric.py:1090(<listcomp>)
+       21    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:450(__init__)
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\numeric.py:1089(<listcomp>)
+      245    0.000    0.000    0.000    0.000 {function Superposition.append at 0x0000020CAD821B88}
+      128    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\core\multiarray.py:77(empty_like)
+       21    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:509(add_phase)
+       21    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:309(__imul__)
+        1    0.000    0.000    0.000    0.000 c:/Users/Tom/Documents/GitHub/Grav-Wave-ML-Project/System/Superposition_Generator.py:187(<listcomp>)
+       21    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:502(<listcomp>)
+       21    0.000    0.000    0.000    0.000 c:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Gaussian_Beam.py:279(extend)
+        4    0.000    0.000    0.000    0.000 <__array_function__ internals>:2(real)
+        4    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\lib\type_check.py:122(real)
+        4    0.000    0.000    0.000    0.000 C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\lib\site-packages\numpy\lib\type_check.py:118(_real_dispatcher)
+        2    0.000    0.000    0.000    0.000 {built-in method math.isnan}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
