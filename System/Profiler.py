@@ -16,10 +16,10 @@ def profile(fnc):
         retval = fnc(*args, **kwargs)
         pr.disable()
         s = io.StringIO()
-        sortby = 'cumulative'
+        sortby = 'tottime'#'cumulative'
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         ps.print_stats()
-        with open ("profile.txt", 'x') as f:
+        with open ("profile.txt", 'w') as f:
             f.writelines(s.getvalue())
         #print(s.getvalue())
         return retval
