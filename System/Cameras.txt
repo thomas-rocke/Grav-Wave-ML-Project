@@ -55,7 +55,7 @@
 "WinCamD-UCD15" : {
     "noise_variance" : 0.005,
     "exposure_limits" : [0.00004, 1],
-    "bit_depth" : 0,
+    "bit_depth" : 16,
     "blur_variance" : 0,
     "stretch_variance" : 0.02,
     "rotational_variance" : 0.02
