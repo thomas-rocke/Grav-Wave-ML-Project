@@ -191,13 +191,14 @@ class ModeProcessor(BaseProcessor):
         super().__init__(target_resolution)
 
     def _reset_bins(self):
-        raw_bins = np.zeros((2**self.bit_depth - 1, 2**self.bit_depth - 1, 2**self.bit_depth - 1)) # (R, G, B) matrix quantised to self.bit_depth
+        self.raw_bins = np.arange(2**self.bit_depth - 1) # Assume Greyscale quantisation
+        '''raw_bins = np.zeros((2**self.bit_depth - 1, 2**self.bit_depth - 1, 2**self.bit_depth - 1)) # (R, G, B) matrix quantised to self.bit_depth
         shape = raw_bins.shape
         for i in range(shape[0]):
             for j in range(shape[1]):
                 for k in range(shape[2]):
                     raw_bins[i, j, k] = 0.2989 * i + 0.5870 * j + 0.1140 * k # Convert quantisation to greyscale
-        self.raw_bins = np.sort(raw_bins.flatten()) # Array of all greyscale intensity values possibly with bit_depth quantization
+        self.raw_bins = np.sort(raw_bins.flatten()) # Array of all greyscale intensity values possibly with bit_depth quantization'''
 
     def change_camera(self, camera:dict):
         msg = "Changing camera"

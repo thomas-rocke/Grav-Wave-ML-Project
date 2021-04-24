@@ -19,10 +19,9 @@ def profile(fnc):
         sortby = 'tottime'#'cumulative'
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         ps.print_stats()
-        # print(s.getvalue())
-        f = open("profiler.txt", "w")
-        f.write(s.getvalue())
-        f.close()
+        with open ("profile.txt", 'w') as f:
+            f.writelines(s.getvalue())
+        #print(s.getvalue())
         return retval
 
     return inner

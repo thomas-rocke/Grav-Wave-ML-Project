@@ -104,6 +104,12 @@ class Hermite:
         self.amplitude *= val
         return self
 
+    def __gt__(self, val):
+        '''
+        Defines greater than operator
+        '''
+        return self.amplitude > val
+
     def copy(self):
         '''
         Method for copying the Gaussian mode.
@@ -463,11 +469,10 @@ class Laguerre(Superposition):
                     y.add_phase((s+p)*np.pi)
                     modes[q, s] = y
             self.modes = modes.flatten()
-
-            for mode in self.modes:
+            super().__init__(*self.modes)
+            for mode in self:
                 mode *= self.amplitude
                 mode.add_phase(self.phase) # Propagates total Laguerre amp and phase to each constituent mode
-            super().__init__(*self.modes)
 
     def __str__(self):
         '''
@@ -496,6 +501,9 @@ class Laguerre(Superposition):
         copy = Laguerre(self.p, self.m, self.amplitude, self.phase, self.resolution, update_modes=False)
         copy.modes = np.array([mode.copy() for mode in self])
         Superposition.__init__(copy, *copy.modes)
+        for mode in copy:
+                mode *= copy.amplitude
+                mode.add_phase(copy.phase) # Propagates total Laguerre amp and phase to each constituent mode
         return copy
 
     def add_phase(self, phase):

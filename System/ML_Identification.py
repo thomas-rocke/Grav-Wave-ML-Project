@@ -44,6 +44,7 @@ from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nada
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 from ImageProcessing import ModeProcessor
+from Profiler import profile
 
 logging.getLogger('tensorflow').setLevel(logging.ERROR)
 logging.getLogger('matplotlib.font_manager').disabled = True
@@ -635,7 +636,31 @@ class ML:
         LOG.debug(f"Prediction: {list(prediction)}")
         LOG.debug(f"Generating superposition of modes above threshold of {threshold} and asigning the respective amplitudes and phases.")
 
-        modes = []
+        raw_modes = np.array([mode.copy() for mode in self.data_generator.hermite_modes])
+
+        pred_amps = prediction[:len(raw_modes)] # Separate out the amplitudes
+        raw_phases = prediction[len(raw_modes):]
+        pred_phases = (raw_phases * (2 * np.pi)) - np.pi # Reverse the "Normalisation" applied to phase predictions
+
+        np.array([mode.add_phase(pred_phases[i]) for i, mode in enumerate(raw_modes)])
+        
+        pred_modes = raw_modes * pred_amps
+
+        predicted_superposition = Superposition(*pred_modes[pred_modes > threshold])
+
+        if len(predicted_superposition) == 0:
+            LOG.critical(f"Prediction failed! A threshold of {threshold} is likely too high.")
+            print(log(f"[FATAL] Prediction failed! A threshold of {threshold} is likely too high.\n"))
+
+            sys.exit()
+
+        LOG.info(f"Prediction complete! Took {round((perf_counter() - start_time) * 1000, 3)} milliseconds.")
+        LOG.info(f"Reconstructed: {repr(predicted_superposition)}")
+        if info: print(log(f"[PRED] Done! Took {round((perf_counter() - start_time) * 1000, 3)} milliseconds."))
+        if info: print(log(f"[PRED] Reconstructed: {str(predicted_superposition)}\n"))
+
+        return predicted_superposition
+        """ modes = []
         for i in range(len(prediction) // 2): # For all values of prediction
 
             # LOG.debug(f"{self.classes[i]}: {prediction[i] :.3f}" + int(prediction[i] > threshold) * " ***")
@@ -672,7 +697,9 @@ class ML:
         if info: print(log(f"[PRED] Done! Took {round((perf_counter() - start_time) * 1000, 3)} milliseconds."))
         if info: print(log(f"[PRED] Reconstructed: {str(answer)}\n"))
 
-        return answer
+        return answer """
+
+
 
     def compare(self, sup: Superposition, camera: dict = None, threshold: float = 0.1, info: bool = True, save: bool = False):
         '''
@@ -964,8 +991,9 @@ class ML:
             test_sup = self.data_generator.get_random()
             true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
             true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
+            true_phases = [phase if (phase !=-10) else 0 for phase in true_phases]
 
-            test_img = self.data_generator.mode_processor.errorEffects(test_sup.superpose())
+            test_img = self.data_generator.mode_processor.getImage(test_sup.superpose())
             pred = self.predict(test_img, threshold=0, info=False)
             pred_amps = [pred.contains(j).amplitude for j in self.data_generator.hermite_modes]
             pred_phases = [pred.contains(j).phase for j in self.data_generator.hermite_modes]
@@ -974,12 +1002,13 @@ class ML:
             diff_phases = [0]*len(pred_phases)
 
             for i in range(len(pred_phases)):
-                diff_phases[i] = np.min([(true_phases[i] - 2*np.pi - pred_phases[i])**2, (true_phases[i] - pred_phases[i])**2, (true_phases[i] + 2*np.pi - pred_phases[i])**2]) # Account for phase wrapping massively changing the error
+                phase_diff = np.min([(true_phases[i] - 2*np.pi - pred_phases[i])**2, (true_phases[i] - pred_phases[i])**2, (true_phases[i] + 2*np.pi - pred_phases[i])**2]) # Account for phase wrapping massively changing the error
+                diff_phases[i] = phase_diff if not np.isnan(phase_diff) else 0
 
             diffs = diff_amps + diff_phases
             cumulative_error += diffs
 
-        self.errs = cumulative_error / (np.sqrt(n_test_points)*(n_test_points - 1))
+        self.errs = cumulative_error / np.sqrt((n_test_points)*(n_test_points - 1))
         print(log("[EVAL] |"))
 
 

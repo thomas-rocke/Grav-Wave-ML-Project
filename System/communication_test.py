@@ -32,11 +32,20 @@ if __name__ == "__main__":
     ax[1].axhline(0.5, linestyle="--")
     offsets = np.linspace(-width/2, width/2, subsections)
 
-    model = ML(BasicGenerator(3, 8, 0.5, 0.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
+    model = ML(BasicGenerator(3, 3, 0.2, 0.4, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'default', 'Adamax', 0.0001, False)
     model.load()
     modes = model.data_generator.hermite_modes[:subsections]
-    right = 0
-    for i in x:
+    model.data_generator.new_stage()
+
+
+    img = model.data_generator.get_random().superpose()
+
+    model.predict(img, threshold=0)
+    print("Clearing space")
+    for i in range(5):
+        model.predict(img)
+    """ right = 0
+    for i in [x[0]]:
         true_vals = [int(j) for j in str(str_to_bin(string[i]))]
         for j in range(subsections): modes[j].amplitude = true_vals[j]
         s = Superposition(*modes)
@@ -60,6 +69,5 @@ if __name__ == "__main__":
         pred_labels[i] = pred_letter
         if pred_letter == labels[i]:
             right += 1
-    print(right*100/len(labels))
     ax[1].set_xticklabels(pred_labels)
-    plt.show()
+    plt.show() """
