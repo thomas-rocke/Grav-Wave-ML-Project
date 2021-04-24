@@ -987,8 +987,9 @@ class ML:
             test_sup = self.data_generator.get_random()
             true_amplitudes = [test_sup.contains(j).amplitude for j in self.data_generator.hermite_modes]
             true_phases = [test_sup.contains(j).phase for j in self.data_generator.hermite_modes]
+            true_phases = [phase if (phase !=-10) else 0 for phase in true_phases]
 
-            test_img = self.data_generator.mode_processor.errorEffects(test_sup.superpose())
+            test_img = self.data_generator.mode_processor.getImage(test_sup.superpose())
             pred = self.predict(test_img, threshold=0, info=False)
             pred_amps = [pred.contains(j).amplitude for j in self.data_generator.hermite_modes]
             pred_phases = [pred.contains(j).phase for j in self.data_generator.hermite_modes]
@@ -997,12 +998,13 @@ class ML:
             diff_phases = [0]*len(pred_phases)
 
             for i in range(len(pred_phases)):
-                diff_phases[i] = np.min([(true_phases[i] - 2*np.pi - pred_phases[i])**2, (true_phases[i] - pred_phases[i])**2, (true_phases[i] + 2*np.pi - pred_phases[i])**2]) # Account for phase wrapping massively changing the error
+                phase_diff = np.min([(true_phases[i] - 2*np.pi - pred_phases[i])**2, (true_phases[i] - pred_phases[i])**2, (true_phases[i] + 2*np.pi - pred_phases[i])**2]) # Account for phase wrapping massively changing the error
+                diff_phases[i] = phase_diff if not np.isnan(phase_diff) else 0
 
             diffs = diff_amps + diff_phases
             cumulative_error += diffs
 
-        self.errs = cumulative_error / (np.sqrt(n_test_points)*(n_test_points - 1))
+        self.errs = cumulative_error / np.sqrt((n_test_points)*(n_test_points - 1))
         print(log("[EVAL] |"))
 
 
