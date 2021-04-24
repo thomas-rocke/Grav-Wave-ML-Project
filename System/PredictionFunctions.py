@@ -44,25 +44,24 @@ def visualise_video_predictions(video_file: str, model:ML):
     plt.show()
     return predictions
 
-def get_rot_matrix(length, theta):
-    rot = np.diagflat([1]*length).astype(float)
-    rot[0, 0] = np.sin(theta)
-    rot[1, 0] = np.cos(theta)
-    rot[0, 1] = np.cos(theta)
-    rot[1, 1] = -np.sin(theta)
-    
-    
-    off = np.zeros((length, length))   
-    ls = deque(range(length))
-    for i in range(length):
-        off[i, :] = ls
-        ls.rotate(1)
-    
-    off /= np.linalg.norm(off)
-    return np.dot(off, rot)
+def real_data_stability(model, video_file):
+    plt.title("MSE difference between Real frame and reconstructed Prediction ")
+    processor = VideoProcessor(video_file, model.data_generator.mode_processor.target_resolution)
+    predictions = np.zeros((processor.frameCount))
+
+    for i in tqdm(range(processor.frameCount), desc=pathlib.PurePath(video_file).name):
+        processed_frame = processor.getImages(batch_size=1)[0] # Get and process next frame
+        predicted = model.predict(processed_frame, threshold=0, info=False).superpose()
+        predicted_image = processor.processImage(predicted, *processor._resetSquare(predicted))
+        predictions[i] = np.sum((predicted_image - processed_frame)**2)
+
+    plt.scatter(range(processor.frameCount), predictions)
+    plt.xlabel("Frame Number")
+    plt.ylabel("MSE error")
+    plt.show()
+
 
 def mode_sweep_test(model, its):
-    model.load()
     while model.data_generator.new_stage(): pass
     sup = model.data_generator.get_random()
 
@@ -150,7 +149,7 @@ if __name__ == '__main__':
     model.load()
     while model.data_generator.new_stage(): pass
     model.data_generator.mode_processor.target_resolution = (64, 64)
-
-    mode_sweep_test(model, 100)
+    fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\Edited.mp4"
+    real_data_stability(model, fname)
     
     
