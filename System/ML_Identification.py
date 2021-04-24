@@ -1082,6 +1082,7 @@ def auto_label(rects, ax):
                     xy=(rect.get_x() + rect.get_width() / 2, height),
                     xytext=(0, 3 if height > 0 else -15),  # 3 points vertical offset
                     textcoords="offset points",
+                    backgroundcolor="white",
                     ha="center", va="bottom")
 
 def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Superposition=None):
@@ -1193,6 +1194,21 @@ if __name__ == '__main__':
           "█─▄▄▄▄██▀▄─██▄─██─▄█─▄▄▄▄█─▄▄▄▄█▄─▄██▀▄─██▄─▀█▄─▄███▄─▀█▀─▄█─▄▄─█▄─▄▄▀█▄─▄▄─█─▄▄▄▄█\n"
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
+    
+    fig, ax = plt.subplots(1, 3, figsize=(10, 5))
+    x = ['Clean Image', 'Low Stretch', 'High Stretch']
+
+    for i in range(3):
+        h = Hermite(2, 3)
+        processor = ModeProcessor(camera={"stretch_variance": 0.2 * i})
+        print(i, processor)
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / h.resolution), np.arange(-1.2, 1.2, 2.4 / h.resolution))
+        ax[i].imshow(processor.errorEffects(h.I(X, Y, 0)), cmap='jet')
+        ax[i].set_title(f"{chr(97+i)}) {x[i]}")
+        ax[i].set_xticks([])
+        ax[i].set_yticks([])
+
+    plt.show()
 
     # max_order = 3
     # number_of_modes = 3
