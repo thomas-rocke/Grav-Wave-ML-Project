@@ -74,7 +74,7 @@ def mode_sweep_test(model, its):
     vec = np.array([sup.contains(j).amplitude for j in hermite_modes] + [sup.contains(j).phase for j in hermite_modes])
     ln = len(vec)
 
-    fig, ax = plt.subplots(nrows=2)
+    fig, ax = plt.subplots(ncols=2, nrows=ln//2+1, sharex=True)
 
     data = np.zeros((its, ln))
 
@@ -118,33 +118,53 @@ def mode_sweep_test(model, its):
     amp_bins = 4*max_amp
     phase_bins = 4*max_phase
 
-    max_amp_freq = 0
-    max_phase_freq = 0
-
     for i, mode in enumerate(hermite_modes):
-        amp_freqs, _, __ = ax[0].hist(data[:, i], amp_bins, label=mode.latex_print(), histtype="step", align="mid")
-        phase_freqs, _, __ = ax[1].hist(data[:, (ln//2) + i], phase_bins, label=mode.latex_print(), histtype="step", align="mid")
+        amp_freqs, _, __ = ax[i+1, 0].hist(data[:, i], amp_bins, histtype="stepfilled", align="mid")
+        ax[i+1, 0].set_ylabel(mode.latex_print(), rotation=0)
+        phase_freqs, _, __ = ax[i+1, 1].hist(data[:, (ln//2) + i], phase_bins, label=mode.latex_print(), histtype="stepfilled", align="mid")
+        ax[i+1, 1].set_ylabel(mode.latex_print(), rotation=0)
 
-        max_amp_freq = max([max_amp_freq, amp_freqs.max()])
-        max_phase_freq = max([max_phase_freq, phase_freqs.max()])
+        ax[i+1, 0].axes.yaxis.set_ticks([])
+        ax[i+1, 1].axes.yaxis.set_ticks([])
+        ax[i+1, 0].yaxis.set_label_coords(-0.03,0.25)
+        ax[i+1, 1].yaxis.set_label_coords(-0.03,0.25)
+
+        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], -1, 1, facecolor="green", alpha=0.3)
+        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
+        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
+        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], -1, 1, facecolor="green", alpha=0.3)
+        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
+        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
+
+
+    amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, label="Total", histtype="stepfilled", align="mid")
+    phase_freqs, _, __ = ax[0, 1].hist(data[:, (ln//2) + i].flatten(), phase_bins, label="Total", histtype="stepfilled", align="mid")
+
+    ax[0, 0].axes.yaxis.set_ticks([])
+    ax[0, 1].axes.yaxis.set_ticks([])
+    ax[0, 0].yaxis.set_label_coords(-0.06,0.25)
+    ax[0, 1].yaxis.set_label_coords(-0.06,0.25)
+
+    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], -1, 1, facecolor="green", alpha=0.3)
+    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
+    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
+    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], -1, 1, facecolor="green", alpha=0.3)
+    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
+    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
     
-    ax[0].set_title("Amplitude Error Distribution")
-    ax[1].set_title("Phase Error Distribution")
-    ax[0].legend()
-    ax[1].legend()
-    ax[0].set_ylabel("Relative Frequency")
-    ax[0].set_xlabel("Amplitude Error")
-    ax[1].set_xlabel("Phase Error")
+    ax[0, 0].set_ylabel("All Modes", rotation=0)
+    ax[0, 1].set_ylabel("All Modes", rotation=0)
 
-    ax[0].fill_betweenx([0, max_amp_freq], -1, 1, facecolor="green", alpha=0.3)
-    ax[0].fill_betweenx([0, max_amp_freq], 1, 2, facecolor="yellow", alpha=0.3)
-    ax[0].fill_betweenx([0, max_amp_freq], -1, -2, facecolor="yellow", alpha=0.3)
-    ax[1].fill_betweenx([0, max_phase_freq], -1, 1, facecolor="green", alpha=0.3)
-    ax[1].fill_betweenx([0, max_phase_freq], 1, 2, facecolor="yellow", alpha=0.3)
-    ax[1].fill_betweenx([0, max_phase_freq], -1, -2, facecolor="yellow", alpha=0.3)
 
-    ax[0].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
-    ax[1].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
+    ax[0, 0].set_title("Amplitude Error Distribution")
+    ax[0, 1].set_title("Phase Error Distribution")
+    #ax[0].legend()
+    #ax[1].legend()
+    ax[-1, 0].set_xlabel("Amplitude Error")
+    ax[-1, 1].set_xlabel("Phase Error")
+    for i in range(ln//2 + 1):
+        ax[i, 0].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
+        ax[i, 1].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
 
 
 
