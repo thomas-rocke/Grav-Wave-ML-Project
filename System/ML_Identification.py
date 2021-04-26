@@ -78,7 +78,7 @@ class ML:
     '''
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
-                 architecture: bool = "default",
+                 architecture: bool = "VGG16",
                  optimiser: str = "Adam",
                  learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
@@ -233,7 +233,7 @@ class ML:
             model.add(BatchNormalization())
 
             model.add(Dense(units=len(self.classes)))
-            model.add(Activation('sigmoid'))
+            model.add(Activation('relu'))
 
         else:
             LOG.critical(f"Unrecognised architecture '{self.architecture}'!")
@@ -285,7 +285,7 @@ class ML:
         print(log("[INIT] Initialising dataset... "), end='')
 
         self.classes = self.data_generator.get_classes()
-        self.input_shape = (self.classes[0].resolution, self.classes[0].resolution, 1)
+        self.input_shape = (self.classes[0].resolution, self.classes[0].resolution, 1) # self.data_generator[0][0].shape[1:]
 
         print("Done!")
         LOG.debug(f"Classes: {list(self.classes)}")
