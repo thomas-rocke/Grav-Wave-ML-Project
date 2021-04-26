@@ -245,6 +245,7 @@ class BasicGenerator(keras.utils.Sequence):
 
         self.phase_norm_method = lowest_order_zero_phase
         self.mode_processor = ModeProcessor(camera=cam)
+        self.mode_processor.target_resolution = (resolution, resolution)
 
         LOG.debug(f"Locals: {locals()}")
 

@@ -286,6 +286,8 @@ class ML:
 
         self.classes = self.data_generator.get_classes()
         self.input_shape = (self.classes[0].resolution, self.classes[0].resolution, 1) # self.data_generator[0][0].shape[1:]
+        # self.input_shape = self.data_generator[0][0].shape[1:] # (self.classes[0].resolution, self.classes[0].resolution, 1)
+        # print(self.input_shape)
 
         print("Done!")
         LOG.debug(f"Classes: {list(self.classes)}")

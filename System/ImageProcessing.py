@@ -318,7 +318,7 @@ class ModeProcessor(BaseProcessor):
         '''
         if bits:
             bins = self.raw_bins * np.max(image)
-            quantized_image = np.digitize(image, bins)
+            quantized_image = np.max(image) * np.digitize(image, bins)
             return quantized_image
         else:
             return image

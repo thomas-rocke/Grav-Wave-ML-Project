@@ -42,7 +42,7 @@ class SuperpositionGenerator(keras.utils.Sequence):#, ModeProcessor):
         self.camera_resolution = camera_resolution
         self.info = info
         self.starting_stage = starting_stage
-        self.network_resolution = camera_resolution # network_resolution
+        self.network_resolution = camera_resolution#network_resolution
         self.mode_processor = ModeProcessor(target_resolution=(network_resolution, network_resolution))
 
         self.starting_stage = starting_stage
