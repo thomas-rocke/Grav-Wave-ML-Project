@@ -107,7 +107,7 @@ def mode_sweep_test(model, its):
             phase_diff = phase_errs[np.argmin(np.abs(phase_errs))] # Account for phase wrapping massively changing the error
             diff_phases[i] = phase_diff if not np.isnan(phase_diff) else 0
 
-        diffs = np.array(diff_amps + diff_phases)
+        diffs = np.abs(np.array(diff_amps + diff_phases))
         dat = diffs/errs
         data[step, :] = np.array([d if not np.isnan(d) else 0 for d in dat])
 
@@ -166,7 +166,8 @@ def mode_sweep_test(model, its):
         ax[i, 0].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
         ax[i, 1].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
 
-
+    ax[0, 0].set_xlim(0, max_amp)
+    ax[0, 1].set_xlim(0, max_phase)
 
     plt.show()
 
@@ -175,9 +176,9 @@ if __name__ == '__main__':
     model = ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
     while model.data_generator.new_stage(): pass
-    model.data_generator.mode_processor.target_resolution = (64, 64)
+    #model.data_generator.mode_processor.target_resolution = (64, 64)
     #fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\Edited.mp4"
     #real_data_stability(model, fname)
-    mode_sweep_test(model, 100)
+    mode_sweep_test(model, 50)
     
     
