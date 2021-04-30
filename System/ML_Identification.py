@@ -233,7 +233,7 @@ class ML:
             model.add(BatchNormalization())
 
             model.add(Dense(units=len(self.classes)))
-            model.add(Activation('relu'))
+            model.add(Activation('sigmoid'))
 
         else:
             LOG.critical(f"Unrecognised architecture '{self.architecture}'!")
