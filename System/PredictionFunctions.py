@@ -13,6 +13,7 @@ import os
 from collections import deque
 from Utils import meanError
 import time
+from matplotlib.ticker import PercentFormatter, MultipleLocator
 LOG = Logger.get_logger(__name__)
 
 def visualise_video_predictions(video_file: str, model:ML):
@@ -45,7 +46,7 @@ def visualise_video_predictions(video_file: str, model:ML):
     return predictions
 
 def real_data_stability(model, video_file):
-    plt.title("MSE difference between Real frame and reconstructed Prediction ")
+    plt.title("MSE error between Real frame and reconstructed Prediction ")
     processor = VideoProcessor(video_file, model.data_generator.mode_processor.target_resolution)
     predictions = np.zeros((processor.frameCount))
 
@@ -55,10 +56,29 @@ def real_data_stability(model, video_file):
         predicted_image = processor.processImage(predicted, *processor._resetSquare(predicted))
         predictions[i] = np.sum((predicted_image - processed_frame)**2)
 
-    plt.scatter(range(processor.frameCount), predictions)
-    plt.xlabel("Frame Number")
-    plt.ylabel("MSE error")
+    plt.hist(predictions, bins=20, weights=np.ones(len(predictions)) / len(predictions))
+    plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
+    plt.ylabel("Frequency")
+    plt.xlabel("MSE error")
     plt.show()
+
+
+def random_real_comparisons(model, video_file):
+    processor = VideoProcessor(video_file, model.data_generator.mode_processor.target_resolution)
+
+    for i in range(10):
+        processed_frame = processor.getImages(batch_size=1)[0] # Get and process next frame
+        predicted = model.predict(processed_frame, threshold=0, info=False).superpose()
+        predicted_image = processor.processImage(predicted, *processor._resetSquare(predicted))
+        fig, ax = plt.subplots(ncols=2)
+        ax[0].axis("off")
+        ax[1].axis("off")
+        ax[0].imshow(processed_frame)
+        ax[0].set_title("Input Image")
+        ax[1].imshow(predicted_image)
+        ax[1].set_title("Reconstructed Image")
+        plt.show()
+        processor[:10]
 
 def format_func(value, tick_num):
     return "{}$\sigma$".format(value)
@@ -119,15 +139,15 @@ def mode_sweep_test(model, its):
     phase_bins = 4*max_phase
 
     for i, mode in enumerate(hermite_modes):
-        amp_freqs, _, __ = ax[i+1, 0].hist(data[:, i], amp_bins, histtype="stepfilled", align="mid")
+        amp_freqs, _, __ = ax[i+1, 0].hist(data[:, i], amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(errs[i], 3)), weights=np.ones(len(data[:, i])) / len(data[:, i]))
         ax[i+1, 0].set_ylabel(mode.latex_print(), rotation=0)
-        phase_freqs, _, __ = ax[i+1, 1].hist(data[:, (ln//2) + i], phase_bins, label=mode.latex_print(), histtype="stepfilled", align="mid")
+        phase_freqs, _, __ = ax[i+1, 1].hist(data[:, (ln//2) + i], phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(errs[(ln//2) + i], 3)), weights=np.ones(len(data[:, (ln//2) + i])) / len(data[:, (ln//2)+  i]))
         ax[i+1, 1].set_ylabel(mode.latex_print(), rotation=0)
 
-        ax[i+1, 0].axes.yaxis.set_ticks([])
-        ax[i+1, 1].axes.yaxis.set_ticks([])
-        ax[i+1, 0].yaxis.set_label_coords(-0.03,0.25)
-        ax[i+1, 1].yaxis.set_label_coords(-0.03,0.25)
+        ax[i+1, 0].yaxis.set_major_formatter(PercentFormatter(1))
+        ax[i+1, 1].yaxis.set_major_formatter(PercentFormatter(1))
+        ax[i+1, 0].yaxis.set_label_coords(-0.11,0.25)
+        ax[i+1, 1].yaxis.set_label_coords(-0.11,0.25)
 
         ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], -1, 1, facecolor="green", alpha=0.3)
         ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
@@ -136,14 +156,20 @@ def mode_sweep_test(model, its):
         ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
         ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
 
+        ax[i+1, 0].legend()
+        ax[i+1, 1].legend()
 
-    amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, label="Total", histtype="stepfilled", align="mid")
-    phase_freqs, _, __ = ax[0, 1].hist(data[:, (ln//2) + i].flatten(), phase_bins, label="Total", histtype="stepfilled", align="mid")
 
-    ax[0, 0].axes.yaxis.set_ticks([])
-    ax[0, 1].axes.yaxis.set_ticks([])
-    ax[0, 0].yaxis.set_label_coords(-0.06,0.25)
-    ax[0, 1].yaxis.set_label_coords(-0.06,0.25)
+    amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(np.average(errs[:(ln//2)]), 3)), weights=np.ones(len(data[:, i].flatten())) / len(data[:, i].flatten()))
+    phase_freqs, _, __ = ax[0, 1].hist(data[:, (ln//2) + i].flatten(), phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(np.average(errs[(ln//2):]), 3)), weights=np.ones(len(data[:, (ln//2) + i].flatten())) / len(data[:, (ln//2) + i].flatten()))
+
+    ax[0, 0].legend()
+    ax[0, 1].legend()
+
+    ax[0, 0].yaxis.set_major_formatter(PercentFormatter(1))
+    ax[0, 1].yaxis.set_major_formatter(PercentFormatter(1))
+    ax[0, 0].yaxis.set_label_coords(-0.13,0.25)
+    ax[0, 1].yaxis.set_label_coords(-0.13,0.25)
 
     ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], -1, 1, facecolor="green", alpha=0.3)
     ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
@@ -165,9 +191,11 @@ def mode_sweep_test(model, its):
     for i in range(ln//2 + 1):
         ax[i, 0].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
         ax[i, 1].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
+        ax[i, 0].xaxis.set_minor_locator(MultipleLocator(0.5))
+        ax[i, 1].xaxis.set_minor_locator(MultipleLocator(0.5))
 
-    ax[0, 0].set_xlim(0, max_amp)
-    ax[0, 1].set_xlim(0, max_phase)
+    ax[0, 0].set_xlim(0, 6)
+    ax[0, 1].set_xlim(0, 6)
 
     plt.show()
 
@@ -176,9 +204,9 @@ if __name__ == '__main__':
     model = ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
     while model.data_generator.new_stage(): pass
-    #model.data_generator.mode_processor.target_resolution = (64, 64)
-    #fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\Edited.mp4"
+    fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
     #real_data_stability(model, fname)
-    mode_sweep_test(model, 50)
+    #mode_sweep_test(model, 10000)
+    random_real_comparisons(model, fname)
     
     
