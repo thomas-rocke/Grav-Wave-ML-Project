@@ -337,6 +337,8 @@
     },
     "CamTest" : {
         "1" : {
+            "amplitude_variation" : 1,
+            "phase_variation" : 1,
             "camera": "WinCam-no-rot",
             "number_of_modes" : 2
         }
