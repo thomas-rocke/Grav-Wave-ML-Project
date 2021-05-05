@@ -341,6 +341,14 @@
             "phase_variation" : 1,
             "camera": "WinCam-no-rot",
             "number_of_modes" : 2
+        },
+
+        "2" : {
+            "number_of_modes" : 3
+        },
+
+        "3" : {
+            "number_of_modes" : 4
         }
     }
 }
