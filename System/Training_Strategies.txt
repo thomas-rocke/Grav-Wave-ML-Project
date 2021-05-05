@@ -350,5 +350,143 @@
         "3" : {
             "number_of_modes" : 4
         }
+    },
+
+    "final_3_01" : {
+        "1" : {
+            "amplitude_variation" : 1,
+            "phase_variation" : 1,
+            "number_of_modes" : 2,
+            "camera" : "ideal_camera"
+        },
+
+        "2" : {
+            "number_of_modes" : 3
+        },
+
+        "3" : {
+            "number_of_modes" : 4
+        },
+        
+        "4" : {
+            "number_of_modes" : 5
+        },
+        
+        "5" : {
+            "number_of_modes" : 6
+        },
+        
+        "6" : {
+            "number_of_modes" : 7
+        },
+        
+        "7" : {
+            "number_of_modes" : 8
+        },
+        
+        "8" : {
+            "number_of_modes" : 9
+        }
+    },
+
+    "final_5_01" : {
+        "1" : {
+            "amplitude_variation" : 1,
+            "phase_variation" : 1,
+            "number_of_modes" : 2,
+            "camera" : "ideal_camera"
+        },
+
+        "2" : {
+            "number_of_modes" : 3
+        },
+
+        "3" : {
+            "number_of_modes" : 4
+        },
+        
+        "4" : {
+            "number_of_modes" : 5
+        },
+        
+        "5" : {
+            "number_of_modes" : 6
+        },
+        
+        "6" : {
+            "number_of_modes" : 7
+        },
+        
+        "7" : {
+            "number_of_modes" : 8
+        },
+        
+        "8" : {
+            "number_of_modes" : 9
+        },
+
+        "9" : {
+            "number_of_modes" : 10
+        },
+
+        "10" : {
+            "number_of_modes" : 11
+        },
+        
+        "11" : {
+            "number_of_modes" : 12
+        },
+        
+        "12" : {
+            "number_of_modes" : 13
+        },
+        
+        "13" : {
+            "number_of_modes" : 14
+        },
+        
+        "14" : {
+            "number_of_modes" : 15
+        },
+        
+        "15" : {
+            "number_of_modes" : 16
+        },
+
+        "16" : {
+            "number_of_modes" : 17
+        },
+
+        "17" : {
+            "number_of_modes" : 18
+        },
+        
+        "18" : {
+            "number_of_modes" : 19
+        },
+        
+        "19" : {
+            "number_of_modes" : 20
+        },
+        
+        "20" : {
+            "number_of_modes" : 21
+        },
+        
+        "21" : {
+            "number_of_modes" : 22
+        },
+        
+        "22" : {
+            "number_of_modes" : 23
+        },
+
+        "23" : {
+            "number_of_modes" : 24
+        },
+        
+        "24" : {
+            "number_of_modes" : 25
+        }
     }
 }
