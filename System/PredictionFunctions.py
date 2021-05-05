@@ -63,10 +63,10 @@ def real_data_stability(model, video_file):
     plt.show()
 
 
-def random_real_comparisons(model, video_file, its):
+def random_real_comparisons(model, video_file):
     processor = VideoProcessor(video_file, model.data_generator.mode_processor.target_resolution)
 
-    for i in range(its):
+    for i in range(10):
         processed_frame = processor.getImages(batch_size=1)[0] # Get and process next frame
         predicted = model.predict(processed_frame, threshold=0, info=False).superpose()
         predicted_image = processor.processImage(predicted, *processor._resetSquare(predicted))
@@ -78,8 +78,7 @@ def random_real_comparisons(model, video_file, its):
         ax[1].imshow(predicted_image)
         ax[1].set_title("Reconstructed Image")
         plt.show()
-        for j in range(50): 
-            processor[0]
+        processor[:10]
 
 def format_func(value, tick_num):
     return "{}$\sigma$".format(value)
@@ -205,10 +204,9 @@ if __name__ == '__main__':
     model = ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
     while model.data_generator.new_stage(): pass
-    #fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
-    fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\LIGO2.mp4"
+    fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
     #real_data_stability(model, fname)
     #mode_sweep_test(model, 10000)
-    random_real_comparisons(model, fname, 10)
+    random_real_comparisons(model, fname)
     
     
