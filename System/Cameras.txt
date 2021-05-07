@@ -1,0 +1,69 @@
+{
+"ideal_camera": {
+    "noise_variance": 0,
+    "exposure_limits": [0, 1],
+    "bit_depth": 0,
+    "blur_variance": 0,
+    "stretch_variance" : 0,
+    "rotational_variance" : 0
+    },
+
+"noise_test": {
+    "noise_variance": 0.1
+    },
+
+"exposure_test": {
+
+    "exposure_limits": [0.2, 0.7]
+    }, 
+
+"bit_depth_test": {
+    "bit_depth": 8
+    },
+
+"blur_test": {
+    "blur_variance": 0.4
+    },
+
+"small_errors" : {
+    "noise_variance" : 0.008,
+    "exposure_limits" : [0.1, 1],
+    "bit_depth" : 0,
+    "blur_variance" : 0.1,
+    "stretch_variance" : 0.1,
+    "rotational_variance" : 0.1
+    },
+
+"medium_errors" : {
+    "noise_variance" : 0.01,
+    "exposure_limits" : [0.3, 1],
+    "bit_depth" : 0,
+    "blur_variance" : 0.2,
+    "stretch_variance" : 0.2,
+    "rotational_variance" : 0.2
+    },
+
+"large_errors" : {
+    "noise_variance" : 0.1,
+    "exposure_limits" : [0.4, 1],
+    "bit_depth" : 0,
+    "blur_variance" : 0.3,
+    "stretch_variance" : 0.02,
+    "rotational_variance" : 0.02
+    },
+
+"WinCamD-UCD15" : {
+    "noise_variance" : 0.005,
+    "exposure_limits" : [0.00004, 1],
+    "bit_depth" : 16,
+    "blur_variance" : 0,
+    "stretch_variance" : 0.02,
+    "rotational_variance" : 0.02
+    },
+"WinCam-no-rot" : {
+    "noise_variance" : 0.005,
+    "exposure_limits" : [0.00004, 1],
+    "bit_depth" : 16,
+    "blur_variance" : 0
+}
+}

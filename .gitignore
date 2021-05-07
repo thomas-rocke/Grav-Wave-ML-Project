@@ -56,7 +56,6 @@ coverage.xml
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -131,5 +130,11 @@ dmypy.json
 *.sqlite
 
 # Other
-# *Old_Models
+*/Old_*
 *.h5
+*workspace.code-workspace
+*.log
+*/Animations
+*/Cavity
+# *.txt
+# *.png
