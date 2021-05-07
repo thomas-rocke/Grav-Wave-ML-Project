@@ -1004,8 +1004,8 @@ class ML:
 
             diffs = diff_amps + diff_phases
             cumulative_error += diffs
-
-        self.errs = cumulative_error / np.sqrt((n_test_points)*(n_test_points - 1))
+        N = np.sqrt((n_test_points-1))#*(n_test_points))
+        self.errs = np.sqrt(cumulative_error) / N
         print(log("[EVAL] |"))
 
 

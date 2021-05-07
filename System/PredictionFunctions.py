@@ -14,6 +14,7 @@ from collections import deque
 from Utils import meanError
 import time
 from matplotlib.ticker import PercentFormatter, MultipleLocator
+from Superposition_Generator import SuperpositionGenerator
 LOG = Logger.get_logger(__name__)
 
 def visualise_video_predictions(video_file: str, model:ML):
@@ -127,18 +128,23 @@ def mode_sweep_test(model, its):
             phase_diff = phase_errs[np.argmin(np.abs(phase_errs))] # Account for phase wrapping massively changing the error
             diff_phases[i] = phase_diff if not np.isnan(phase_diff) else 0
 
-        diffs = np.abs(np.array(diff_amps + diff_phases))
+        diffs = np.array(diff_amps + diff_phases)#np.abs(np.array(diff_amps + diff_phases))
         dat = diffs/errs
         data[step, :] = np.array([d if not np.isnan(d) else 0 for d in dat])
 
+
     max_amp = int(np.max(np.abs(data[:, :ln//2]))) + 1
     max_phase = int(np.max(np.abs(data[:, ln//2:]))) + 1
-
 
     amp_bins = 4*max_amp
     phase_bins = 4*max_phase
 
     for i, mode in enumerate(hermite_modes):
+        amp_mean = data[:, i].mean()
+        phase_mean = data[:, (ln//2) + i].mean()
+
+        ax[i+1, 0].axvline(amp_mean, linestyle="dashed", color='k')
+        ax[i+1, 1].axvline(phase_mean, linestyle="dashed", color='k')
         amp_freqs, _, __ = ax[i+1, 0].hist(data[:, i], amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(errs[i], 3)), weights=np.ones(len(data[:, i])) / len(data[:, i]))
         ax[i+1, 0].set_ylabel(mode.latex_print(), rotation=0)
         phase_freqs, _, __ = ax[i+1, 1].hist(data[:, (ln//2) + i], phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(errs[(ln//2) + i], 3)), weights=np.ones(len(data[:, (ln//2) + i])) / len(data[:, (ln//2)+  i]))
@@ -162,6 +168,14 @@ def mode_sweep_test(model, its):
 
     amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(np.average(errs[:(ln//2)]), 3)), weights=np.ones(len(data[:, i].flatten())) / len(data[:, i].flatten()))
     phase_freqs, _, __ = ax[0, 1].hist(data[:, (ln//2) + i].flatten(), phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(np.average(errs[(ln//2):]), 3)), weights=np.ones(len(data[:, (ln//2) + i].flatten())) / len(data[:, (ln//2) + i].flatten()))
+
+    amp_mean = data[:, :(ln//2)].mean()
+    phase_mean = data[:, (ln//2):].mean()
+
+    ax[0, 0].axvline(amp_mean, linestyle="dashed", color='k')
+    ax[0, 1].axvline(phase_mean, linestyle="dashed", color='k')
+
+
 
     ax[0, 0].legend()
     ax[0, 1].legend()
@@ -194,19 +208,37 @@ def mode_sweep_test(model, its):
         ax[i, 0].xaxis.set_minor_locator(MultipleLocator(0.5))
         ax[i, 1].xaxis.set_minor_locator(MultipleLocator(0.5))
 
-    ax[0, 0].set_xlim(0, 6)
-    ax[0, 1].set_xlim(0, 6)
+    #ax[0, 0].set_xlim(0, 15)
+    ax[0, 1].set_xlim(-6, 6)
 
     plt.show()
 
 if __name__ == '__main__':
 
-    model = ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
+    model = ML(SuperpositionGenerator(3, 128, 128, 'final_3_01', 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)#ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
-    while model.data_generator.new_stage(): pass
-    fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
+
+
+    fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Models\ML(SuperpositionGenerator(3, 128, 128, 'final_3_01', 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)/stage.txt"
+    dat = np.genfromtxt(fname)
+
+    nums = np.zeros((8))
+
+    for line in dat:
+        nums[int(line)-1] += 1
+    
+    s = 0
+    i=0
+    while model.data_generator.new_stage():
+        s = len(model.data_generator.combs)*nums[i]
+        i += 1
+    print(s)
+
+    print(len(dat))
+    #fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
+    #fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\edited.mp4"
     #real_data_stability(model, fname)
     #mode_sweep_test(model, 10000)
-    random_real_comparisons(model, fname)
+    #random_real_comparisons(model, fname)
     
     
