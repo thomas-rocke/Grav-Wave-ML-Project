@@ -216,7 +216,7 @@ def mode_sweep_test(model, its):
 if __name__ == '__main__':
 
     #model = ML(SuperpositionGenerator(3, 128, 128, 'final_3_01', 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)#ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
-    model = ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
+    model = ML(BasicGenerator(3, 9, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
     while model.data_generator.new_stage(): pass
     #fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
