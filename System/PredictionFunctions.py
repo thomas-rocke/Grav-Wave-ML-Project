@@ -162,8 +162,8 @@ def mode_sweep_test(model, its):
         ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
         ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
 
-        ax[i+1, 0].legend()
-        ax[i+1, 1].legend()
+        ax[i+1, 0].legend(loc="lower right")
+        ax[i+1, 1].legend(loc="lower right")
 
 
     amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(np.average(errs[:(ln//2)]), 3)), weights=np.ones(len(data[:, i].flatten())) / len(data[:, i].flatten()))
@@ -177,8 +177,8 @@ def mode_sweep_test(model, its):
 
 
 
-    ax[0, 0].legend()
-    ax[0, 1].legend()
+    ax[0, 0].legend(loc="lower right")
+    ax[0, 1].legend(loc="lower right")
 
     ax[0, 0].yaxis.set_major_formatter(PercentFormatter(1))
     ax[0, 1].yaxis.set_major_formatter(PercentFormatter(1))
@@ -215,30 +215,14 @@ def mode_sweep_test(model, its):
 
 if __name__ == '__main__':
 
-    model = ML(SuperpositionGenerator(3, 128, 128, 'final_3_01', 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)#ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
+    #model = ML(SuperpositionGenerator(3, 128, 128, 'final_3_01', 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)#ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
+    model = ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
-
-
-    fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\System\Models\ML(SuperpositionGenerator(3, 128, 128, 'final_3_01', 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)/stage.txt"
-    dat = np.genfromtxt(fname)
-
-    nums = np.zeros((8))
-
-    for line in dat:
-        nums[int(line)-1] += 1
-    
-    s = 0
-    i=0
-    while model.data_generator.new_stage():
-        s = len(model.data_generator.combs)*nums[i]
-        i += 1
-    print(s)
-
-    print(len(dat))
+    while model.data_generator.new_stage(): pass
     #fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
     #fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\edited.mp4"
     #real_data_stability(model, fname)
-    #mode_sweep_test(model, 10000)
+    mode_sweep_test(model, 10000)
     #random_real_comparisons(model, fname)
     
     
