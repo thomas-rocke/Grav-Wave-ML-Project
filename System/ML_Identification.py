@@ -1113,7 +1113,7 @@ def auto_label(rects, ax):
                     xy=(rect.get_x() + rect.get_width() / 2, height),
                     xytext=(0, 3 if height > 0 else -15),  # 3 points vertical offset
                     textcoords="offset points",
-                    backgroundcolor="white",
+                    #backgroundcolor="white",
                     ha="center", va="bottom")
 
 def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Superposition=None):
