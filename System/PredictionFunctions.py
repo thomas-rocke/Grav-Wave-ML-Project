@@ -82,7 +82,7 @@ def random_real_comparisons(model, video_file):
         processor[:10]
 
 def format_func(value, tick_num):
-    return "{}$\sigma$".format(value)
+    return "{}$\pi$".format(value/np.pi)
 
 
 def mode_sweep_test(model, its):
@@ -95,7 +95,7 @@ def mode_sweep_test(model, its):
     vec = np.array([sup.contains(j).amplitude for j in hermite_modes] + [sup.contains(j).phase for j in hermite_modes])
     ln = len(vec)
 
-    fig, ax = plt.subplots(ncols=2, nrows=ln//2+1, sharex=True)
+    fig, ax = plt.subplots(ncols=2, nrows=ln//2+1, sharex='col')
 
     data = np.zeros((its, ln))
 
@@ -129,15 +129,15 @@ def mode_sweep_test(model, its):
             diff_phases[i] = phase_diff if not np.isnan(phase_diff) else 0
 
         diffs = np.array(diff_amps + diff_phases)#np.abs(np.array(diff_amps + diff_phases))
-        dat = diffs/errs
+        dat = diffs
         data[step, :] = np.array([d if not np.isnan(d) else 0 for d in dat])
 
 
     max_amp = int(np.max(np.abs(data[:, :ln//2]))) + 1
     max_phase = int(np.max(np.abs(data[:, ln//2:]))) + 1
 
-    amp_bins = 4*max_amp
-    phase_bins = 4*max_phase
+    amp_bins = 32*max_amp
+    phase_bins = 32*max_phase
 
     for i, mode in enumerate(hermite_modes):
         amp_mean = data[:, i].mean()
@@ -155,19 +155,20 @@ def mode_sweep_test(model, its):
         ax[i+1, 0].yaxis.set_label_coords(-0.11,0.25)
         ax[i+1, 1].yaxis.set_label_coords(-0.11,0.25)
 
-        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], -1, 1, facecolor="green", alpha=0.3)
-        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
-        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
-        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], -1, 1, facecolor="green", alpha=0.3)
-        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
-        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
+        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], -errs[i], errs[i], facecolor="green", alpha=0.3)
+        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], errs[i], 2*errs[i], facecolor="yellow", alpha=0.3)
+        ax[i+1, 0].fill_betweenx([0, np.max(amp_freqs)], -errs[i], -2*errs[i], facecolor="yellow", alpha=0.3)
+        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], -errs[(ln//2) + i], errs[(ln//2) + i], facecolor="green", alpha=0.3)
+        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], errs[(ln//2) + i], 2*errs[(ln//2) + i], facecolor="yellow", alpha=0.3)
+        ax[i+1, 1].fill_betweenx([0, np.max(phase_freqs)], -errs[(ln//2) + i], -2*errs[(ln//2) + i], facecolor="yellow", alpha=0.3)
 
         ax[i+1, 0].legend(loc="lower right")
         ax[i+1, 1].legend(loc="lower right")
 
-
-    amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(np.average(errs[:(ln//2)]), 3)), weights=np.ones(len(data[:, i].flatten())) / len(data[:, i].flatten()))
-    phase_freqs, _, __ = ax[0, 1].hist(data[:, (ln//2) + i].flatten(), phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(np.average(errs[(ln//2):]), 3)), weights=np.ones(len(data[:, (ln//2) + i].flatten())) / len(data[:, (ln//2) + i].flatten()))
+    amp_err = np.average(errs[:(ln//2)])
+    phase_err = np.average(errs[(ln//2):])
+    amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(amp_err, 3)), weights=np.ones(len(data[:, i].flatten())) / len(data[:, i].flatten()))
+    phase_freqs, _, __ = ax[0, 1].hist(data[:, (ln//2) + i].flatten(), phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(phase_err, 3)), weights=np.ones(len(data[:, (ln//2) + i].flatten())) / len(data[:, (ln//2) + i].flatten()))
 
     amp_mean = data[:, :(ln//2)].mean()
     phase_mean = data[:, (ln//2):].mean()
@@ -185,12 +186,12 @@ def mode_sweep_test(model, its):
     ax[0, 0].yaxis.set_label_coords(-0.13,0.25)
     ax[0, 1].yaxis.set_label_coords(-0.13,0.25)
 
-    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], -1, 1, facecolor="green", alpha=0.3)
-    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
-    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
-    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], -1, 1, facecolor="green", alpha=0.3)
-    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], 1, 2, facecolor="yellow", alpha=0.3)
-    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], -1, -2, facecolor="yellow", alpha=0.3)
+    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], -amp_err, amp_err, facecolor="green", alpha=0.3)
+    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], amp_err, 2*amp_err, facecolor="yellow", alpha=0.3)
+    ax[0, 0].fill_betweenx([0, np.max(amp_freqs)], -amp_err, -2*amp_err, facecolor="yellow", alpha=0.3)
+    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], -phase_err, phase_err, facecolor="green", alpha=0.3)
+    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], phase_err, 2*phase_err, facecolor="yellow", alpha=0.3)
+    ax[0, 1].fill_betweenx([0, np.max(phase_freqs)], -phase_err, -2*phase_err, facecolor="yellow", alpha=0.3)
     
     ax[0, 0].set_ylabel("All Modes", rotation=0)
     ax[0, 1].set_ylabel("All Modes", rotation=0)
@@ -203,13 +204,12 @@ def mode_sweep_test(model, its):
     ax[-1, 0].set_xlabel("Amplitude Error")
     ax[-1, 1].set_xlabel("Phase Error")
     for i in range(ln//2 + 1):
-        ax[i, 0].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
         ax[i, 1].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
-        ax[i, 0].xaxis.set_minor_locator(MultipleLocator(0.5))
-        ax[i, 1].xaxis.set_minor_locator(MultipleLocator(0.5))
+        ax[i, 1].xaxis.set_minor_locator(MultipleLocator(np.pi/4))
+        ax[i, 1].xaxis.set_major_locator(MultipleLocator(np.pi))
 
     #ax[0, 0].set_xlim(0, 15)
-    ax[0, 1].set_xlim(-6, 6)
+    #ax[0, 1].set_xlim(-6, 6)
 
     plt.show()
 
@@ -222,7 +222,7 @@ if __name__ == '__main__':
     #fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
     #fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\edited.mp4"
     #real_data_stability(model, fname)
-    mode_sweep_test(model, 10000)
+    mode_sweep_test(model, 100)
     #random_real_comparisons(model, fname)
     
     
