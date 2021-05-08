@@ -24,6 +24,7 @@ from Gaussian_Beam import Hermite, Superposition, Laguerre
 from Old_Data_Generators import GenerateData, BasicGenerator, Dataset
 from Superposition_Generator import SuperpositionGenerator
 import Logger
+from Profiler import profile
 from time import perf_counter
 from datetime import datetime
 from math import isnan
@@ -39,7 +40,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D, Convolution2D, ZeroPadding2D
 from keras.constraints import maxnorm
-from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam, Ftrl
+from keras.optimizers import SGD, RMSprop, Adam, Adadelta, Adagrad, Adamax, Nadam
 from itertools import combinations, chain
 from multiprocessing import Pool, cpu_count
 from ImageProcessing import ModeProcessor
@@ -77,8 +78,7 @@ class ML:
     '''
     def __init__(self,
                  data_generator: keras.utils.Sequence = BasicGenerator(),
-                 architecture: bool = "default",
-
+                 architecture: bool = "VGG16",
                  optimiser: str = "Adam",
                  learning_rate: float = 0.0001,
                  use_multiprocessing: bool = True):
@@ -148,6 +148,7 @@ class ML:
 
         return K.mean(K.equal(K.round(y_true * mask), K.round(y_pred * mask)))
 
+    # @profile
     def loss(self, y_true, y_pred):
         '''
         Custom loss function to mask out modes that don't exist in the superposition.
@@ -258,6 +259,7 @@ class ML:
         LOG.debug("Keras model architecture created successfully!")
         return model
 
+    # @profile
     def train(self, info: bool = False):
         '''
         Train the model.
@@ -283,8 +285,9 @@ class ML:
         print(log("[INIT] Initialising dataset... "), end='')
 
         self.classes = self.data_generator.get_classes()
-        self.input_shape = self.data_generator[0][0].shape[1:] # (self.classes[0].resolution, self.classes[0].resolution, 1)
-        print(self.input_shape)
+        self.input_shape = (self.classes[0].resolution, self.classes[0].resolution, 1) # self.data_generator[0][0].shape[1:]
+        # self.input_shape = self.data_generator[0][0].shape[1:] # (self.classes[0].resolution, self.classes[0].resolution, 1)
+        # print(self.input_shape)
 
         print("Done!")
         LOG.debug(f"Classes: {list(self.classes)}")
@@ -608,6 +611,7 @@ class ML:
         LOG.info("ML object loaded successfully!")
         print("Done!\n")
 
+    @profile
     def predict(self, data, threshold: float = 0.1, info: bool = True):
         '''
         Predict the superposition based on a 2D numpy array of the unknown optical cavity.
@@ -981,6 +985,7 @@ class ML:
         LOG.info("Optimisation complete.\n")
         print(log(f"[INFO] Optimisation complete!\n"))
 
+    # @profile
     def get_errs_of_model(self, n_test_points:int=1000):
         cumulative_error = np.zeros(len(self.classes))
 
@@ -1108,6 +1113,7 @@ def auto_label(rects, ax):
                     xy=(rect.get_x() + rect.get_width() / 2, height),
                     xytext=(0, 3 if height > 0 else -15),  # 3 points vertical offset
                     textcoords="offset points",
+                    #backgroundcolor="white",
                     ha="center", va="bottom")
 
 def get_model_error(model, data_object:GenerateData, test_number:int=10, sup:Superposition=None):
@@ -1219,6 +1225,21 @@ if __name__ == '__main__':
           "█─▄▄▄▄██▀▄─██▄─██─▄█─▄▄▄▄█─▄▄▄▄█▄─▄██▀▄─██▄─▀█▄─▄███▄─▀█▀─▄█─▄▄─█▄─▄▄▀█▄─▄▄─█─▄▄▄▄█\n"
           "█─██▄─██─▀─███─██─██▄▄▄▄─█▄▄▄▄─██─███─▀─███─█▄▀─█████─█▄█─██─██─██─██─██─▄█▀█▄▄▄▄─█\n"
           "▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀▀▀▄▄▄▀▄▄▄▀▄▄▄▄▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀\n")
+    
+    fig, ax = plt.subplots(1, 3, figsize=(10, 5))
+    x = ['Clean Image', 'Low Stretch', 'High Stretch']
+
+    for i in range(3):
+        h = Hermite(2, 3)
+        processor = ModeProcessor(camera={"stretch_variance": 0.2 * i})
+        print(i, processor)
+        X, Y = np.meshgrid(np.arange(-1.2, 1.2, 2.4 / h.resolution), np.arange(-1.2, 1.2, 2.4 / h.resolution))
+        ax[i].imshow(processor.errorEffects(h.I(X, Y, 0)), cmap='jet')
+        ax[i].set_title(f"{chr(97+i)}) {x[i]}")
+        ax[i].set_xticks([])
+        ax[i].set_yticks([])
+
+    plt.show()
 
     # max_order = 3
     # number_of_modes = 3

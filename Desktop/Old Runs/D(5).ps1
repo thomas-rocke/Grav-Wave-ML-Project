@@ -1,4 +1,4 @@
-cd ../../System/
+cd ../System/
 
 python Main.py -i "ML(Dataset('stage_change_test', 5), use_multiprocessing=False)" -t -s -e
 python Main.py -i "ML(Dataset('slow_curve', 5), use_multiprocessing=False)" -t -s -e
