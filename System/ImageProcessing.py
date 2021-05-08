@@ -349,7 +349,7 @@ class ModeProcessor(BaseProcessor):
         '''
         Stretch the image randomly in a random direction, according to stretch_variance
         '''
-        stretch_factor = np.abs(np.random.uniform(1 - stretch_variance, 1 + stretch_variance))
+        stretch_factor = np.abs(1 + stretch_variance)
         angle = np.random.uniform(0, 2*np.pi)
         rotated_im = self.rotate_image(image, angle)
         stretched_dims = (rotated_im.shape[0], int(rotated_im.shape[1]*stretch_factor))
