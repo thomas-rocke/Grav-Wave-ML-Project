@@ -145,10 +145,10 @@ def mode_sweep_test(model, its):
 
         ax[i+1, 0].axvline(amp_mean, linestyle="dashed", color='k')
         ax[i+1, 1].axvline(phase_mean, linestyle="dashed", color='k')
-        amp_freqs, _, __ = ax[i+1, 0].hist(data[:, i], amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(errs[i], 3)), weights=np.ones(len(data[:, i])) / len(data[:, i]))
+        amp_freqs, _, __ = ax[i+1, 0].hist(data[:, i], amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(errs[i], 2)), weights=np.ones(len(data[:, i])) / len(data[:, i]))
         ax[i+1, 0].set_ylabel(mode.latex_print(), rotation=0)
-        phase_freqs, _, __ = ax[i+1, 1].hist(data[:, (ln//2) + i], phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(errs[(ln//2) + i], 3)), weights=np.ones(len(data[:, (ln//2) + i])) / len(data[:, (ln//2)+  i]))
-        ax[i+1, 1].set_ylabel(mode.latex_print(), rotation=0)
+        phase_freqs, _, __ = ax[i+1, 1].hist(data[:, (ln//2) + i], phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(errs[(ln//2) + i], 2)), weights=np.ones(len(data[:, (ln//2) + i])) / len(data[:, (ln//2)+  i]))
+        #ax[i+1, 1].set_ylabel(mode.latex_print(), rotation=0)
 
         ax[i+1, 0].yaxis.set_major_formatter(PercentFormatter(1))
         ax[i+1, 1].yaxis.set_major_formatter(PercentFormatter(1))
@@ -167,8 +167,8 @@ def mode_sweep_test(model, its):
 
     amp_err = np.average(errs[:(ln//2)])
     phase_err = np.average(errs[(ln//2):])
-    amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(amp_err, 3)), weights=np.ones(len(data[:, i].flatten())) / len(data[:, i].flatten()))
-    phase_freqs, _, __ = ax[0, 1].hist(data[:, (ln//2) + i].flatten(), phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(phase_err, 3)), weights=np.ones(len(data[:, (ln//2) + i].flatten())) / len(data[:, (ln//2) + i].flatten()))
+    amp_freqs, _, __ = ax[0, 0].hist(data[:, i].flatten(), amp_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(amp_err, 2)), weights=np.ones(len(data[:, i].flatten())) / len(data[:, i].flatten()))
+    phase_freqs, _, __ = ax[0, 1].hist(data[:, (ln//2) + i].flatten(), phase_bins, histtype="stepfilled", align="mid", label="$\sigma$={}".format(round(phase_err, 2)), weights=np.ones(len(data[:, (ln//2) + i].flatten())) / len(data[:, (ln//2) + i].flatten()))
 
     amp_mean = data[:, :(ln//2)].mean()
     phase_mean = data[:, (ln//2):].mean()
@@ -222,7 +222,7 @@ if __name__ == '__main__':
     #fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
     #fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\edited.mp4"
     #real_data_stability(model, fname)
-    mode_sweep_test(model, 100)
+    mode_sweep_test(model, 10000)
     #random_real_comparisons(model, fname)
     
     
