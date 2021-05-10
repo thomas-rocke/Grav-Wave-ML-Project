@@ -191,7 +191,7 @@ class ModeProcessor(BaseProcessor):
         super().__init__(target_resolution)
 
     def _reset_bins(self):
-        self.raw_bins = np.arange(2**self.bit_depth - 1) # Assume Greyscale quantisation
+        self.raw_bins = np.arange(2**self.bit_depth - 1) / (2**self.bit_depth - 1) # Assume Greyscale quantisation
         '''raw_bins = np.zeros((2**self.bit_depth - 1, 2**self.bit_depth - 1, 2**self.bit_depth - 1)) # (R, G, B) matrix quantised to self.bit_depth
         shape = raw_bins.shape
         for i in range(shape[0]):
@@ -341,22 +341,28 @@ class ModeProcessor(BaseProcessor):
         '''
         Rotate the image by a random amount according to rotational_variance
         '''
-        angle = np.random.uniform(-rotational_variance, rotational_variance)
-        rotated_image = self.rotate_image(image, angle)
-        return rotated_image
+        if rotational_variance:
+            angle = np.random.uniform(-rotational_variance, rotational_variance)
+            rotated_image = self.rotate_image(image, angle)
+            return rotated_image
+        else:
+            return image
     
     def add_random_stretch(self, image, stretch_variance):
         '''
         Stretch the image randomly in a random direction, according to stretch_variance
         '''
-        stretch_factor = np.abs(1 + stretch_variance)
-        angle = np.random.uniform(0, 2*np.pi)
-        rotated_im = self.rotate_image(image, angle)
-        stretched_dims = (rotated_im.shape[0], int(rotated_im.shape[1]*stretch_factor))
-        stretched_im = cv2.resize(rotated_im, stretched_dims, interpolation=cv2.INTER_CUBIC)
+        if stretch_variance:
+            stretch_factor = np.abs(1 + stretch_variance)
+            angle = np.random.uniform(0, 2*np.pi)
+            rotated_im = self.rotate_image(image, angle)
+            stretched_dims = (rotated_im.shape[0], int(rotated_im.shape[1]*stretch_factor))
+            stretched_im = cv2.resize(rotated_im, stretched_dims, interpolation=cv2.INTER_CUBIC)
 
-        restored_im = self.rotate_image(stretched_im, -angle)
-        return restored_im
+            restored_im = self.rotate_image(stretched_im, -angle)
+            return restored_im
+        else:
+            return image
 
 
 def get_bounding_box(img):
