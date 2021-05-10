@@ -206,5 +206,9 @@ if __name__ == "__main__":
     gen._reset_combs()
     gen.mode_processor.change_camera(get_cams("WinCamD-UCD15"))
     
-    dat = gen[0]
-    print(len(gen.combs))
+    dat = gen[0][0][0, :, :, 0]
+    plt.imshow(dat)
+    plt.show()
+
+    plt.imshow(gen.get_random().superpose())
+    plt.show()
