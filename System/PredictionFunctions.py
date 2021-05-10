@@ -220,17 +220,14 @@ if __name__ == '__main__':
     model = ML(BasicGenerator(3, 9, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
     while model.data_generator.new_stage(): pass
-    cam = get_cams("WinCamD-UCD15")
+    cam = get_cams("WinCam-no-rot")
     
     model.data_generator.mode_processor.change_camera(cam)
-    img = model.data_generator[0][0][0, :, :, 0]
-    print(img.shape)
-    plt.imshow(img)
-    plt.show()
     #fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
     #fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\edited.mp4"
     #real_data_stability(model, fname)
     #mode_sweep_test(model, 10000)
     #random_real_comparisons(model, fname)
+    model.evaluate()
     
     
