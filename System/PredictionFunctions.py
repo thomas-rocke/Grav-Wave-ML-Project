@@ -11,7 +11,7 @@ from Gaussian_Beam import Hermite, Superposition
 import Logger
 import os
 from collections import deque
-from Utils import meanError
+from Utils import meanError, get_cams
 import time
 from matplotlib.ticker import PercentFormatter, MultipleLocator
 from Superposition_Generator import SuperpositionGenerator
@@ -216,13 +216,21 @@ def mode_sweep_test(model, its):
 if __name__ == '__main__':
 
     #model = ML(SuperpositionGenerator(3, 128, 128, 'final_3_01', 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)#ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
-    model = ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
+    #model = ML(BasicGenerator(4, 4, 0.5, 1.0, 0.1, (0.0, 1.0), 32, 32, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
+    model = ML(BasicGenerator(3, 9, 0.5, 1.0, 0.1, (0.0, 1.0), 64, 64, 64, 1, False), 'VGG16', 'Adam', 0.0001, False)
     model.load()
     while model.data_generator.new_stage(): pass
+    cam = get_cams("WinCamD-UCD15")
+    
+    model.data_generator.mode_processor.change_camera(cam)
+    img = model.data_generator[0][0][0, :, :, 0]
+    print(img.shape)
+    plt.imshow(img)
+    plt.show()
     #fname = r"C:\Users\Tom\Downloads\video-1619369292.mp4"
     #fname = r"C:\Users\Tom\Documents\GitHub\Grav-Wave-ML-Project\Cavity\edited.mp4"
     #real_data_stability(model, fname)
-    mode_sweep_test(model, 100)
+    #mode_sweep_test(model, 10000)
     #random_real_comparisons(model, fname)
     
     
